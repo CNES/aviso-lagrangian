@@ -138,6 +138,16 @@ public:
     }
 
     /**
+     * @brief Computes a Julian day from Unix Time
+     *
+     * @return The julian day
+     */
+    static double JulianDayFromUnixTime(const double time)
+    {
+        return time / 86400.0 + unix_time;
+    }
+
+    /**
      * @brief Returns the julian day
      *
      * @return The Julian day

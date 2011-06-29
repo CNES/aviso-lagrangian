@@ -423,6 +423,14 @@ void DatePythonModule()
         JulianDayExposer.def(bp::init<double>((
                 bp::arg("jd"))));
 
+        { //lagrangian::JulianDay::JulianFromUnixTime
+            JulianDayExposer.def(
+                "JulianDayFromUnixTime",
+                (double (*)( double const ))
+                    ( &::lagrangian::JulianDay::JulianDayFromUnixTime ),
+                (bp::arg("time")));
+
+        }
         { //lagrangian::JulianDay::ToPtime
             JulianDayExposer.def(
                 "ToPtime",
@@ -466,6 +474,8 @@ void DatePythonModule()
                     (&lagrangian::JulianDay::get_seconds));
 
         }
+
+        JulianDayExposer.staticmethod("JulianDayFromUnixTime");
 
         // Operators
         JulianDayExposer.def("__float__",
