@@ -20,6 +20,10 @@
 #include "integration_wrapper.h"
 #include "reader_wrapper.h"
 #include "map_wrapper.h"
+#include "parameter_wrapper.h"
+
+#include "boost/python/suite/indexing/vector_indexing_suite.hpp"
+
 
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #include <numpy/noprefix.h>
@@ -39,6 +43,15 @@ BOOST_PYTHON_MODULE(lagrangian)
     bp::to_python_converter<const boost::posix_time::time_duration,
         wrapper::TimeDurationToPython>();
 
+    { // std::vector< std::string >
+        bp::class_<std::vector<std::string> > StringListExposer = bp::class_<
+                std::vector<std::string> >("StringList");
+        bp::scope StringListScope(StringListExposer);
+        StringListExposer.def(
+                bp::vector_indexing_suite<std::vector<std::string>, true>());
+    }
+
+    wrapper::ParameterPythonModule();
     wrapper::DatePythonModule();
     wrapper::FieldPythonModule();
     wrapper::ReaderPythonModule();
