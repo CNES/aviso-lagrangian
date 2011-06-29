@@ -45,6 +45,42 @@ bp::tuple Path::WrapperCompute(const lagrangian::Iterator& it,
     return bp::make_tuple(result, x1, y1);
 }
 
+FiniteLyapunovExponents::FiniteLyapunovExponents(
+        lagrangian::FiniteLyapunovExponents const & arg) :
+    lagrangian::FiniteLyapunovExponents(arg),
+            bp::wrapper<lagrangian::FiniteLyapunovExponents>()
+
+{
+
+}
+
+FiniteLyapunovExponents::FiniteLyapunovExponents(
+        lagrangian::JulianDay const & start_time,
+        lagrangian::JulianDay const & end_time,
+        boost::posix_time::time_duration const & delta_t,
+        double const min_separation,
+        double const delta,
+        lagrangian::Field const * field) :
+    lagrangian::FiniteLyapunovExponents(start_time,
+                end_time,
+                delta_t,
+                min_separation,
+                delta,
+                field),
+            bp::wrapper<lagrangian::FiniteLyapunovExponents>()
+{
+}
+
+bp::tuple FiniteLyapunovExponents::WrapperCompute(
+        const lagrangian::Iterator& it) const
+{
+    lagrangian::Triplet p;
+
+    bool result = lagrangian::FiniteLyapunovExponents::Compute(it, p);
+
+    return bp::make_tuple(result, p);
+}
+
 // ___________________________________________________________________________//
 
 void IntegrationPythonModule()
@@ -111,6 +147,66 @@ void IntegrationPythonModule()
             (bp::arg("it"),
              bp::arg("x0"),
              bp::arg("x1")));
+    //
+    // lagrangian::FiniteLyapunovExponents
+    //
+    bp::class_<FiniteLyapunovExponents, bp::bases<lagrangian::Integration> >(
+            "FiniteLyapunovExponents",
+            bp::init<lagrangian::JulianDay const &,
+                     lagrangian::JulianDay const &,
+                     boost::posix_time::time_duration const &,
+                     double const,
+                     double const,
+                     lagrangian::Field const *>((
+                             bp::arg("start_time"),
+                             bp::arg("end_time"),
+                             bp::arg("delta_t"),
+                             bp::arg("min_separation"),
+                             bp::arg("delta"),
+                             bp::arg("field"))))
+        .def(
+            "Compute",
+            (bp::tuple (lagrangian::FiniteLyapunovExponents::*)
+                (lagrangian::Iterator const &) const)
+                    (&FiniteLyapunovExponents::WrapperCompute),
+                                 (bp::arg("it")))
+        .def(
+            "Exponents",
+            (void (lagrangian::FiniteLyapunovExponents::*)
+                (lagrangian::Iterator const &,
+                 lagrangian::Triplet const &))
+                     (&lagrangian::FiniteLyapunovExponents::Exponents),
+            (bp::arg("it"),
+             bp::arg("p")))
+        .def(
+            "Separation",
+            (bool (lagrangian::FiniteLyapunovExponents::*)
+                (lagrangian::Triplet const &) const)
+                    (&lagrangian::FiniteLyapunovExponents::Separation),
+            ( bp::arg("p")))
+        .def(
+            "SetInitialPoint",
+            (lagrangian::Triplet (lagrangian::FiniteLyapunovExponents::*)
+                (double const, double const) const)
+                    (&lagrangian::FiniteLyapunovExponents::SetInitialPoint),
+            (bp::arg("x"),
+             bp::arg("y")))
+        .def(
+             "get_lambda1",
+             (double (lagrangian::FiniteLyapunovExponents::*)() const)
+                     (&lagrangian::FiniteLyapunovExponents::get_lambda1))
+        .def(
+            "get_lambda2",
+            (double (lagrangian::FiniteLyapunovExponents::*)() const)
+                    (&lagrangian::FiniteLyapunovExponents::get_lambda2))
+        .def(
+             "get_theta1",
+             (double (lagrangian::FiniteLyapunovExponents::*)() const)
+                     (&lagrangian::FiniteLyapunovExponents::get_theta1))
+        .def(
+            "get_theta2",
+            (double (lagrangian::FiniteLyapunovExponents::*)() const)
+                    (&lagrangian::FiniteLyapunovExponents::get_theta2));
 }
 
 } // namespace wrapper
