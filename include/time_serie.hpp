@@ -145,15 +145,15 @@ public:
      * undefined or contains an empty string, the object will not do unit
      * conversion(i.e. the unit of the interpolated value is the unit of the
      * file)
-     * @param n Number of grids to load into memory
      * @param reader Instance of an object implementing the class Reader. By
      * default the class uses the reader of NetCDF grids.
+     * @param n Number of grids to load into memory
      */
     TimeSerie(const std::vector<std::string>& filenames,
             const std::string& varname,
             const std::string& unit = "",
-            const int n = 4,
-            const reader::Factory::Type type = reader::Factory::kNetCDF);
+            const reader::Factory::Type type = reader::Factory::kNetCDF,
+            const int n = 4);
 
     /**
      * @brief Default method invoked when a TimeSerie is destroyed.

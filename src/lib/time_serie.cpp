@@ -77,8 +77,8 @@ FileList::FileList(const std::vector<std::string>& filenames,
 TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
         const std::string& varname,
         const std::string& unit,
-        const int n,
-        const reader::Factory::Type type) :
+        const reader::Factory::Type type,
+        const int n) :
     first_index_(-1), last_index_(-1), varname_(varname), unit_(unit)
 {
     readers_.resize(n);

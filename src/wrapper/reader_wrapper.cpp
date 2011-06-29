@@ -16,6 +16,7 @@
 */
 
 #include "reader_wrapper.h"
+#include "reader_factory.hpp"
 
 namespace wrapper
 {

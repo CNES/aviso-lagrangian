@@ -27,6 +27,7 @@
 #include "parameter.hpp"
 #include "time_serie.hpp"
 #include "field.hpp"
+#include "reader_factory.hpp"
 
 // ___________________________________________________________________________//
 
@@ -42,7 +43,8 @@ private:
     lagrangian::TimeSerie *v_;
 public:
     TimeSerie(const std::string& configuration_file,
-            const Field::UnitType unit_type = kMetric);
+            const Field::UnitType unit_type = kMetric,
+            const reader::Factory::Type reader_type = reader::Factory::kNetCDF);
 
     ~TimeSerie()
     {

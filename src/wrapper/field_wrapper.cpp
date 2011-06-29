@@ -79,8 +79,9 @@ TimeSerieField::TimeSerieField(lagrangian::field::TimeSerie const & arg) :
 }
 
 TimeSerieField::TimeSerieField(std::string const & configuration_file,
-        lagrangian::Field::UnitType const unit_type) :
-    lagrangian::field::TimeSerie(configuration_file, unit_type),
+        lagrangian::Field::UnitType const unit_type,
+        lagrangian::reader::Factory::Type reader_type) :
+    lagrangian::field::TimeSerie(configuration_file, unit_type, reader_type),
             bp::wrapper<lagrangian::field::TimeSerie>()
 {
 }
@@ -100,6 +101,10 @@ bp::tuple TimeSerieField::WrapperCompute(double const t,
 
 void FieldPythonModule()
 {
+    // lagrangian::reader::Factory::Type
+    bp::enum_<lagrangian::reader::Factory::Type>("ReaderType")
+            .value("kNetCDF", lagrangian::reader::Factory::kNetCDF)
+            .export_values();
     // lagrangian::Field
     {
         bp::class_<Field, boost::noncopyable>
@@ -162,9 +167,11 @@ void FieldPythonModule()
     bp::class_< TimeSerieField, bp::bases<lagrangian::Field> >(
             "TimeSerieField",
             bp::init<std::string const &,
-                     bp::optional<lagrangian::Field::UnitType> >((
+                     bp::optional<lagrangian::Field::UnitType,
+                         lagrangian::reader::Factory::Type> >((
                              bp::arg("configuration_file"),
-                             bp::arg("unit_type") = lagrangian::Field::kMetric)))
+                             bp::arg("unit_type") = lagrangian::Field::kMetric,
+                             bp::arg("reader_type") = lagrangian::reader::Factory::kNetCDF)))
         .def(
             "Compute",
             (bp::tuple (TimeSerieField::*)

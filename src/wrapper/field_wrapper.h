@@ -81,7 +81,9 @@ struct TimeSerieField: lagrangian::field::TimeSerie, bp::wrapper<
 
     TimeSerieField(std::string const & configuration_file,
             lagrangian::Field::UnitType const unit_type =
-                    lagrangian::Field::kMetric);
+                    lagrangian::Field::kMetric,
+            lagrangian::reader::Factory::Type reader_type =
+                    lagrangian::reader::Factory::kNetCDF);
 
     bp::tuple WrapperCompute(double const t,
             double const x,

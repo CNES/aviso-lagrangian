@@ -36,7 +36,6 @@ namespace wrapper
 
 // ___________________________________________________________________________//
 
-
 struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
 {
 

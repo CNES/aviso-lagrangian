@@ -23,17 +23,20 @@ namespace field
 {
 
 TimeSerie::TimeSerie(const std::string& configuration,
-        const Field::UnitType unit_type) :
+        const Field::UnitType unit_type,
+        const reader::Factory::Type reader_type) :
     Field(unit_type), u_(NULL), v_(NULL)
 {
     Parameter p(configuration);
 
     u_ = new lagrangian::TimeSerie(p.Values<std::string> ("U"),
             p.Value<std::string> ("U_NAME"),
-            GetUnit());
+            GetUnit(),
+            reader_type);
     v_ = new lagrangian::TimeSerie(p.Values<std::string> ("V"),
             p.Value<std::string> ("V_NAME"),
-            GetUnit());
+            GetUnit(),
+            reader_type);
 }
 
 bool TimeSerie::Compute(const double t,
