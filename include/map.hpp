@@ -134,12 +134,16 @@ public:
                 for (int iy = 0; iy < map_.get_ny(); ++iy)
                 {
                     Triplet t = map_.GetItem(ix, iy);
-                    if (!fle.Compute(it, t))
-                        map_.SetItem(ix, iy, Triplet::MISSING());
-                    else
-                        map_.SetItem(ix, iy, t);
+                    if (!t.IsMissing())
+                    {
+                        if (!fle.Compute(it, t))
+                            map_.SetItem(ix, iy, Triplet::MISSING());
+                        else
+                            map_.SetItem(ix, iy, t);
+                    }
                 }
             }
+            ++it;
         }
     }
 };
