@@ -102,34 +102,6 @@ class FiniteLyapunovExponents
 protected:
     Map<Triplet> map_;
 
-    /*typedef double
-     (FiniteLyapunovExponents::*GetExponent)() const;
-
-     Map<double> GetMapOfExponents(const double nan, const IntegrationIterator& it,
-     FiniteLyapunovExponents& fle, GetExponent pGetExponent)
-     {
-     Map<double> result(map_.get_nx(), map_.get_ny(), map_.get_x_min(),
-     map_.get_y_min(), map_.get_step());
-
-     for(int ix = 0; ix < map_.get_nx(); ++ix)
-     {
-     for(int iy = 0; iy < map_.get_ny(); ++iy)
-     {
-     Triplet t = map_.GetItem(ix, iy);
-     if (t.IsMissing())
-     {
-     result.SetItem(ix, iy, nan);
-     }
-     else
-     {
-     fle.Exponents(it, t);
-     result.SetItem(ix, iy, (fle.*pGetExponent)());
-     }
-     }
-     }
-     return result;
-     }
-     */
 public:
     FiniteLyapunovExponents(const int nx,
             const int ny,
@@ -170,38 +142,6 @@ public:
             }
         }
     }
-
-    /*Map<double> GetMapOfLambda1(const double nan,
-     const IntegrationIterator& it,
-     FiniteLyapunovExponents& fle)
-     {
-     return GetMapOfExponents(nan, it, fle,
-     &FiniteLyapunovExponents::get_lambda1);
-     }
-
-     Map<double> GetMapOfLambda2(const double nan,
-     const IntegrationIterator& it,
-     FiniteLyapunovExponents& fle)
-     {
-     return GetMapOfExponents(nan, it, fle,
-     &FiniteLyapunovExponents::get_lambda2);
-     }
-
-     Map<double> GetMapOfTheta1(const double nan,
-     const IntegrationIterator& it,
-     FiniteLyapunovExponents& fle)
-     {
-     return GetMapOfExponents(nan, it, fle,
-     &FiniteLyapunovExponents::get_theta1);
-     }
-
-     Map<double> GetMapOfTheta2(const double nan,
-     const IntegrationIterator& it,
-     FiniteLyapunovExponents& fle)
-     {
-     return GetMapOfExponents(nan, it, fle,
-     &FiniteLyapunovExponents::get_theta2);
-     }*/
 };
 
 }
