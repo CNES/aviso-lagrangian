@@ -120,7 +120,7 @@ public:
             for (int iy = 0; iy < map_.get_ny(); ++iy)
             {
                 Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
-                        map_.GetYValue(ix));
+                        map_.GetYValue(iy));
                 map_.SetItem(ix, iy, t);
             }
         }

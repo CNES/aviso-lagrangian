@@ -134,7 +134,7 @@ public:
             const double y0,
             const double y1,
             const double y2) :
-        x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(x2)
+        x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2)
     {
     }
     inline double get_x0() const

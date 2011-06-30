@@ -224,7 +224,7 @@ void MapPythonModule()
              bp::arg("it"),
              bp::arg("fle")))
         .def(
-            "GetMapOfTheta2",
+            "GetMapOfTheta1",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,
                  lagrangian::Iterator const &,
