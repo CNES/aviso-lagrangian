@@ -1,0 +1,57 @@
+#!/usr/bin/python
+import lagrangian
+import datetime
+import argparse
+import numpy
+import re
+
+def usage():
+    parser = argparse.ArgumentParser(description='Compute path')
+    parser.add_argument('configuration', help='Configuration file')
+    parser.add_argument('input', help='Input positions')
+    parser.add_argument('output', help='Output positions')
+    parser.add_argument('start_time', help='Start time')
+    parser.add_argument('end_time', help='End time')
+    return parser.parse_args()
+
+
+args = usage()
+
+ts = lagrangian.TimeSerieField(args.configuration)
+start_time = lagrangian.JulianDay(args.start_time)
+end_time = lagrangian.JulianDay(args.end_time)
+delta = datetime.timedelta(0, 6 * 60 * 60)
+path = lagrangian.Path(start_time, end_time, delta, ts)
+
+it=path.GetIterator()
+
+n = sum([1 for line in open(args.input, 'r')])
+x = numpy.zeros(n)
+y = numpy.zeros(n)
+process = numpy.zeros(n)
+n = 0
+
+output = open(args.output, 'w')
+
+for line in open(args.input, 'r'):
+    line = line[:line.find('#')].strip()
+    if len(line):
+        columns = re.split('\s+', line)
+        x[n] = columns[0]
+        y[n] = columns[1]
+        process[n] = True
+        n+=1
+
+numpy.resize(x, n)
+numpy.resize(y, n)
+
+while it.GoAfter():
+    for ix in range(0,n):
+        if process[ix]:
+            (result, x1, y1) = path.Compute(it, x[ix], y[ix])
+            if result:
+                output.write("%f\t%f\t%f\n" % (x1, y1, it()))
+            x[ix] = x1
+            y[ix] = y1
+            process[ix] = result
+    it.Next();

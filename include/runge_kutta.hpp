@@ -25,89 +25,6 @@ namespace lagrangian
 {
 
 /**
- * Cartesian coordinate system
- */
-
-class Cartesian
-{
-private:
-    double x_;
-    double y_;
-    double z_;
-
-public:
-    Cartesian(const double x, const double y, const double z) :
-        x_(x), y_(y), z_(z)
-    {
-    }
-
-    /**
-     * @brief Build a new instance from spherical coordinate system
-     *
-     * @param longitude longitude in radians
-     * @param latitude latitude in radians
-     */
-    Cartesian(const double longitude, const double latitude)
-    {
-        const double cos_y = cos(latitude);
-
-        x_ = kEarthRadius * cos_y * cos(longitude);
-        y_ = kEarthRadius * cos_y * sin(longitude);
-        z_ = kEarthRadius * sin(latitude);
-    }
-
-    /**
-     * @brief Returns the x component in Cartesian coordinate system
-     *
-     * @return x
-     */
-    inline double get_x() const
-    {
-        return x_;
-    }
-
-    /**
-     * @brief Returns the y component in Cartesian coordinate system
-     *
-     * @return y
-     */
-    inline double get_y() const
-    {
-        return y_;
-    }
-
-    /**
-     * @brief Returns the z component in Cartesian coordinate system
-     *
-     * @return z
-     */
-    inline double get_z() const
-    {
-        return z_;
-    }
-
-    /**
-     * @brief Computes longitude value from Cartesian coordinate
-     *
-     * @return longitude in degrees
-     */
-    inline double GetLongitude() const
-    {
-        return RadiansToDegrees(atan2(y_, x_));
-    }
-
-    /**
-     * @brief Computes latitude value from Cartesian coordinate
-     *
-     * @return latitude in degrees
-     */
-    inline double GetLatitude() const
-    {
-        return RadiansToDegrees(asin(z_ / sqrt(x_ * x_ + y_ * y_ + z_ * z_)));
-    }
-};
-
-/**
  * @brief Fourth-order Runge-Kutta method
  */
 class RungeKutta
@@ -130,39 +47,42 @@ private:
     MoveFunction pMove_;
 
     inline void MoveAngular(const double t,
-            const double x,
-            const double y,
+            const double x0,
+            const double y0,
             const double u,
             const double v,
-            double& xi,
-            double& yi) const
+            double& x1,
+            double& y1) const
     {
-        xi = x + u * t;
-        yi = y + v * t;
+        x1 = x0 + u * t;
+        y1 = y0 + v * t;
     }
 
     inline void MoveMetric(const double t,
-            const double x,
-            const double y,
+            const double x0,
+            const double y0,
             const double u,
             const double v,
-            double& xi,
-            double& yi) const
+            double& x1,
+            double& y1) const
     {
-        const double xr = DegreesToRadians(x);
-        const double yr = DegreesToRadians(y);
+        const double xr = DegreesToRadians(x0);
+        const double yr = DegreesToRadians(y0);
         const double sin_x = sin(xr);
         const double cos_x = cos(xr);
         const double sin_y = sin(yr);
+        const double cos_y = cos(yr);
 
-        Cartesian c0(xr, yr);
+        double x = kEarthRadius * cos_y * cos_x;
+        double y = kEarthRadius * cos_y * sin_x;
+        double z = kEarthRadius * sin_y;
 
-        Cartesian c1(c0.get_x() + (-u * sin_x - v * cos_x * sin_y) * t,
-                c0.get_y() + (u * cos_x - v * sin_y * sin_x) * t,
-                c0.get_z() + (v * cos(yr)) * t);
+        x += (-u * sin_x - v * cos_x * sin_y) * t;
+        y += ( u * cos_x - v * sin_y * sin_x) * t;
+        z += ( v * cos_y) * t;
 
-        xi = c1.GetLongitude();
-        yi = c1.GetLatitude();
+        x1 = RadiansToDegrees(atan2(y, x));
+        y1 = RadiansToDegrees(asin(z / sqrt(x * x + y * y + z * z)));
     }
 
 public:
@@ -221,7 +141,6 @@ public:
                                 v1 + 2 * (v2 + v3) + v4,
                                 xi,
                                 yi);
-
                         return true;
                     }
                 }

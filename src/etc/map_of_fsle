@@ -1,0 +1,90 @@
+#!/usr/bin/python
+import lagrangian
+import datetime
+import netCDF4
+import numpy
+import argparse
+
+# ./map_of_fsle.py list.ini "2010-05-01 00:00:00.000" "2010-05-30 00:00:00.000"
+
+def usage():
+    parser = argparse.ArgumentParser(description='Compute Map of FSLE')
+    parser.add_argument('configuration', help='Configuration file')
+    parser.add_argument('fsle', help='Map of FSLE in NetCDF format')
+    parser.add_argument('start_time', help='Start time')
+    parser.add_argument('end_time', help='End time')
+    parser.add_argument('--step', help='Grid step in degrees', type=float,
+                        default=1)
+    parser.add_argument('--separation', help='Minimum separation in degrees',
+                        type=float, metavar='SEP', default=1.4)
+    parser.add_argument('--x_min', help='X min in degrees', type=float,
+                        default=-180)
+    parser.add_argument('--x_max', help='X max in degrees', type=float,
+                        default=180)
+    parser.add_argument('--y_min', help='Y min in degrees', type=float,
+                        default=-90)
+    parser.add_argument('--y_max', help='Y max in degrees', type=float,
+                        default=90)
+    return parser.parse_args()
+
+args = usage()
+
+NC_FILL_DOUBLE=9.9692099683868690e+36
+
+ts = lagrangian.TimeSerieField(args.configuration)
+start_time = lagrangian.JulianDay(args.start_time)
+end_time = lagrangian.JulianDay(args.end_time)
+delta = datetime.timedelta(0, 6 * 60 * 60)
+
+nx=int((args.x_max - args.x_min) / args.step)
+ny=int((args.y_max - args.y_min) / args.step)
+
+map_of_fle=lagrangian.MapOfFiniteLyapunovExponents(nx, ny, args.x_min,
+                                                   args.y_min, args.step)
+fle=lagrangian.FiniteLyapunovExponents(start_time, end_time, delta,
+                                       args.separation, args.step, ts)
+map_of_fle.Compute(fle)
+
+rootgrp = netCDF4.Dataset(args.fsle, 'w', format='NETCDF4')
+rootgrp.createDimension('x', nx)
+rootgrp.createDimension('y', ny)
+rootgrp.title = 'Map of FSLE'
+rootgrp.separation = 'Minimum separation in degrees: %f' % args.separation
+rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
+rootgrp.end_time = end_time.ToString("%Y-%m-%d %T")
+
+x_axis = rootgrp.createVariable('x','f8',('x',))
+x_axis.units = 'degrees_east'
+x_axis[:] = map_of_fle.get_map_properties().GetXAxis()
+
+y_axis = rootgrp.createVariable('y','f8',('y',))
+y_axis.units = 'degrees_north'
+y_axis[:] = map_of_fle.get_map_properties().GetYAxis()
+
+theta1 = rootgrp.createVariable('theta1','f8',('x', 'y',),
+                                fill_value=NC_FILL_DOUBLE)
+theta1.long_name = 'theta1'
+theta1.units = 'degrees'
+theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle.GetIterator(), fle)
+
+theta2 = rootgrp.createVariable('theta2','f8',('x', 'y',),
+                                fill_value=NC_FILL_DOUBLE)
+theta2.long_name = 'theta2'
+theta2.units = 'degrees'
+theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle.GetIterator(), fle)
+
+lambda1 = rootgrp.createVariable('lambda1','f8',('x', 'y',),
+                                 fill_value=NC_FILL_DOUBLE)
+lambda1.long_name = 'lambda1'
+lambda1.units = '1/day'
+lambda1[:] = map_of_fle.GetMapOfLambda1(NC_FILL_DOUBLE, fle.GetIterator(), fle)
+lambda1 = lambda1 * numpy.double(86400)
+
+lambda2 = rootgrp.createVariable('lambda2','f8',('x', 'y',),
+                                 fill_value=NC_FILL_DOUBLE)
+lambda2.long_name = 'lambda2'
+lambda2.units = '1/day'
+lambda2[:] = map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle.GetIterator(), fle)
+lambda2 = lambda1 * numpy.double(86400)
+
+rootgrp.close()

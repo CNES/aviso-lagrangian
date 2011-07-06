@@ -86,7 +86,7 @@ inline double RadiansToDegrees(const double x)
 /**
  * @brief Calculate distance between two latitudes/longitudes
  *
- * @return distance in meters
+ * @return distance in degrees
  */
 inline double Distance(const double lon0,
         const double lat0,
@@ -98,8 +98,8 @@ inline double Distance(const double lon0,
     double y1 = DegreesToRadians(lat1);
     double x1 = DegreesToRadians(lon1);
 
-    return acos(sin(y0) * sin(y1) + cos(y0) * cos(y1) * cos(x1 - x0))
-            * kEarthRadius;
+    return RadiansToDegrees(acos(sin(y0) * sin(y1) + cos(y0) * cos(y1) * cos(x1
+            - x0)));
 }
 
 /**

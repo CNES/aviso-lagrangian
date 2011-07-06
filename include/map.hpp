@@ -18,7 +18,14 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
+#include <cstdlib>
+#include <boost/thread.hpp>
 #include "integration.hpp"
+
+namespace std
+{
+    using ::getenv;
+}
 
 namespace lagrangian
 {
@@ -99,6 +106,36 @@ namespace map
 
 class FiniteLyapunovExponents
 {
+private:
+    void ComputeHt(const int i_start,
+            const int i_stop,
+            lagrangian::FiniteLyapunovExponents& fle,
+            Iterator& it)
+    {
+        for (int ix = i_start; ix < i_stop; ++ix)
+        {
+            for (int iy = 0; iy < map_.get_ny(); ++iy)
+            {
+                Triplet t = map_.GetItem(ix, iy);
+
+                if (!t.get_completed() && !t.IsMissing())
+                {
+                    if (!fle.Compute(it, t))
+                    {
+                        map_.SetItem(ix, iy, Triplet::MISSING());
+                    }
+                    else
+                    {
+                        if(fle.Separation(t))
+                            t.set_completed();
+                        map_.SetItem(ix, iy, t);
+                    }
+                }
+            }
+        }
+    }
+    int num_threads_;
+
 protected:
     Map<Triplet> map_;
 
@@ -111,6 +148,25 @@ public:
         map_(nx, ny, x_min, y_min, step)
 
     {
+        char* omp_num_threads = std::getenv("OMP_NUM_THREADS");
+        if( omp_num_threads == NULL)
+        {
+            num_threads_ = 1;
+        }
+        else
+        {
+            try
+            {
+                num_threads_ = boost::lexical_cast<int>(omp_num_threads);
+            }
+            catch (boost::bad_lexical_cast e)
+            {
+                throw std::runtime_error(
+                        std::string("Invalid value for OMP_NUM_THREADS: ")
+                            + omp_num_threads);
+            }
+        }
+
     }
 
     void Compute(lagrangian::FiniteLyapunovExponents& fle)
@@ -126,23 +182,24 @@ public:
         }
 
         Iterator it = fle.GetIterator();
-
+        boost::thread_group threads;
         while (it.GoAfter())
         {
-            for (int ix = 0; ix < map_.get_nx(); ++ix)
+            for(int ix = 0; ix < num_threads_; ++ix)
             {
-                for (int iy = 0; iy < map_.get_ny(); ++iy)
-                {
-                    Triplet t = map_.GetItem(ix, iy);
-                    if (!t.IsMissing())
-                    {
-                        if (!fle.Compute(it, t))
-                            map_.SetItem(ix, iy, Triplet::MISSING());
-                        else
-                            map_.SetItem(ix, iy, t);
-                    }
-                }
+                int from = (ix * map_.get_nx()) / num_threads_;
+                int to = ((ix + 1) * map_.get_nx()) / num_threads_;
+                threads.create_thread(boost::bind(
+                        &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
+                        this,
+                        from,
+                        to,
+                        fle,
+                        it));
             }
+            threads.join_all();
+            JulianDay jd(JulianDay::JulianDayFromUnixTime(it()));
+            std::cout << jd.ToString("%Y%m%d %H:%M:%S") << std::endl << std::flush;
             ++it;
         }
     }

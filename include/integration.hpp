@@ -124,6 +124,8 @@ class Triplet
 private:
     double x0_, x1_, x2_;
     double y0_, y1_, y2_;
+    double time_;
+    bool completed_;
 public:
     Triplet()
     {
@@ -134,8 +136,24 @@ public:
             const double y0,
             const double y1,
             const double y2) :
-        x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2)
+        x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2), time_(0), completed_(false)
     {
+    }
+    inline void Update(const double time,
+            const double x0,
+            const double x1,
+            const double x2,
+            const double y0,
+            const double y1,
+            const double y2)
+    {
+        x0_ = x0;
+        x1_ = x1;
+        x2_ = x2;
+        y0_ = y0;
+        y1_ = y1;
+        y2_ = y2;
+        time_ = time;
     }
     inline double get_x0() const
     {
@@ -160,6 +178,18 @@ public:
     inline double get_y2() const
     {
         return y2_;
+    }
+    inline double get_time() const
+    {
+        return time_;
+    }
+    inline bool get_completed() const
+    {
+        return completed_;
+    }
+    inline void set_completed()
+    {
+        completed_ = true;
     }
     inline bool IsMissing()
     {
@@ -226,7 +256,7 @@ public:
                 || !rk_.Compute(it(), p.get_x2(), p.get_y2(), x[2], y[2]))
             return false;
 
-        p = Triplet(x[0], x[1], x[2], y[0], y[1], y[2]);
+        p.Update(it(), x[0], x[1], x[2], y[0], y[1], y[2]);
         return true;
     }
 

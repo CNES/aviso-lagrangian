@@ -15,6 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/thread/mutex.hpp>
 #include <float.h>
 #include <algorithm>
 
@@ -27,6 +28,53 @@
 
 namespace lagrangian
 {
+
+// ___________________________________________________________________________//
+
+boost::mutex g_load_mutex;
+
+// ___________________________________________________________________________//
+
+void TimeSerie::Load(int& ix0, const int ix1)
+{
+    boost::mutex::scoped_lock scoped_lock(g_load_mutex);
+
+    // Should we load new data into memory ?
+    if (ix0 < first_index_ || ix0 > last_index_ || ix1 < first_index_
+            || ix1 > last_index_)
+    {
+        std::vector<int> indexes;
+        int start = 0;
+
+        // Keep the last file into memory
+        if (ix0 > 0)
+            --ix0;
+
+        indexes.push_back(ix0);
+
+        for (int ix = 1; ix < static_cast<int> (readers_.size()); ++ix)
+        {
+            if (indexes[start] + ix < time_serie_->GetNumElements())
+            {
+                indexes.push_back(indexes[start] + ix);
+            }
+            else
+            {
+                indexes.insert(indexes.begin(), indexes[0] - 1);
+                start += 1;
+            }
+        }
+
+        first_index_ = ix0;
+        last_index_ = ix0 + readers_.size() - 1;
+
+        for (int ix = 0; ix < static_cast<int> (readers_.size()); ++ix)
+        {
+            readers_[ix]->Open(time_serie_->GetItem(indexes[ix]));
+            readers_[ix]->Load(varname_, unit_);
+        }
+    }
+}
 
 // ___________________________________________________________________________//
 
@@ -96,44 +144,11 @@ double TimeSerie::Interpolate(const double date,
         const double longitude,
         const double latitude)
 {
+
     int ix0 = time_serie_->FindIndex(date);
     int ix1 = ix0 == time_serie_->GetNumElements() - 1 ? ix0 - 1 : ix0 + 1;
 
-    // Should we load new data into memory ?
-    if (ix0 < first_index_ || ix0 > last_index_ || ix1 < first_index_ || ix1
-            > last_index_)
-    {
-        std::vector<int> indexes;
-        int start = 0;
-
-        // Keep the last file into memory
-        if (ix0 > 0)
-            --ix0;
-
-        indexes.push_back(ix0);
-
-        for (int ix = 1; ix < static_cast<int> (readers_.size()); ++ix)
-        {
-            if (indexes[start] + ix < time_serie_->GetNumElements())
-            {
-                indexes.push_back(indexes[start] + ix);
-            }
-            else
-            {
-                indexes.insert(indexes.begin(), indexes[0] - 1);
-                start += 1;
-            }
-        }
-
-        first_index_ = ix0;
-        last_index_ = ix0 + readers_.size() - 1;
-
-        for (int ix = 0; ix < static_cast<int> (readers_.size()); ++ix)
-        {
-            readers_[ix]->Open(time_serie_->GetItem(indexes[ix]));
-            readers_[ix]->Load(varname_, unit_);
-        }
-    }
+    Load(ix0, ix1);
 
     const double x0 = time_serie_->GetDate(ix0);
     const double x1 = time_serie_->GetDate(ix1);

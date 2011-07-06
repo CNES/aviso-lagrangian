@@ -134,6 +134,9 @@ private:
     std::string varname_;
     std::string unit_;
 
+    // Load new files in memory if necessary.
+    void Load(int& ix0, const int ix1);
+
 public:
 
     /**
