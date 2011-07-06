@@ -147,6 +147,7 @@ private:
     double increment_;
     bool is_regular_;
     bool is_ascending_;
+    bool is_circle_;
 
     // Check if  value(i) = start_ + i * increment_.
     void CalcIsRegular();
@@ -163,6 +164,9 @@ private:
     {
         int index = static_cast<int> (boost::math::round((coordinate - start_)
                 / increment_));
+
+        if(is_circle_)
+            index %= GetNumElements();
 
         if (index < 0)
             return bounded ? 0 : -1;
@@ -400,6 +404,12 @@ public:
         else
         {
             GetCoordinateValue(i0) - coordinate > 1e-4 ? --i0 : ++i1;
+
+            if(is_circle_)
+            {
+                i0 %= GetNumElements();
+                i1 %= GetNumElements();
+            }
         }
         return i0 >= 0 && i1 < GetNumElements();
     }

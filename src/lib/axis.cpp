@@ -233,6 +233,10 @@ void Axis::CalcIsRegular()
             }
         }
     }
+
+    is_circle_ = is_regular_ && type_ == kLongitude
+            ? IsSame(increment_ * GetNumElements(), 360)
+            : false;
 }
 
 }
