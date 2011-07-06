@@ -933,11 +933,9 @@ def caption_options(parser):
 
 def netcdf_options(parser):
     """
-    Definition of NetCDF variables to read
+    Definition of NetCDF axis to read
     """
-    netcdf = parser.add_argument_group('NetCDF', 'Defining variables to read')
-    netcdf.add_argument('--variable', help='NetCDF variable name to map',
-                        default='Grid_0001', metavar='NAME')
+    netcdf = parser.add_argument_group('NetCDF', 'Defining axis to read')
     netcdf.add_argument('--x_axis', help='NetCDF variable name defines the '
                         'axis of longitudes', metavar='NAME')
     netcdf.add_argument('--y_axis', help='NetCDF variable name defines the '
@@ -951,8 +949,6 @@ def scatter_options(parser):
     """
     scatter = parser.add_argument_group('scatter plot', 'Setting up scatter '
                                         'plot')
-    scatter.add_argument('--column', nargs=3, help='Column numbers to read '
-                         'in the CSV file', metavar=('X', 'Y', 'Z'), type=int)
     scatter.add_argument('--size', help='Dot size to display.', type=float)
 
 # __________________________________________________________________________ #
@@ -972,6 +968,13 @@ def usage():
     # optional arguments
     parser.add_argument('--debug', help='Print debugging message',
                         action='store_true')
+
+    # exclusive group
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--variable', help='NetCDF variable name to map',
+                        metavar='NAME')
+    group.add_argument('--column', nargs=3, help='Column numbers to read '
+                         'in the CSV file', metavar=('X', 'Y', 'Z'), type=int)
 
     # mapping options
     mapping_options(parser)
