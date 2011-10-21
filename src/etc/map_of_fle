@@ -58,8 +58,8 @@ map_of_fle.Compute(fle)
 rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
 rootgrp.createDimension('x', nx)
 rootgrp.createDimension('y', ny)
-rootgrp.title = 'Map of %' % caption
-if rootgrp.separation > 0:
+rootgrp.title = 'Map of %s' % caption
+if args.separation > 0:
     rootgrp.separation ='Minimum separation (expansion) in degrees: %f' % ( 
         args.separation)
 rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
