@@ -301,7 +301,7 @@ class Variable(object):
         """
         [x_min, x_max] = Axis.normalize_longitude_range(x_min, x_max)
         
-        logging.debug('select area [%.1f, %.1f, %.1f, %.1f]' % (x_min,
+        logging.debug('select area [%.2f, %.2f, %.2f, %.2f]' % (x_min,
                                                                 x_max,
                                                                 y_min,
                                                                 y_max))
@@ -650,7 +650,7 @@ class Mapping(object):
         Set color range
         """
         step = (max - min) / n_colors
-        logging.debug('set range to [%.1f, %.1f], step=%.1f' % (min, max, step))
+        logging.debug('set range to [%.2f, %.2f], step=%.2f' % (min, max, step))
         self._range = numpy.arange(min, max + step, step)
 
     def __contour(self, cm):
@@ -1023,6 +1023,11 @@ def main():
     else:
         var = Variable.from_ascii(args.inputfile,
                                   map(lambda x: x - 1, args.column))
+    
+    logging.debug('average: %f' % (numpy.mean(var.values)))
+    logging.debug('stddev: %f' % (numpy.std(var.values)))
+    logging.debug('minimum: %f' % (numpy.min(var.values)))
+    logging.debug('maximum: %f' % (numpy.max(var.values)))
     
     # Set the caption and the title with the data supplied by the user
     if args.legend:

@@ -171,8 +171,7 @@ Axis::Axis(const netcdf::Variable& variable) :
     // Determines axis from generic spatial coordinates
     if (type_ == kUnknown)
     {
-        netcdf::Attribute attribute =
-                variable.FindAttributeIgnoreCase(netcdf::CF::AXIS);
+        attribute = variable.FindAttributeIgnoreCase(netcdf::CF::AXIS);
         if (attribute != netcdf::Attribute::MISSING)
         {
             if (boost::iequals(attribute.get_string(), "Y"))

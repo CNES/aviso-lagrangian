@@ -138,6 +138,13 @@ public:
     }
 
     /**
+     * @brief Default method invoked when a JulianDay is destroyed.
+     */
+    virtual ~JulianDay()
+    {
+    }
+
+    /**
      * @brief Computes a Julian day from Unix Time
      *
      * @return The julian day
@@ -348,6 +355,10 @@ public:
 
     ModifiedJulianDay(const double day, const int gap = 0) :
         JulianDay(ToJulianDay<double> (day, gap))
+    {
+    }
+
+    virtual ~ModifiedJulianDay()
     {
     }
 

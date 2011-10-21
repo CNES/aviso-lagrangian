@@ -66,7 +66,8 @@ inline double Square(const double x)
  */
 inline double DegreesToRadians(const double x)
 {
-    return x * M_PI / 180.0;
+    static const double f = M_PI / 180.0;
+    return x * f;
 }
 
 // ___________________________________________________________________________//
@@ -78,7 +79,8 @@ inline double DegreesToRadians(const double x)
  */
 inline double RadiansToDegrees(const double x)
 {
-    return x * 180.0 / M_PI;
+    static const double f = 180.0 / M_PI;
+    return x * f;
 }
 
 // ___________________________________________________________________________//

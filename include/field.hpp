@@ -35,9 +35,9 @@ private:
     UnitType unit_type_;
 public:
 
-    Field(const Field::UnitType unit_type)
+    Field(const Field::UnitType unit_type): unit_type_(unit_type)
     {
-        switch (unit_type)
+        switch (unit_type_)
         {
         case kMetric:
             break;
@@ -46,8 +46,9 @@ public:
         default:
             throw std::invalid_argument("invalid Field::UnitType value");
         }
-        unit_type_ = unit_type;
     }
+
+    virtual ~Field() {}
 
     virtual bool Compute(const double t,
             const double x,
@@ -60,7 +61,7 @@ public:
      *
      * @return unit type.
      */
-    const UnitType get_unit_type() const
+    UnitType get_unit_type() const
     {
         return unit_type_;
     }
@@ -77,6 +78,8 @@ public:
             return "m/s";
         case kAngular:
             return "deg/s";
+        default:
+            throw std::runtime_error("invalid Field::UnitType value");
         }
     }
 };

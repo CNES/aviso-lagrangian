@@ -57,7 +57,6 @@ private:
     typedef double (lagrangian::FiniteLyapunovExponents::*GetExponent)() const;
 
     bp::numeric::array GetMapOfExponents(const double nan,
-            const lagrangian::Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle,
             GetExponent pGetExponent) const;
 
@@ -68,20 +67,16 @@ public:
             const double y_min,
             const double step);
 
-    bp::numeric::array GetMapOfLambda1(const double nan,
-            lagrangian::Iterator const & it,
+    bp::numeric::array GetMapOfLambda1(const double fill_value,
             lagrangian::FiniteLyapunovExponents& fle) const;
 
-    bp::numeric::array GetMapOfLambda2(const double nan,
-            lagrangian::Iterator const & it,
+    bp::numeric::array GetMapOfLambda2(const double fill_value,
             lagrangian::FiniteLyapunovExponents& fle) const;
 
-    bp::numeric::array GetMapOfTheta1(const double nan,
-            lagrangian::Iterator const & it,
+    bp::numeric::array GetMapOfTheta1(const double fill_value,
             lagrangian::FiniteLyapunovExponents& fle) const;
 
-    bp::numeric::array GetMapOfTheta2(const double nan,
-            lagrangian::Iterator const & it,
+    bp::numeric::array GetMapOfTheta2(const double fill_value,
             lagrangian::FiniteLyapunovExponents& fle) const;
 
     wrapper::MapProperties get_map_properties() const;

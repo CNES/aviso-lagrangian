@@ -69,6 +69,14 @@ private:
     }
 
 public:
+
+    /**
+     * @brief Constructor
+     */
+    Netcdf()
+    {
+    }
+
     /**
      * @brief Opens a NetCDF grid in read-only.
      *

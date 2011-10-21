@@ -58,12 +58,14 @@ FiniteLyapunovExponents::FiniteLyapunovExponents(
         lagrangian::JulianDay const & start_time,
         lagrangian::JulianDay const & end_time,
         boost::posix_time::time_duration const & delta_t,
+        lagrangian::FiniteLyapunovExponents::Mode mode,
         double const min_separation,
         double const delta,
         lagrangian::Field const * field) :
     lagrangian::FiniteLyapunovExponents(start_time,
                 end_time,
                 delta_t,
+                mode,
                 min_separation,
                 delta,
                 field),
@@ -114,11 +116,10 @@ void IntegrationPythonModule()
             bp::init<lagrangian::JulianDay const &,
                      lagrangian::JulianDay const &,
                      boost::posix_time::time_duration const &,
-                     double, lagrangian::Field const *>((
+                     lagrangian::Field const *>((
                              bp::arg("start_time"),
                              bp::arg("end_time"),
                              bp::arg("delta_t"),
-                             bp::arg("min_separation"),
                              bp::arg("field"))))
         .def(
             "GetIterator",
@@ -150,17 +151,24 @@ void IntegrationPythonModule()
     //
     // lagrangian::FiniteLyapunovExponents
     //
+    bp::enum_< lagrangian::FiniteLyapunovExponents::Mode>("Mode").
+            value("kFSLE", lagrangian::FiniteLyapunovExponents::kFSLE).
+            value("kFTLE", lagrangian::FiniteLyapunovExponents::kFTLE).
+            export_values();
+
     bp::class_<FiniteLyapunovExponents, bp::bases<lagrangian::Integration> >(
             "FiniteLyapunovExponents",
             bp::init<lagrangian::JulianDay const &,
                      lagrangian::JulianDay const &,
                      boost::posix_time::time_duration const &,
+                     lagrangian::FiniteLyapunovExponents::Mode,
                      double const,
                      double const,
                      lagrangian::Field const *>((
                              bp::arg("start_time"),
                              bp::arg("end_time"),
                              bp::arg("delta_t"),
+                             bp::arg("mode"),
                              bp::arg("min_separation"),
                              bp::arg("delta"),
                              bp::arg("field"))))

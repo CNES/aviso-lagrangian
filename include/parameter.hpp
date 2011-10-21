@@ -79,7 +79,7 @@ private:
         {
             return boost::lexical_cast<T>(value);
         }
-        catch (boost::bad_lexical_cast e)
+        catch (boost::bad_lexical_cast& e)
         {
             throw std::runtime_error(str(boost::format("value `%s' could not be interpreted as %s")
                     % boost::lexical_cast<std::string>(value)
@@ -97,7 +97,7 @@ public:
      * @throw std::runtime_error if the file does not exist or contains a
      * syntax error.
      */
-    Parameter(const std::string& filename)
+    Parameter(const std::string& filename): data_()
     {
         Load(filename);
     }
@@ -105,7 +105,7 @@ public:
     /**
      * @brief Create a new instance with no data.
      */
-    Parameter()
+    Parameter(): data_()
     {
     }
 

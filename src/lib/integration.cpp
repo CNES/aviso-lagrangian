@@ -20,8 +20,7 @@
 namespace lagrangian
 {
 
-void FiniteLyapunovExponents::Exponents(const Iterator& it,
-        const Triplet& p)
+void FiniteLyapunovExponents::Exponents(const Triplet& p)
 {
     const double delta_t = p.get_time() - start_time_;
 

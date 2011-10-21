@@ -53,7 +53,6 @@ bp::numeric::array MapProperties::GetYAxis() const
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
         double const nan,
-        const lagrangian::Iterator& it,
         lagrangian::FiniteLyapunovExponents& fle,
         GetExponent pGetExponent) const
 {
@@ -74,9 +73,14 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
             {
                 data[ix * map_.get_ny() + iy] = nan;
             }
+            else if( !t.get_completed() && fle.get_mode() ==
+                    lagrangian::FiniteLyapunovExponents::kFSLE )
+            {
+                data[ix * map_.get_ny() + iy] = 0;
+            }
             else
             {
-                fle.Exponents(it, t);
+                fle.Exponents(t);
                 data[ix * map_.get_ny() + iy] = (fle.*pGetExponent)();
             }
         }
@@ -95,45 +99,37 @@ map_properties_(nx, ny, x_min, y_min, step)
 }
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda1(
-        const double nan,
-        lagrangian::Iterator const & it,
+        const double fill_value,
         lagrangian::FiniteLyapunovExponents& fle) const
 {
-    return GetMapOfExponents(nan,
-            it,
+    return GetMapOfExponents(fill_value,
             fle,
             &lagrangian::FiniteLyapunovExponents::get_lambda1);
 }
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda2(
-        const double nan,
-        lagrangian::Iterator const & it,
+        const double fill_value,
         lagrangian::FiniteLyapunovExponents& fle) const
 {
-    return GetMapOfExponents(nan,
-            it,
+    return GetMapOfExponents(fill_value,
             fle,
             &lagrangian::FiniteLyapunovExponents::get_lambda2);
 }
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfTheta1(
-        const double nan,
-        lagrangian::Iterator const & it,
+        const double fill_value,
         lagrangian::FiniteLyapunovExponents& fle) const
 {
-    return GetMapOfExponents(nan,
-            it,
+    return GetMapOfExponents(fill_value,
             fle,
             &lagrangian::FiniteLyapunovExponents::get_theta1);
 }
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfTheta2(
-        const double nan,
-        lagrangian::Iterator const & it,
+        const double fill_value,
         lagrangian::FiniteLyapunovExponents& fle) const
 {
-    return GetMapOfExponents(nan,
-            it,
+    return GetMapOfExponents(fill_value,
             fle,
             &lagrangian::FiniteLyapunovExponents::get_theta2);
 }
@@ -207,41 +203,33 @@ void MapPythonModule()
             "GetMapOfLambda1",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,
-                 lagrangian::Iterator const &,
-                 lagrangian::FiniteLyapunovExponents &))
+                 lagrangian::FiniteLyapunovExponents const &))
                     (&MapOfFiniteLyapunovExponents::GetMapOfLambda1),
-            (bp::arg("nan"),
-             bp::arg("it"),
+            (bp::arg("fill_value"),
              bp::arg("fle")))
         .def(
             "GetMapOfLambda2",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,
-                 lagrangian::Iterator const &,
-                 lagrangian::FiniteLyapunovExponents &))
+                 lagrangian::FiniteLyapunovExponents const &))
                     (&MapOfFiniteLyapunovExponents::GetMapOfLambda2),
-            (bp::arg("nan"),
-             bp::arg("it"),
+            (bp::arg("fill_value"),
              bp::arg("fle")))
         .def(
             "GetMapOfTheta1",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,
-                 lagrangian::Iterator const &,
-                 lagrangian::FiniteLyapunovExponents &))
+                 lagrangian::FiniteLyapunovExponents const &))
                     (&MapOfFiniteLyapunovExponents::GetMapOfTheta1),
-            (bp::arg("nan"),
-             bp::arg("it"),
+            (bp::arg("fill_value"),
              bp::arg("fle")))
         .def(
             "GetMapOfTheta2",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,
-                 lagrangian::Iterator const &,
-                 lagrangian::FiniteLyapunovExponents &))
+                 lagrangian::FiniteLyapunovExponents const &))
                     (&MapOfFiniteLyapunovExponents::GetMapOfTheta2),
-            (bp::arg("nan"),
-             bp::arg("it"),
+            (bp::arg("fill_value"),
              bp::arg("fle")))
         .def(
             "get_map_properties",

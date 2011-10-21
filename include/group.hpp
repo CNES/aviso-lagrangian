@@ -50,6 +50,13 @@ protected:
 public:
 
     /**
+     * @brief Constructor
+     */
+    Group(): dimensions_(), attributes_()
+    {
+    }
+
+    /**
      * @brief Default method invoked when a Group is destroyed.
      */
     virtual ~Group()

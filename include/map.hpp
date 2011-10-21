@@ -47,6 +47,9 @@ public:
         nx_(nx), ny_(ny), x_min_(x_min), y_min_(y_min), step_(step)
     {
     }
+    virtual ~MapProperties()
+    {
+    }
     inline double GetXValue(const int ix) const
     {
         return x_min_ + ix * step_;
@@ -128,6 +131,7 @@ private:
                     {
                         if(fle.Separation(t))
                             t.set_completed();
+
                         map_.SetItem(ix, iy, t);
                     }
                 }
@@ -145,21 +149,17 @@ public:
             const double x_min,
             const double y_min,
             const double step) :
-        map_(nx, ny, x_min, y_min, step)
+                num_threads_(1), map_(nx, ny, x_min, y_min, step)
 
     {
         char* omp_num_threads = std::getenv("OMP_NUM_THREADS");
-        if( omp_num_threads == NULL)
-        {
-            num_threads_ = 1;
-        }
-        else
+        if( omp_num_threads )
         {
             try
             {
                 num_threads_ = boost::lexical_cast<int>(omp_num_threads);
             }
-            catch (boost::bad_lexical_cast e)
+            catch (boost::bad_lexical_cast& e)
             {
                 throw std::runtime_error(
                         std::string("Invalid value for OMP_NUM_THREADS: ")
@@ -167,6 +167,10 @@ public:
             }
         }
 
+    }
+
+    virtual ~FiniteLyapunovExponents()
+    {
     }
 
     void Compute(lagrangian::FiniteLyapunovExponents& fle)
@@ -197,9 +201,9 @@ public:
                         fle,
                         it));
             }
+
             threads.join_all();
             JulianDay jd(JulianDay::JulianDayFromUnixTime(it()));
-            std::cout << jd.ToString("%Y%m%d %H:%M:%S") << std::endl << std::flush;
             ++it;
         }
     }
@@ -214,7 +218,6 @@ private:
     (lagrangian::FiniteLyapunovExponents::*GetExponent)() const;
 
     Map<double> GetMapOfExponents(const double nan,
-            const Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle,
             GetExponent pGetExponent)
     {
@@ -233,9 +236,14 @@ private:
                 {
                     result.SetItem(ix, iy, nan);
                 }
+                else if( !t.get_completed() && fle.get_mode() ==
+                        lagrangian::FiniteLyapunovExponents::kFSLE )
+                {
+                    result.SetItem(ix, iy, 0);
+                }
                 else
                 {
-                    fle.Exponents(it, t);
+                    fle.Exponents(t);
                     result.SetItem(ix, iy, (fle.*pGetExponent)());
                 }
             }
@@ -253,45 +261,36 @@ public:
     }
 
     Map<double> GetMapOfLambda1(const double nan,
-            const Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle)
     {
         return GetMapOfExponents(nan,
-                it,
                 fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda1);
     }
 
     Map<double> GetMapOfLambda2(const double nan,
-            const Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle)
     {
         return GetMapOfExponents(nan,
-                it,
                 fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda2);
     }
 
     Map<double> GetMapOfTheta1(const double nan,
-            const Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle)
     {
         return GetMapOfExponents(nan,
-                it,
                 fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta1);
     }
 
     Map<double> GetMapOfTheta2(const double nan,
-            const Iterator& it,
             lagrangian::FiniteLyapunovExponents& fle)
     {
         return GetMapOfExponents(nan,
-                it,
                 fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta2);
     }
-
 };
 
 }

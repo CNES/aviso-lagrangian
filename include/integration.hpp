@@ -66,7 +66,6 @@ protected:
     double start_time_;
     double end_time_;
     double size_of_interval_;
-    double min_separation_;
 
     const Field* const field_;
 
@@ -75,12 +74,14 @@ public:
     Integration(const JulianDay& start_time,
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
-            const double min_separation,
             const Field* const field) :
         start_time_(start_time.ToUnixTime()), end_time_(end_time.ToUnixTime()),
                 size_of_interval_(delta_t.total_seconds()),
-                min_separation_(min_separation), field_(field),
-                rk_(size_of_interval_, field_)
+                field_(field), rk_(size_of_interval_, field_)
+    {
+    }
+
+    virtual ~Integration()
     {
     }
 
@@ -102,8 +103,11 @@ public:
                 Integration(start_time,
                         end_time,
                         delta_t,
-                        std::numeric_limits<double>::max(),
                         field)
+    {
+    }
+
+    virtual ~Path()
     {
     }
 
@@ -136,7 +140,7 @@ public:
             const double y0,
             const double y1,
             const double y2) :
-        x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2), time_(0), completed_(false)
+            x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2), time_(0), completed_(false)
     {
     }
     inline void Update(const double time,
@@ -211,24 +215,74 @@ public:
 
 class FiniteLyapunovExponents: public Integration
 {
+public:
+    /**
+     * @brief Mode of integration
+     */
+    enum Mode
+    {
+        kFSLE, kFTLE
+    };
+
 private:
+    Mode mode_;
     const double delta_;
     double lambda1_;
     double lambda2_;
     double theta1_;
     double theta2_;
     double f2_;
+    double min_separation_;
+
+    typedef bool
+    (FiniteLyapunovExponents::*SeparationFunction)(const Triplet& p) const;
+
+    inline bool SeparationFSLE(const Triplet& p) const
+    {
+        double d1 = Distance(p.get_x0(), p.get_y0(), p.get_x1(), p.get_y1());
+        double d2 = Distance(p.get_x0(), p.get_y0(), p.get_x2(), p.get_y2());
+
+        boost::tuple<double const&, double const&> d = boost::minmax(d1, d2);
+
+        return d.get<1> () > min_separation_;
+    }
+
+    inline bool SeparationFTLE(const Triplet&) const
+    {
+        return false;
+    }
+
+    SeparationFunction pSeparation_;
 
 public:
     FiniteLyapunovExponents(const JulianDay& start_time,
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
+            const Mode mode,
             const double min_separation,
             const double delta,
             const Field* const field) :
-        Integration(start_time, end_time, delta_t, min_separation, field),
-                delta_(delta), f2_(0.5 * (1 / (delta_ * delta_)))
+        Integration(start_time, end_time, delta_t, field),
+                mode_(mode), delta_(delta), f2_(0.5 * (1 / (delta_ * delta_))),
+                min_separation_(-1)
 
+    {
+        switch (mode_)
+        {
+        case kFSLE:
+            min_separation_ = min_separation;
+            pSeparation_ = &FiniteLyapunovExponents::SeparationFSLE;
+            break;
+        case kFTLE:
+            pSeparation_ = &FiniteLyapunovExponents::SeparationFTLE;
+            break;
+        default:
+            throw std::invalid_argument(
+                    "invalid FiniteLyapunovExponents::Mode computation");
+        }
+    }
+
+    virtual ~FiniteLyapunovExponents()
     {
     }
 
@@ -239,12 +293,12 @@ public:
 
     inline bool Separation(const Triplet& p) const
     {
-        double d1 = Distance(p.get_x0(), p.get_y0(), p.get_x1(), p.get_y1());
-        double d2 = Distance(p.get_x0(), p.get_y0(), p.get_x2(), p.get_y2());
+        return (this->*pSeparation_)(p);
+    }
 
-        boost::tuple<double const&, double const&> d = boost::minmax(d1, d2);
-
-        return d.get<1> () > min_separation_;
+    inline Mode get_mode() const
+    {
+        return mode_;
     }
 
     inline bool Compute(const Iterator& it, Triplet& p) const
@@ -260,7 +314,7 @@ public:
         return true;
     }
 
-    void Exponents(const Iterator& it, const Triplet& p);
+    void Exponents(const Triplet& p);
 
     inline double get_lambda1() const
     {

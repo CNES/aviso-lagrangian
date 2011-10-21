@@ -57,6 +57,20 @@ public:
     {
         return unit_.find(unit) != unit_.end();
     }
+
+    /**
+     * @brief Default method invoked when an Unit is destroyed.
+     */
+    virtual ~Unit()
+    {
+    }
+
+    /**
+     * @brief Constructor
+     */
+    Unit(): unit_()
+    {
+    }
 };
 
 // ___________________________________________________________________________//

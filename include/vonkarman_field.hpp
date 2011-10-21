@@ -47,8 +47,8 @@ public:
             const double y0 = 0.3,
             const double l = 2,
             const double u0 = 14) :
-        Field(kMetric), a_(a), w_(w), tc_(tc), alpha2_(alpha * alpha), y0_(y0),
-                l_(l), u0_(u0)
+        Field(kMetric), a_(a), w_(w), r0_(r0), tc_(tc), alpha2_(alpha * alpha),
+                y0_(y0), l_(l), u0_(u0)
     {
     }
     bool Compute(const double t,

@@ -30,11 +30,11 @@ Field::Field(lagrangian::Field::UnitType const unit_type) :
 bool Field::Compute(double const t,
         double const x,
         double const y,
-        double& u,
+        double &u,
         double &v) const
 {
-    // pure virtual
-    throw;
+    bp::override function = this->get_override( "Compute" );
+    return function(t, x, y, u, v);
 }
 
 // ___________________________________________________________________________//
@@ -116,6 +116,24 @@ void FieldPythonModule()
                 .value("kMetric", lagrangian::Field::kMetric)
                 .value("kAngular", lagrangian::Field::kAngular)
                 .export_values();
+        { //lagrangian::Field::Compute
+
+            FieldExposer.def(
+                "Compute",
+                bp::pure_virtual((bool ( lagrangian::Field::* )
+                        (double const,
+                         double const,
+                         double const,
+                         double &,
+                         double & ) const)
+                    (&lagrangian::Field::Compute)),
+                (bp::arg("t"),
+                 bp::arg("x"),
+                 bp::arg("y"),
+                 bp::arg("u"),
+                 bp::arg("v")));
+
+        }
         { //lagrangian::Field::GetUnit
 
             FieldExposer.def(
@@ -126,7 +144,7 @@ void FieldPythonModule()
         { //lagrangian::Field::get_unit_type
             FieldExposer.def(
                 "get_unit_type",
-                (lagrangian::Field::UnitType const(lagrangian::Field::*)() const)
+                (lagrangian::Field::UnitType (lagrangian::Field::*)() const)
                     (&lagrangian::Field::get_unit_type));
         }
     }

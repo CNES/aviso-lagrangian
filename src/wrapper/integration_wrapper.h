@@ -55,6 +55,7 @@ struct FiniteLyapunovExponents: lagrangian::FiniteLyapunovExponents, bp::wrapper
     FiniteLyapunovExponents(lagrangian::JulianDay const & start_time,
             lagrangian::JulianDay const & end_time,
             boost::posix_time::time_duration const & delta_t,
+            lagrangian::FiniteLyapunovExponents::Mode mode,
             double const min_separation,
             double const delta,
             lagrangian::Field const * field);
