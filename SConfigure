@@ -1,0 +1,210 @@
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+
+import os
+import site
+import re
+import distutils.sysconfig
+
+INCLUDE = '/usr/include'
+LIB = '/usr/lib'
+
+def check_numpy(cfg):
+    """Test that Numpy is installed""" 
+    HEADER = 'numpy/noprefix.h'
+    cfg.Message('Checking for C header file %s... ' % HEADER)
+    try:
+        import numpy
+        path = os.path.join(numpy.__path__[0],
+                            os.path.join(os.path.join('core', 'include'),
+                                         HEADER))
+        if os.path.isfile(path):
+            cfg.Result('yes')
+            return (path, HEADER) 
+    except Exception:
+        pass
+    cfg.Result('no')
+    return
+
+def check_python_module(cfg, module):
+    """Test a Python module"""
+    PATTERN = re.compile("module '(.+)' from '(.+)'")
+    cfg.Message('Checking for Python module %s... ' % module)
+    try:
+        
+        m = PATTERN.search(str(__import__(module)))
+        cfg.Result('yes')
+        return (m.group(2), m.group(1))
+    except ImportError:
+        cfg.Result('no')
+        return
+
+def check_boost_headers(headers):
+    """Test boost C++ headers"""
+    for item in headers:
+        header = 'boost/%s' % item
+        if not cfg.CheckCXXHeader(header):
+            print '%s headers not found' % header
+            Exit(1)
+
+def append_include_path(env, key):
+    if env[key] != INCLUDE:
+        env.AppendUnique(CXXFLAGS=['-I%s' % env[key]])
+
+def append_library_path(env, key):
+    if env[key] != LIB:
+        env.AppendUnique(LDFLAGS=['-L%s' % env[key]])
+
+EnsureSConsVersion(1, 2)
+
+vars = Variables(['lagrangian.cfg'])
+
+# CXX compiler
+vars.AddVariables(PathVariable('CXX',
+                               'The C++ compiler',
+                               'g++',
+                               PathVariable.PathAccept))
+vars.Add('CXXFLAGS', 'The C++ compiler flags', None)
+vars.Add('LDFLAGS', 'The linker flags', None)
+
+# PREFIX
+vars.AddVariables(PathVariable('prefix',
+                               'Installation prefix',
+                               site.PREFIXES[0],
+                               PathVariable.PathIsDirCreate))
+
+# BOOST
+vars.AddVariables(PathVariable('boost_includes',
+                               'Location of boost C++ headers',
+                               INCLUDE,
+                               PathVariable.PathIsDir))
+vars.AddVariables(PathVariable('boost_libraries',
+                               'Location of boost C++ libraries',
+                               LIB,
+                               PathVariable.PathIsDir))
+
+# NetCDF
+vars.AddVariables(PathVariable('netcdf_includes',
+                               'Location of NetCDF C/C++ headers',
+                               INCLUDE,
+                               PathVariable.PathIsDir))
+vars.AddVariables(PathVariable('netcdf_libraries',
+                               'Location of NetCDF C/C++ libraries',
+                               LIB,
+                               PathVariable.PathIsDir))
+
+# UDUNTIS-2
+vars.AddVariables(PathVariable('udunits_includes',
+                               'Location of UDUNITS-2 C headers',
+                               INCLUDE,
+                               PathVariable.PathIsDir))
+vars.AddVariables(PathVariable('udunits_libraries',
+                               'Location of UDUNITS-2 C libraries',
+                               LIB,
+                               PathVariable.PathIsDir))
+
+# Die on unknown variables
+unknown = vars.UnknownVariables()
+if unknown:
+    print "Unknown variables:", unknown.keys()
+    Exit(1)
+
+env = Environment(variables = vars,
+                  CPPPATH=[distutils.sysconfig.get_python_inc()])
+
+cfg = Configure(env,
+                custom_tests = { 'CheckNumpy': check_numpy,
+                                 'CheckPythonModule' : check_python_module })
+
+append_include_path(env, 'boost_includes')
+append_library_path(env, 'boost_libraries')
+
+append_include_path(env, 'netcdf_includes')
+append_library_path(env, 'netcdf_libraries')
+
+append_include_path(env, 'udunits_includes')
+append_library_path(env, 'udunits_libraries')
+
+if not cfg.CheckCXX():
+    print 'CXX compiler does not work'
+    Exit(1)
+
+if not cfg.CheckCHeader('netcdf.h'):
+    print 'NetCDF header not found'
+    Exit(1)
+
+if not cfg.CheckCXXHeader('netcdfcpp.h'):
+    print 'NetCDF C++ header not found'
+    Exit(1)
+
+if not cfg.CheckCHeader('udunits2.h'):
+    print 'Udunits-2 header not found'
+    Exit(1)
+
+if not cfg.CheckNumpy():
+    print 'Numpy headers not found'
+    Exit(1)
+
+check_boost_headers(['date_time.hpp',
+                     'python.hpp',
+                     'python/numeric.hpp',
+                     'regex.hpp',
+                     'thread.hpp',
+                     'version.hpp'])
+
+
+if not cfg.CheckLib('udunits2', language='c'):
+    print 'udunits2 C library not found'
+    Exit(1)
+
+if not cfg.CheckLib('netcdf', language='c'):
+    print 'NetCDF C library not found'
+    Exit(1)
+
+if not cfg.CheckLib('netcdf_c++', language='c++'):
+    print 'NetCDF C++ library not found'
+    Exit(1)
+
+if not cfg.CheckLib('boost_python', language='c++'):
+    print 'boost_python C++ library not found'
+    Exit(1)
+
+if not cfg.CheckLib('boost_date_time', language='c++'):
+    print 'boost_date_time C++ library not found'
+    Exit(1)
+
+if not cfg.CheckLib('boost_regex', language='c++'):
+    print 'boost_regex C++ library not found'
+    Exit(1)
+
+if not cfg.CheckLib('boost_thread', language='c++'):
+    print 'boost_thread C++ library not found'
+    Exit(1)
+    
+if not cfg.CheckPythonModule('argparse'):
+    print "Python module argparse not found"
+
+if not cfg.CheckPythonModule('netCDF4'):
+    print "Python module netCDF4 not found"
+
+if not cfg.CheckPythonModule('matplotlib'):
+    print "Python module matplotlib not found"
+
+if not cfg.CheckPythonModule('mpl_toolkits.basemap'):
+    print "Python module mpl_toolkits.basemap not found"
+
+# Generate help, printing current status of options
+Help(vars.GenerateHelpText(env))
+env = cfg.Finish()
+vars.Save('lagrangian.cfg', env)
