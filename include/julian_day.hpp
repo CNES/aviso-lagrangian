@@ -133,7 +133,7 @@ public:
         double fractional, integer;
         fractional = modf(jd, &integer) * 86400;
         day_ = static_cast<int> (integer);
-        microseconds_ = modf(fractional, &integer) * 1e6;
+        microseconds_ = static_cast<int>(modf(fractional, &integer) * 1e6);
         seconds_ = static_cast<int> (integer);
     }
 

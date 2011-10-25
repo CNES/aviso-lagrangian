@@ -20,8 +20,9 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/date_time.hpp>
 #include <boost/algorithm/minmax.hpp>
+#include <boost/date_time.hpp>
+#include <boost/math/special_functions.hpp>
 #include <limits>
 
 // ___________________________________________________________________________//
@@ -63,7 +64,7 @@ public:
 class Integration
 {
 protected:
-    double start_time_;
+    __attribute__((aligned(8))) double start_time_;
     double end_time_;
     double size_of_interval_;
 
@@ -197,8 +198,12 @@ public:
     }
     inline bool IsMissing()
     {
-        return isnan(x0_) || isnan(x1_) || isnan(x2_) || isnan(y0_)
-                || isnan(y1_) || isnan(y2_);
+        return boost::math::isnan<double>(x0_)
+                || boost::math::isnan<double>(x1_)
+                || boost::math::isnan<double>(x2_)
+                || boost::math::isnan<double>(y0_)
+                || boost::math::isnan<double>(y1_)
+                || boost::math::isnan<double>(y2_);
     }
     static Triplet const MISSING()
     {
@@ -225,7 +230,6 @@ public:
     };
 
 private:
-    Mode mode_;
     const double delta_;
     double lambda1_;
     double lambda2_;
@@ -233,6 +237,7 @@ private:
     double theta2_;
     double f2_;
     double min_separation_;
+    Mode mode_;
 
     typedef bool
     (FiniteLyapunovExponents::*SeparationFunction)(const Triplet& p) const;
@@ -263,8 +268,7 @@ public:
             const double delta,
             const Field* const field) :
         Integration(start_time, end_time, delta_t, field),
-                mode_(mode), delta_(delta), f2_(0.5 * (1 / (delta_ * delta_))),
-                min_separation_(-1)
+                delta_(delta), f2_(0.5 * (1 / (delta_ * delta_))), mode_(mode)
 
     {
         switch (mode_)
@@ -274,6 +278,7 @@ public:
             pSeparation_ = &FiniteLyapunovExponents::SeparationFSLE;
             break;
         case kFTLE:
+            min_separation_ = -1;
             pSeparation_ = &FiniteLyapunovExponents::SeparationFTLE;
             break;
         default:

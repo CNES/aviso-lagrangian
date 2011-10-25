@@ -33,18 +33,19 @@ namespace lagrangian
 class MapProperties
 {
 protected:
-    int nx_;
-    int ny_;
-    double x_min_;
+    __attribute__((aligned(8))) double x_min_;
     double y_min_;
     double step_;
+    int nx_;
+    int ny_;
+
 public:
     MapProperties(const int nx,
             const int ny,
             const double x_min,
             const double y_min,
             const double step) :
-        nx_(nx), ny_(ny), x_min_(x_min), y_min_(y_min), step_(step)
+        x_min_(x_min), y_min_(y_min), step_(step), nx_(nx), ny_(ny)
     {
     }
     virtual ~MapProperties()
@@ -204,6 +205,7 @@ public:
 
             threads.join_all();
             JulianDay jd(JulianDay::JulianDayFromUnixTime(it()));
+            std::cout << jd.ToString("%Y%m%d %H:%M:%S") << std::endl << std::flush;
             ++it;
         }
     }

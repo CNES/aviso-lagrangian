@@ -35,8 +35,11 @@ bp::numeric::array MapProperties::GetXAxis() const
 {
     bp::numeric::array result = MakeVector(get_nx());
     double* data = static_cast<double*> PyArray_DATA(result.ptr());
-    for (int ix = 0; ix < get_nx(); ++ix)
-    data[ix] = GetXValue(ix);
+    int temp = get_nx();
+
+    for (int ix = 0; ix < temp; ++ix)
+        data[ix] = GetXValue(ix);
+
     return result;
 }
 
@@ -44,8 +47,11 @@ bp::numeric::array MapProperties::GetYAxis() const
 {
     bp::numeric::array result = MakeVector(get_ny());
     double* data = static_cast<double*> PyArray_DATA(result.ptr());
-    for (int iy = 0; iy < get_ny(); ++iy)
-    data[iy] = GetYValue(iy);
+    int temp = get_ny();
+
+    for (int iy = 0; iy < temp; ++iy)
+        data[iy] = GetYValue(iy);
+
     return result;
 }
 
