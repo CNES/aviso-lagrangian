@@ -17,8 +17,18 @@
 import subprocess
 import sys
 
-process = subprocess.Popen('scons --config=force -f SConfigure ' +
-                              ' '.join(sys.argv[1:]), shell=True)
+argv = []
+
+for item in sys.argv[1:]:
+    try:
+        ix = item.index('=')
+    except ValueError:
+        argv.append(item)
+    else:
+        argv.append("%s='%s'" % (item[:ix], item[ix+1:])) 
+
+process = subprocess.Popen('scons --config=force -f SConfigure %s' %
+                              ' '.join(argv), shell=True)
 if process:
     process.wait()
     if process.returncode == 0:

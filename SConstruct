@@ -32,13 +32,16 @@ def permissions(env, dest, files, perm):
         env.AddPostAction(item, env.Chmod(str(item), perm))
     return dest
 
-def source_list(dir, mask='.*'):
+def source_list(dir, mask='.*', replace=None):
     result = []
     regexp = re.compile(mask)
     for root, dirs, files in os.walk(dir):
         for f in files:
             if regexp.search(f):
-                result.append(os.path.join(root, f))
+                path = os.path.join(root, f)
+                if replace:
+                    path = path.replace(replace[0], replace[1])
+                result.append(path)
     return result
 
 def load_cfg(env):
@@ -47,13 +50,20 @@ def load_cfg(env):
     if os.path.exists(CFG):
         exec open(CFG, 'rU').read() in {}, values
         for key, value in values.iteritems():
-            env[key] = value
+            values = value.split(' ') if not isinstance(value, list) else value
+            if len(values) == 1:
+                env[key] = value
+            else:
+                env[key] = []
+                for item in values:
+                    env[key].append(item)
 
 def zipdist(target, source, env):
     file = zipfile.ZipFile("lagrangian.zip", mode="w")
     for item in source:
-        item = str(item)
-        file.write(item, item, zipfile.ZIP_DEFLATED)
+        src = str(item)
+        dst = os.path.join("lagrangian", src)
+        file.write(src, dst, zipfile.ZIP_DEFLATED)
     file.close()
     return None
 
@@ -61,7 +71,10 @@ EnsureSConsVersion(1, 2)
 
 SConsEnvironment.InstallPerm = permissions
 
+VariantDir('build', 'src')
+
 env = Environment(CPPPATH=[distutils.sysconfig.get_python_inc()],
+                  ENV=os.environ,
                   SHLIBPREFIX='')
 
 load_cfg(env)
@@ -77,8 +90,6 @@ env.AppendUnique(LIBS=['boost_python',
                        'netcdf',
                        'netcdf_c++'])
 
-Progress(['-\r', '\\\r', '|\r', '/\r'], interval = 5)
-
 dist_files = ['COPYING', 'configure.py', 'SConstruct', 'SConfigure']
 dist_files += source_list('src', mask='\.(cpp|hpp|h)$')
 dist_files += source_list('include', mask='\.(hpp|h)$')
@@ -90,7 +101,16 @@ lib_prefix = distutils.sysconfig.get_python_lib()
 lib_prefix = os.path.join(prefix, lib_prefix.replace(site.PREFIXES[1], '')[1:])
 
 lagrangian = env.SharedLibrary(target='lagrangian',
-                               source=source_list('src', mask='\.cpp$'))
+                               source=source_list('src',
+                                                  mask='\.cpp$',
+                                                  replace=('src', 'build')))
+
+for header in source_list('include', mask='\.(hpp|h)$'):
+    env.Depends(lagrangian, header)
+
+for header in source_list('src', mask='\.(hpp|h)$'):
+    env.Depends(lagrangian, header)
+
 env.Install(bin_prefix, 'src/etc/map_of_fle')
 env.Install(bin_prefix, 'src/etc/mapping')
 env.Install(lib_prefix, lagrangian[0])
@@ -98,5 +118,13 @@ env.Alias('install', bin_prefix)
 env.Alias('install', lib_prefix)
 env.InstallPerm(bin_prefix, ['src/etc/map_of_fle', 'src/etc/mapping'], 0555)
 env.InstallPerm(lib_prefix, [lagrangian[0]], 0555)
-env.Command("uninstall", None, Delete(FindInstalledFiles()))
-env.Command("zipdist", dist_files, zipdist)
+
+env.Clean('distclean', ['.sconsign.dblite', '.sconf_temp', 'config.log',
+                        'lagrangian.cfg', 'lagrangian.zip'])
+Clean('.', 'build')
+
+if 'uninstall' in COMMAND_LINE_TARGETS:
+    env.Command("uninstall", None, Delete(FindInstalledFiles()))
+
+if 'zipdist' in COMMAND_LINE_TARGETS:
+    env.Command("zipdist", dist_files, zipdist)

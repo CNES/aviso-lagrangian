@@ -75,8 +75,10 @@ vars.AddVariables(PathVariable('CXX',
                                'The C++ compiler',
                                'g++',
                                PathVariable.PathAccept))
+
 vars.Add('CXXFLAGS', 'The C++ compiler flags', None)
-vars.Add('LDFLAGS', 'The linker flags', None)
+vars.Add('LINKFLAGS', 'The linker flags', None)
+vars.Add('LIBS', 'Additional libraries', None)
 
 # PREFIX
 vars.AddVariables(PathVariable('prefix',
@@ -121,7 +123,8 @@ if unknown:
     Exit(1)
 
 env = Environment(variables = vars,
-                  CPPPATH=[distutils.sysconfig.get_python_inc()])
+                  CPPPATH=[distutils.sysconfig.get_python_inc()],
+                  ENV=os.environ)
 
 cfg = Configure(env,
                 custom_tests = { 'CheckNumpy': check_numpy,
@@ -135,6 +138,9 @@ append_library_path(env, 'netcdf_libraries')
 
 append_include_path(env, 'udunits_includes')
 append_library_path(env, 'udunits_libraries')
+
+# Avoid the linking problem on ubuntu 10.04 for the library checker
+cfg.env.AppendUnique(LINKFLAGS = '-static')
 
 if not cfg.CheckCXX():
     print 'CXX compiler does not work'
