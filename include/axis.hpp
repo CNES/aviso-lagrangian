@@ -186,7 +186,7 @@ private:
             return bounded ? 0 : -1;
 
         if (index >= static_cast<int> (points_.size()))
-            return bounded ? points_.size() - 1 : -1;
+            return bounded ? static_cast<int>(points_.size() - 1) : -1;
 
         return index;
     }
