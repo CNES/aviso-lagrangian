@@ -19,6 +19,9 @@ import datetime
 import netCDF4
 import numpy
 import argparse
+import multiprocessing
+import signal
+import sys
 
 def usage():
     parser = argparse.ArgumentParser(description='Compute Map of FLE')
@@ -47,69 +50,99 @@ def convert_from_sec_to_day(a, fill_value):
     result *= 86400
     return result.data
 
-args = usage()
+def compute():
+    # Initializes arguments from command line
+    args = usage()
 
-NC_FILL_DOUBLE=9.9692099683868690e+36
+    # Fill value for double in NetCDF file
+    NC_FILL_DOUBLE=9.9692099683868690e+36
 
-ts = lagrangian.TimeSerieField(args.configuration)
-start_time = lagrangian.JulianDay(args.start_time)
-end_time = lagrangian.JulianDay(args.end_time)
-delta = datetime.timedelta(0, 6 * 60 * 60)
+    # Initializes the time series to process
+    ts = lagrangian.TimeSerieField(args.configuration)
+    start_time = lagrangian.JulianDay(args.start_time)
+    end_time = lagrangian.JulianDay(args.end_time)
+    delta = datetime.timedelta(0, 6 * 60 * 60)
 
-nx=int((args.x_max - args.x_min) / args.step)
-ny=int((args.y_max - args.y_min) / args.step)
+    nx=int((args.x_max - args.x_min) / args.step)
+    ny=int((args.y_max - args.y_min) / args.step)
 
-mode = lagrangian.kFTLE if args.separation < 0 else lagrangian.kFSLE
-caption = 'FTLE' if args.separation < 0 else 'FSLE' 
+    # Initializes calculation mode 
+    mode = lagrangian.kFTLE if args.separation < 0 else lagrangian.kFSLE
+    caption = 'FTLE' if args.separation < 0 else 'FSLE' 
 
-map_of_fle=lagrangian.MapOfFiniteLyapunovExponents(nx, ny, args.x_min,
-                                                   args.y_min, args.step)
-fle=lagrangian.FiniteLyapunovExponents(start_time, end_time, delta,
-                                       mode, args.separation, args.step, ts)
-map_of_fle.Compute(fle)
+    # Initializes the map to process
+    map_of_fle=lagrangian.MapOfFiniteLyapunovExponents(nx, ny, args.x_min,
+                                                       args.y_min, args.step)
 
-rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
-rootgrp.createDimension('x', nx)
-rootgrp.createDimension('y', ny)
-rootgrp.title = 'Map of %s' % caption
-if args.separation > 0:
-    rootgrp.separation ='Minimum separation (expansion) in degrees: %f' % ( 
-        args.separation)
-rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
-rootgrp.end_time = end_time.ToString("%Y-%m-%d %T")
+    # Initializes the FLE to process
+    fle=lagrangian.FiniteLyapunovExponents(start_time, end_time, delta, mode,
+                                           args.separation, args.step, ts)
 
-x_axis = rootgrp.createVariable('x','f8',('x',))
-x_axis.units = 'degrees_east'
-x_axis[:] = map_of_fle.get_map_properties().GetXAxis()
+    # Computes map
+    map_of_fle.Compute(fle)
+    
+    # Creates the NetCDF file
+    rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
+    rootgrp.createDimension('x', nx)
+    rootgrp.createDimension('y', ny)
+    rootgrp.title = 'Map of %s' % caption
+    if args.separation > 0:
+        rootgrp.separation ='Minimum separation (expansion) in degrees: %f' % (
+            args.separation)
+    rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
+    rootgrp.end_time = end_time.ToString("%Y-%m-%d %T")
 
-y_axis = rootgrp.createVariable('y','f8',('y',))
-y_axis.units = 'degrees_north'
-y_axis[:] = map_of_fle.get_map_properties().GetYAxis()
+    x_axis = rootgrp.createVariable('x','f8',('x',))
+    x_axis.units = 'degrees_east'
+    x_axis[:] = map_of_fle.get_map_properties().GetXAxis()
 
-theta1 = rootgrp.createVariable('theta1','f8',('x', 'y',),
-                                fill_value=NC_FILL_DOUBLE)
-theta1.long_name = 'theta1'
-theta1.units = 'degrees'
-theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle)
+    y_axis = rootgrp.createVariable('y','f8',('y',))
+    y_axis.units = 'degrees_north'
+    y_axis[:] = map_of_fle.get_map_properties().GetYAxis()
 
-theta2 = rootgrp.createVariable('theta2','f8',('x', 'y',),
-                                fill_value=NC_FILL_DOUBLE)
-theta2.long_name = 'theta2'
-theta2.units = 'degrees'
-theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle)
+    theta1 = rootgrp.createVariable('theta1','f8',('x', 'y',),
+                                    fill_value=NC_FILL_DOUBLE)
+    theta1.long_name = 'theta1'
+    theta1.units = 'degrees'
+    theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle)
 
-lambda1 = rootgrp.createVariable('lambda1','f8',('x', 'y',),
-                                 fill_value=NC_FILL_DOUBLE)
-lambda1.long_name = 'lambda1'
-lambda1.units = '1/day'
-lambda1[:] = convert_from_sec_to_day(
+    theta2 = rootgrp.createVariable('theta2','f8',('x', 'y',),
+                                    fill_value=NC_FILL_DOUBLE)
+    theta2.long_name = 'theta2'
+    theta2.units = 'degrees'
+    theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle)
+
+    lambda1 = rootgrp.createVariable('lambda1','f8',('x', 'y',),
+                                     fill_value=NC_FILL_DOUBLE)
+    lambda1.long_name = 'lambda1'
+    lambda1.units = '1/day'
+    lambda1[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda1(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
 
-lambda2 = rootgrp.createVariable('lambda2','f8',('x', 'y',),
-                                 fill_value=NC_FILL_DOUBLE)
-lambda2.long_name = 'lambda2'
-lambda2.units = '1/day'
-lambda2[:] = convert_from_sec_to_day(
+    lambda2 = rootgrp.createVariable('lambda2','f8',('x', 'y',),
+                                     fill_value=NC_FILL_DOUBLE)
+    lambda2.long_name = 'lambda2'
+    lambda2.units = '1/day'
+    lambda2[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
 
-rootgrp.close()
+    rootgrp.close()
+
+def signal_handler(signum, frame):
+    signame = {}
+    for v, k in signal.__dict__.iteritems():
+        if v.startswith('SIG'):
+            signame[k] = v
+    print 'Stop with signal %s' % signame[signum]
+    for process in multiprocessing.process.active_children():
+        process.terminate()
+    sys.exit(0)
+
+# Initialize signal handler
+signal.signal(signal.SIGINT, signal_handler)
+
+# As the calculation is long, the calculation process is started in parallel.
+# Thus the user can stop the program
+p = multiprocessing.Process(target=compute)
+p.start()
+p.join()
