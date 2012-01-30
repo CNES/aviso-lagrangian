@@ -40,10 +40,10 @@ static long GetMicroseconds(boost::posix_time::time_duration const& d)
 /* Convert ptime to/from python */
 PyObject* PtimeToPythonDatetime::convert(boost::posix_time::ptime const& pt)
 {
-	boost::gregorian::date date = pt.date();
+    boost::gregorian::date date = pt.date();
     boost::posix_time::time_duration time = pt.time_of_day();
     return PyDateTime_FromDateAndTime(static_cast<int> (date.year()),
-    		static_cast<int> (date.month()),
+            static_cast<int> (date.month()),
             static_cast<int> (date.day()),
             time.hours(),
             time.minutes(),
@@ -56,39 +56,39 @@ PyObject* PtimeToPythonDatetime::convert(boost::posix_time::ptime const& pt)
 PtimeFromPythonDatetime::PtimeFromPythonDatetime()
 {
     bp::converter::registry::push_back(&convertible,
-    		&construct,
-    		bp::type_id<boost::posix_time::ptime>());
+            &construct,
+            bp::type_id<boost::posix_time::ptime>());
 }
 
 void* PtimeFromPythonDatetime::convertible(PyObject * obj_ptr)
 {
-	return PyDateTime_Check(obj_ptr) ? obj_ptr : NULL;
+    return PyDateTime_Check(obj_ptr) ? obj_ptr : NULL;
 }
 
 void PtimeFromPythonDatetime::construct(PyObject* obj_ptr,
-		bp::converter::rvalue_from_python_stage1_data * data)
+        bp::converter::rvalue_from_python_stage1_data * data)
 {
-	PyDateTime_DateTime const* pydate =
-			reinterpret_cast<PyDateTime_DateTime*> (obj_ptr);
+    PyDateTime_DateTime const* pydate =
+            reinterpret_cast<PyDateTime_DateTime*> (obj_ptr);
 
     // Create date object
     boost::gregorian::date date(PyDateTime_GET_YEAR(pydate),
-    		PyDateTime_GET_MONTH(pydate),
+            PyDateTime_GET_MONTH(pydate),
             PyDateTime_GET_DAY(pydate));
 
     // Create time duration object
     boost::posix_time::time_duration duration(PyDateTime_DATE_GET_HOUR(pydate),
-    		PyDateTime_DATE_GET_MINUTE(pydate),
-    		PyDateTime_DATE_GET_SECOND(pydate),
+            PyDateTime_DATE_GET_MINUTE(pydate),
+            PyDateTime_DATE_GET_SECOND(pydate),
             0);
 
    // Set the usecs value
    duration += boost::posix_time::microseconds(
-		   PyDateTime_DATE_GET_MICROSECOND(pydate));
+           PyDateTime_DATE_GET_MICROSECOND(pydate));
 
     // Create posix time object
     void* storage = ((bp::converter::rvalue_from_python_storage<
-    		boost::posix_time::ptime>*) data)->storage.bytes;
+            boost::posix_time::ptime>*) data)->storage.bytes;
     new (storage) boost::posix_time::ptime(date, duration);
     data->convertible = storage;
 }
@@ -96,16 +96,16 @@ void PtimeFromPythonDatetime::construct(PyObject* obj_ptr,
 // ___________________________________________________________________________//
 
 PyObject* TimeDurationToPython::convert(
-		boost::posix_time::time_duration const& d)
+        boost::posix_time::time_duration const& d)
 {
-	int days = d.hours() / 24;
+    int days = d.hours() / 24;
 
-	if (days < 0)
-		days--;
+    if (days < 0)
+        days--;
 
-	return PyDelta_FromDSU(days,
-			d.total_seconds() - days * (24 * 3600),
-			GetMicroseconds(d));
+    return PyDelta_FromDSU(days,
+            d.total_seconds() - days * (24 * 3600),
+            GetMicroseconds(d));
 }
 
 // ___________________________________________________________________________//
@@ -149,518 +149,563 @@ void TimeDurationFromPython::construct(PyObject* obj_ptr,
 
 // ___________________________________________________________________________//
 
-JulianDay::JulianDay(lagrangian::JulianDay const & arg) :
-    lagrangian::JulianDay(arg), bp::wrapper<lagrangian::JulianDay>()
+JulianDay::JulianDay(lagrangian::JulianDay const & arg)
+    : lagrangian::JulianDay(arg), bp::wrapper<lagrangian::JulianDay>()
 {
 }
 
-JulianDay::JulianDay(boost::posix_time::ptime const & t) :
-    lagrangian::JulianDay(boost::ref(t)), bp::wrapper<lagrangian::JulianDay>()
+JulianDay::JulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::JulianDay(boost::ref(t)), bp::wrapper<lagrangian::JulianDay>()
 {
 }
 
-JulianDay::JulianDay(std::string const & s) :
-    lagrangian::JulianDay(s), bp::wrapper<lagrangian::JulianDay>()
+JulianDay::JulianDay(std::string const & s)
+    : lagrangian::JulianDay(s), bp::wrapper<lagrangian::JulianDay>()
 {
 }
 
-JulianDay::JulianDay(int const day, int const seconds, int const microseconds) :
-    lagrangian::JulianDay(day, seconds, microseconds),
-            bp::wrapper<lagrangian::JulianDay>()
+JulianDay::JulianDay(int const day, int const seconds, int const microseconds)
+    : lagrangian::JulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::JulianDay>()
 {
 }
 
-JulianDay::JulianDay(double const jd) :
-    lagrangian::JulianDay(jd), bp::wrapper<lagrangian::JulianDay>()
+JulianDay::JulianDay(double const jd)
+    : lagrangian::JulianDay(static_cast<long double>(jd)),
+      bp::wrapper<lagrangian::JulianDay>()
 {
 }
 
 // ___________________________________________________________________________//
 
-ModifiedJulianDay::ModifiedJulianDay(lagrangian::ModifiedJulianDay const & arg) :
-    lagrangian::ModifiedJulianDay(arg),
-            bp::wrapper<lagrangian::ModifiedJulianDay>()
+ModifiedJulianDay::ModifiedJulianDay(lagrangian::ModifiedJulianDay const & arg)
+    : lagrangian::ModifiedJulianDay(arg),
+      bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
 }
 
-ModifiedJulianDay::ModifiedJulianDay() :
-    lagrangian::ModifiedJulianDay(),
-            bp::wrapper<lagrangian::ModifiedJulianDay>()
+ModifiedJulianDay::ModifiedJulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::ModifiedJulianDay(boost::ref(t)),
+      bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
 }
 
-ModifiedJulianDay::ModifiedJulianDay(std::string const & s) :
-    lagrangian::ModifiedJulianDay(s),
-            bp::wrapper<lagrangian::ModifiedJulianDay>()
+ModifiedJulianDay::ModifiedJulianDay(std::string const & s)
+    : lagrangian::ModifiedJulianDay(s),
+      bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
 }
 
-ModifiedJulianDay::ModifiedJulianDay(int const day,
-        int const seconds,
-        int const microseconds,
-        int const gap) :
-    lagrangian::ModifiedJulianDay(day, seconds, microseconds, gap),
-            bp::wrapper<lagrangian::ModifiedJulianDay>()
+ModifiedJulianDay::ModifiedJulianDay(
+    int const day,
+    int const seconds,
+    int const microseconds)
+    : lagrangian::ModifiedJulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
 }
 
-ModifiedJulianDay::ModifiedJulianDay(double const day, int const gap) :
-    lagrangian::ModifiedJulianDay(day, gap),
-            bp::wrapper<lagrangian::ModifiedJulianDay>()
+ModifiedJulianDay::ModifiedJulianDay(double const jd)
+    : lagrangian::ModifiedJulianDay(jd),
+      bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
-}
-
-int ModifiedJulianDay::GetModifiedJulianDay() const
-{
-    if ( bp::override function = this->get_override("GetModifiedJulianDay"))
-        return function();
-    else
-        return this->lagrangian::ModifiedJulianDay::GetModifiedJulianDay();
-}
-
-int ModifiedJulianDay::DefaultGetModifiedJulianDay() const
-{
-    return lagrangian::ModifiedJulianDay::GetModifiedJulianDay();
 }
 
 // ___________________________________________________________________________//
 
-CCSDSJulianDay::CCSDSJulianDay(lagrangian::CCSDSJulianDay const & arg) :
-    lagrangian::CCSDSJulianDay(arg), bp::wrapper<lagrangian::CCSDSJulianDay>()
+CNESJulianDay::CNESJulianDay(lagrangian::CNESJulianDay const & arg)
+    : lagrangian::CNESJulianDay(arg),
+      bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
 
-CCSDSJulianDay::CCSDSJulianDay() :
-    lagrangian::CCSDSJulianDay(), bp::wrapper<lagrangian::CCSDSJulianDay>()
+CNESJulianDay::CNESJulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::CNESJulianDay(boost::ref(t)),
+      bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
 
-CCSDSJulianDay::CCSDSJulianDay(std::string const & s) :
-    lagrangian::CCSDSJulianDay(s), bp::wrapper<lagrangian::CCSDSJulianDay>()
+CNESJulianDay::CNESJulianDay(std::string const & s)
+    : lagrangian::CNESJulianDay(s),
+      bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
 
-CCSDSJulianDay::CCSDSJulianDay(double const jd) :
-    lagrangian::CCSDSJulianDay(jd), bp::wrapper<lagrangian::CCSDSJulianDay>()
+CNESJulianDay::CNESJulianDay(
+    int const day,
+    int const seconds,
+    int const microseconds)
+    : lagrangian::CNESJulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
 
-CCSDSJulianDay::CCSDSJulianDay(int const day,
-        int const seconds,
-        int const microseconds) :
-    lagrangian::CCSDSJulianDay(day, seconds, microseconds),
-            bp::wrapper<lagrangian::CCSDSJulianDay>()
-{
-}
-
-int CCSDSJulianDay::GetModifiedJulianDay() const
-{
-    if ( bp::override function = this->get_override("GetModifiedJulianDay"))
-        return function();
-    else
-        return this->lagrangian::CCSDSJulianDay::GetModifiedJulianDay();
-}
-
-int CCSDSJulianDay::DefaultGetModifiedJulianDay() const
-{
-    return lagrangian::CCSDSJulianDay::GetModifiedJulianDay();
-}
-
-// ___________________________________________________________________________//
-
- CNESJulianDay::CNESJulianDay(lagrangian::CNESJulianDay const & arg) :
-    lagrangian::CNESJulianDay(arg), bp::wrapper<lagrangian::CNESJulianDay>()
-{
-}
-
-CNESJulianDay::CNESJulianDay() :
-    lagrangian::CNESJulianDay(), bp::wrapper<lagrangian::CNESJulianDay>()
-{
-}
-
-CNESJulianDay::CNESJulianDay(std::string const & s) :
-    lagrangian::CNESJulianDay(s), bp::wrapper<lagrangian::CNESJulianDay>()
-{
-}
-
-CNESJulianDay::CNESJulianDay(double const jd) :
-    lagrangian::CNESJulianDay(jd), bp::wrapper<lagrangian::CNESJulianDay>()
-{
-}
-
-CNESJulianDay::CNESJulianDay(int const day,
-        int const seconds,
-        int const microseconds) :
-    lagrangian::CNESJulianDay(day, seconds, microseconds),
-            bp::wrapper<lagrangian::CNESJulianDay>()
+CNESJulianDay::CNESJulianDay(double const jd)
+    : lagrangian::CNESJulianDay(jd), bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
 
 int CNESJulianDay::GetModifiedJulianDay() const
 {
-    if ( bp::override function = this->get_override("GetModifiedJulianDay"))
-        return function();
-    else
-        return this->lagrangian::CNESJulianDay::GetModifiedJulianDay();
+  return lagrangian::CNESJulianDay::GetModifiedJulianDay();
 }
-
-int CNESJulianDay::DefaultGetModifiedJulianDay() const
-{
-    return lagrangian::CNESJulianDay::GetModifiedJulianDay();
-}
-
 
 // ___________________________________________________________________________//
 
-LOPJulianDay::LOPJulianDay(lagrangian::LOPJulianDay const & arg) :
-    lagrangian::LOPJulianDay(arg), bp::wrapper<lagrangian::LOPJulianDay>()
+LOPJulianDay::LOPJulianDay(lagrangian::LOPJulianDay const & arg)
+    : lagrangian::LOPJulianDay(arg),
+      bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
 
-LOPJulianDay::LOPJulianDay() :
-    lagrangian::LOPJulianDay(), bp::wrapper<lagrangian::LOPJulianDay>()
+LOPJulianDay::LOPJulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::LOPJulianDay(boost::ref(t)),
+      bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
 
-LOPJulianDay::LOPJulianDay(std::string const & s) :
-    lagrangian::LOPJulianDay(s), bp::wrapper<lagrangian::LOPJulianDay>()
+LOPJulianDay::LOPJulianDay(std::string const & s)
+    : lagrangian::LOPJulianDay(s),
+      bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
 
-LOPJulianDay::LOPJulianDay(double const jd) :
-    lagrangian::LOPJulianDay(jd), bp::wrapper<lagrangian::LOPJulianDay>()
+LOPJulianDay::LOPJulianDay(
+    int const day,
+    int const seconds,
+    int const microseconds)
+    : lagrangian::LOPJulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
 
-LOPJulianDay::LOPJulianDay(int const day,
-        int const seconds,
-        int const microseconds) :
-    lagrangian::LOPJulianDay(day, seconds, microseconds),
-            bp::wrapper<lagrangian::LOPJulianDay>()
+LOPJulianDay::LOPJulianDay(double const jd)
+    : lagrangian::LOPJulianDay(jd), bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
 
 int LOPJulianDay::GetModifiedJulianDay() const
 {
-    if ( bp::override function = this->get_override("GetModifiedJulianDay"))
-        return function();
-    else
-        return this->lagrangian::LOPJulianDay::GetModifiedJulianDay();
+  return lagrangian::LOPJulianDay::GetModifiedJulianDay();
 }
-
-int LOPJulianDay::DefaultGetModifiedJulianDay() const
-{
-    return lagrangian::LOPJulianDay::GetModifiedJulianDay();
-}
-
 
 // ___________________________________________________________________________//
 
-NASAJulianDay::NASAJulianDay(lagrangian::NASAJulianDay const & arg) :
-    lagrangian::NASAJulianDay(arg), bp::wrapper<lagrangian::NASAJulianDay>()
+NASAJulianDay::NASAJulianDay(lagrangian::NASAJulianDay const & arg)
+    : lagrangian::NASAJulianDay(arg),
+      bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
 
-NASAJulianDay::NASAJulianDay() :
-    lagrangian::NASAJulianDay(), bp::wrapper<lagrangian::NASAJulianDay>()
+NASAJulianDay::NASAJulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::NASAJulianDay(boost::ref(t)),
+      bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
 
-NASAJulianDay::NASAJulianDay(::std::string const & s) :
-    lagrangian::NASAJulianDay(s), bp::wrapper<lagrangian::NASAJulianDay>()
+NASAJulianDay::NASAJulianDay(std::string const & s)
+    : lagrangian::NASAJulianDay(s),
+      bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
 
-NASAJulianDay::NASAJulianDay(double const jd) :
-    lagrangian::NASAJulianDay(jd), bp::wrapper<lagrangian::NASAJulianDay>()
+NASAJulianDay::NASAJulianDay(
+    int const day,
+    int const seconds,
+    int const microseconds)
+    : lagrangian::NASAJulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
 
-NASAJulianDay::NASAJulianDay(int const day,
-        int const seconds,
-        int const microseconds) :
-    lagrangian::NASAJulianDay(day, seconds, microseconds),
-            bp::wrapper<lagrangian::NASAJulianDay>()
+NASAJulianDay::NASAJulianDay(double const jd)
+    : lagrangian::NASAJulianDay(jd), bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
 
 int NASAJulianDay::GetModifiedJulianDay() const
 {
-    if ( bp::override function = this->get_override("GetModifiedJulianDay"))
-        return function();
-    else
-        return this->lagrangian::NASAJulianDay::GetModifiedJulianDay();
+  return lagrangian::NASAJulianDay::GetModifiedJulianDay();
 }
 
-int NASAJulianDay::DefaultGetModifiedJulianDay() const
+// ___________________________________________________________________________//
+
+CCSDSJulianDay::CCSDSJulianDay(lagrangian::CCSDSJulianDay const & arg)
+    : lagrangian::CCSDSJulianDay(arg),
+      bp::wrapper<lagrangian::CCSDSJulianDay>()
 {
-    return lagrangian::NASAJulianDay::GetModifiedJulianDay();
 }
+
+CCSDSJulianDay::CCSDSJulianDay(boost::posix_time::ptime const & t)
+    : lagrangian::CCSDSJulianDay(boost::ref(t)),
+      bp::wrapper<lagrangian::CCSDSJulianDay>()
+{
+}
+
+CCSDSJulianDay::CCSDSJulianDay(std::string const & s)
+    : lagrangian::CCSDSJulianDay(s),
+      bp::wrapper<lagrangian::CCSDSJulianDay>()
+{
+}
+
+CCSDSJulianDay::CCSDSJulianDay(
+    int const day,
+    int const seconds,
+    int const microseconds)
+    : lagrangian::CCSDSJulianDay(day, seconds, microseconds),
+      bp::wrapper<lagrangian::CCSDSJulianDay>()
+{
+}
+
+CCSDSJulianDay::CCSDSJulianDay(double const jd)
+    : lagrangian::CCSDSJulianDay(jd), bp::wrapper<lagrangian::CCSDSJulianDay>()
+{
+}
+
+int CCSDSJulianDay::GetModifiedJulianDay() const
+{
+  return lagrangian::CCSDSJulianDay::GetModifiedJulianDay();
+}
+
+// ___________________________________________________________________________//
 
 void DatePythonModule()
 {
-    PyDateTime_IMPORT;
+  PyDateTime_IMPORT;
 
-    //
-    // lagrangian::JulianDay
-    //
-    {
-        bp::class_<JulianDay> JulianDayExposer = bp::class_<JulianDay>(
-                "JulianDay",
-                bp::init<bp::optional<boost::posix_time::ptime const &> >((
-                    bp::arg("t")=
-                        boost::posix_time::microsec_clock::universal_time())));
+  //
+  // lagrangian::JulianDay
+  //
+  {
+    bp::class_<JulianDay> JulianDayExposer = bp::class_<JulianDay>(
+            "JulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
 
-        // Constructors
+    // Constructors
+    JulianDayExposer.def(
+            bp::init<std::string const &>((
+                    bp::arg("string"))));
+    JulianDayExposer.def(
+            bp::init<int,int,int >((
+                    bp::arg("day"),
+                    bp::arg("seconds"),
+                    bp::arg("microseconds"))));
+    JulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+
+    { //lagrangian::JulianDay::FromUnixTime
         JulianDayExposer.def(
-                bp::init<std::string const &>((
-                        bp::arg("s"))));
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::JulianDay::FromUnixTime ),
+            (bp::arg("time")));
+    }
+    { //lagrangian::JulianDay::ToPtime
         JulianDayExposer.def(
-                bp::init<int,int,int >((
-                        bp::arg("day"),
-                        bp::arg("seconds"),
-                        bp::arg("microseconds"))));
-        JulianDayExposer.def(bp::init<double>((
-                bp::arg("jd"))));
+            "ToPtime",
+            (boost::posix_time::ptime (lagrangian::JulianDay::*)() const)
+                (&lagrangian::JulianDay::ToPtime));
+    }
+    { //lagrangian::JulianDay::ToString
+        JulianDayExposer.def(
+            "ToString",
+            (std::string (lagrangian::JulianDay::*)
+                (std::string const &) const)
+                    (&lagrangian::JulianDay::ToString),
+            (bp::arg("format")));
+    }
+    { //lagrangian::JulianDay::ToUnixTime
 
-        { //lagrangian::JulianDay::JulianFromUnixTime
-            JulianDayExposer.def(
-                "JulianDayFromUnixTime",
-                (double (*)( double const ))
-                    ( &::lagrangian::JulianDay::JulianDayFromUnixTime ),
-                (bp::arg("time")));
-
-        }
-        { //lagrangian::JulianDay::ToPtime
-            JulianDayExposer.def(
-                "ToPtime",
-                (boost::posix_time::ptime (lagrangian::JulianDay::*)() const)
-                    (&lagrangian::JulianDay::ToPtime));
-
-        }
-        { //lagrangian::JulianDay::ToString
-            JulianDayExposer.def(
-                "ToString",
-                (std::string (lagrangian::JulianDay::*)
-                    (std::string const &) const)
-                        (&lagrangian::JulianDay::ToString),
-                (bp::arg("format")));
-
-        }
-        { //lagrangian::JulianDay::ToUnixTime
-
-            JulianDayExposer.def(
-                "ToUnixTime",
-                (double (lagrangian::JulianDay::*)() const)
-                    (&lagrangian::JulianDay::ToUnixTime));
-
-        }
-        { //lagrangian::JulianDay::get_day
-            JulianDayExposer.def(
-                "get_day",
-                (int (lagrangian::JulianDay::*)() const)
-                    (&lagrangian::JulianDay::get_day));
-        }
-        { //lagrangian::JulianDay::get_microseconds
-            JulianDayExposer.def(
-                "get_microseconds",
-                (int (lagrangian::JulianDay::*)() const)
-                    (&lagrangian::JulianDay::get_microseconds));
-        }
-        { //lagrangian::JulianDay::get_seconds
-            JulianDayExposer.def(
-                "get_seconds",
-                (int (lagrangian::JulianDay::*)() const)
-                    (&lagrangian::JulianDay::get_seconds));
-
-        }
-
-        JulianDayExposer.staticmethod("JulianDayFromUnixTime");
-
-        // Operators
-        JulianDayExposer.def("__float__",
-                &lagrangian::JulianDay::operator double );
-
-        JulianDayExposer.def(bp::self != bp::self);
-        JulianDayExposer.def(bp::self += bp::self);
-        JulianDayExposer.def(bp::self -= bp::self);
-        JulianDayExposer.def(bp::self < bp::self);
-        JulianDayExposer.def(bp::self <= bp::self);
-
-        { //lagrangian::JulianDay::operator=
-
-            JulianDayExposer.def(
-                "assign",
-                (lagrangian::JulianDay& (lagrangian::JulianDay::*)
-                    (lagrangian::JulianDay const &))
-                        ( &lagrangian::JulianDay::operator= ),
-                (bp::arg("other")),
-                bp::return_self<>());
-        }
-        JulianDayExposer.def( bp::self == bp::self );
-        JulianDayExposer.def( bp::self > bp::self );
-        JulianDayExposer.def( bp::self >= bp::self );
-        JulianDayExposer.def( bp::self + bp::self );
-        JulianDayExposer.def( bp::self - bp::self );
-        JulianDayExposer.def( bp::self_ns::str( bp::self ) );
+        JulianDayExposer.def(
+            "ToUnixTime",
+            (long double (lagrangian::JulianDay::*)() const)
+                (&lagrangian::JulianDay::ToUnixTime));
+    }
+    { //lagrangian::JulianDay::get_day
+        JulianDayExposer.def(
+            "get_day",
+            (int (lagrangian::JulianDay::*)() const)
+                (&lagrangian::JulianDay::get_day));
+    }
+    { //lagrangian::JulianDay::get_seconds
+        JulianDayExposer.def(
+            "get_seconds",
+            (int (lagrangian::JulianDay::*)() const)
+                (&lagrangian::JulianDay::get_seconds));
+    }
+    { //lagrangian::JulianDay::get_microseconds
+        JulianDayExposer.def(
+            "get_microseconds",
+            (int (lagrangian::JulianDay::*)() const)
+                (&lagrangian::JulianDay::get_microseconds));
     }
 
-    //
-    // lagrangian::ModifiedJulianDay
-    //
-    {
-        bp::class_<ModifiedJulianDay,
-                bp::bases<lagrangian::JulianDay> >
-                    ModifiedJulianDayExposer = bp::class_<ModifiedJulianDay,
-                        bp::bases<lagrangian::JulianDay> >(
-                "ModifiedJulianDay",
-                bp::init< >());
-        ModifiedJulianDayExposer.def(bp::init<std::string const &>((
-                bp::arg("s"))));
-        ModifiedJulianDayExposer.def(bp::init<int,
-                                     bp::optional<int, int, int> >((
-                bp::arg("day"),
-                bp::arg("seconds") = 0,
-                bp::arg("microseconds") = 0,
-                bp::arg("gap") = 0)));
-        ModifiedJulianDayExposer.def(bp::init<double, bp::optional<int> >((
-                bp::arg("day"),
-                bp::arg("gap") = 0)));
-        { //lagrangian::ModifiedJulianDay::GetModifiedJulianDay
-            ModifiedJulianDayExposer.def(
-                "GetModifiedJulianDay",
-                (int (lagrangian::ModifiedJulianDay::*)() const)
-                    (&lagrangian::ModifiedJulianDay::GetModifiedJulianDay),
-                (int (ModifiedJulianDay::*)() const)
-                    (&ModifiedJulianDay::DefaultGetModifiedJulianDay));
-        }
-        ModifiedJulianDayExposer.def("__float__",
-                &lagrangian::ModifiedJulianDay::operator double);
-        ModifiedJulianDayExposer.def(bp::self_ns::str(bp::self));
+    JulianDayExposer.staticmethod("FromUnixTime");
+
+    // Operators
+    JulianDayExposer.def("__float__",
+            &lagrangian::JulianDay::operator double );
+
+    JulianDayExposer.def(bp::self != bp::self);
+    JulianDayExposer.def(bp::self += bp::self);
+    JulianDayExposer.def(bp::self -= bp::self);
+    JulianDayExposer.def(bp::self < bp::self);
+    JulianDayExposer.def(bp::self <= bp::self);
+
+    { //lagrangian::JulianDay::operator=
+        JulianDayExposer.def(
+            "assign",
+            (lagrangian::JulianDay& (lagrangian::JulianDay::*)
+                (lagrangian::JulianDay const &))
+                    ( &lagrangian::JulianDay::operator= ),
+            (bp::arg("other")),
+            bp::return_self<>());
     }
-    //
-    // lagrangian::CNESJulianDay
-    //
-    {
-        bp::class_<CNESJulianDay, bp::bases<lagrangian::ModifiedJulianDay> >
-                CNESJulianDayExposer = bp::class_<CNESJulianDay, bp::bases<
-                        lagrangian::ModifiedJulianDay> >(
-                "CNESJulianDay",
-                bp::init< >());
-        CNESJulianDayExposer.def(bp::init<std::string const &>((
-                bp::arg("s"))));
-        CNESJulianDayExposer.def(bp::init<int,
+    JulianDayExposer.def( bp::self == bp::self );
+    JulianDayExposer.def( bp::self > bp::self );
+    JulianDayExposer.def( bp::self >= bp::self );
+    JulianDayExposer.def( bp::self + bp::self );
+    JulianDayExposer.def( bp::self - bp::self );
+    JulianDayExposer.def( bp::self_ns::str( bp::self ) );
+  }
+
+  //
+  // lagrangian::ModifiedJulianDay
+  //
+  {
+    bp::class_<ModifiedJulianDay,
+            bp::bases<lagrangian::JulianDay> >
+                ModifiedJulianDayExposer = bp::class_<ModifiedJulianDay,
+                    bp::bases<lagrangian::JulianDay> >(
+            "ModifiedJulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
+    ModifiedJulianDayExposer.def(bp::init<std::string const &>((
+            bp::arg("string"))));
+    ModifiedJulianDayExposer.def(bp::init<int,
                                  bp::optional<int, int> >((
-                bp::arg("day"),
-                bp::arg("seconds") = 0,
-                bp::arg("microseconds") = 0)));
-        CNESJulianDayExposer.def(bp::init<double>((
-                bp::arg("day"))));
-        { //lagrangian::CNESJulianDay::GetJulianDay
-            CNESJulianDayExposer.def(
-                "GetModifiedJulianDay",
-                (int (lagrangian::CNESJulianDay::*)() const)
-                    (&lagrangian::CNESJulianDay::GetModifiedJulianDay),
-                (int (CNESJulianDay::*)() const)
-                    (&CNESJulianDay::DefaultGetModifiedJulianDay));
-        }
-        CNESJulianDayExposer.def("__float__",
-                &lagrangian::CNESJulianDay::operator double);
-        CNESJulianDayExposer.def(bp::self_ns::str(bp::self));
+            bp::arg("day"),
+            bp::arg("seconds") = 0,
+            bp::arg("microseconds") = 0)));
+    ModifiedJulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+    { //lagrangian::ModifiedJulianDay::FromUnixTime
+        ModifiedJulianDayExposer.def(
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::ModifiedJulianDay::FromUnixTime ),
+            (bp::arg("time")));
     }
-    //
-    // lagrangian::CCSDSJulianDay
-    //
-    {
-        bp::class_<CCSDSJulianDay,
-                bp::bases<lagrangian::ModifiedJulianDay> >
-                    CCSDSJulianDayExposer = bp::class_<CCSDSJulianDay,
-                        bp::bases<lagrangian::ModifiedJulianDay> >(
-                "CCSDSJulianDay",
-                bp::init< >());
-        CCSDSJulianDayExposer.def(bp::init<std::string const &>((
-                bp::arg("s"))));
-        CCSDSJulianDayExposer.def(bp::init<int,
-                                  bp::optional<int, int> >((
-                bp::arg("day"),
-                bp::arg("seconds") = 0,
-                bp::arg("microseconds") = 0)));
-        CCSDSJulianDayExposer.def(bp::init<double>((
-                bp::arg("day"))));
-        { //lagrangian::CCSDSJulianDay::GetJulianDay
-            CCSDSJulianDayExposer.def(
-                "GetModifiedJulianDay",
-                (int (lagrangian::CCSDSJulianDay::*)() const)
-                    (&lagrangian::CCSDSJulianDay::GetModifiedJulianDay),
-                (int (CCSDSJulianDay::*)() const)
-                    (&CCSDSJulianDay::DefaultGetModifiedJulianDay));
-        }
-        CCSDSJulianDayExposer.def("__float__",
-                &lagrangian::CCSDSJulianDay::operator double);
-        CCSDSJulianDayExposer.def(bp::self_ns::str(bp::self));
+    { //lagrangian::ModifiedJulianDay::GetModifiedJulianDay
+        ModifiedJulianDayExposer.def(
+            "GetModifiedJulianDay",
+            (int (lagrangian::ModifiedJulianDay::*)() const)
+                (&lagrangian::ModifiedJulianDay::GetModifiedJulianDay));
     }
-    //
-    // lagrangian::LOPJulianDay
-    //
-    {
-        bp::class_<LOPJulianDay,
-                bp::bases<lagrangian::ModifiedJulianDay> >
-                    LOPJulianDayExposer = bp::class_<LOPJulianDay,
-                        bp::bases<lagrangian::ModifiedJulianDay> >(
-                "LOPJulianDay",
-                bp::init< >());
-        LOPJulianDayExposer.def(bp::init<std::string const &>((
-                bp::arg("s"))));
-        LOPJulianDayExposer.def(bp::init<int,
-                                bp::optional<int, int> >((
-                bp::arg("day"),
-                bp::arg("seconds") = 0,
-                bp::arg("microseconds") = 0)));
-        LOPJulianDayExposer.def(bp::init<double>((
-                bp::arg("day"))));
-        { //lagrangian::LOPJulianDay::GetJulianDay
-            LOPJulianDayExposer.def(
-                "GetModifiedJulianDay",
-                (int (lagrangian::LOPJulianDay::*)() const)
-                    (&lagrangian::LOPJulianDay::GetModifiedJulianDay),
-                (int (LOPJulianDay::*)() const)
-                    (&LOPJulianDay::DefaultGetModifiedJulianDay));
-        }
-        LOPJulianDayExposer.def("__float__",
-                &lagrangian::LOPJulianDay::operator double);
-        LOPJulianDayExposer.def(bp::self_ns::str(bp::self));
+    { //lagrangian::ModifiedJulianDay::Gap
+        ModifiedJulianDayExposer.def(
+            "Gap",
+            (lagrangian::JulianDay (*)( void ))
+                ( &lagrangian::ModifiedJulianDay::Gap ));
     }
-    //
-    // lagrangian::NASAJulianDay
-    //
-    {
-        bp::class_<NASAJulianDay,
-                bp::bases<lagrangian::ModifiedJulianDay> >
-                    NASAJulianDayExposer = bp::class_<NASAJulianDay,
-                        bp::bases<lagrangian::ModifiedJulianDay> >(
-                "NASAJulianDay",
-                bp::init< >());
-        NASAJulianDayExposer.def(bp::init<std::string const &>((
-                bp::arg("s"))));
-        NASAJulianDayExposer.def(bp::init<int,
+    ModifiedJulianDayExposer.staticmethod("FromUnixTime");
+    ModifiedJulianDayExposer.staticmethod("Gap");
+    ModifiedJulianDayExposer.def("__float__",
+            &lagrangian::ModifiedJulianDay::operator double);
+    ModifiedJulianDayExposer.def(bp::self_ns::str(bp::self));
+  }
+
+  //
+  // lagrangian::CNESJulianDay
+  //
+  {
+    bp::class_<CNESJulianDay,
+            bp::bases<lagrangian::JulianDay> >
+                CNESJulianDayExposer = bp::class_<CNESJulianDay,
+                    bp::bases<lagrangian::JulianDay> >(
+            "CNESJulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
+    CNESJulianDayExposer.def(bp::init<std::string const &>((
+            bp::arg("string"))));
+    CNESJulianDayExposer.def(bp::init<int,
                                  bp::optional<int, int> >((
-                bp::arg("day"),
-                bp::arg("seconds") = 0,
-                bp::arg("microseconds") = 0)));
-        NASAJulianDayExposer.def(bp::init<double>((
-                bp::arg("day"))));
-        { //lagrangian::NASAJulianDay::GetJulianDay
-            NASAJulianDayExposer.def(
-                "GetModifiedJulianDay",
-                (int (lagrangian::NASAJulianDay::*)() const)
-                    (&lagrangian::NASAJulianDay::GetModifiedJulianDay),
-                (int (NASAJulianDay::*)() const)
-                    (&NASAJulianDay::DefaultGetModifiedJulianDay));
-        }
-        NASAJulianDayExposer.def("__float__",
-                &lagrangian::NASAJulianDay::operator double);
-        NASAJulianDayExposer.def(bp::self_ns::str(bp::self));
+            bp::arg("day"),
+            bp::arg("seconds") = 0,
+            bp::arg("microseconds") = 0)));
+    CNESJulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+    { //lagrangian::CNESJulianDay::FromUnixTime
+        CNESJulianDayExposer.def(
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::CNESJulianDay::FromUnixTime ),
+            (bp::arg("time")));
     }
+    { //lagrangian::CNESJulianDay::GetCNESJulianDay
+        CNESJulianDayExposer.def(
+            "GetModifiedJulianDay",
+            (int (lagrangian::CNESJulianDay::*)() const)
+                (&lagrangian::CNESJulianDay::GetModifiedJulianDay));
+    }
+    { //lagrangian::CNESJulianDay::Gap
+        CNESJulianDayExposer.def(
+            "Gap",
+            (lagrangian::JulianDay (*)( void ))
+                ( &lagrangian::CNESJulianDay::Gap ));
+    }
+    CNESJulianDayExposer.staticmethod("FromUnixTime");
+    CNESJulianDayExposer.staticmethod("Gap");
+    CNESJulianDayExposer.def("__float__",
+            &lagrangian::CNESJulianDay::operator double);
+    CNESJulianDayExposer.def(bp::self_ns::str(bp::self));
+  }
+
+  //
+  // lagrangian::LOPJulianDay
+  //
+  {
+    bp::class_<LOPJulianDay,
+            bp::bases<lagrangian::JulianDay> >
+                LOPJulianDayExposer = bp::class_<LOPJulianDay,
+                    bp::bases<lagrangian::JulianDay> >(
+            "LOPJulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
+    LOPJulianDayExposer.def(bp::init<std::string const &>((
+            bp::arg("string"))));
+    LOPJulianDayExposer.def(bp::init<int,
+                                 bp::optional<int, int> >((
+            bp::arg("day"),
+            bp::arg("seconds") = 0,
+            bp::arg("microseconds") = 0)));
+    LOPJulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+    { //lagrangian::LOPJulianDay::FromUnixTime
+        LOPJulianDayExposer.def(
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::LOPJulianDay::FromUnixTime ),
+            (bp::arg("time")));
+    }
+    { //lagrangian::LOPJulianDay::GetLOPJulianDay
+        LOPJulianDayExposer.def(
+            "GetModifiedJulianDay",
+            (int (lagrangian::LOPJulianDay::*)() const)
+                (&lagrangian::LOPJulianDay::GetModifiedJulianDay));
+    }
+    { //lagrangian::LOPJulianDay::Gap
+        LOPJulianDayExposer.def(
+            "Gap",
+            (lagrangian::JulianDay (*)( void ))
+                ( &lagrangian::LOPJulianDay::Gap ));
+    }
+    LOPJulianDayExposer.staticmethod("FromUnixTime");
+    LOPJulianDayExposer.staticmethod("Gap");
+    LOPJulianDayExposer.def("__float__",
+            &lagrangian::LOPJulianDay::operator double);
+    LOPJulianDayExposer.def(bp::self_ns::str(bp::self));
+  }
+
+  //
+  // lagrangian::NASAJulianDay
+  //
+  {
+    bp::class_<NASAJulianDay,
+            bp::bases<lagrangian::JulianDay> >
+                NASAJulianDayExposer = bp::class_<NASAJulianDay,
+                    bp::bases<lagrangian::JulianDay> >(
+            "NASAJulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
+    NASAJulianDayExposer.def(bp::init<std::string const &>((
+            bp::arg("string"))));
+    NASAJulianDayExposer.def(bp::init<int,
+                                 bp::optional<int, int> >((
+            bp::arg("day"),
+            bp::arg("seconds") = 0,
+            bp::arg("microseconds") = 0)));
+    NASAJulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+    { //lagrangian::NASAJulianDay::FromUnixTime
+        NASAJulianDayExposer.def(
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::NASAJulianDay::FromUnixTime ),
+            (bp::arg("time")));
+    }
+    { //lagrangian::NASAJulianDay::GetNASAJulianDay
+        NASAJulianDayExposer.def(
+            "GetModifiedJulianDay",
+            (int (lagrangian::NASAJulianDay::*)() const)
+                (&lagrangian::NASAJulianDay::GetModifiedJulianDay));
+    }
+    { //lagrangian::NASAJulianDay::Gap
+        NASAJulianDayExposer.def(
+            "Gap",
+            (lagrangian::JulianDay (*)( void ))
+                ( &lagrangian::NASAJulianDay::Gap ));
+    }
+    NASAJulianDayExposer.staticmethod("FromUnixTime");
+    NASAJulianDayExposer.staticmethod("Gap");
+    NASAJulianDayExposer.def("__float__",
+            &lagrangian::NASAJulianDay::operator double);
+    NASAJulianDayExposer.def(bp::self_ns::str(bp::self));
+  }
+
+
+  //
+  // lagrangian::CCSDSJulianDay
+  //
+  {
+    bp::class_<CCSDSJulianDay,
+            bp::bases<lagrangian::JulianDay> >
+                CCSDSJulianDayExposer = bp::class_<CCSDSJulianDay,
+                    bp::bases<lagrangian::JulianDay> >(
+            "CCSDSJulianDay",
+            bp::init<bp::optional<boost::posix_time::ptime const &> >((
+                bp::arg("datetime")=
+                    boost::posix_time::microsec_clock::universal_time())));
+    CCSDSJulianDayExposer.def(bp::init<std::string const &>((
+            bp::arg("string"))));
+    CCSDSJulianDayExposer.def(bp::init<int,
+                                 bp::optional<int, int> >((
+            bp::arg("day"),
+            bp::arg("seconds") = 0,
+            bp::arg("microseconds") = 0)));
+    CCSDSJulianDayExposer.def(bp::init<double>((
+            bp::arg("day"))));
+    { //lagrangian::CCSDSJulianDay::FromUnixTime
+        CCSDSJulianDayExposer.def(
+            "FromUnixTime",
+            (long double (*)( long double const ))
+                ( &lagrangian::CCSDSJulianDay::FromUnixTime ),
+            (bp::arg("time")));
+    }
+    { //lagrangian::CCSDSJulianDay::GetCCSDSJulianDay
+        CCSDSJulianDayExposer.def(
+            "GetModifiedJulianDay",
+            (int (lagrangian::CCSDSJulianDay::*)() const)
+                (&lagrangian::CCSDSJulianDay::GetModifiedJulianDay));
+    }
+    { //lagrangian::CCSDSJulianDay::Gap
+        CCSDSJulianDayExposer.def(
+            "Gap",
+            (lagrangian::JulianDay (*)( void ))
+                ( &lagrangian::CCSDSJulianDay::Gap ));
+    }
+    CCSDSJulianDayExposer.staticmethod("FromUnixTime");
+    CCSDSJulianDayExposer.staticmethod("Gap");
+    CCSDSJulianDayExposer.def("__float__",
+          &lagrangian::CCSDSJulianDay::operator double);
+    CCSDSJulianDayExposer.def(bp::self_ns::str(bp::self));
+  }
 }
 
 

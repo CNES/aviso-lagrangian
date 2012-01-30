@@ -19,8 +19,8 @@ import logging
 import mpl_toolkits.basemap
 import netCDF4
 import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot
+import math
 import numpy
 import re
 import sys
@@ -647,7 +647,7 @@ class Mapping(object):
         Set color range
         """
         step = (max - min) / n_colors
-        logging.debug('set range to [%.2f, %.2f], step=%.2f' % (min, max, step))
+        logging.debug('set range to [%.4f, %.4f], step=%.4f' % (min, max, step))
         self._range = numpy.arange(min, max + step, step)
 
     def __contour(self, cm):
@@ -708,8 +708,9 @@ class Mapping(object):
         # Draws colormap if user want it
         if self._show_colormap:
             logging.debug('draw colormap')
+            fmt = '%%.%df' % math.log10(1/(self._range[1]-self._range[0]))
             cbar = self._figure.colorbar(ctr, orientation='horizontal',
-                                         pad=0.06, aspect=40, format='%0.1f')
+                                         pad=0.06, aspect=40, format=fmt)
             for text in cbar.ax.get_xticklabels():
                 text.set_size(6)
             cbar.set_label(self._legend, fontsize=8)
@@ -719,8 +720,7 @@ class Mapping(object):
         """
         max = round(max)
         min = round(min)
-        n = 10 if max * min > 0 else 11
-        return numpy.linspace(min, max, n)
+        return numpy.arange(min, max, (max-min) * 0.1)
 
     def __draw_longitude(self):
         """

@@ -62,14 +62,14 @@ public:
     {
         boost::tuple<double const&, double const&> minmax =
                 boost::minmax(u_->GetFirstDate(), v_->GetFirstDate());
-        return JulianDay(JulianDay::JulianDayFromUnixTime(minmax.get<1> ()));
+        return JulianDay(JulianDay::FromUnixTime(minmax.get<1> ()));
     }
 
     JulianDay EndTime() const
     {
         boost::tuple<double const&, double const&> minmax =
                 boost::minmax(u_->GetLastDate(), v_->GetLastDate());
-        return JulianDay(JulianDay::JulianDayFromUnixTime(minmax.get<0> ()));
+        return JulianDay(JulianDay::FromUnixTime(minmax.get<0> ()));
     }
 };
 

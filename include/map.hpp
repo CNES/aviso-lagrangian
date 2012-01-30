@@ -204,7 +204,7 @@ public:
             }
 
             threads.join_all();
-            JulianDay jd(JulianDay::JulianDayFromUnixTime(it()));
+            JulianDay jd(JulianDay::FromUnixTime(it()));
             std::cout << jd.ToString("%Y%m%d %H:%M:%S") << std::endl << std::flush;
             ++it;
         }

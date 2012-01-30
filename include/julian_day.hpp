@@ -22,6 +22,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/math/special_functions.hpp>
+#include <boost/regex.hpp>
 
 // ___________________________________________________________________________//
 
@@ -29,7 +30,7 @@ namespace lagrangian
 {
 
 /**
- * @brief Handle a Julian day as a triplet: day, seconds and microseconds.
+ * @brief Handle a julian day as a triplet: day, seconds and microseconds.
  */
 class JulianDay
 {
@@ -56,10 +57,10 @@ private:
     /*
      * @brief Comparison of Julian days
      *
-     * @param j Julian day compared with the current instance.
+     * @param j julian day compared with the current instance.
      *
-     * @return The difference of the Julian day of the instance minus
-     * the Julian day passed as parameter.
+     * @return The difference of the julian day of the instance minus
+     * the julian day passed as parameter.
      */
     int Compare(const JulianDay& j) const
     {
@@ -77,12 +78,19 @@ private:
         return n;
     }
 
+    /**
+     * @brief adjusts the seconds and microseconds in their domain after an
+     * arithmetic operation.
+     */
+    void AdjustDomain();
+
 public:
     /**
-     * @brief Construct a Julian day from a boost::posix_time::ptime object
+     * @brief Construct a julian day from a boost::posix_time::ptime object
      *
      * @param t Instance of a ptime object. If t isn't set, the new instance
      * will be contain the current date.
+     * @param coordinate_time Coordinate time
      */
     JulianDay(const boost::posix_time::ptime& t =
             boost::posix_time::microsec_clock::universal_time())
@@ -94,7 +102,7 @@ public:
     }
 
     /**
-     * @brief Creating a Julian day from string.
+     * @brief Creating a julian day from string.
      *
      * @param s String to parse.
      */
@@ -104,17 +112,20 @@ public:
     }
 
     /**
-     * @brief Creating a Julian day from a triplet: day, seconds and microseconds.
+     * @brief Creating a julian day from a triplet: day, seconds and microseconds.
      *
-     * @param day Julian day
+     * @param day julian day
      * @param seconds Seconds
      * @param microseconds Microseconds
      *
      * @throw std::runtime_error if the number of seconds is greater than 86400
      * or the number of microseconds is greater than 1000000
      */
-    JulianDay(const int day, const int seconds, const int microseconds) :
-        day_(day), seconds_(seconds), microseconds_(microseconds)
+    JulianDay(
+        const int day,
+        const int seconds = 0,
+        const int microseconds = 0) :
+      day_(day), seconds_(seconds), microseconds_(microseconds)
     {
         if (seconds_ > seconds_per_day_)
             std::invalid_argument("seconds must be less than 86400");
@@ -124,16 +135,20 @@ public:
     }
 
     /**
-     * @brief Creating a Julian day from a fractional Julian day
+     * @brief Creating a julian day from a fractional julian day
      *
-     * @param jd Julian day
+     * @param jd julian day
      */
-    JulianDay(const double jd)
+    JulianDay(const long double jd)
     {
         double fractional, integer;
-        fractional = modf(jd, &integer) * 86400;
-        day_ = static_cast<int> (integer);
-        microseconds_ = static_cast<int>(modf(fractional, &integer) * 1e6);
+        long double integer_part = static_cast<int>(jd);
+
+        fractional = boost::math::round<double>(modf(jd - integer_part,
+              &integer) * 86400000000.0) * 1e-6;
+
+        day_ = static_cast<int> (integer_part);
+        microseconds_ = static_cast<int> (modf(fractional, &integer) * 1e6);
         seconds_ = static_cast<int> (integer);
     }
 
@@ -145,11 +160,11 @@ public:
     }
 
     /**
-     * @brief Computes a Julian day from Unix Time
+     * @brief Computes a julian day from Unix Time
      *
      * @return The julian day
      */
-    static double JulianDayFromUnixTime(const double time)
+    static long double FromUnixTime(const long double time)
     {
         return time / 86400.0 + unix_time;
     }
@@ -157,7 +172,7 @@ public:
     /**
      * @brief Returns the julian day
      *
-     * @return The Julian day
+     * @return The julian day
      */
     int get_day() const
     {
@@ -223,12 +238,12 @@ public:
     }
 
     /**
-     * @brief Converts a Julian day to Unix Time
+     * @brief Converts a julian day to Unix Time
      *
      * @return the number of seconds elapsed since midnight Coordinated
      * Universal Time (UTC) of January 1, 1970, not counting leap seconds.
      */
-    double ToUnixTime() const
+    long double ToUnixTime() const
     {
         return (day_ * 86400.0 + seconds_ + microseconds_ * 1e-6) - unix_time
                 * 86400.0;
@@ -246,16 +261,16 @@ public:
     /**
      * @brief Returns a boost::posix_time::ptime object
      *
-     * @return a new intance of a boost::posix_time::ptime object
+     * @return a new instance of a boost::posix_time::ptime object
      */
     boost::posix_time::ptime ToPtime() const;
 
     /**
-     * @brief Converts a Julian day to a string according the given format.
+     * @brief Converts a julian day to a string according the given format.
      *
      * @param format String format
      *
-     * @return The string representation of the Julian day
+     * @return The string representation of the julian day
      *
      * @see
      * @htmlonly
@@ -281,111 +296,179 @@ inline JulianDay operator-(const JulianDay& a, const JulianDay& b)
     return r -= b;
 }
 
-inline std::ostream& operator<<(std::ostream& os, const JulianDay& j)
+inline std::ostream& operator<<(std::ostream& os, const JulianDay& jd)
 {
-    return os << j.get_day() << " " << j.get_seconds() << " "
-            << j.get_microseconds();
+    return os << jd.get_day() << " " << jd.get_seconds() << " "
+        << jd.get_microseconds();
+}
+
+inline std::istream& operator>>(std::istream& is, JulianDay& jd)
+{
+    static boost::regex triplet("(\\d+)\\s+(\\d+)\\s+(\\d+)");
+    static boost::regex real("([-+]?\\d*\\.?\\d+)");
+    boost::smatch match;
+    
+    std::string line;
+    std::getline(is, line);
+    
+    // if the line contains three integers we construct a julian day from a
+    // triplet: date, seconds, microseconds
+    if (boost::regex_match(line, match, triplet))
+    {
+        jd = JulianDay(
+            boost::lexical_cast<int>(match[1]),
+            boost::lexical_cast<int>(match[2]),
+            boost::lexical_cast<int>(match[3]));
+    }
+    // if the line contains a floating point number we construct a julian day
+    // from a fractional julian day
+    else if (boost::regex_match(line, match, real))
+    {
+        jd = JulianDay(boost::lexical_cast<long double>(match[1]));
+    }
+    // otherwise we try to build a julian day from a string
+    else
+    {
+        jd = JulianDay(line);
+    }
+    return is;
 }
 
 // ___________________________________________________________________________//
 
 /**
- * @brief Handle a modified Julian day as a triplet: day, seconds and
- * microseconds.
- *
- * Modified Julian Day is defined as the Julian Day minus 2400000.5.
- * Thus MJD 0 is at midnight between the 16 and 17 November 1858 AD Gregorian.
+ * @brief Handle a Julian day as a triplet, day, seconds and
+ * microseconds, for different reference epoch.
  */
-class ModifiedJulianDay: public JulianDay
+template<int GAP>
+class AbstractModifiedJulianDay: public JulianDay
 {
-private:
-    // boost use a prerounded gap between julian day and modified julian day
-    static const int gap_ = 2400001;
-
 protected:
 
     /**
-     * @brief Convert a modified Julian day to a Julian day
+     * @brief Convert a modified julian day to a julian day
      *
-     * @param mjd Modified Julian day to process
-     * @param gap Modified Julian day minus "gap" to compute a modified julian
-     * day derived.
+     * @param mjd Modified julian day to process
      *
-     * @return The Julian day
+     * @return The julian day
      */
-    template<class T>
-    static T ToJulianDay(const T mjd, const int gap = 0)
+    template<typename T>
+    inline T ToJulianDay(const T mjd) const
     {
-        return mjd + gap + gap_;
-    }
-
-    /**
-     * @brief Convert a Julian day to a modified Julian day
-     *
-     * @param jd Julian day to process
-     * @param gap Modified Julian day minus "gap" to compute a modified julian
-     * day derived.
-     *
-     * @return The modified Julian day
-     */
-    static int ToModifiedJulianDay(const int jd, const int gap = 0)
-    {
-        return jd - gap - gap_;
+        return mjd + GAP;
     }
 
 public:
 
-    ModifiedJulianDay() :
-        JulianDay()
+    AbstractModifiedJulianDay(const boost::posix_time::ptime& t =
+        boost::posix_time::microsec_clock::universal_time()) :
+      JulianDay(t)
     {
     }
 
-    ModifiedJulianDay(const std::string& s) :
-        JulianDay(s)
+    AbstractModifiedJulianDay(const std::string& s) :
+      JulianDay(s)
     {
     }
 
-    ModifiedJulianDay(const int day,
-            const int seconds = 0,
-            const int microseconds = 0,
-            const int gap = 0) :
-        JulianDay(ToJulianDay<int> (day, gap), seconds, microseconds)
+    AbstractModifiedJulianDay(
+        const int day,
+        const int seconds = 0,
+        const int microseconds = 0) :
+      JulianDay(ToJulianDay<int> (day), seconds, microseconds)
     {
     }
 
-    ModifiedJulianDay(const double day, const int gap = 0) :
-        JulianDay(ToJulianDay<double> (day, gap))
+    AbstractModifiedJulianDay(const double day) :
+      JulianDay(ToJulianDay<long double> (day))
     {
     }
 
-    virtual ~ModifiedJulianDay()
+    virtual ~AbstractModifiedJulianDay()
     {
     }
 
     /**
-     * @brief Returns the modified Julian day
+     * @brief Computes a modified julian day from Unix Time
      *
      * @return The modified julian day
      */
-    virtual int GetModifiedJulianDay() const
+    static long double FromUnixTime(const long double time)
     {
-        return ToModifiedJulianDay(get_day());
+        return JulianDay::FromUnixTime(time) - GAP;
     }
 
+    /**
+     * @brief Returns the modified julian day
+     *
+     * @return The modified julian day
+     */
+    inline int GetModifiedJulianDay() const
+    {
+        return get_day() - GAP;
+    }
+
+    /**
+     * @brief Returns the decimal julian day
+     *
+     * @return The decimal julian day
+     */
     operator double() const
     {
         return GetModifiedJulianDay() + (get_seconds() + get_microseconds()
-                * 1e-6) / 86400.0;
+            * 1e-6) / 86400.0;
     }
+
+    /**
+     * @brief Returns the julian day number that defines the modified julian
+     * day.
+     * 
+     * @return the julian day of reference
+     */
+    static JulianDay Gap()
+    {
+        return JulianDay(static_cast<long double> (GAP));
+    }
+
     using JulianDay::operator=;
 };
+
 // ___________________________________________________________________________//
 
-inline std::ostream& operator<<(std::ostream& os, const ModifiedJulianDay& j)
+template<int GAP>
+inline std::ostream& operator<<(
+    std::ostream& os,
+    const AbstractModifiedJulianDay<GAP>& mjd)
 {
-    return os << j.GetModifiedJulianDay() << " " << j.get_seconds() << " "
-            << j.get_microseconds();
+    return os << mjd.GetModifiedJulianDay() << " " << mjd.get_seconds() << " "
+        << mjd.get_microseconds();
 }
+
+template<int GAP>
+inline std::istream& operator>>(
+    std::istream& is,
+    AbstractModifiedJulianDay<GAP>& mjd)
+{
+      JulianDay jd;
+      is >> jd;
+      mjd = AbstractModifiedJulianDay<GAP> (
+          jd.get_day(),
+          jd.get_seconds(),
+          jd.get_microseconds());
+      return is;
+}
+
+// ___________________________________________________________________________//
+
+/**
+ * @brief Handle a modified julian day as a triplet: day, seconds and
+ * microseconds.
+ *
+ * Modified julian Day is defined as the julian Day minus 2400000.5.
+ * Thus MJD 0 is at midnight between the 16 and 17 November 1858 AD Gregorian.
+ * (boost use a rounded gap between julian day and modified julian day)
+ */
+typedef AbstractModifiedJulianDay<2400001> ModifiedJulianDay;
 
 // ___________________________________________________________________________//
 
@@ -396,46 +479,7 @@ inline std::ostream& operator<<(std::ostream& os, const ModifiedJulianDay& j)
  * Thus CNES 0 is at midnight between the 31 December and 01 January 1950 AD
  * Gregorian.
  */
-class CNESJulianDay: public ModifiedJulianDay
-{
-private:
-    static const int gap_ = 33282;
-public:
-
-    CNESJulianDay() :
-        ModifiedJulianDay()
-    {
-    }
-
-    CNESJulianDay(const std::string& s) :
-        ModifiedJulianDay(s)
-    {
-    }
-
-    CNESJulianDay(const double jd) :
-        ModifiedJulianDay(jd, gap_)
-    {
-    }
-
-    CNESJulianDay(const int day,
-            const int seconds = 0,
-            const int microseconds = 0U) :
-        ModifiedJulianDay(day, seconds, microseconds, gap_)
-    {
-    }
-
-    /**
-     * @brief Returns the CNES Julian day
-     *
-     * @return The CNES Julian day
-     */
-    int GetModifiedJulianDay() const
-    {
-        return ToModifiedJulianDay(get_day(), gap_);
-    }
-
-    using JulianDay::operator=;
-};
+typedef AbstractModifiedJulianDay<2400001 + 33282> CNESJulianDay;
 
 // ___________________________________________________________________________//
 
@@ -446,45 +490,7 @@ public:
  * Thus LOP 0 is at midnight between the 31 December and 01 January 1992 AD
  * Gregorian.
  */
-class LOPJulianDay: public ModifiedJulianDay
-{
-private:
-    static const int gap_ = 48622;
-public:
-    LOPJulianDay() :
-        ModifiedJulianDay()
-    {
-    }
-
-    LOPJulianDay(const std::string& s) :
-        ModifiedJulianDay(s)
-    {
-    }
-
-    LOPJulianDay(const double jd) :
-        ModifiedJulianDay(jd, gap_)
-    {
-    }
-
-    LOPJulianDay(const int day,
-            const int seconds = 0,
-            const int microseconds = 0U) :
-        ModifiedJulianDay(day, seconds, microseconds, gap_)
-    {
-    }
-
-    /**
-     * @brief Returns the LOP Julian day
-     *
-     * @return the LOP Julian day
-     */
-    int GetModifiedJulianDay() const
-    {
-        return ToModifiedJulianDay(get_day(), gap_);
-    }
-
-    using JulianDay::operator=;
-};
+typedef AbstractModifiedJulianDay<2400001 + 48622> LOPJulianDay;
 
 // ___________________________________________________________________________//
 
@@ -495,46 +501,7 @@ public:
  * Thus NASA 0 is at midnight between the 23 May and 24 May 1968 AD Gregorian,
  * at which time the Apollo missions to the Moon were underway.
  */
-class NASAJulianDay: public ModifiedJulianDay
-{
-private:
-    static const int gap_ = 40000;
-public:
-
-    NASAJulianDay() :
-        ModifiedJulianDay()
-    {
-    }
-
-    NASAJulianDay(const std::string& s) :
-        ModifiedJulianDay(s)
-    {
-    }
-
-    NASAJulianDay(const double jd) :
-        ModifiedJulianDay(jd, gap_)
-    {
-    }
-
-    NASAJulianDay(const int day,
-            const int seconds = 0,
-            const int microseconds = 0U) :
-        ModifiedJulianDay(day, seconds, microseconds, gap_)
-    {
-    }
-
-    /**
-     * @brief Returns the NASA Julian day
-     *
-     * @return the NASA Julian day
-     */
-    int GetModifiedJulianDay() const
-    {
-        return ToModifiedJulianDay(get_day(), gap_);
-    }
-
-    using JulianDay::operator=;
-};
+typedef AbstractModifiedJulianDay<2400001 + 40000> NASAJulianDay;
 
 // ___________________________________________________________________________//
 
@@ -545,46 +512,7 @@ public:
  * Thus CCSDS 0 is at midnight between the 31 December and 01 January 1958 AD
  * Gregorian.
  */
-class CCSDSJulianDay: public ModifiedJulianDay
-{
-private:
-    static const int gap_ = 36204;
-public:
-
-    CCSDSJulianDay() :
-        ModifiedJulianDay()
-    {
-    }
-
-    CCSDSJulianDay(const std::string& s) :
-        ModifiedJulianDay(s)
-    {
-    }
-
-    CCSDSJulianDay(const double jd) :
-        ModifiedJulianDay(jd, gap_)
-    {
-    }
-
-    CCSDSJulianDay(const int day,
-            const int seconds = 0,
-            const int microseconds = 0U) :
-        ModifiedJulianDay(day, seconds, microseconds, gap_)
-    {
-    }
-
-    /**
-     * @brief Returns the CCSDS Julian day
-
-     * @return the CCSDS Julian day
-     */
-    int GetModifiedJulianDay() const
-    {
-        return ToModifiedJulianDay(get_day(), gap_);
-    }
-
-    using JulianDay::operator=;
-};
+typedef AbstractModifiedJulianDay<2400001 + 36204> CCSDSJulianDay;
 
 }
 

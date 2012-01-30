@@ -20,6 +20,31 @@
 namespace lagrangian
 {
 
+void JulianDay::AdjustDomain()
+{
+    if (microseconds_ >= microseconds_per_second_)
+    {
+        ++seconds_;
+        microseconds_ -= microseconds_per_second_;
+    }
+    if (seconds_ >= seconds_per_day_)
+    {
+        ++day_;
+        seconds_ -= seconds_per_day_;
+    }
+    
+    if (microseconds_ < 0)
+    {
+        --seconds_;
+        microseconds_ += microseconds_per_second_;
+    }
+    if (seconds_ < 0)
+    {
+        --day_;
+        seconds_ += seconds_per_day_;
+    }
+}
+
 // ___________________________________________________________________________//
 
 JulianDay& JulianDay::operator+=(const JulianDay& jd)
@@ -28,17 +53,8 @@ JulianDay& JulianDay::operator+=(const JulianDay& jd)
     microseconds_ += jd.get_microseconds();
     seconds_ += jd.get_seconds();
 
-    if (microseconds_ > microseconds_per_second_)
-    {
-        ++seconds_;
-        microseconds_ -= microseconds_per_second_;
-    }
-
-    if (seconds_ > seconds_per_day_)
-    {
-        ++day_;
-        seconds_ -= seconds_per_day_;
-    }
+    AdjustDomain();
+    
     return *this;
 }
 
@@ -50,16 +66,8 @@ JulianDay& JulianDay::operator-=(const JulianDay& jd)
     microseconds_ -= jd.get_microseconds();
     seconds_ -= jd.get_seconds();
 
-    if (microseconds_ < 0)
-    {
-        --seconds_;
-        microseconds_ += microseconds_per_second_;
-    }
-    if (seconds_ < 0)
-    {
-        --day_;
-        seconds_ += seconds_per_day_;
-    }
+    AdjustDomain();
+    
     return *this;
 }
 
@@ -94,7 +102,7 @@ std::string JulianDay::ToString(const std::string& format) const
 
     ss.imbue(std::locale(ss.getloc(), f));
     ss << pt;
-    // do not call "delete f"; f is a sort of smart pointer !
+    // do not call "delete f"; f is a smart pointer !
     return ss.str();
 }
 
