@@ -41,6 +41,7 @@ class FileList
 private:
     Axis axis_;
     std::vector<std::string> filenames_;
+    bool same_coordinates_;
 
 public:
     /**
@@ -65,7 +66,7 @@ public:
      * @throw std::out_of_range if the date requested is not included in the
      * time series.
      */
-    int FindIndex(const double date)
+    inline int FindIndex(const double date)
     {
         int index = axis_.FindIndex(date);
 
@@ -81,7 +82,7 @@ public:
      *
      * @return number of filenames
      */
-    int GetNumElements() const
+    inline int GetNumElements() const
     {
         return axis_.GetNumElements();
     }
@@ -95,7 +96,7 @@ public:
      *
      * @throw std::out_of_range if index is out of range
      */
-    std::string& GetItem(const int index)
+    inline std::string& GetItem(const int index)
     {
         if (index < 0 || index > GetNumElements() - 1)
         {
@@ -111,9 +112,19 @@ public:
      *
      * @return date in JulianDay
      */
-    double GetDate(const int index) const
+    inline double GetDate(const int index) const
     {
         return axis_.GetCoordinateValue(index);
+    }
+
+    /**
+     * @brief Returns true if the file list have the same spatial coordinates.
+     *
+     * @return false if the file list have different spatial coordinates.
+     */
+    inline bool same_coordinates() const
+    {
+        return same_coordinates_;
     }
 };
 
@@ -133,11 +144,32 @@ private:
     double last_date_;
     std::string varname_;
     std::string unit_;
+    bool same_coordinates_;
+    bool backwards_;
+    reader::Factory::Type type_;
 
     // Load new files in memory if necessary.
-    void Load(int& ix0, const int ix1);
+    void Load(int ix0, const int ix1);
+
+    inline int NextItem(const int ix) const
+    {
+        return backwards_
+                ? (ix == 0 ? ix + 1: ix -1)
+                : (ix == time_serie_->GetNumElements() - 1 ? ix - 1: ix + 1);
+    }
 
 public:
+
+    /**
+     * @brief Loads the data necessary for the interpolation of the values in
+     * the interval [begin, end].
+     *
+     * @param begin Date of the first measurement to compute in number of
+     *  seconds elapsed since 1/1/1970)
+     * @param end Date of the last measurement to compute in number of
+     *  seconds elapsed since 1/1/1970)
+     */
+    void Load(const double t0, const double t1);
 
     /**
      * @brief Create a new instance of TimeSerie.
@@ -150,13 +182,11 @@ public:
      * file)
      * @param reader Instance of an object implementing the class Reader. By
      * default the class uses the reader of NetCDF grids.
-     * @param n Number of grids to load into memory
      */
     TimeSerie(const std::vector<std::string>& filenames,
             const std::string& varname,
             const std::string& unit = "",
-            const reader::Factory::Type type = reader::Factory::kNetCDF,
-            const int n = 4);
+            const reader::Factory::Type type = reader::Factory::kNetCDF);
 
     /**
      * @brief Default method invoked when a TimeSerie is destroyed.
@@ -181,15 +211,16 @@ public:
      *
      */
     double Interpolate(const double date,
-            const double longitude,
-            const double latitude);
+            double& longitude,
+            const double latitude,
+            Coordinates& coordinates=Coordinates::UNDEF());
 
     /**
      * @brief Returns the first date of the time series.
      *
      * @returns the first date
      */
-    double GetFirstDate() const
+    inline double GetFirstDate() const
     {
         return time_serie_->GetDate(0);
     }
@@ -199,7 +230,7 @@ public:
      *
      * @returns the last date
      */
-    double GetLastDate() const
+    inline double GetLastDate() const
     {
         return time_serie_->GetDate(time_serie_->GetNumElements() - 1);
     }
@@ -209,9 +240,21 @@ public:
      *
      * @return number of filenames
      */
-    int GetNumElements() const
+    inline int GetNumElements() const
     {
         return time_serie_->GetNumElements();
+    }
+
+    /**
+     * @brief Returns true if the time series data have the same spatial
+     * coordinates.
+     *
+     * @return false if the time series data have different spatial
+     * coordinates.
+     */
+    inline bool same_coordinates() const
+    {
+        return same_coordinates_;
     }
 };
 

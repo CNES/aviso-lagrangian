@@ -120,34 +120,37 @@ void Netcdf::Load(const std::string& name, const std::string& unit)
 
 // ___________________________________________________________________________//
 
-double Netcdf::Interpolate(const double x, const double y) const
+double Netcdf::Interpolate(double& longitude,
+        const double latitude,
+        Coordinates& coordinates) const
 {
-
-    int ix0, ix1;
-    int iy0, iy1;
-
     if (data_.size() == 0)
         throw std::logic_error("No data loaded into memory");
 
-    double axis_x = axis_x_.get_type() == Axis::kLongitude
-            ? axis_x_.Normalize(x, 360)
-            : x;
+    if (coordinates.Undef())
+    {
+        int ix0, ix1;
+        int iy0, iy1;
 
-    if (!axis_x_.FindIndexes(axis_x, ix0, ix1) || !axis_y_.FindIndexes(y,
-            iy0,
-            iy1))
-        return std::numeric_limits<double>::quiet_NaN();
+        longitude = axis_x_.Normalize(longitude, 360);
 
-    return BilinearInterpolation(axis_x_.GetCoordinateValue(ix0),
-            axis_x_.GetCoordinateValue(ix1),
-            axis_y_.GetCoordinateValue(iy0),
-            axis_y_.GetCoordinateValue(iy1),
-            GetValue(ix0, iy0),
-            GetValue(ix1, iy0),
-            GetValue(ix0, iy1),
-            GetValue(ix1, iy1),
-            axis_x,
-            y);
+        if (!axis_x_.FindIndexes(longitude, ix0, ix1) ||
+                !axis_y_.FindIndexes(latitude, iy0, iy1))
+            return std::numeric_limits<double>::quiet_NaN();
+
+        coordinates = Coordinates(ix0, ix1, iy0, iy1);
+    }
+
+    return BilinearInterpolation(axis_x_.GetCoordinateValue(coordinates.ix0()),
+            axis_x_.GetCoordinateValue(coordinates.ix1()),
+            axis_y_.GetCoordinateValue(coordinates.iy0()),
+            axis_y_.GetCoordinateValue(coordinates.iy1()),
+            GetValue(coordinates.ix0(), coordinates.iy0()),
+            GetValue(coordinates.ix1(), coordinates.iy0()),
+            GetValue(coordinates.ix0(), coordinates.iy1()),
+            GetValue(coordinates.ix1(), coordinates.iy1()),
+            longitude,
+            latitude);
 }
 
 // ___________________________________________________________________________//

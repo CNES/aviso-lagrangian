@@ -11,8 +11,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-
-import sys
 import re
 import os
 import site
@@ -21,16 +19,17 @@ import zipfile
 
 import SCons
 from SCons.Script.SConscript import SConsEnvironment
-from zipfile import ZipFile
 
 SConsEnvironment.Chmod = SCons.Action.ActionFactory(os.chmod,
     lambda dest, mode: 'Chmod("%s", 0%o)' % (dest, mode))
+
 
 def permissions(env, dest, files, perm):
     obj = env.Install(dest, files)
     for item in obj:
         env.AddPostAction(item, env.Chmod(str(item), perm))
     return dest
+
 
 def source_list(dir, mask='.*', replace=None):
     result = []
@@ -44,8 +43,9 @@ def source_list(dir, mask='.*', replace=None):
                 result.append(path)
     return result
 
+
 def load_cfg(env):
-    CFG='lagrangian.cfg'
+    CFG = 'lagrangian.cfg'
     values = {}
     if os.path.exists(CFG):
         exec open(CFG, 'rU').read() in {}, values
@@ -57,6 +57,7 @@ def load_cfg(env):
                 env[key] = []
                 for item in values:
                     env[key].append(item)
+
 
 def zipdist(target, source, env):
     file = zipfile.ZipFile("lagrangian.zip", mode="w")
@@ -95,7 +96,7 @@ dist_files += source_list('src', mask='\.(cpp|hpp|h)$')
 dist_files += source_list('include', mask='\.(hpp|h)$')
 dist_files += source_list('src/etc')
 
-prefix = env['prefix'] if env.has_key('prefix') else site.PREFIXES[0]
+prefix = env['prefix'] if 'prefix' in env else site.PREFIXES[0]
 bin_prefix = os.path.join(prefix, 'bin')
 lib_prefix = distutils.sysconfig.get_python_lib()
 lib_prefix = os.path.join(prefix, lib_prefix.replace(site.PREFIXES[1], '')[1:])
@@ -113,14 +114,23 @@ for header in source_list('src', mask='\.(hpp|h)$'):
 
 env.Install(bin_prefix, 'src/etc/map_of_fle')
 env.Install(bin_prefix, 'src/etc/mapping')
+env.Install(bin_prefix, 'src/etc/path')
 env.Install(lib_prefix, lagrangian[0])
 env.Alias('install', bin_prefix)
 env.Alias('install', lib_prefix)
-env.InstallPerm(bin_prefix, ['src/etc/map_of_fle', 'src/etc/mapping'], 0555)
+env.InstallPerm(bin_prefix,
+                ['src/etc/map_of_fle',
+                 'src/etc/mapping',
+                 'src/etc/path'],
+                0555)
 env.InstallPerm(lib_prefix, [lagrangian[0]], 0555)
 
-env.Clean('distclean', ['.sconsign.dblite', '.sconf_temp', 'config.log',
-                        'lagrangian.cfg', 'lagrangian.zip'])
+env.Clean('distclean',
+          ['.sconsign.dblite',
+           '.sconf_temp',
+           'config.log',
+           'lagrangian.cfg',
+           'lagrangian.zip'])
 Clean('.', 'build')
 
 if 'uninstall' in COMMAND_LINE_TARGETS:

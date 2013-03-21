@@ -23,6 +23,19 @@ import multiprocessing
 import signal
 import sys
 
+
+def delta(value):
+    try:
+        value = float(value)
+    except ValueError:
+        msg = "invalid float value: %r" % value
+        raise argparse.ArgumentTypeError(msg)
+    if value < 0:
+        msg = "value must be positive: %f" % value
+        raise argparse.ArgumentTypeError(msg)
+    return value
+
+
 def usage():
     parser = argparse.ArgumentParser(description='Compute Map of FLE')
     parser.add_argument('configuration', help='Configuration file')
@@ -33,7 +46,7 @@ def usage():
                         default=1)
     parser.add_argument('--separation', help='Minimum separation in degrees',
                         type=float, metavar='SEP', default=-1)
-    parser.add_argument('--delta', help='Time delta in hours', type=float,
+    parser.add_argument('--delta', help='Time delta in hours', type=delta,
                         default=6)
     parser.add_argument('--x_min', help='X min in degrees', type=float,
                         default=-180)
@@ -45,10 +58,12 @@ def usage():
                         default=90)
     return parser.parse_args()
 
+
 def convert_from_sec_to_day(a, fill_value):
     result = numpy.ma.masked_equal(a, fill_value)
     result *= 86400
     return result.data
+
 
 def compute():
     # Initializes arguments from command line
@@ -61,14 +76,14 @@ def compute():
     ts = lagrangian.TimeSerieField(args.configuration)
     start_time = lagrangian.JulianDay(args.start_time)
     end_time = lagrangian.JulianDay(args.end_time)
-    delta = datetime.timedelta(0, 6 * 60 * 60)
+    delta = datetime.timedelta(0, args.delta * 60 * 60)
 
     nx=int((args.x_max - args.x_min) / args.step)
     ny=int((args.y_max - args.y_min) / args.step)
 
-    # Initializes calculation mode 
+    # Initializes calculation mode
     mode = lagrangian.kFTLE if args.separation < 0 else lagrangian.kFSLE
-    caption = 'FTLE' if args.separation < 0 else 'FSLE' 
+    caption = 'FTLE' if args.separation < 0 else 'FSLE'
 
     # Initializes the map to process
     map_of_fle=lagrangian.MapOfFiniteLyapunovExponents(nx, ny, args.x_min,
@@ -80,7 +95,7 @@ def compute():
 
     # Computes map
     map_of_fle.Compute(fle)
-    
+
     # Creates the NetCDF file
     rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
     rootgrp.createDimension('x', nx)
@@ -128,6 +143,7 @@ def compute():
 
     rootgrp.close()
 
+
 def signal_handler(signum, frame):
     signame = {}
     for v, k in signal.__dict__.iteritems():
@@ -137,6 +153,7 @@ def signal_handler(signum, frame):
     for process in multiprocessing.process.active_children():
         process.terminate()
     sys.exit(0)
+
 
 # Initialize signal handler
 signal.signal(signal.SIGINT, signal_handler)

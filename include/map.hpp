@@ -33,7 +33,7 @@ namespace lagrangian
 class MapProperties
 {
 protected:
-    __attribute__((aligned(8))) double x_min_;
+    double x_min_;
     double y_min_;
     double step_;
     int nx_;
@@ -167,7 +167,6 @@ public:
                             + omp_num_threads);
             }
         }
-
     }
 
     virtual ~FiniteLyapunovExponents()
@@ -190,6 +189,8 @@ public:
         boost::thread_group threads;
         while (it.GoAfter())
         {
+            fle.Fetch(it());
+
             for(int ix = 0; ix < num_threads_; ++ix)
             {
                 int from = (ix * map_.get_nx()) / num_threads_;
@@ -205,7 +206,9 @@ public:
 
             threads.join_all();
             JulianDay jd(JulianDay::FromUnixTime(it()));
-            std::cout << jd.ToString("%Y%m%d %H:%M:%S") << std::endl << std::flush;
+            std::cout << jd.ToString("%Y%m%d %H:%M:%S")
+                      << std::endl
+                      << std::flush;
             ++it;
         }
     }

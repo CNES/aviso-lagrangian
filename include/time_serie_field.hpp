@@ -41,6 +41,8 @@ class TimeSerie: public Field
 private:
     lagrangian::TimeSerie *u_;
     lagrangian::TimeSerie *v_;
+    bool same_coordinates_;
+
 public:
     TimeSerie(const std::string& configuration_file,
             const Field::UnitType unit_type = kMetric,
@@ -50,6 +52,12 @@ public:
     {
         delete u_;
         delete v_;
+    }
+
+    void Fetch(const double t0, const double t1)
+    {
+        u_->Load(t0, t1);
+        v_->Load(t0, t1);
     }
 
     bool Compute(const double t,

@@ -31,13 +31,13 @@ namespace bp = boost::python;
 namespace wrapper
 {
 
-bp::numeric::array MakeVector(intp n, PyArray_TYPES t = PyArray_DOUBLE)
+bp::numeric::array MakeVector(int n, PyArray_TYPES t = PyArray_DOUBLE)
 {
     bp::object obj(bp::handle<>(PyArray_FromDims(1, &n, t)));
     return bp::extract<bp::numeric::array>(obj);
 }
 
-bp::numeric::array MakeMatrix(std::vector<intp> dimens,
+bp::numeric::array MakeMatrix(std::vector<int> dimens,
         PyArray_TYPES t = PyArray_DOUBLE)
 {
     bp::object obj(bp::handle<>(PyArray_FromDims(dimens.size(),

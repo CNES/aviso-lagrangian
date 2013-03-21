@@ -15,7 +15,6 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/thread/mutex.hpp>
 #include <float.h>
 #include <algorithm>
 
@@ -31,14 +30,8 @@ namespace lagrangian
 
 // ___________________________________________________________________________//
 
-boost::mutex g_load_mutex;
-
-// ___________________________________________________________________________//
-
-void TimeSerie::Load(int& ix0, const int ix1)
+void TimeSerie::Load(int ix0, const int ix1)
 {
-    boost::mutex::scoped_lock scoped_lock(g_load_mutex);
-
     // Should we load new data into memory ?
     if (ix0 < first_index_ || ix0 > last_index_ || ix1 < first_index_
             || ix1 > last_index_)
@@ -70,6 +63,7 @@ void TimeSerie::Load(int& ix0, const int ix1)
 
         for (int ix = 0; ix < static_cast<int> (readers_.size()); ++ix)
         {
+            std::cout << time_serie_->GetItem(indexes[ix]) << std::endl;
             readers_[ix]->Open(time_serie_->GetItem(indexes[ix]));
             readers_[ix]->Load(varname_, unit_);
         }
@@ -95,6 +89,10 @@ FileList::FileList(const std::vector<std::string>& filenames,
 {
     std::vector<std::string>::const_iterator its;
     std::vector<std::pair<double, std::string> > files;
+    Axis axis_x;
+    Axis axis_y;
+
+    same_coordinates_ = true;
 
     // For all files, find the time to create an associative array: date,
     // filename.
@@ -103,6 +101,16 @@ FileList::FileList(const std::vector<std::string>& filenames,
         reader->Open(*its);
         files.push_back(std::make_pair(reader->GetJulianDay(varname).ToUnixTime(),
                 *its));
+        if (its == filenames.begin())
+        {
+            axis_x = reader->axis_x();
+            axis_y = reader->axis_y();
+        }
+        else
+        {
+            if (axis_x != reader->axis_x() or axis_y != reader->axis_y())
+                same_coordinates_ = false;
+        }
     }
 
     // Data are sorted according file date
@@ -125,46 +133,79 @@ FileList::FileList(const std::vector<std::string>& filenames,
 TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
         const std::string& varname,
         const std::string& unit,
-        const reader::Factory::Type type,
-        const int n) :
-    first_index_(-1), last_index_(-1), varname_(varname), unit_(unit)
+        const reader::Factory::Type type) :
+    first_index_(-1), last_index_(-1), last_date_(), varname_(varname),
+    unit_(unit), backwards_(false), type_(type)
 {
-    readers_.resize(n);
+    readers_.resize(2);
 
-    for (int ix = 0; ix < n; ++ix)
-        readers_[ix] = reader::Factory::NewReader(type);
+    for (size_t ix = 0; ix < readers_.size(); ++ix)
+        readers_[ix] = reader::Factory::NewReader(type_);
 
     // Create the time series
     time_serie_ = new FileList(filenames, varname_, readers_[0]);
+    same_coordinates_ = time_serie_->same_coordinates();
 }
 
 // ___________________________________________________________________________//
 
 double TimeSerie::Interpolate(const double date,
-        const double longitude,
-        const double latitude)
+        double& longitude,
+        const double latitude,
+        Coordinates& coordinates)
 {
+    int it0 = time_serie_->FindIndex(date);
+    int it1 = NextItem(it0);
 
-    int ix0 = time_serie_->FindIndex(date);
-    int ix1 = ix0 == time_serie_->GetNumElements() - 1 ? ix0 - 1 : ix0 + 1;
+    const double t0 = time_serie_->GetDate(it0);
+    const double t1 = time_serie_->GetDate(it1);
 
-    Load(ix0, ix1);
+    it0 = it0 - first_index_;
+    it1 = it1 - first_index_;
 
-    const double x0 = time_serie_->GetDate(ix0);
-    const double x1 = time_serie_->GetDate(ix1);
+    const double dx = 1 / (t1 - t0);
 
-    ix0 = ix0 - first_index_;
-    ix1 = ix1 - first_index_;
+    const double x0 = readers_[it0]->Interpolate(longitude,
+            latitude,
+            coordinates);
+    const double x1 = readers_[it1]->Interpolate(longitude,
+            latitude,
+            coordinates);
 
-    const double dx = 1 / (x1 - x0);
+    const double w0 = (t1 - date) * dx;
+    const double w1 = (date - t0) * dx;
 
-    const double y0 = readers_[ix0]->Interpolate(longitude, latitude);
-    const double y1 = readers_[ix1]->Interpolate(longitude, latitude);
+    return (w0 * x0 + w1 * x1) / (w0 + w1);
+}
 
-    const double w0 = (x1 - date) * dx;
-    const double w1 = (date - x0) * dx;
+// ___________________________________________________________________________//
 
-    return (w0 * y0 + w1 * y1) / (w0 + w1);
+void TimeSerie::Load(const double t0, const double t1)
+{
+    backwards_ = t0 > t1;
+    int it10 = time_serie_->FindIndex(t1);
+    int it11 = NextItem(it10);
+
+    int it00 = time_serie_->FindIndex(t0);
+    int it01 = NextItem(it00);
+
+    size_t required_size = abs(it11 - it00) + 1;
+
+    // The current size of the buffer is not adequate
+    if (required_size > readers_.size())
+    {
+        size_t previous_size = readers_.size();
+        readers_.resize(required_size);
+
+        for (size_t ix = previous_size; ix < required_size; ++ix)
+            readers_[ix] = reader::Factory::NewReader(type_);
+
+        // We force the reloading of the first data to reset the buffer.
+        Load(it00, it01);
+    }
+
+    // Loading the needed data
+    Load(it10, it11);
 }
 
 }

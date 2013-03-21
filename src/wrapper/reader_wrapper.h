@@ -25,6 +25,7 @@
 // ___________________________________________________________________________//
 
 #include "reader.h"
+#include "axis.hpp"
 #include "netcdf_reader.hpp"
 
 // ___________________________________________________________________________//
@@ -36,6 +37,27 @@ namespace wrapper
 
 // ___________________________________________________________________________//
 
+struct Coordinates: public lagrangian::Coordinates
+{
+    Coordinates(const int ix0, const int ix1, const int iy0, const int iy1):
+        lagrangian::Coordinates(ix0, ix1, iy0, iy1)
+    {
+    }
+
+    Coordinates(lagrangian::Coordinates& arg):
+        lagrangian::Coordinates(arg)
+    {
+    }
+
+    static Coordinates UNDEF()
+    {
+        static Coordinates result(lagrangian::Coordinates::UNDEF());
+        return result;
+    }
+};
+
+// ___________________________________________________________________________//
+
 struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
 {
 
@@ -43,8 +65,14 @@ struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
 
     virtual lagrangian::JulianDay GetJulianDay(std::string const &name) const;
 
-    virtual double
-            Interpolate(double const longitude, double const latitude) const;
+    virtual double Interpolate(double& longitude,
+            double const latitude,
+            lagrangian::Coordinates& coordinates=lagrangian::Coordinates::UNDEF()) const;
+
+   
+    virtual lagrangian::Axis& axis_x();
+
+    virtual lagrangian::Axis& axis_y();
 
     virtual void Load(::std::string const & name, ::std::string const & unit);
 
@@ -64,9 +92,9 @@ struct Netcdf: lagrangian::reader::Netcdf, bp::wrapper<
 
     lagrangian::JulianDay WrapperGetJulianDay(std::string const & name) const;
 
-    virtual double Interpolate(double const x, double const y) const;
-
-    double WrapperInterpolate(double const x, double const y) const;
+    bp::tuple WrapperInterpolate(double longitude,
+            double const latitude,
+            Coordinates coordinates=Coordinates::UNDEF()) const;
 
     virtual void Load(std::string const & varname,
             std::string const & unit = "");

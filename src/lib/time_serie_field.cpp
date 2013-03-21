@@ -17,8 +17,13 @@
 
 #include "time_serie_field.hpp"
 
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
+
+// ___________________________________________________________________________//
+
 namespace field
 {
 
@@ -37,7 +42,10 @@ TimeSerie::TimeSerie(const std::string& configuration,
             p.Value<std::string> ("V_NAME"),
             GetUnit(),
             reader_type);
+    same_coordinates_ = u_->same_coordinates() && v_->same_coordinates();
 }
+
+// ___________________________________________________________________________//
 
 bool TimeSerie::Compute(const double t,
         const double x,
@@ -45,8 +53,22 @@ bool TimeSerie::Compute(const double t,
         double& u,
         double& v) const
 {
-    u = u_->Interpolate(t, x, y);
-    v = v_->Interpolate(t, x, y);
+    double longitude = x;
+
+    // If the time series consists of data with the same spatial coverage
+    if(same_coordinates_)
+    {
+        Coordinates coordinates = Coordinates::UNDEF();
+
+        // Velocity interpolation
+        u = u_->Interpolate(t, longitude, y, coordinates);
+        v = v_->Interpolate(t, longitude, y, coordinates);
+    }
+    else
+    {
+        u = u_->Interpolate(t, longitude, y);
+        v = v_->Interpolate(t, longitude, y);
+    }
 
     return isnan(u) || isnan(v) ? false : true;
 }

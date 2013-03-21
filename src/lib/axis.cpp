@@ -105,7 +105,7 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const
         while (high > low + 1)
         {
             mid = (low + high) >> 1;
-            const double value = edges_[mid];
+            register double value = edges_[mid];
 
             if (value == coordinate)
                 return mid;
@@ -120,7 +120,7 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const
         while (high > low + 1)
         {
             mid = (low + high) >> 1;
-            const double value = edges_[mid];
+            register double value = edges_[mid];
 
             if (value == coordinate)
                 return mid;

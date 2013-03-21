@@ -62,7 +62,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
         lagrangian::FiniteLyapunovExponents& fle,
         GetExponent pGetExponent) const
 {
-    std::vector<intp> dims;
+    std::vector<int> dims;
 
     dims.push_back(map_.get_nx());
     dims.push_back(map_.get_ny());

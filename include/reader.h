@@ -23,6 +23,7 @@
 
 // ___________________________________________________________________________//
 
+#include "axis.hpp"
 #include "julian_day.hpp"
 
 // ___________________________________________________________________________//
@@ -30,6 +31,73 @@
 
 namespace lagrangian
 {
+
+/**
+ * @brief Coordinates to use for spatial interpolation
+ */
+class Coordinates
+{
+private:
+    int ix0_, ix1_, iy0_, iy1_;
+public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param ix0
+     * @param ix1
+     * @param iy0
+     * @param iy1
+     */
+    Coordinates(const int ix0, const int ix1, const int iy0, const int iy1)
+            : ix0_(ix0), ix1_(ix1), iy0_(iy0), iy1_(iy1)
+    {
+    }
+
+    /**
+     * @brief Represent an undefined coordinates
+     *
+     * @return an undefined coordinates
+     */
+    static Coordinates& UNDEF()
+    {
+        static Coordinates coordinates(std::numeric_limits<int>::max(),
+                0,
+                0,
+                0);
+        return coordinates;
+    }
+
+    /**
+     * @brief Checks if the current instance is defined
+     *
+     * @return true if the current coordinates are defined
+     */
+    inline bool Undef()
+    {
+        return ix0_ == std::numeric_limits<int>::max();
+    }
+
+    inline int ix0() const
+    {
+        return ix0_;
+    }
+
+    inline int ix1() const
+    {
+        return ix1_;
+    }
+
+    inline int iy0() const
+    {
+        return iy0_;
+    }
+
+    inline int iy1() const
+    {
+        return iy1_;
+    }
+};
 
 /**
  * @brief Abstract class that defines a velocity reader fields.
@@ -58,14 +126,20 @@ public:
     /**
      * @brief Computes the velocity of the grid point requested
      *
-     * @param longitude in degrees
+     * @param longitude in degrees . In output, the longitude is normalized
+     * relative to the definition of its axis.
      * @param latitude in degrees
+     * @param coordinates Coordinates will be calculated if the parameter
+     * coordinates is equal to Coordinates::UNDEF() otherwise the coordinates
+     * defined by the parameter Coordinates::UNDEF() will be used to
+     * interpolate the value.
      *
      * @return Interpolated velocity or std::numeric_limits<double>::quiet_NaN()
      * if point is outside the grid.
      */
-    virtual double
-    Interpolate(const double longitude, const double latitude) const = 0;
+    virtual double Interpolate(double& longitude,
+            const double latitude,
+            Coordinates& coordinates=Coordinates::UNDEF()) const = 0;
 
     /**
      * @brief Returns the date of the grid expressed in JulianDay.
@@ -77,11 +151,21 @@ public:
     virtual JulianDay GetJulianDay(const std::string& name) const = 0;
 
     /**
-     * @brief Default method invoked when a NetcdfReader is destroyed.
+     * @brief Default method invoked when a reader is destroyed.
      */
     virtual ~Reader()
     {
     }
+
+    /**
+     * @brief Returns the longitude coordinate
+     */
+    virtual Axis& axis_x() = 0;
+
+    /**
+     * @brief Returns the latitude coordinate
+     */
+    virtual Axis& axis_y() = 0;
 };
 
 }

@@ -174,7 +174,7 @@ private:
 
     // Get the index of the given points. Compute index from formula:
     // (value - start) / step
-    int FindIndexRegular(const double coordinate, bool bounded) const
+    inline int FindIndexRegular(const double coordinate, bool bounded) const
     {
         int index = static_cast<int> (boost::math::round((coordinate - start_)
                 / increment_));
@@ -212,7 +212,7 @@ public:
 
     Axis() :
         type_(kUnknown), points_(), edges_(), is_regular_(false),
-                is_ascending_(false)
+                is_ascending_(false), is_circle_(false)
     {
     }
 
@@ -243,7 +243,7 @@ public:
      *
      * @return type of axis
      */
-    Type get_type() const
+    inline Type get_type() const
     {
         return type_;
     }
@@ -255,7 +255,7 @@ public:
      *
      * @return coordinate value
      */
-    double GetCoordinateValue(const int index) const
+    inline double GetCoordinateValue(const int index) const
     {
         if (index < 0 || index > static_cast<int> (points_.size()) - 1)
         {
@@ -269,7 +269,7 @@ public:
      *
      * @return minimum coordinate value
      */
-    double GetMinValue() const
+    inline double GetMinValue() const
     {
         return *(std::min_element(points_.begin(), points_.end()));
     }
@@ -279,7 +279,7 @@ public:
      *
      * @return maximum coordinate value
      */
-    double GetMaxValue() const
+    inline double GetMaxValue() const
     {
         return *(std::max_element(points_.begin(), points_.end()));
     }
@@ -289,7 +289,7 @@ public:
      *
      * @return the number of values
      */
-    int GetNumElements() const
+    inline int GetNumElements() const
     {
         return points_.size();
     }
@@ -299,7 +299,7 @@ public:
      *
      * @return true if value(i) = GetStart() + i * GetIncrement()
      */
-    bool is_regular() const
+    inline bool is_regular() const
     {
         return is_regular_;
     }
@@ -316,7 +316,7 @@ public:
      *
      * @return index of the grid point containing it or -1 if outside grid area
      */
-    int FindIndex(double coordinate) const
+    inline int FindIndex(double coordinate) const
     {
         return is_regular_
                 ? FindIndexRegular(coordinate, false)
@@ -330,7 +330,7 @@ public:
      * @param coordinate position in this coordinate system
      * @return index of the grid point containing it or -1 if outside grid area
      */
-    int FindIndexBounded(double coordinate) const
+    inline int FindIndexBounded(double coordinate) const
     {
         return is_regular_
                 ? FindIndexRegular(coordinate, true)
@@ -369,7 +369,7 @@ public:
      *
      * @return true if units attribute exists otherwise false
      */
-    bool get_units(std::string& units) const
+    inline bool get_units(std::string& units) const
     {
         units = unit_;
         return unit_ != "";
@@ -433,7 +433,7 @@ public:
      *
      * @return starting value if is_regular()
      */
-    double get_start() const
+    inline double get_start() const
     {
         return start_;
     }
@@ -443,9 +443,22 @@ public:
      *
      * @return increment value if is_regular()
      */
-    double get_increment() const
+    inline double get_increment() const
     {
         return increment_;
+    }
+
+    /**
+     * @brief compare two variables instances
+     *
+     * @param a A variable to compare
+     * @param b An other variable to compare
+     *
+     * @return if variables are equals
+     */
+    friend bool operator!=(Axis const & a, Axis const & b)
+    {
+        return a.points_ != b.points_;
     }
 };
 

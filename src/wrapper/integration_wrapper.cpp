@@ -28,7 +28,7 @@ Path::Path(lagrangian::Path const & arg) :
 Path::Path(lagrangian::JulianDay const & start_time,
         lagrangian::JulianDay const & end_time,
         boost::posix_time::time_duration const & delta_t,
-        lagrangian::Field const * field) :
+        lagrangian::Field* field) :
     lagrangian::Path(start_time, end_time, delta_t, field),
             bp::wrapper<lagrangian::Path>()
 {
@@ -61,7 +61,7 @@ FiniteLyapunovExponents::FiniteLyapunovExponents(
         lagrangian::FiniteLyapunovExponents::Mode mode,
         double const min_separation,
         double const delta,
-        lagrangian::Field const * field) :
+        lagrangian::Field* field) :
     lagrangian::FiniteLyapunovExponents(start_time,
                 end_time,
                 delta_t,
@@ -116,7 +116,7 @@ void IntegrationPythonModule()
             bp::init<lagrangian::JulianDay const &,
                      lagrangian::JulianDay const &,
                      boost::posix_time::time_duration const &,
-                     lagrangian::Field const *>((
+                     lagrangian::Field*>((
                              bp::arg("start_time"),
                              bp::arg("end_time"),
                              bp::arg("delta_t"),
@@ -133,7 +133,7 @@ void IntegrationPythonModule()
             bp::init<lagrangian::JulianDay const &,
                      lagrangian::JulianDay const &,
                      boost::posix_time::time_duration const &,
-                     lagrangian::Field const *>((
+                     lagrangian::Field*>((
                              bp::arg("start_time"),
                              bp::arg("end_time"),
                              bp::arg("delta_t"),
@@ -164,7 +164,7 @@ void IntegrationPythonModule()
                      lagrangian::FiniteLyapunovExponents::Mode,
                      double const,
                      double const,
-                     lagrangian::Field const *>((
+                     lagrangian::Field*>((
                              bp::arg("start_time"),
                              bp::arg("end_time"),
                              bp::arg("delta_t"),

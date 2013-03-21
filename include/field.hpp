@@ -50,6 +50,14 @@ public:
 
     virtual ~Field() {}
 
+    /**
+     * @brief Loads the data in the interval [t0, t1]
+     *
+     * @param t0 Begin date (number of seconds elapsed since 1/1/1970)
+     * @param t1 End date (number of seconds elapsed since 1/1/1970)
+     */
+    virtual void Fetch(const double t0, const double t1) {}
+
     virtual bool Compute(const double t,
             const double x,
             const double y,

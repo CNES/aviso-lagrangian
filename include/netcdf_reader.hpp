@@ -65,7 +65,8 @@ private:
 
     inline double GetValue(const int ix, const int iy) const
     {
-        return data_[(this->*pGetIndex_)(ix, iy)];
+        double result = data_[(this->*pGetIndex_)(ix, iy)];
+        return boost::math::isnan<double>(result) ? 0 : result;
     }
 
 public:
@@ -73,7 +74,7 @@ public:
     /**
      * @brief Constructor
      */
-    Netcdf()
+    Netcdf(): pGetIndex_(NULL)
     {
     }
 
@@ -104,11 +105,17 @@ public:
      *
      * @param x coordinate
      * @param y coordinate
+     * @param coordinates Coordinates will be calculated if the parameter
+     * coordinates is equal to Coordinates::UNDEF() otherwise the coordinates
+     * defined by the parameter Coordinates::UNDEF() will be used to
+     * interpolate the value.
      *
      * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
      * point is outside the grid.
      */
-    double Interpolate(const double x, const double y) const;
+    double Interpolate(double& longitude,
+            const double latitude,
+            Coordinates& coordinates=Coordinates::UNDEF()) const;
 
     /**
      * @brief Returns the date of the grid expressed in JulianDay.
@@ -118,6 +125,21 @@ public:
      * @return the date
      */
     JulianDay GetJulianDay(const std::string& name) const;
+    /**
+     * @brief Returns the longitude coordinate
+     */
+    inline Axis& axis_x()
+    {
+        return axis_x_;
+    }
+
+    /**
+     * @brief Returns the latitude coordinate
+     */
+    inline Axis& axis_y()
+    {
+        return axis_y_;
+    }
 };
 
 } // namespace::reader

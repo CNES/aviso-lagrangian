@@ -57,6 +57,10 @@ public:
     {
         return ix_;
     }
+    inline double inc() const
+    {
+        return inc_;
+    }
 };
 
 // ___________________________________________________________________________//
@@ -64,22 +68,26 @@ public:
 class Integration
 {
 protected:
-    __attribute__((aligned(8))) double start_time_;
-    double end_time_;
     double size_of_interval_;
-
-    const Field* const field_;
-
+    Field* field_;
+    double start_time_;
+    double end_time_;
     RungeKutta rk_;
+
 public:
     Integration(const JulianDay& start_time,
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
-            const Field* const field) :
-        start_time_(start_time.ToUnixTime()), end_time_(end_time.ToUnixTime()),
-                size_of_interval_(delta_t.total_seconds()),
-                field_(field), rk_(size_of_interval_, field_)
+            Field* field) :
+        size_of_interval_(delta_t.total_seconds()), field_(field),
+                start_time_(start_time.ToUnixTime()),
+                end_time_(end_time.ToUnixTime()),
+                rk_(size_of_interval_ * (start_time_ > end_time_ ? -1: 1),
+                        field_)
     {
+        std::cout << size_of_interval_ << std::endl;
+        if (size_of_interval_ < 0)
+            throw std::runtime_error("Time delta must be positive");
     }
 
     virtual ~Integration()
@@ -89,6 +97,13 @@ public:
     Iterator GetIterator() const
     {
         return Iterator(start_time_, end_time_, size_of_interval_);
+    }
+
+    void Fetch(const double t) const
+    {
+        start_time_ < end_time_
+            ? field_->Fetch(t, t + size_of_interval_)
+            : field_->Fetch(t, t - size_of_interval_);
     }
 };
 
@@ -100,7 +115,7 @@ public:
     Path(const JulianDay& start_time,
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
-            const Field* const field) :
+            Field* field) :
                 Integration(start_time,
                         end_time,
                         delta_t,
@@ -230,17 +245,18 @@ public:
     };
 
 private:
+    typedef bool
+    (FiniteLyapunovExponents::*SeparationFunction)(const Triplet& p) const;
+
     const double delta_;
+    double min_separation_;
+    Mode mode_;
+    SeparationFunction pSeparation_;
+    double f2_;
     double lambda1_;
     double lambda2_;
     double theta1_;
     double theta2_;
-    double f2_;
-    double min_separation_;
-    Mode mode_;
-
-    typedef bool
-    (FiniteLyapunovExponents::*SeparationFunction)(const Triplet& p) const;
 
     inline bool SeparationFSLE(const Triplet& p) const
     {
@@ -257,8 +273,6 @@ private:
         return false;
     }
 
-    SeparationFunction pSeparation_;
-
 public:
     FiniteLyapunovExponents(const JulianDay& start_time,
             const JulianDay& end_time,
@@ -266,10 +280,9 @@ public:
             const Mode mode,
             const double min_separation,
             const double delta,
-            const Field* const field) :
+            Field* field) :
         Integration(start_time, end_time, delta_t, field),
-                delta_(delta), f2_(0.5 * (1 / (delta_ * delta_))), mode_(mode)
-
+                delta_(delta), mode_(mode), f2_(0.5 * (1 / (delta_ * delta_)))
     {
         switch (mode_)
         {
