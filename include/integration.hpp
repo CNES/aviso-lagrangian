@@ -85,7 +85,6 @@ public:
                 rk_(size_of_interval_ * (start_time_ > end_time_ ? -1: 1),
                         field_)
     {
-        std::cout << size_of_interval_ << std::endl;
         if (size_of_interval_ < 0)
             throw std::runtime_error("Time delta must be positive");
     }

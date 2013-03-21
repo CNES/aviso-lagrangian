@@ -63,7 +63,6 @@ void TimeSerie::Load(int ix0, const int ix1)
 
         for (int ix = 0; ix < static_cast<int> (readers_.size()); ++ix)
         {
-            std::cout << time_serie_->GetItem(indexes[ix]) << std::endl;
             readers_[ix]->Open(time_serie_->GetItem(indexes[ix]));
             readers_[ix]->Load(varname_, unit_);
         }

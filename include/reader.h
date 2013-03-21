@@ -131,8 +131,7 @@ public:
      * @param latitude in degrees
      * @param coordinates Coordinates will be calculated if the parameter
      * coordinates is equal to Coordinates::UNDEF() otherwise the coordinates
-     * defined by the parameter Coordinates::UNDEF() will be used to
-     * interpolate the value.
+     * defined by the parameter will be used to interpolate the value.
      *
      * @return Interpolated velocity or std::numeric_limits<double>::quiet_NaN()
      * if point is outside the grid.
