@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AXIS_HPP_
-#define AXIS_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -53,7 +52,7 @@ public:
      *
      * @return if the unit can define this type of axis
      */
-    bool operator()(const std::string& unit) const
+    inline bool operator()(const std::string& unit) const
     {
         return unit_.find(unit) != unit_.end();
     }
@@ -456,12 +455,10 @@ public:
      *
      * @return if variables are equals
      */
-    friend bool operator!=(Axis const & a, Axis const & b)
+    inline friend bool operator!=(Axis const & a, Axis const & b)
     {
         return a.points_ != b.points_;
     }
 };
 
 }
-
-#endif /* AXIS_HPP_ */
