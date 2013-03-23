@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INTEGRATION_WRAPPER_H_
-#define INTEGRATION_WRAPPER_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -68,5 +67,3 @@ struct FiniteLyapunovExponents: lagrangian::FiniteLyapunovExponents, bp::wrapper
 void IntegrationPythonModule();
 
 }
-
-#endif /* INTEGRATION_WRAPPER_H_ */

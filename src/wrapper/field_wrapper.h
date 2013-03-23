@@ -16,8 +16,7 @@
 */
 
 
-#ifndef FIELD_WRAPPER_H_
-#define FIELD_WRAPPER_H_
+#pragma once
 
 
 // ___________________________________________________________________________//
@@ -93,5 +92,3 @@ struct TimeSerieField: lagrangian::field::TimeSerie, bp::wrapper<
 void FieldPythonModule();
 
 }
-
-#endif /* FIELD_WRAPPER_HPP_ */

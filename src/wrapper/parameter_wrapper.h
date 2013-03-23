@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PARAMETER_WRAPPER_H_
-#define PARAMETER_WRAPPER_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -34,5 +33,3 @@ namespace wrapper
 {
     void ParameterPythonModule();
 }
-
-#endif /* PARAMETER_WRAPPER_H_ */

@@ -15,11 +15,14 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RUNGE_KUTTA_HPP_
-#define RUNGE_KUTTA_HPP_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include "field.hpp"
 #include "misc.hpp"
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
@@ -104,7 +107,7 @@ public:
         }
     }
 
-    bool Compute(const double t,
+    inline bool Compute(const double t,
             const double x,
             const double y,
             double &xi,
@@ -150,4 +153,3 @@ public:
     }
 };
 }
-#endif /* RUNGE_KUTTA_HPP_ */

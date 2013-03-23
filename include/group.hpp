@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GROUP_HPP_
-#define GROUP_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -68,7 +67,7 @@ public:
      *
      * @return Dimension list
      */
-    std::vector<Dimension> get_dimensions() const
+    inline std::vector<Dimension> get_dimensions() const
     {
         return dimensions_;
     }
@@ -91,7 +90,7 @@ public:
      *
      * @return the index of the named Dimension, or -1 if not found.
      */
-    int FindDimensionIndex(const std::string& name) const
+    inline int FindDimensionIndex(const std::string& name) const
     {
         for (unsigned int ix = 0; ix < dimensions_.size(); ++ix)
         {
@@ -106,7 +105,7 @@ public:
      *
      * @return Attribute list
      */
-    std::list<Attribute> get_attributes() const
+    inline std::list<Attribute> get_attributes() const
     {
         return attributes_;
     }
@@ -132,5 +131,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* GROUP_HPP_ */

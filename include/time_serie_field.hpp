@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TIME_SERIE_FIELD_HPP_
-#define TIME_SERIE_FIELD_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -54,7 +53,7 @@ public:
         delete v_;
     }
 
-    void Fetch(const double t0, const double t1)
+    inline void Fetch(const double t0, const double t1)
     {
         u_->Load(t0, t1);
         v_->Load(t0, t1);
@@ -66,14 +65,14 @@ public:
             double& u,
             double& v) const;
 
-    JulianDay StartTime() const
+    inline JulianDay StartTime() const
     {
         boost::tuple<double const&, double const&> minmax =
                 boost::minmax(u_->GetFirstDate(), v_->GetFirstDate());
         return JulianDay(JulianDay::FromUnixTime(minmax.get<1> ()));
     }
 
-    JulianDay EndTime() const
+    inline JulianDay EndTime() const
     {
         boost::tuple<double const&, double const&> minmax =
                 boost::minmax(u_->GetLastDate(), v_->GetLastDate());
@@ -83,5 +82,3 @@ public:
 
 } // namespace field
 } // namespace lagrangian
-
-#endif /* TIME_SERIE_FIELD_HPP_ */

@@ -15,17 +15,19 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef READER_FACTORY_HPP_
-#define READER_FACTORY_HPP_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include "reader.h"
 #include "netcdf_reader.hpp"
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
 namespace reader
 {
-
 class Factory
 {
 public:
@@ -46,5 +48,3 @@ public:
 
 } // namespace::reader
 } // namespace::lagrangian
-
-#endif /* READER_FACTORY_HPP_ */

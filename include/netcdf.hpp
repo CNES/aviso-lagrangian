@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NETCDF_HPP_
-#define NETCDF_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -42,6 +41,7 @@ class Netcdf: public netcdf::Group
 private:
     boost::shared_ptr<NcFile> ncfile_;
     std::list<netcdf::Variable> variables_;
+
 public:
 
     /**
@@ -81,7 +81,7 @@ public:
      * @brief Get all of the variables in the files.
      * @return List of variable
      */
-    std::list<netcdf::Variable> get_variables() const
+    inline std::list<netcdf::Variable> get_variables() const
     {
         return variables_;
     }
@@ -107,5 +107,3 @@ public:
 };
 
 }
-
-#endif /* NETCDF_HPP_ */

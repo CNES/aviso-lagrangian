@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TIME_SERIE_H_
-#define TIME_SERIE_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -259,5 +258,3 @@ public:
 };
 
 }
-
-#endif /* TIME_SERIE_H_ */

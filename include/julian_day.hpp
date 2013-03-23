@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef JULIAN_DAY_HPP_
-#define JULIAN_DAY_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -164,7 +163,7 @@ public:
      *
      * @return The julian day
      */
-    static long double FromUnixTime(const long double time)
+    inline static long double FromUnixTime(const long double time)
     {
         return time / 86400.0 + unix_time;
     }
@@ -174,7 +173,7 @@ public:
      *
      * @return The julian day
      */
-    int get_day() const
+    inline int get_day() const
     {
         return day_;
     }
@@ -184,7 +183,7 @@ public:
      *
      * @return The number of second
      */
-    int get_seconds() const
+    inline int get_seconds() const
     {
         return seconds_;
     }
@@ -194,7 +193,7 @@ public:
      *
      * @return The number of second
      */
-    int get_microseconds() const
+    inline int get_microseconds() const
     {
         return microseconds_;
     }
@@ -202,32 +201,32 @@ public:
     JulianDay& operator+=(const JulianDay& j);
     JulianDay& operator-=(const JulianDay& j);
 
-    bool operator <(const JulianDay& jd) const
+    inline bool operator <(const JulianDay& jd) const
     {
         return Compare(jd) < 0;
     }
 
-    bool operator >(const JulianDay& jd) const
+    inline bool operator >(const JulianDay& jd) const
     {
         return Compare(jd) > 0;
     }
 
-    bool operator <=(const JulianDay& jd) const
+    inline bool operator <=(const JulianDay& jd) const
     {
         return Compare(jd) <= 0;
     }
 
-    bool operator >=(const JulianDay& jd) const
+    inline bool operator >=(const JulianDay& jd) const
     {
         return Compare(jd) >= 0;
     }
 
-    bool operator ==(const JulianDay& jd) const
+    inline bool operator ==(const JulianDay& jd) const
     {
         return Compare(jd) == 0;
     }
 
-    bool operator !=(const JulianDay& jd) const
+    inline bool operator !=(const JulianDay& jd) const
     {
         return Compare(jd) != 0;
     }
@@ -243,7 +242,7 @@ public:
      * @return the number of seconds elapsed since midnight Coordinated
      * Universal Time (UTC) of January 1, 1970, not counting leap seconds.
      */
-    long double ToUnixTime() const
+    inline long double ToUnixTime() const
     {
         return (day_ * 86400.0 + seconds_ + microseconds_ * 1e-6) - unix_time
                 * 86400.0;
@@ -515,5 +514,3 @@ typedef AbstractModifiedJulianDay<2400001 + 40000> NASAJulianDay;
 typedef AbstractModifiedJulianDay<2400001 + 36204> CCSDSJulianDay;
 
 }
-
-#endif /* JULIAN_DAY_HPP_ */

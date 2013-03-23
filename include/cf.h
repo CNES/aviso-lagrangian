@@ -15,10 +15,13 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CF_H_
-#define CF_H_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include <string>
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
@@ -78,5 +81,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* CF_H_ */

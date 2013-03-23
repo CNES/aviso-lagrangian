@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DATE_WRAPPER_H_
-#define DATE_WRAPPER_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -199,4 +198,3 @@ struct CCSDSJulianDay: lagrangian::CCSDSJulianDay, bp::wrapper<
 void DatePythonModule();
 
 }
-#endif /* DATE_WRAPPER_H_ */

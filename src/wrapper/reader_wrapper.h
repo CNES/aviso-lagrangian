@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef READER_WRAPPER_H_
-#define READER_WRAPPER_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -112,5 +111,3 @@ struct Netcdf: lagrangian::reader::Netcdf, bp::wrapper<
 void ReaderPythonModule();
 
 }
-
-#endif /* READER_WRAPPER_HPP_ */

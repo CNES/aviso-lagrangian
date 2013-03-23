@@ -15,9 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DIMENSION_HPP_
-#define DIMENSION_HPP_
-
+#pragma once
 // ___________________________________________________________________________//
 
 #include <string>
@@ -46,7 +44,7 @@ public:
      *
      * @return name of Dimension
      */
-    std::string const& get_name() const
+    inline std::string const& get_name() const
     {
         return name_;
     }
@@ -56,7 +54,7 @@ public:
      *
      * @return length of Dimension
      */
-    int get_length() const
+    inline int get_length() const
     {
         return length_;
     }
@@ -67,7 +65,7 @@ public:
      *
      * @return if its an "unlimited" Dimension
      */
-    bool is_unlimited() const
+    inline bool is_unlimited() const
     {
         return unlimited_;
     }
@@ -92,7 +90,7 @@ public:
      * @param other Another instance of Dimension
      * @return if dimensions are equals
      */
-    bool operator==(Dimension& other)
+    inline bool operator==(Dimension& other)
     {
         return name_ == other.get_name() && length_ == other.get_length()
                 && unlimited_ == other.is_unlimited();
@@ -101,5 +99,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* DIMENSION_HPP_ */

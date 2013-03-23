@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INTEGRATION_HPP_
-#define INTEGRATION_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -331,7 +330,7 @@ public:
         return true;
     }
 
-    void Exponents(const Triplet& p);
+    bool Exponents(const Triplet& p);
 
     inline double get_lambda1() const
     {
@@ -356,5 +355,3 @@ public:
 };
 
 } // namespace lagrangian
-
-#endif /* INTEGRATION_HPP_ */

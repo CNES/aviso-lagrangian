@@ -15,8 +15,8 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef READER_H_
-#define READER_H_
+#pragma once
+
 // ___________________________________________________________________________//
 
 #include <string>
@@ -168,5 +168,3 @@ public:
 };
 
 }
-
-#endif /* READER_H_ */

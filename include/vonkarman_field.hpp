@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VONKARMAN_FIELD_HPP_
-#define VONKARMAN_FIELD_HPP_
+#pragma once
 
 #include "field.hpp"
 
@@ -60,5 +59,3 @@ public:
 
 } // namespace field
 } // namespace lagrangian
-
-#endif /* VONKARMAN_FIELDS_HPP_ */

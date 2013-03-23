@@ -15,17 +15,22 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAP_HPP_
-#define MAP_HPP_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include <cstdlib>
 #include <boost/thread.hpp>
 #include "integration.hpp"
 
+// ___________________________________________________________________________//
+
 namespace std
 {
     using ::getenv;
 }
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
@@ -81,6 +86,8 @@ public:
     }
 };
 
+// ___________________________________________________________________________//
+
 template<class T> class Map: public MapProperties
 {
 private:
@@ -99,11 +106,13 @@ public:
     {
         grid_[ix * get_ny() + iy] = item;
     }
-    inline T GetItem(const int ix, const int iy) const
+    inline T& GetItem(const int ix, const int iy)
     {
         return grid_[ix * get_ny() + iy];
     }
 };
+
+// ___________________________________________________________________________//
 
 namespace map
 {
@@ -113,14 +122,17 @@ class FiniteLyapunovExponents
 private:
     void ComputeHt(const int i_start,
             const int i_stop,
+            int* completed,
             lagrangian::FiniteLyapunovExponents& fle,
             Iterator& it)
     {
+        *completed = 0;
+
         for (int ix = i_start; ix < i_stop; ++ix)
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
             {
-                Triplet t = map_.GetItem(ix, iy);
+                Triplet& t = map_.GetItem(ix, iy);
 
                 if (!t.get_completed() && !t.IsMissing())
                 {
@@ -131,7 +143,10 @@ private:
                     else
                     {
                         if(fle.Separation(t))
+                        {
+                            ++(*completed);
                             t.set_completed();
+                        }
 
                         map_.SetItem(ix, iy, t);
                     }
@@ -187,6 +202,9 @@ public:
 
         Iterator it = fle.GetIterator();
         boost::thread_group threads;
+        std::vector<int> count(num_threads_, 0);
+        int completed = 0;
+        
         while (it.GoAfter())
         {
             fle.Fetch(it());
@@ -195,18 +213,26 @@ public:
             {
                 int from = (ix * map_.get_nx()) / num_threads_;
                 int to = ((ix + 1) * map_.get_nx()) / num_threads_;
+
                 threads.create_thread(boost::bind(
                         &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
                         this,
                         from,
                         to,
+                        &count[ix],
                         fle,
                         it));
             }
 
             threads.join_all();
+
+            for(int ix = 0; ix < num_threads_; ++ix)
+                completed += count[ix];
+
             JulianDay jd(JulianDay::FromUnixTime(it()));
-            std::cout << jd.ToString("%Y%m%d %H:%M:%S")
+            std::cout << jd.ToString("%Y-%m-%d %H:%M:%S ")
+                      << completed * 100.0 / (map_.get_nx() * map_.get_ny())
+                      << " % completed"
                       << std::endl
                       << std::flush;
             ++it;
@@ -215,6 +241,8 @@ public:
 };
 
 }
+
+// ___________________________________________________________________________//
 
 class MapOfFiniteLyapunovExponents: public map::FiniteLyapunovExponents
 {
@@ -236,7 +264,7 @@ private:
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
             {
-                Triplet t = map_.GetItem(ix, iy);
+                Triplet& t = map_.GetItem(ix, iy);
                 if (t.IsMissing())
                 {
                     result.SetItem(ix, iy, nan);
@@ -248,8 +276,10 @@ private:
                 }
                 else
                 {
-                    fle.Exponents(t);
-                    result.SetItem(ix, iy, (fle.*pGetExponent)());
+                    double exponent = fle.Exponents(t)
+                        ? (fle.*pGetExponent)()
+                        : std::numeric_limits<double>::quiet_NaN();
+                    result.SetItem(ix, iy, exponent);
                 }
             }
         }
@@ -299,5 +329,3 @@ public:
 };
 
 }
-
-#endif /* MAP_HPP_ */

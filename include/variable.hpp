@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VARIABLE_HPP_
-#define VARIABLE_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -64,7 +63,7 @@ public:
      *
      * @return variable name
      */
-    std::string get_name() const
+    inline std::string get_name() const
     {
         return name_;
     }
@@ -73,7 +72,7 @@ public:
      * @brief Get the shape: length of Variable in each dimension.
      * @return array whose length is the rank of this variable.
      */
-    std::vector<long int> get_shape() const
+    inline std::vector<long int> get_shape() const
     {
         return shape_;
     }
@@ -85,7 +84,7 @@ public:
      *
      * @return size of the ith dimension
      */
-    long int get_shape(const int index) const
+    inline long int get_shape(const int index) const
     {
         return shape_[index];
     }
@@ -95,7 +94,7 @@ public:
      *
      * @return total number of elements in the Variable.
      */
-    long GetSize() const
+    inline long GetSize() const
     {
         long result = 1;
         std::vector<long int>::const_iterator it;
@@ -111,7 +110,7 @@ public:
      *
      * @return the rank
      */
-    long int GetRank() const
+    inline long int GetRank() const
     {
         return shape_.size();
     }
@@ -121,7 +120,7 @@ public:
      *
      * @return true if Variable has rank 0
      */
-    bool IsScalar() const
+    inline bool IsScalar() const
     {
         return GetRank() == 0;
     }
@@ -158,7 +157,7 @@ public:
      * @brief Calculate if this is a classic coordinate variable: has same name
      * as its first dimension
      */
-    bool IsCoordinateVariable() const
+    inline bool IsCoordinateVariable() const
     {
         if (GetRank() == 1)
         {
@@ -177,7 +176,7 @@ public:
      *
      * @return if variables are equals
      */
-    friend bool operator==(Variable const & a, Variable const & b)
+    inline friend bool operator==(Variable const & a, Variable const & b)
     {
         return a.name_ == b.name_ && a.shape_ == b.shape_;
     }
@@ -190,7 +189,7 @@ public:
      *
      * @return if variables are differents
      */
-    friend bool operator!=(Variable const & a, Variable const & b)
+    inline friend bool operator!=(Variable const & a, Variable const & b)
     {
         return a.name_ != b.name_ || a.shape_ != b.shape_;
     }
@@ -219,5 +218,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* VARIABLE_HPP_ */

@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAP_WRAPPER_H_
-#define MAP_WRAPPER_H_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -58,7 +57,7 @@ private:
 
     bp::numeric::array GetMapOfExponents(const double nan,
             lagrangian::FiniteLyapunovExponents& fle,
-            GetExponent pGetExponent) const;
+            GetExponent pGetExponent);
 
 public:
     MapOfFiniteLyapunovExponents(const int nx,
@@ -68,16 +67,16 @@ public:
             const double step);
 
     bp::numeric::array GetMapOfLambda1(const double fill_value,
-            lagrangian::FiniteLyapunovExponents& fle) const;
+            lagrangian::FiniteLyapunovExponents& fle);
 
     bp::numeric::array GetMapOfLambda2(const double fill_value,
-            lagrangian::FiniteLyapunovExponents& fle) const;
+            lagrangian::FiniteLyapunovExponents& fle);
 
     bp::numeric::array GetMapOfTheta1(const double fill_value,
-            lagrangian::FiniteLyapunovExponents& fle) const;
+            lagrangian::FiniteLyapunovExponents& fle);
 
     bp::numeric::array GetMapOfTheta2(const double fill_value,
-            lagrangian::FiniteLyapunovExponents& fle) const;
+            lagrangian::FiniteLyapunovExponents& fle);
 
     wrapper::MapProperties get_map_properties() const;
 };
@@ -87,4 +86,3 @@ public:
 void MapPythonModule();
 
 }
-#endif /* MAP_WRAPPER_H_ */

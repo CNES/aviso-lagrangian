@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PARAMETER_HPP_
-#define PARAMETER_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -124,7 +123,7 @@ public:
      *
      * @param key Key to delete
      */
-    void Clear(const std::string& key)
+    inline void Clear(const std::string& key)
     {
         data_.erase(key);
     }
@@ -132,7 +131,7 @@ public:
     /**
      * @brief Removes all data associated with the instance.
      */
-    void Clear()
+    inline void Clear()
     {
         data_.clear();
     }
@@ -144,7 +143,7 @@ public:
      * @param value New value to assign
      */
     template<class T>
-    void AddValue(const std::string& key, T value)
+    inline void AddValue(const std::string& key, T value)
     {
         data_[key].push_back(boost::lexical_cast<std::string>(value));
     }
@@ -156,7 +155,7 @@ public:
      *
      * @result True if the key exists otherwise false
      */
-    bool Exists(const std::string& key) const
+    inline bool Exists(const std::string& key) const
     {
         std::map<std::string, std::vector<std::string> >::const_iterator it =
                 data_.find(key);
@@ -170,7 +169,7 @@ public:
      *
      * @result Number of values associated with the key.
      */
-    unsigned int Size(const std::string& key) const
+    inline unsigned int Size(const std::string& key) const
     {
         return Items(key).size();
     }
@@ -180,7 +179,7 @@ public:
      *
      * @result Number of parameters
      */
-    unsigned int Size() const
+    inline unsigned int Size() const
     {
         return data_.size();
     }
@@ -238,7 +237,7 @@ public:
      * number of available values
      */
     template<class T>
-    T Value(const std::string& key, const int index = 0) const
+    inline T Value(const std::string& key, const int index = 0) const
     {
         return ParameterCast<T> (Items(key).at(index));
     }
@@ -267,8 +266,6 @@ public:
         }
         return os;
     }
-
 };
 
 }
-#endif /* PARAMETER_HPP_ */

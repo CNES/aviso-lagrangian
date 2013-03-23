@@ -20,9 +20,12 @@
 namespace lagrangian
 {
 
-void FiniteLyapunovExponents::Exponents(const Triplet& p)
+bool FiniteLyapunovExponents::Exponents(const Triplet& p)
 {
     const double delta_t = p.get_time() - start_time_;
+
+    if (delta_t < std::numeric_limits<double>::epsilon())
+        return false;
 
     double a00 = p.get_x1() - p.get_x0();
     double a01 = p.get_x2() - p.get_x0();
@@ -68,6 +71,8 @@ void FiniteLyapunovExponents::Exponents(const Triplet& p)
         theta1_ = RadiansToDegrees(atan(at1 / (at2 + s2)));
         theta2_ = RadiansToDegrees(-atan(at1 / (-at2 + s2)));
     }
+    
+    return true;
 }
 
 }

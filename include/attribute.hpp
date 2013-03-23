@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ATTRIBUTE_HPP_
-#define ATTRIBUTE_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -81,7 +80,7 @@ public:
      *
      * @return name
      */
-    std::string const& get_name() const
+    inline std::string const& get_name() const
     {
         return name_;
     }
@@ -91,7 +90,7 @@ public:
      *
      * @return if its a string
      */
-    bool IsString() const
+    inline bool IsString() const
     {
         return value_.empty();
     }
@@ -105,8 +104,7 @@ public:
      *
      * @see Attribute#IsString
      */
-
-    std::string const& get_string() const
+    inline std::string const& get_string() const
     {
         if (!IsString())
             throw std::logic_error("Attribute is numeric");
@@ -122,7 +120,7 @@ public:
      *
      * @return ith value.
      */
-    double get_value(const int index = 0) const
+    inline double get_value(const int index = 0) const
     {
         if (IsString())
             throw std::logic_error("Attribute isn't numeric");
@@ -134,7 +132,7 @@ public:
      *
      * @return number of elements for this attribute.
      */
-    int GetLength() const
+    inline int GetLength() const
     {
         return IsString() ? svalue_.size() : value_.size();
     }
@@ -147,7 +145,7 @@ public:
      *
      * @return if attributes are equals
      */
-    friend bool operator==(Attribute const & a, Attribute const & b)
+    inline friend bool operator==(Attribute const & a, Attribute const & b)
     {
         return a.name_ == b.name_ && a.svalue_ == b.svalue_ && a.value_
                 == b.value_;
@@ -161,7 +159,7 @@ public:
      *
      * @return if attributes are differents
      */
-    friend bool operator!=(Attribute const & a, Attribute const & b)
+    inline friend bool operator!=(Attribute const & a, Attribute const & b)
     {
         return a.name_ != b.name_ || a.svalue_ != b.svalue_ || a.value_
                 != b.value_;
@@ -175,5 +173,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* ATTRIBUTE_HPP_ */

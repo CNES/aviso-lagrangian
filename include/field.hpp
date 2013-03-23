@@ -15,11 +15,14 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FIELD_HPP_
-#define FIELD_HPP_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include <stdexcept>
 #include <string>
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
@@ -93,5 +96,3 @@ public:
 };
 
 }
-
-#endif /* FIELD_HPP_ */

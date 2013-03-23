@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef UNITS_HPP_
-#define UNITS_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -84,7 +83,6 @@ public:
      */
     ~SmartUtSystem()
     {
-
         ut_free_system(system_);
     }
 
@@ -185,5 +183,3 @@ public:
 };
 
 } //namespace lagrangian
-
-#endif /* UNITS_HPP_ */

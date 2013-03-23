@@ -15,10 +15,10 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALE_MISSING_H_
-#define SCALE_MISSING_H_
+#pragma once
 
 // ___________________________________________________________________________//
+
 #include <boost/math/special_functions.hpp>
 #include <cmath>
 #include <limits>
@@ -46,7 +46,6 @@ namespace netcdf
  * if those "standard attributes" are present.
  *
  */
-
 class ScaleMissing
 {
 private:
@@ -82,7 +81,7 @@ public:
      * @return true if variable has valid_range, valid_min or valid_max
      * attributes
      */
-    bool HasInvalidData() const
+    inline bool HasInvalidData() const
     {
         return has_valid_range_ || has_valid_min_ || has_valid_max_;
     }
@@ -92,7 +91,7 @@ public:
      *
      * @return true if Variable has missing data values
      */
-    bool HasMissing() const
+    inline bool HasMissing() const
     {
         return HasInvalidData() || has_fill_value_;
     }
@@ -102,7 +101,7 @@ public:
      *
      * @return the minimum value in the valid range
      */
-    double get_valid_min() const
+    inline double get_valid_min() const
     {
         return valid_min_;
     }
@@ -112,7 +111,7 @@ public:
      *
      * @return the maximum value in the valid range
      */
-    double get_valid_max() const
+    inline double get_valid_max() const
     {
         return valid_max_;
     }
@@ -123,7 +122,7 @@ public:
      * @param value Value to test
      * @return true if value it's outside the valid range
      */
-    bool IsInvalidData(const double value) const
+    inline bool IsInvalidData(const double value) const
     {
         if (HasInvalidData())
             return (value < valid_min_) || (value > valid_max_);
@@ -139,7 +138,7 @@ public:
      *
      * @return true if Variable has _FillValue attribute
      */
-    bool has_fill_value() const
+    inline bool has_fill_value() const
     {
         return has_fill_value_;
     }
@@ -150,7 +149,7 @@ public:
      * @param value Value to test
      * @return true if value equals the _FillValue
      */
-    bool IsFillValue(const double value) const
+    inline bool IsFillValue(const double value) const
     {
         return has_fill_value_ && (value == fill_value_);
     }
@@ -161,7 +160,7 @@ public:
      * @param value Value to test
      * @return true if value equals the missing_value
      */
-    bool IsMissingValue(const double value) const
+    inline bool IsMissingValue(const double value) const
     {
         return has_missing_value_ && (value == missing_value_);
     }
@@ -173,7 +172,7 @@ public:
      *
      * @return true if value is missing
      */
-    bool IsMissing(const double value) const
+    inline bool IsMissing(const double value) const
     {
 
         if (boost::math::isnan(value))
@@ -223,5 +222,3 @@ public:
 
 } // namespace netcdf
 } // namespace lagrangian
-
-#endif /* SCALE_MISSING_H_ */

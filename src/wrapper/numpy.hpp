@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NUMPY_HPP_
-#define NUMPY_HPP_
+#pragma once
 
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #define NO_IMPORT_ARRAY
@@ -47,5 +46,3 @@ bp::numeric::array MakeMatrix(std::vector<int> dimens,
 }
 
 }
-
-#endif /* NUMPY_HPP_ */

@@ -15,8 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MISC_HPP_
-#define MISC_HPP_
+#pragma once
 
 // ___________________________________________________________________________//
 
@@ -126,5 +125,3 @@ inline double NormalizeLongitude(double x,
 }
 
 }
-
-#endif /* MISC_HPP_ */

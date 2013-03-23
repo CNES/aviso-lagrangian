@@ -15,13 +15,16 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NETCDF_READER_HPP_
-#define NETCDF_READER_HPP_
+#pragma once
+
+// ___________________________________________________________________________//
 
 #include "axis.hpp"
 #include "reader.h"
 #include "julian_day.hpp"
 #include "netcdf.hpp"
+
+// ___________________________________________________________________________//
 
 namespace lagrangian
 {
@@ -144,5 +147,3 @@ public:
 
 } // namespace::reader
 } // namespace::lagrangian
-
-#endif /* NETCDF_READER_HPP_ */

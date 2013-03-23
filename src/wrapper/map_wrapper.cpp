@@ -60,7 +60,7 @@ bp::numeric::array MapProperties::GetYAxis() const
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
         double const nan,
         lagrangian::FiniteLyapunovExponents& fle,
-        GetExponent pGetExponent) const
+        GetExponent pGetExponent)
 {
     std::vector<int> dims;
 
@@ -74,7 +74,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            lagrangian::Triplet t = map_.GetItem(ix, iy);
+            lagrangian::Triplet& t = map_.GetItem(ix, iy);
             if (t.IsMissing())
             {
                 data[ix * map_.get_ny() + iy] = nan;
@@ -86,8 +86,9 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
             }
             else
             {
-                fle.Exponents(t);
-                data[ix * map_.get_ny() + iy] = (fle.*pGetExponent)();
+                data[ix * map_.get_ny() + iy] = fle.Exponents(t)
+                    ? (fle.*pGetExponent)()
+                    : nan; 
             }
         }
     }
@@ -106,7 +107,7 @@ map_properties_(nx, ny, x_min, y_min, step)
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda1(
         const double fill_value,
-        lagrangian::FiniteLyapunovExponents& fle) const
+        lagrangian::FiniteLyapunovExponents& fle)
 {
     return GetMapOfExponents(fill_value,
             fle,
@@ -115,7 +116,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda1(
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda2(
         const double fill_value,
-        lagrangian::FiniteLyapunovExponents& fle) const
+        lagrangian::FiniteLyapunovExponents& fle)
 {
     return GetMapOfExponents(fill_value,
             fle,
@@ -124,7 +125,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfLambda2(
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfTheta1(
         const double fill_value,
-        lagrangian::FiniteLyapunovExponents& fle) const
+        lagrangian::FiniteLyapunovExponents& fle)
 {
     return GetMapOfExponents(fill_value,
             fle,
@@ -133,7 +134,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfTheta1(
 
 bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfTheta2(
         const double fill_value,
-        lagrangian::FiniteLyapunovExponents& fle) const
+        lagrangian::FiniteLyapunovExponents& fle)
 {
     return GetMapOfExponents(fill_value,
             fle,
