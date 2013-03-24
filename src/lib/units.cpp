@@ -15,6 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/lexical_cast.hpp>
 #include <iostream>
 
 // ___________________________________________________________________________//
@@ -38,7 +39,8 @@ static void HandleParseStatus(ut_unit* unit, const std::string& str)
         if (status == UT_UNKNOWN)
             throw units::Exception("'" + str
                     + "' string contained an unknown identifier");
-        throw units::Exception("Unhandled exception: " + status);
+        throw units::Exception("Unhandled exception: " +
+                boost::lexical_cast<std::string>(status));
     }
 }
 
@@ -58,7 +60,8 @@ static void HandleConverterStatus(cv_converter *converter,
             throw units::Exception("the units '" + from + "' and '" + to
                     + "' belong to the same unit-system but conversion "
                     + "between them is meaningless");
-        throw units::Exception("Unhandled exception: " + status);
+        throw units::Exception("Unhandled exception: " +
+                boost::lexical_cast<std::string>(status));
     }
 }
 

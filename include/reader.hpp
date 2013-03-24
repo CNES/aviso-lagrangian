@@ -28,7 +28,6 @@
 
 // ___________________________________________________________________________//
 
-
 namespace lagrangian
 {
 
@@ -96,6 +95,14 @@ public:
     inline int iy1() const
     {
         return iy1_;
+    }
+
+    inline void Update(const int ix0, const int ix1, const int iy0, const int iy1)
+    {
+        ix0_ = ix0;
+        ix1_ = ix1;
+        iy0_ = iy0;
+        iy1_ = iy1;
     }
 };
 

@@ -70,7 +70,7 @@ bool TimeSerie::Compute(const double t,
         v = v_->Interpolate(t, longitude, y);
     }
 
-    return isnan(u) || isnan(v) ? false : true;
+    return std::isnan(u) || std::isnan(v) ? false : true;
 }
 
 } // namespace field

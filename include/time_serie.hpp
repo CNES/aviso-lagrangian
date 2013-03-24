@@ -140,7 +140,6 @@ private:
     std::vector<Reader*> readers_;
     FileList* time_serie_;
     int first_index_, last_index_;
-    double last_date_;
     std::string varname_;
     std::string unit_;
     bool same_coordinates_;

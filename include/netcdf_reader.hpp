@@ -20,7 +20,7 @@
 // ___________________________________________________________________________//
 
 #include "axis.hpp"
-#include "reader.h"
+#include "reader.hpp"
 #include "julian_day.hpp"
 #include "netcdf.hpp"
 

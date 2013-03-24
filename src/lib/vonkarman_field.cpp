@@ -15,7 +15,6 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/math/special_functions.hpp>
 #include <cmath>
 
 // ___________________________________________________________________________//

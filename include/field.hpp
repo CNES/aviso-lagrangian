@@ -34,8 +34,10 @@ public:
     {
         kMetric, kAngular
     };
+
 private:
     UnitType unit_type_;
+
 public:
 
     Field(const Field::UnitType unit_type): unit_type_(unit_type)
@@ -88,7 +90,7 @@ public:
         case kMetric:
             return "m/s";
         case kAngular:
-            return "deg/s";
+            return "degrees/s";
         default:
             throw std::runtime_error("invalid Field::UnitType value");
         }

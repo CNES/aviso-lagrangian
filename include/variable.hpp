@@ -46,14 +46,10 @@ private:
 
     NcVar* ncvar_;
 
-    double missing_value_;
-    double scale_factor_;
-    double add_offset_;
-
     ScaleMissing scale_missing_;
 
     Variable() :
-        name_("")
+        name_(""), shape_(), ncvar_(NULL), scale_missing_()
     {
     }
 

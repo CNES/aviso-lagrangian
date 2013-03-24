@@ -28,8 +28,6 @@
 namespace lagrangian
 {
 
-// ___________________________________________________________________________//
-
 void TimeSerie::Load(int ix0, const int ix1)
 {
     // Should we load new data into memory ?
@@ -133,7 +131,7 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
         const std::string& varname,
         const std::string& unit,
         const reader::Factory::Type type) :
-    first_index_(-1), last_index_(-1), last_date_(), varname_(varname),
+    first_index_(-1), last_index_(-1), varname_(varname),
     unit_(unit), backwards_(false), type_(type)
 {
     readers_.resize(2);

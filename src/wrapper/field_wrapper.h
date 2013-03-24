@@ -15,9 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #pragma once
-
 
 // ___________________________________________________________________________//
 

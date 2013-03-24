@@ -14,7 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "parameter_wrapper.h"
+
+// ___________________________________________________________________________//
 
 namespace wrapper
 {

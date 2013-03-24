@@ -21,9 +21,7 @@ import logging
 import mpl_toolkits.basemap
 import netCDF4
 import matplotlib.pyplot
-import math
 import numpy
-import re
 import sys
 
 # __________________________________________________________________________ #
@@ -193,14 +191,6 @@ class Variable(object):
         self._title = title
         self._long_name = long_name
 
-    def concatenate(self, other):
-        """
-        concatenate the values of another variable
-        """
-        self._x = numpy.ma.concatenate([self._x, other.longitudes])
-        self._y = numpy.ma.concatenate([self._y, other.latitudes])
-        self._z = numpy.ma.concatenate([self._z, other.values])
-
     @classmethod
     def from_netcdf(cls, filename, variable_name, x_axis=None, y_axis=None):
         """
@@ -270,43 +260,6 @@ class Variable(object):
                    Variable.ncattr('title', dataset),
                    Variable.ncattr('long_name', variable),
                    Variable.ncattr('units', variable))
-
-    @classmethod
-    def from_ascii(cls, filename, column_index):
-        """
-        Constructs a new instance from ans ascii file
-        """
-        n = sum([1 for line in open(filename, 'r')])
-
-        logging.debug('reading %s (%d lines)' % (filename, n))
-
-        x = numpy.zeros(n)
-        y = numpy.zeros(n)
-        z = numpy.zeros(n)
-
-        n = 0
-
-        for line in open(filename, 'r'):
-            # Ignore comments
-            line = line[:line.find('#')].strip()
-            if len(line):
-                columns = re.split('\s+', line)
-                x[n] = columns[column_index[0]]
-                y[n] = columns[column_index[1]]
-                z[n] = columns[column_index[2]]
-                n+=1
-
-        numpy.resize(x, n)
-        numpy.resize(y, n)
-        numpy.resize(z, n)
-
-        # Normalize longitude
-        axis = Axis(Axis.LONGITUDE, x)
-        axis.normalize()
-        x = axis[:]
-
-        # Build the new object
-        return cls(x, y, z)
 
     def select_zone(self, x_min, y_min, x_max, y_max):
         """
@@ -396,6 +349,9 @@ class Variable(object):
         return self._z
 
     def dump(self):
+        """
+        Displays information about the variable loaded in memory
+        """
         if len(self._x):
             logging.debug('x_min=%f, x_max=%f' % (numpy.min(self._x),
                                                   numpy.max(self._x)))
@@ -460,7 +416,7 @@ class ContinentType(OptionType):
             'filled',
             'filled',
             'wireframe',
-                                            'none')
+            'none')
 
 # __________________________________________________________________________ #
 
@@ -649,7 +605,8 @@ class Mapping(object):
                                     linewidth=self._meridian_linewidth,
                                     zorder=self._zorder)
 
-    def __range(self, min_range, max_range):
+    @staticmethod
+    def __range(min_range, max_range):
         """Create range to draw longitudes or latitudes lines
         """
         max_range = round(max_range)
@@ -1082,15 +1039,9 @@ def usage():
                         action='store_true')
 
     # exclusive group
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--variable',
-                       help='NetCDF variable name to map',
-                       metavar='NAME')
-    group.add_argument('--column',
-                       nargs=3,
-                       help='Column numbers to read in the CSV file',
-                       metavar=('X', 'Y', 'Z'),
-                       type=int)
+    parser.add_argument('--variable',
+                        help='NetCDF variable name to map',
+                        metavar='NAME')
 
     # mapping options
     mapping_options(parser)
@@ -1130,15 +1081,11 @@ def main():
     # Enable/disable debugging trace
     setup_logger(args.debug)
 
-    # Reads a NetCDF file
-    if args.column is None:
-        var = Variable.from_netcdf(args.inputfile, args.variable,
-                                   x_axis=args.x_axis, y_axis=args.y_axis)
-
-    # the file provided in input is an ASCII file
-    else:
-        var = Variable.from_ascii(args.inputfile,
-                                  map(lambda x: x - 1, args.column))
+    # Reads NetCDF file
+    var = Variable.from_netcdf(args.inputfile,
+                               args.variable,
+                               x_axis=args.x_axis,
+                               y_axis=args.y_axis)
 
     # Set the caption and the title with the data supplied by the user
     if args.legend:

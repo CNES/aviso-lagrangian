@@ -210,8 +210,8 @@ private:
 public:
 
     Axis() :
-        type_(kUnknown), points_(), edges_(), is_regular_(false),
-                is_ascending_(false), is_circle_(false)
+        type_(kUnknown), points_(), edges_(), unit_(), start_(), increment_(),
+                is_regular_(false), is_ascending_(false), is_circle_(false)
     {
     }
 
@@ -256,11 +256,7 @@ public:
      */
     inline double GetCoordinateValue(const int index) const
     {
-        if (index < 0 || index > static_cast<int> (points_.size()) - 1)
-        {
-            throw std::out_of_range("index out of range");
-        }
-        return points_[index];
+        return points_.at(index);
     }
 
     /**

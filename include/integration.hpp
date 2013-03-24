@@ -19,7 +19,6 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/algorithm/minmax.hpp>
 #include <boost/date_time.hpp>
 #include <boost/math/special_functions.hpp>
 #include <limits>
@@ -145,7 +144,8 @@ private:
     double time_;
     bool completed_;
 public:
-    Triplet()
+    Triplet() :
+            x0_(), x1_(), x2_(), y0_(), y1_(), y2_(), time_(), completed_()
     {
     }
     Triplet(const double x0,
@@ -211,12 +211,8 @@ public:
     }
     inline bool IsMissing()
     {
-        return boost::math::isnan<double>(x0_)
-                || boost::math::isnan<double>(x1_)
-                || boost::math::isnan<double>(x2_)
-                || boost::math::isnan<double>(y0_)
-                || boost::math::isnan<double>(y1_)
-                || boost::math::isnan<double>(y2_);
+        return std::isnan(x0_) || std::isnan(x1_) || std::isnan(x2_)
+                || std::isnan(y0_) || std::isnan(y1_) || std::isnan(y2_);
     }
     static Triplet const MISSING()
     {
@@ -261,9 +257,7 @@ private:
         double d1 = Distance(p.get_x0(), p.get_y0(), p.get_x1(), p.get_y1());
         double d2 = Distance(p.get_x0(), p.get_y0(), p.get_x2(), p.get_y2());
 
-        boost::tuple<double const&, double const&> d = boost::minmax(d1, d2);
-
-        return d.get<1> () > min_separation_;
+        return (d1 > d2 ? d1: d2) > min_separation_;
     }
 
     inline bool SeparationFTLE(const Triplet&) const
@@ -280,7 +274,8 @@ public:
             const double delta,
             Field* field) :
         Integration(start_time, end_time, delta_t, field),
-                delta_(delta), mode_(mode), f2_(0.5 * (1 / (delta_ * delta_)))
+                delta_(delta), mode_(mode), f2_(0.5 * (1 / (delta_ * delta_))),
+                lambda1_(), lambda2_(), theta1_(), theta2_()
     {
         switch (mode_)
         {

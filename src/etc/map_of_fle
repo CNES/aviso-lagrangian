@@ -23,8 +23,12 @@ import multiprocessing
 import signal
 import sys
 
+# __________________________________________________________________________ #
 
-def delta(value):
+def positive_value(value):
+    """
+    Check options for defining values strictly positive.
+    """
     try:
         value = float(value)
     except ValueError:
@@ -35,63 +39,105 @@ def delta(value):
         raise argparse.ArgumentTypeError(msg)
     return value
 
+# __________________________________________________________________________ #
 
 def usage():
+    """
+    Program syntax
+    """
     parser = argparse.ArgumentParser(description='Compute Map of FLE')
     parser.add_argument('configuration', help='Configuration file')
     parser.add_argument('fle', help='Map of FLE in NetCDF format')
     parser.add_argument('start_time', help='Start time')
     parser.add_argument('end_time', help='End time')
-    parser.add_argument('--step', help='Grid step in degrees', type=float,
+    parser.add_argument('--step',
+                        help='Grid step in degrees',
+                        type=positive_value,
                         default=1)
-    parser.add_argument('--separation', help='Minimum separation in degrees',
-                        type=float, metavar='SEP', default=-1)
-    parser.add_argument('--delta', help='Time delta in hours', type=delta,
+    parser.add_argument('--separation',
+                        help='Minimum separation in degrees',
+                        type=positive_value,
+                        metavar='SEP',
+                        default=-1)
+    parser.add_argument('--delta',
+                        help='Time delta in hours',
+                        type=positive_value,
                         default=6)
-    parser.add_argument('--x_min', help='X min in degrees', type=float,
+    parser.add_argument('--x_min',
+                        help='X min in degrees',
+                        type=float,
                         default=-180)
-    parser.add_argument('--x_max', help='X max in degrees', type=float,
+    parser.add_argument('--x_max',
+                        help='X max in degrees',
+                        type=float,
                         default=180)
-    parser.add_argument('--y_min', help='Y min in degrees', type=float,
+    parser.add_argument('--y_min',
+                        help='Y min in degrees',
+                        type=float,
                         default=-90)
-    parser.add_argument('--y_max', help='Y max in degrees', type=float,
+    parser.add_argument('--y_max',
+                        help='Y max in degrees',
+                        type=float,
                         default=90)
     return parser.parse_args()
 
+# __________________________________________________________________________ #
 
 def convert_from_sec_to_day(a, fill_value):
+    """
+    Converting values from second to days
+    """
     result = numpy.ma.masked_equal(a, fill_value)
     result *= 86400
     return result.data
 
+# __________________________________________________________________________ #
 
-def compute():
+def main():
+    """
+    Main function
+    """
     # Initializes arguments from command line
     args = usage()
+    
+    # Check X & Y range
+    if not args.x_min < args.x_max:
+        raise RuntimeError("Invalid definition of x range.")
+    if not args.y_min < args.y_max:
+        raise RuntimeError("Invalid definition of y range.")
 
     # Fill value for double in NetCDF file
-    NC_FILL_DOUBLE=9.9692099683868690e+36
+    NC_FILL_DOUBLE = 9.9692099683868690e+36
 
     # Initializes the time series to process
     ts = lagrangian.TimeSerieField(args.configuration)
-    start_time = lagrangian.JulianDay(args.start_time)
-    end_time = lagrangian.JulianDay(args.end_time)
     delta = datetime.timedelta(0, args.delta * 60 * 60)
 
-    nx=int((args.x_max - args.x_min) / args.step)
-    ny=int((args.y_max - args.y_min) / args.step)
+    start_time = lagrangian.JulianDay(args.start_time)
+    end_time = lagrangian.JulianDay(args.end_time)
+
+    nx = int((args.x_max - args.x_min) / args.step)
+    ny = int((args.y_max - args.y_min) / args.step)
 
     # Initializes calculation mode
     mode = lagrangian.kFTLE if args.separation < 0 else lagrangian.kFSLE
     caption = 'FTLE' if args.separation < 0 else 'FSLE'
 
     # Initializes the map to process
-    map_of_fle=lagrangian.MapOfFiniteLyapunovExponents(nx, ny, args.x_min,
-                                                       args.y_min, args.step)
+    map_of_fle = lagrangian.MapOfFiniteLyapunovExponents(nx,
+                                                         ny,
+                                                         args.x_min,
+                                                         args.y_min,
+                                                         args.step)
 
     # Initializes the FLE to process
-    fle=lagrangian.FiniteLyapunovExponents(start_time, end_time, delta, mode,
-                                           args.separation, args.step, ts)
+    fle = lagrangian.FiniteLyapunovExponents(start_time,
+                                             end_time,
+                                             delta,
+                                             mode,
+                                             args.separation,
+                                             args.step,
+                                             ts)
 
     # Computes map
     map_of_fle.Compute(fle)
@@ -102,64 +148,76 @@ def compute():
     rootgrp.createDimension('y', ny)
     rootgrp.title = 'Map of %s' % caption
     if args.separation > 0:
-        rootgrp.separation ='Minimum separation (expansion) in degrees: %f' % (
-            args.separation)
+        rootgrp.separation = ('Minimum separation (expansion) in degrees: %f'
+                              % (args.separation))
     rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
     rootgrp.end_time = end_time.ToString("%Y-%m-%d %T")
 
-    x_axis = rootgrp.createVariable('x','f8',('x',))
+    x_axis = rootgrp.createVariable('x', 'f8', ('x',))
     x_axis.units = 'degrees_east'
     x_axis[:] = map_of_fle.get_map_properties().GetXAxis()
 
-    y_axis = rootgrp.createVariable('y','f8',('y',))
+    y_axis = rootgrp.createVariable('y', 'f8', ('y',))
     y_axis.units = 'degrees_north'
     y_axis[:] = map_of_fle.get_map_properties().GetYAxis()
 
-    theta1 = rootgrp.createVariable('theta1','f8',('x', 'y',),
+    theta1 = rootgrp.createVariable('theta1',
+                                    'f8',
+                                    ('x', 'y',),
                                     fill_value=NC_FILL_DOUBLE)
     theta1.long_name = 'theta1'
     theta1.units = 'degrees'
     theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle)
 
-    theta2 = rootgrp.createVariable('theta2','f8',('x', 'y',),
+    theta2 = rootgrp.createVariable('theta2',
+                                    'f8',
+                                    ('x', 'y',),
                                     fill_value=NC_FILL_DOUBLE)
     theta2.long_name = 'theta2'
     theta2.units = 'degrees'
     theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle)
 
-    lambda1 = rootgrp.createVariable('lambda1','f8',('x', 'y',),
+    lambda1 = rootgrp.createVariable('lambda1',
+                                     'f8',
+                                     ('x', 'y',),
                                      fill_value=NC_FILL_DOUBLE)
     lambda1.long_name = 'lambda1'
     lambda1.units = '1/day'
     lambda1[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda1(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
 
-    lambda2 = rootgrp.createVariable('lambda2','f8',('x', 'y',),
+    lambda2 = rootgrp.createVariable('lambda2', 'f8', ('x', 'y',),
                                      fill_value=NC_FILL_DOUBLE)
     lambda2.long_name = 'lambda2'
     lambda2.units = '1/day'
     lambda2[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
-
     rootgrp.close()
 
+# __________________________________________________________________________ #
 
-def signal_handler(signum, frame):
+def signal_handler(signum, _):
+    """
+    Signal handler
+    """
     signame = {}
-    for v, k in signal.__dict__.iteritems():
-        if v.startswith('SIG'):
-            signame[k] = v
+    for value, key in signal.__dict__.iteritems():
+        if value.startswith('SIG'):
+            signame[key] = value
     print 'Stop with signal %s' % signame[signum]
     for process in multiprocessing.process.active_children():
         process.terminate()
     sys.exit(0)
 
+# __________________________________________________________________________ #
 
-# Initialize signal handler
-signal.signal(signal.SIGINT, signal_handler)
+if __name__ == '__main__':
+    
+    # Initialize signal handler
+    signal.signal(signal.SIGINT, signal_handler)
 
-# As the calculation is long, the calculation process is started in parallel.
-# Thus the user can stop the program
-p = multiprocessing.Process(target=compute)
-p.start()
-p.join()
+    # As the calculation is long, the calculation process is started in
+    # parallel. Thus the user can stop the program
+    PROCESS = multiprocessing.Process(target=main)
+    PROCESS.start()
+    PROCESS.join()

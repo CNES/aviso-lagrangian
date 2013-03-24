@@ -17,6 +17,8 @@
 
 #include "integration.hpp"
 
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
 
@@ -24,7 +26,7 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
 {
     const double delta_t = p.get_time() - start_time_;
 
-    if (delta_t < std::numeric_limits<double>::epsilon())
+    if (fabs(delta_t) < std::numeric_limits<double>::epsilon())
         return false;
 
     double a00 = p.get_x1() - p.get_x0();

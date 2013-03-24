@@ -17,12 +17,12 @@
 
 #include "netcdf_reader.hpp"
 
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
 namespace reader
 {
-
-// ___________________________________________________________________________//
 
 static inline double BilinearInterpolation(const double x0,
         const double x1,
@@ -44,10 +44,10 @@ static inline double BilinearInterpolation(const double x0,
     const double wy0 = (y1 - y) * dy;
     const double wy1 = (y - y0) * dy;
 
-    const double w00 = wx0 * wy0;
-    const double w01 = wx0 * wy1;
-    const double w10 = wx1 * wy0;
-    const double w11 = wx1 * wy1;
+    const double w00 = wx0 * wy0; // 0
+    const double w01 = wx0 * wy1; // 2
+    const double w10 = wx1 * wy0; // 1
+    const double w11 = wx1 * wy1; // 3
 
     return (z00 * w00 + z01 * w01 + z10 * w10 + z11 * w11) / (w00 + w01 + w10
             + w11);
@@ -138,7 +138,7 @@ double Netcdf::Interpolate(double& longitude,
                 !axis_y_.FindIndexes(latitude, iy0, iy1))
             return std::numeric_limits<double>::quiet_NaN();
 
-        coordinates = Coordinates(ix0, ix1, iy0, iy1);
+        coordinates.Update(ix0, ix1, iy0, iy1);
     }
 
     return BilinearInterpolation(axis_x_.GetCoordinateValue(coordinates.ix0()),

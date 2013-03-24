@@ -1,9 +1,25 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# lagrangian.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
 import lagrangian
 import datetime
 import argparse
 import numpy
 import re
+
+# __________________________________________________________________________ #
 
 def usage():
     parser = argparse.ArgumentParser(description='Compute path')
@@ -14,44 +30,54 @@ def usage():
     parser.add_argument('end_time', help='End time')
     return parser.parse_args()
 
+# __________________________________________________________________________ #
 
-args = usage()
+def main():
+    """
+    Main program
+    """
+    args = usage()
 
-ts = lagrangian.TimeSerieField(args.configuration)
-start_time = lagrangian.JulianDay(args.start_time)
-end_time = lagrangian.JulianDay(args.end_time)
-delta = datetime.timedelta(0, 6 * 60 * 60)
-path = lagrangian.Path(start_time, end_time, delta, ts)
+    ts = lagrangian.TimeSerieField(args.configuration)
+    start_time = lagrangian.JulianDay(args.start_time)
+    end_time = lagrangian.JulianDay(args.end_time)
+    delta = datetime.timedelta(0, 6 * 60 * 60)
+    path = lagrangian.Path(start_time, end_time, delta, ts)
 
-it=path.GetIterator()
+    it = path.GetIterator()
 
-n = sum([1 for line in open(args.input, 'r')])
-x = numpy.zeros(n)
-y = numpy.zeros(n)
-process = numpy.zeros(n)
-n = 0
+    n = sum([1 for line in open(args.input, 'r')])
+    x = numpy.zeros(n)
+    y = numpy.zeros(n)
+    process = numpy.zeros(n)
+    n = 0
 
-output = open(args.output, 'w')
+    output = open(args.output, 'w')
 
-for line in open(args.input, 'r'):
-    line = line[:line.find('#')].strip()
-    if len(line):
-        columns = re.split('\s+', line)
-        x[n] = columns[0]
-        y[n] = columns[1]
-        process[n] = True
-        n+=1
+    for line in open(args.input, 'r'):
+        line = line[:line.find('#')].strip()
+        if len(line):
+            columns = re.split(r'\s+', line)
+            x[n] = columns[0]
+            y[n] = columns[1]
+            process[n] = True
+            n += 1
 
-numpy.resize(x, n)
-numpy.resize(y, n)
+    numpy.resize(x, n)
+    numpy.resize(y, n)
 
-while it.GoAfter():
-    for ix in range(0,n):
-        if process[ix]:
-            (result, x1, y1) = path.Compute(it, x[ix], y[ix])
-            if result:
-                output.write("%f\t%f\t%f\n" % (x1, y1, it()))
-            x[ix] = x1
-            y[ix] = y1
-            process[ix] = result
-    it.Next();
+    while it.GoAfter():
+        for ix in range(0, n):
+            if process[ix]:
+                (result, x1, y1) = path.Compute(it, x[ix], y[ix])
+                if result:
+                    output.write("%f\t%f\t%f\n" % (x1, y1, it()))
+                x[ix] = x1
+                y[ix] = y1
+                process[ix] = result
+        it.Next()
+
+# __________________________________________________________________________ #
+
+if __name__ == '__main__':
+    main()

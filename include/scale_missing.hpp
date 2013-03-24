@@ -19,7 +19,6 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/math/special_functions.hpp>
 #include <cmath>
 #include <limits>
 
@@ -175,7 +174,7 @@ public:
     inline bool IsMissing(const double value) const
     {
 
-        if (boost::math::isnan(value))
+        if (std::isnan(value))
             return true;
         if (IsMissingValue(value))
             return true;
