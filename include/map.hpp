@@ -21,7 +21,11 @@
 
 #include <cstdlib>
 #include <boost/thread.hpp>
+
+// ___________________________________________________________________________//
+
 #include "integration.hpp"
+#include "trace.h"
 
 // ___________________________________________________________________________//
 
@@ -122,12 +126,9 @@ class FiniteLyapunovExponents
 private:
     void ComputeHt(const int i_start,
             const int i_stop,
-            int* completed,
             lagrangian::FiniteLyapunovExponents& fle,
             Iterator& it)
     {
-        *completed = 0;
-
         for (int ix = i_start; ix < i_stop; ++ix)
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
@@ -143,10 +144,7 @@ private:
                     else
                     {
                         if(fle.Separation(t))
-                        {
-                            ++(*completed);
                             t.set_completed();
-                        }
 
                         map_.SetItem(ix, iy, t);
                     }
@@ -182,6 +180,7 @@ public:
                             + omp_num_threads);
             }
         }
+        Debug(str(boost::format("Uses %d threads") % num_threads_));
     }
 
     virtual ~FiniteLyapunovExponents()
@@ -202,12 +201,17 @@ public:
 
         Iterator it = fle.GetIterator();
         boost::thread_group threads;
-        std::vector<int> count(num_threads_, 0);
-        int completed = 0;
         
         while (it.GoAfter())
         {
             fle.Fetch(it());
+
+            std::string date =
+                    JulianDay(
+                            JulianDay::FromUnixTime(it())).
+                                ToString("%Y-%m-%d %H:%M:%S");
+
+            Debug(str(boost::format("Start time step %s") % date));
 
             for(int ix = 0; ix < num_threads_; ++ix)
             {
@@ -219,22 +223,14 @@ public:
                         this,
                         from,
                         to,
-                        &count[ix],
                         fle,
                         it));
             }
 
             threads.join_all();
 
-            for(int ix = 0; ix < num_threads_; ++ix)
-                completed += count[ix];
+            Debug(str(boost::format("Close time step %s") % date));
 
-            JulianDay jd(JulianDay::FromUnixTime(it()));
-            std::cout << jd.ToString("%Y-%m-%d %H:%M:%S ")
-                      << completed * 100.0 / (map_.get_nx() * map_.get_ny())
-                      << " % completed"
-                      << std::endl
-                      << std::flush;
             ++it;
         }
     }

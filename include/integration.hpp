@@ -29,32 +29,52 @@
 #include "julian_day.hpp"
 #include "runge_kutta.hpp"
 
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
 
+/**
+ * @brief Definition of an iterator over a time period
+ */
 class Iterator
 {
 private:
     double end_;
     double inc_;
     double ix_;
+
 public:
+    
+    /**
+     * @brief Default constructor
+     *
+     * @param begin Begin of the period expressed in number of seconds
+     * elapsed since 1970
+     * @param end End of the period expressed in number of seconds
+     * elapsed since 1970
+     * @param inc Time increment in seconds
+     */
     Iterator(const double begin, const double end, const double inc) :
         end_(end), inc_(begin > end ? -inc : inc), ix_(begin)
     {
     }
+    
     inline bool GoAfter() const
     {
         return inc_ > 0 ? ix_ <= end_ : ix_ >= end_;
     }
+    
     inline void operator++()
     {
         ix_ += inc_;
     }
+    
     inline double operator()() const
     {
         return ix_;
     }
+    
     inline double inc() const
     {
         return inc_;

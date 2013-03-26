@@ -27,9 +27,17 @@
 namespace lagrangian
 {
 
+/**
+ * @brief Abstract class defining a field where it is possible to calculate a
+ * speed
+ */
 class Field
 {
 public:
+    
+    /**
+     * @brief Unit field
+     */
     enum UnitType
     {
         kMetric, kAngular
@@ -40,6 +48,11 @@ private:
 
 public:
 
+    /**
+     * @brief Default constructor
+     *
+     * @param unit_type Unit field
+     */
     Field(const Field::UnitType unit_type): unit_type_(unit_type)
     {
         switch (unit_type_)
@@ -53,6 +66,9 @@ public:
         }
     }
 
+    /**
+     * @brief Default method invoked when a Field is destroyed.
+     */
     virtual ~Field() {}
 
     /**
@@ -63,6 +79,18 @@ public:
      */
     virtual void Fetch(const double t0, const double t1) {}
 
+    /**
+     * Calculate the value of the speed to the spatio temporal position
+     * requested.
+     *
+     * @param t Time in number of seconds elapsed since 1970
+     * @param x Longitude in degree
+     * @param y Latitude in degree
+     * @param u Velocity
+     * @param v Velocity
+     *
+     * @return true if the value of the speed is set otherwise false.
+     */
     virtual bool Compute(const double t,
             const double x,
             const double y,
@@ -78,6 +106,7 @@ public:
     {
         return unit_type_;
     }
+
     /**
      * @brief Unit used by this field.
      *

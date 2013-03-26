@@ -21,6 +21,7 @@
 #include "reader_wrapper.h"
 #include "map_wrapper.h"
 #include "parameter_wrapper.h"
+#include "trace.h"
 
 #include "boost/python/suite/indexing/vector_indexing_suite.hpp"
 
@@ -57,4 +58,5 @@ BOOST_PYTHON_MODULE(lagrangian)
     wrapper::ReaderPythonModule();
     wrapper::IntegrationPythonModule();
     wrapper::MapPythonModule();
+    bp::def("SetVerbose", lagrangian::SetVerbose);
 }

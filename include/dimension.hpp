@@ -38,6 +38,7 @@ private:
     std::string name_;
     int length_;
     bool unlimited_;
+
 public:
 
     /**

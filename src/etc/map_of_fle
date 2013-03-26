@@ -54,6 +54,9 @@ def usage():
                         help='Grid step in degrees',
                         type=positive_value,
                         default=1)
+    parser.add_argument('--verbose',
+                        help='Verbose mode',
+                        action='store_true')
     parser.add_argument('--separation',
                         help='Minimum separation in degrees',
                         type=positive_value,
@@ -99,6 +102,9 @@ def main():
     """
     # Initializes arguments from command line
     args = usage()
+
+    # Set debug
+    lagrangian.SetVerbose(args.verbose)
     
     # Check X & Y range
     if not args.x_min < args.x_max:

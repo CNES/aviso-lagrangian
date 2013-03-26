@@ -43,6 +43,7 @@ private:
     bool same_coordinates_;
 
 public:
+
     /**
      * @brief Create a new instance of FileList.
      *
@@ -55,25 +56,25 @@ public:
             Reader* const reader);
 
     /**
-     * @brief Given a date expressed as JulianDay, find the file name closest to
-     * the date requested.
+     * @brief Given a date expressed as a number of seconds elapsed since
+     * 1970, find elements around it. This mean that
+     * @code
+     * dates[i0] <= date < dates[i1]
+     * @endcode
      *
-     * @param date requested
-     *
-     * @return index of the filename closest to the date
+     * @param date Date request
+     * @param i0
+     * @param i1
      *
      * @throw std::out_of_range if the date requested is not included in the
      * time series.
      */
-    inline int FindIndex(const double date)
+    inline void FindIndexes(const double date, int& i0, int& i1)
     {
-        int index = axis_.FindIndex(date);
-
-        if (index == -1)
+        if (axis_.FindIndexes(date, i0, i1) == false)
         {
             throw std::out_of_range("date out of range");
         }
-        return index;
     }
 
     /**
@@ -97,11 +98,7 @@ public:
      */
     inline std::string& GetItem(const int index)
     {
-        if (index < 0 || index > GetNumElements() - 1)
-        {
-            throw std::out_of_range("index out of range");
-        }
-        return filenames_[index];
+        return filenames_.at(index);
     }
 
     /**
@@ -132,7 +129,8 @@ public:
 /**
  * @brief Spatio-temporal interpolation of a series of grids.
  *
- * The series is described by a list of files containing only one date per file.
+ * The series is described by a list of files containing only one date per
+ * file.
  */
 class TimeSerie
 {
@@ -143,18 +141,11 @@ private:
     std::string varname_;
     std::string unit_;
     bool same_coordinates_;
-    bool backwards_;
     reader::Factory::Type type_;
+    std::map<std::string, int> files_;
 
     // Load new files in memory if necessary.
     void Load(int ix0, const int ix1);
-
-    inline int NextItem(const int ix) const
-    {
-        return backwards_
-                ? (ix == 0 ? ix + 1: ix -1)
-                : (ix == time_serie_->GetNumElements() - 1 ? ix - 1: ix + 1);
-    }
 
 public:
 

@@ -15,44 +15,21 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/algorithm/string.hpp>
+#pragma once
 
 // ___________________________________________________________________________//
 
-#include "group.hpp"
+#include <boost/format.hpp>
+
+// ___________________________________________________________________________//
+
 
 // ___________________________________________________________________________//
 
 namespace lagrangian
 {
-namespace netcdf
-{
 
-Attribute const& Group::FindAttribute(const std::string& name) const
-{
-    std::list<Attribute>::const_iterator it;
+void Debug(std::string const& message);
 
-    for (it = attributes_.begin(); it != attributes_.end(); ++it)
-    {
-        if ((*it).get_name() == name)
-            return *it;
-    }
-    return Attribute::MISSING;
+void SetVerbose(const bool value);
 }
-
-// ___________________________________________________________________________//
-
-Attribute const& Group::FindAttributeIgnoreCase(const std::string& name) const
-{
-    std::list<Attribute>::const_iterator it;
-
-    for (it = attributes_.begin(); it != attributes_.end(); ++it)
-    {
-        if (boost::iequals((*it).get_name(), name))
-            return *it;
-    }
-    return Attribute::MISSING;
-}
-
-} // namespace netcdf
-} // namespace lagrangian

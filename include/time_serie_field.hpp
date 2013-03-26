@@ -19,6 +19,11 @@
 
 // ___________________________________________________________________________//
 
+#include <boost/tuple/tuple.hpp>
+#include <boost/algorithm/minmax.hpp>
+
+// ___________________________________________________________________________//
+
 #include "parameter.hpp"
 #include "time_serie.hpp"
 #include "field.hpp"
@@ -39,28 +44,65 @@ private:
     bool same_coordinates_;
 
 public:
+    
+    /**
+     * @brief Default constructor
+     *
+     * @param configuration_file The configuration file contains the list of
+     * files to take into account to interpolate speeds.
+     * @param unit_type Unit fields.
+     * @param reader_type The reader used to read grids containing speeds.
+     */
     TimeSerie(const std::string& configuration_file,
             const Field::UnitType unit_type = kMetric,
             const reader::Factory::Type reader_type = reader::Factory::kNetCDF);
 
+    /**
+    * @brief Default method invoked when a TimeSerie is destroyed.
+    */
     ~TimeSerie()
     {
         delete u_;
         delete v_;
     }
 
+    /**
+     * @brief Loads the grids used to interpolate the velocities in the
+     * interval [t0, t1]
+     *
+     * @param t0 First date of the interval expressed as a number of seconds
+     * elapsed since 1970.
+     * @param t1 Last date of the interval expressed as a number of seconds
+     * elapsed since 1970.
+     */
     inline void Fetch(const double t0, const double t1)
     {
         u_->Load(t0, t1);
         v_->Load(t0, t1);
     }
 
+    /**
+     * @brief Interpolates the velocity to the wanted spatio temporal position.
+     *
+     * @param t Time expressed as a number of seconds elapsed since 1970.
+     * @param x Longitude expressed as degree
+     * @param y Latitude expressed as degree
+     * @param u
+     * @param v
+     *
+     * @return true if the value of the speed is set otherwise false.
+     */
     bool Compute(const double t,
             const double x,
             const double y,
             double& u,
             double& v) const;
 
+    /**
+     * @brief Returns the date of the first grid constituting the time series.
+     *
+     * @return the julian day of the first date
+     */
     inline JulianDay StartTime() const
     {
         boost::tuple<double const&, double const&> minmax =
@@ -68,6 +110,11 @@ public:
         return JulianDay(JulianDay::FromUnixTime(minmax.get<1> ()));
     }
 
+    /**
+    * @brief Returns the date of the last grid constituting the time series.
+    *
+    * @return the julian day of the last date
+    */
     inline JulianDay EndTime() const
     {
         boost::tuple<double const&, double const&> minmax =

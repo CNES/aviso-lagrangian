@@ -37,7 +37,6 @@ namespace netcdf
 /**
  * @brief A group is a logical collection of dimensions and attributes
  */
-
 class Group
 {
 protected:

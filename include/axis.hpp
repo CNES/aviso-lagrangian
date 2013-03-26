@@ -46,6 +46,7 @@ protected:
      * @brief Unit known
      */
     std::set<std::string> unit_;
+
 public:
     /**
      * @brief Checks if the unit can define this type of axis.

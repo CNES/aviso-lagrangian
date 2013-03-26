@@ -22,6 +22,7 @@
 
 #include "time_serie.hpp"
 #include "parameter.hpp"
+#include "trace.h"
 
 // ___________________________________________________________________________//
 
@@ -34,36 +35,39 @@ void TimeSerie::Load(int ix0, const int ix1)
     if (ix0 < first_index_ || ix0 > last_index_ || ix1 < first_index_
             || ix1 > last_index_)
     {
-        std::vector<int> indexes;
-        int start = 0;
+            first_index_ = ix0;
+            last_index_ = ix1;
 
-        // Keep the last file into memory
-        if (ix0 > 0)
-            --ix0;
+            std::map<std::string, int>::iterator it;
+            std::map<std::string, int> new_files;
 
-        indexes.push_back(ix0);
-
-        for (int ix = 1; ix < static_cast<int> (readers_.size()); ++ix)
-        {
-            if (indexes[start] + ix < time_serie_->GetNumElements())
+            for (int ix = ix0; ix <= ix1; ++ix)
             {
-                indexes.push_back(indexes[start] + ix);
+                std::string filename = time_serie_->GetItem(ix);
+                int iy = ix - first_index_;
+
+                it = files_.find(filename);
+
+                if(it != files_.end())
+                {
+                    std::swap(readers_[iy], readers_[it->second]);
+                    new_files[it->first] = iy;
+                }
+                else
+                    new_files[filename] = iy;
             }
-            else
+
+            for (it = new_files.begin(); it != new_files.end(); ++it)
             {
-                indexes.insert(indexes.begin(), indexes[0] - 1);
-                start += 1;
+                if (files_.find(it->first) == files_.end())
+                {
+                    Debug(str(boost::format("Loading %s from %s") % varname_
+                        % it->first));
+                    readers_[it->second]->Open(it->first);
+                    readers_[it->second]->Load(varname_, unit_);
+                }
             }
-        }
-
-        first_index_ = ix0;
-        last_index_ = ix0 + readers_.size() - 1;
-
-        for (int ix = 0; ix < static_cast<int> (readers_.size()); ++ix)
-        {
-            readers_[ix]->Open(time_serie_->GetItem(indexes[ix]));
-            readers_[ix]->Load(varname_, unit_);
-        }
+            files_ = new_files;
     }
 }
 
@@ -132,7 +136,7 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
         const std::string& unit,
         const reader::Factory::Type type) :
     first_index_(-1), last_index_(-1), varname_(varname),
-    unit_(unit), backwards_(false), type_(type)
+    unit_(unit), type_(type)
 {
     readers_.resize(2);
 
@@ -151,8 +155,9 @@ double TimeSerie::Interpolate(const double date,
         const double latitude,
         Coordinates& coordinates)
 {
-    int it0 = time_serie_->FindIndex(date);
-    int it1 = NextItem(it0);
+    int it0, it1;
+
+    time_serie_->FindIndexes(date, it0, it1);
 
     const double t0 = time_serie_->GetDate(it0);
     const double t1 = time_serie_->GetDate(it1);
@@ -179,12 +184,13 @@ double TimeSerie::Interpolate(const double date,
 
 void TimeSerie::Load(const double t0, const double t1)
 {
-    backwards_ = t0 > t1;
-    int it10 = time_serie_->FindIndex(t1);
-    int it11 = NextItem(it10);
+    int it00, it01, it10, it11;
 
-    int it00 = time_serie_->FindIndex(t0);
-    int it01 = NextItem(it00);
+    time_serie_->FindIndexes(t0, it00, it01);
+    time_serie_->FindIndexes(t1, it10, it11);
+
+    it00 = it00 < it10 ? it00: it10;
+    it11 = it11 > it01 ? it11: it01;
 
     size_t required_size = abs(it11 - it00) + 1;
 
@@ -196,13 +202,10 @@ void TimeSerie::Load(const double t0, const double t1)
 
         for (size_t ix = previous_size; ix < required_size; ++ix)
             readers_[ix] = reader::Factory::NewReader(type_);
-
-        // We force the reloading of the first data to reset the buffer.
-        Load(it00, it01);
     }
 
     // Loading the needed data
-    Load(it10, it11);
+    Load(it00, it11);
 }
 
 }
