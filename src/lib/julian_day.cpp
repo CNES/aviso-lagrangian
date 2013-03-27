@@ -34,7 +34,7 @@ void JulianDay::AdjustDomain()
         ++day_;
         seconds_ -= seconds_per_day_;
     }
-    
+
     if (microseconds_ < 0)
     {
         --seconds_;
@@ -56,7 +56,7 @@ JulianDay& JulianDay::operator+=(const JulianDay& jd)
     seconds_ += jd.get_seconds();
 
     AdjustDomain();
-    
+
     return *this;
 }
 
@@ -69,7 +69,7 @@ JulianDay& JulianDay::operator-=(const JulianDay& jd)
     seconds_ -= jd.get_seconds();
 
     AdjustDomain();
-    
+
     return *this;
 }
 

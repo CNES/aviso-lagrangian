@@ -44,7 +44,7 @@ private:
     bool same_coordinates_;
 
 public:
-    
+
     /**
      * @brief Default constructor
      *

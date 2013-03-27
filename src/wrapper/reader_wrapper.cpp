@@ -198,7 +198,7 @@ void ReaderPythonModule()
                 (std::string const &) const)
                     (&Netcdf::WrapperGetJulianDay),
             (bp::arg("name")))
-        .def( 
+        .def(
             "Interpolate",
             (bp::tuple (Netcdf::*)
                 (double,
@@ -207,7 +207,7 @@ void ReaderPythonModule()
                      (&Netcdf::WrapperInterpolate),
             (bp::arg("longitude"),
              bp::arg("latitude"),
-             bp::arg("coordinates")=Coordinates::UNDEF()))    
+             bp::arg("coordinates")=Coordinates::UNDEF()))
         .def(
             "Load",
             (void (lagrangian::reader::Netcdf::*)

@@ -88,7 +88,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
             {
                 data[ix * map_.get_ny() + iy] = fle.Exponents(t)
                     ? (fle.*pGetExponent)()
-                    : nan; 
+                    : nan;
             }
         }
     }

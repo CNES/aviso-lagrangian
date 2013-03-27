@@ -201,7 +201,7 @@ public:
 
         Iterator it = fle.GetIterator();
         boost::thread_group threads;
-        
+
         while (it.GoAfter())
         {
             fle.Fetch(it());

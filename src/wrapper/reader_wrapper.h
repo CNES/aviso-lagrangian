@@ -68,7 +68,7 @@ struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
             double const latitude,
             lagrangian::Coordinates& coordinates=lagrangian::Coordinates::UNDEF()) const;
 
-   
+
     virtual lagrangian::Axis& axis_x();
 
     virtual lagrangian::Axis& axis_y();

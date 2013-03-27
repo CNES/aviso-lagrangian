@@ -73,7 +73,7 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
         theta1_ = RadiansToDegrees(atan(at1 / (at2 + s2)));
         theta2_ = RadiansToDegrees(-atan(at1 / (-at2 + s2)));
     }
-    
+
     return true;
 }
 

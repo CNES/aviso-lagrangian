@@ -40,19 +40,17 @@ void TimeSerie::Load(int ix0, const int ix1)
 
             std::map<std::string, int>::iterator it;
             std::map<std::string, int> new_files;
-
             for (int ix = ix0; ix <= ix1; ++ix)
             {
                 std::string filename = time_serie_->GetItem(ix);
                 int iy = ix - first_index_;
-
                 it = files_.find(filename);
 
                 if(it != files_.end())
                 {
                     std::swap(readers_[iy], readers_[it->second]);
                     new_files[it->first] = iy;
-                }
+            }
                 else
                     new_files[filename] = iy;
             }

@@ -34,7 +34,7 @@ namespace lagrangian
 class Field
 {
 public:
-    
+
     /**
      * @brief Unit field
      */

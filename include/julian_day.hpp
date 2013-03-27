@@ -306,10 +306,10 @@ inline std::istream& operator>>(std::istream& is, JulianDay& jd)
     static boost::regex triplet("(\\d+)\\s+(\\d+)\\s+(\\d+)");
     static boost::regex real("([-+]?\\d*\\.?\\d+)");
     boost::smatch match;
-    
+
     std::string line;
     std::getline(is, line);
-    
+
     // if the line contains three integers we construct a julian day from a
     // triplet: date, seconds, microseconds
     if (boost::regex_match(line, match, triplet))
@@ -421,7 +421,7 @@ public:
     /**
      * @brief Returns the julian day number that defines the modified julian
      * day.
-     * 
+     *
      * @return the julian day of reference
      */
     static JulianDay Gap()
