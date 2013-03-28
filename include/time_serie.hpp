@@ -43,6 +43,7 @@ private:
     bool same_coordinates_;
 
 public:
+
     /**
      * @brief Create a new instance of FileList.
      *

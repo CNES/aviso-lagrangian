@@ -70,6 +70,25 @@ def zipdist(target, source, env):
 
 EnsureSConsVersion(1, 2)
 
+Help("""
+To configure and verify that the prerequisites required for the construction
+of the library type:
+
+./configure.py [ OPTIONS ]
+
+The following options allow you to define paths to the required libraries to
+build the software:
+
+    boost_includes      Location of boost C++ headers
+    boost_libraries     Location of boost C++ libraries
+    boost_mt            Set to 1 to use boost C++ libraries with multithreading
+                        support enabled
+    netcdf_includes     Location of NetCDF headers
+    netcdf_libraries    Location of NetCDF libraries
+    udunits_includes    Location of UDUNITS-2 headers
+    udunits_librairies  Location of UDUNITS-2 libraries
+""")
+
 SConsEnvironment.InstallPerm = permissions
 
 VariantDir('build', 'src')
@@ -83,13 +102,6 @@ load_cfg(env)
 env.Decider('MD5-timestamp')
 
 env.AppendUnique(CXXFLAGS=['-I./include', '-I.'])
-env.AppendUnique(LIBS=['boost_python',
-                       'boost_date_time',
-                       'boost_regex',
-                       'boost_thread',
-                       'udunits2',
-                       'netcdf',
-                       'netcdf_c++'])
 
 dist_files = ['COPYING', 'configure.py', 'SConstruct', 'SConfigure']
 dist_files += source_list('src', mask='\.(cpp|hpp|h)$')
@@ -102,6 +114,7 @@ lib_prefix = distutils.sysconfig.get_python_lib()
 lib_prefix = os.path.join(prefix, lib_prefix.replace(site.PREFIXES[1], '')[1:])
 
 lagrangian = env.SharedLibrary(target='lagrangian',
+                               SHLIBSUFFIX='.so',
                                source=source_list('src',
                                                   mask='\.cpp$',
                                                   replace=('src', 'build')))

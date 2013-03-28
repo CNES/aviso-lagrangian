@@ -74,14 +74,14 @@ struct TimeDurationFromPython
 struct JulianDay: lagrangian::JulianDay, bp::wrapper<lagrangian::JulianDay>
 {
     JulianDay(lagrangian::JulianDay const & arg);
-
+    
     JulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     JulianDay(std::string const & s);
-
+    
     JulianDay(int const day, int const seconds, int const microseconds);
-
+    
     JulianDay(double const jd);
 };
 
@@ -92,18 +92,18 @@ struct ModifiedJulianDay: lagrangian::ModifiedJulianDay, bp::wrapper<
 {
 
     ModifiedJulianDay(lagrangian::ModifiedJulianDay const & arg);
-
+    
     ModifiedJulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     ModifiedJulianDay(std::string const & s);
-
+    
     ModifiedJulianDay(int const day,
           int const seconds = 0,
           int const microseconds = 0);
-
+    
     ModifiedJulianDay(double const jd);
-
+    
     int GetModifiedJulianDay() const;
 };
 
@@ -114,18 +114,18 @@ struct CNESJulianDay: lagrangian::CNESJulianDay, bp::wrapper<
 {
 
     CNESJulianDay(lagrangian::CNESJulianDay const & arg);
-
+    
     CNESJulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     CNESJulianDay(std::string const & s);
-
+    
     CNESJulianDay(int const day,
           int const seconds = 0,
           int const microseconds = 0);
-
+    
     CNESJulianDay(double const jd);
-
+    
     int GetModifiedJulianDay() const;
 };
 
@@ -136,18 +136,18 @@ struct LOPJulianDay: lagrangian::LOPJulianDay, bp::wrapper<
 {
 
     LOPJulianDay(lagrangian::LOPJulianDay const & arg);
-
+    
     LOPJulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     LOPJulianDay(std::string const & s);
-
+    
     LOPJulianDay(int const day,
           int const seconds = 0,
           int const microseconds = 0);
-
+    
     LOPJulianDay(double const jd);
-
+    
     int GetModifiedJulianDay() const;
 };
 
@@ -158,18 +158,18 @@ struct NASAJulianDay: lagrangian::NASAJulianDay, bp::wrapper<
 {
 
     NASAJulianDay(lagrangian::NASAJulianDay const & arg);
-
+    
     NASAJulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     NASAJulianDay(std::string const & s);
-
+    
     NASAJulianDay(int const day,
           int const seconds = 0,
           int const microseconds = 0);
-
+    
     NASAJulianDay(double const jd);
-
+    
     int GetModifiedJulianDay() const;
 };
 
@@ -180,18 +180,18 @@ struct CCSDSJulianDay: lagrangian::CCSDSJulianDay, bp::wrapper<
 {
 
     CCSDSJulianDay(lagrangian::CCSDSJulianDay const & arg);
-
+    
     CCSDSJulianDay(boost::posix_time::ptime const & t =
           boost::posix_time::microsec_clock::universal_time());
-
+    
     CCSDSJulianDay(std::string const & s);
-
+    
     CCSDSJulianDay(int const day,
           int const seconds = 0,
           int const microseconds = 0);
-
+    
     CCSDSJulianDay(double const jd);
-
+    
     int GetModifiedJulianDay() const;
 };
 

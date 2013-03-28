@@ -14,6 +14,7 @@
 
 import os
 import site
+import sys
 import re
 import distutils.sysconfig
 
@@ -61,14 +62,16 @@ def check_boost_headers(headers):
 def append_include_path(env, key):
     if env[key] != INCLUDE:
         env.AppendUnique(CXXFLAGS=['-I%s' % env[key]])
+        env.AppendUnique(CFLAGS=['-I%s' % env[key]])
 
 def append_library_path(env, key):
     if env[key] != LIB:
         env.AppendUnique(LDFLAGS=['-L%s' % env[key]])
+        env.AppendUnique(LIBPATH=[env[key]])
 
 EnsureSConsVersion(1, 2)
 
-vars = Variables(['lagrangian.cfg'])
+vars = Variables()
 
 # CXX compiler
 vars.AddVariables(PathVariable('CXX',
@@ -79,6 +82,7 @@ vars.AddVariables(PathVariable('CXX',
 vars.Add('CXXFLAGS', 'The C++ compiler flags', None)
 vars.Add('LINKFLAGS', 'The linker flags', None)
 vars.Add('LIBS', 'Additional libraries', None)
+vars.Add('LIBPATH', 'Path to libraries', None)
 
 # PREFIX
 vars.AddVariables(PathVariable('prefix',
@@ -95,6 +99,10 @@ vars.AddVariables(PathVariable('boost_libraries',
                                'Location of boost C++ libraries',
                                LIB,
                                PathVariable.PathIsDir))
+vars.Add('boost_mt',
+         'Set to 1 to use boost C++ libraries with multithreading support '
+         'enabled',
+         0)
 
 # NetCDF
 vars.AddVariables(PathVariable('netcdf_includes',
@@ -129,7 +137,6 @@ env = Environment(variables = vars,
 cfg = Configure(env,
                 custom_tests = { 'CheckNumpy': check_numpy,
                                  'CheckPythonModule' : check_python_module })
-
 append_include_path(env, 'boost_includes')
 append_library_path(env, 'boost_libraries')
 
@@ -139,8 +146,29 @@ append_library_path(env, 'netcdf_libraries')
 append_include_path(env, 'udunits_includes')
 append_library_path(env, 'udunits_libraries')
 
+boost_libraries = ['boost_python',
+                   'boost_date_time',
+                   'boost_regex',
+                   'boost_thread']
+
+try:
+    boost_mt = ARGUMENTS.get('boost_mt')
+    boost_mt = 0 if boost_mt is None else int(boost_mt)
+except ValueError:
+    print ('argument boost_mt: invalid integer value: %r'
+           % repr(ARGUMENTS.get('boost_mt')))
+    Exit(1)
+
+if env['PLATFORM'] == 'darwin':
+    boost_libraries.append('boost_system')
+    env.AppendUnique(LIBS=['python%d.%d' % (sys.version_info.major,
+                                            sys.version_info.minor)])
+
+if boost_mt:
+    boost_libraries = ["%s-mt" % item for item in boost_libraries]
+
 # Avoid the linking problem on ubuntu 10.04 for the library checker
-cfg.env.AppendUnique(LINKFLAGS = '-static')
+#cfg.env.AppendUnique(LINKFLAGS = '-static')
 
 if not cfg.CheckCXX():
     print 'CXX compiler does not work'
@@ -182,24 +210,19 @@ if not cfg.CheckLib('netcdf_c++', language='c++'):
     print 'NetCDF C++ library not found'
     Exit(1)
 
-if not cfg.CheckLib('boost_python', language='c++'):
-    print 'boost_python C++ library not found'
-    Exit(1)
-
-if not cfg.CheckLib('boost_date_time', language='c++'):
-    print 'boost_date_time C++ library not found'
-    Exit(1)
-
-if not cfg.CheckLib('boost_regex', language='c++'):
-    print 'boost_regex C++ library not found'
-    Exit(1)
-
-if not cfg.CheckLib('boost_thread', language='c++'):
-    print 'boost_thread C++ library not found'
-    Exit(1)
+for library in boost_libraries:
+    if not cfg.CheckLib(library, language='c++'):
+        print '%s C++ library not found' % library
+        Exit(1)
     
 if not cfg.CheckPythonModule('argparse'):
     print "Python module argparse not found"
+
+if not cfg.CheckPythonModule('numpy'):
+    print "Python module numpy not found"
+
+import numpy
+env.AppendUnique(CXXFLAGS=['-I%s' % numpy.get_include()])
 
 if not cfg.CheckPythonModule('netCDF4'):
     print "Python module netCDF4 not found"

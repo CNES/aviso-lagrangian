@@ -35,37 +35,66 @@ void TimeSerie::Load(int ix0, const int ix1)
     if (ix0 < first_index_ || ix0 > last_index_ || ix1 < first_index_
             || ix1 > last_index_)
     {
-            first_index_ = ix0;
-            last_index_ = ix1;
+        first_index_ = ix0;
+        last_index_ = ix1;
 
-            std::map<std::string, int>::iterator it;
-            std::map<std::string, int> new_files;
-            for (int ix = ix0; ix <= ix1; ++ix)
+        std::map<std::string, int>::iterator it, jt, kt;
+        std::map<std::string, int> new_files;
+
+        // Creation of the new association "open file" and "readers index"
+        for (int ix = ix0; ix <= ix1; ++ix)
+        {
+            std::string filename = time_serie_->GetItem(ix);
+            new_files[filename] = ix - first_index_;
+        }
+
+        // Swap readers
+        for (it = new_files.begin(); it != new_files.end(); ++it)
+        {
+            jt = files_.find(it->first);
+
+            // If the file is already open
+            if (jt != files_.end())
             {
-                std::string filename = time_serie_->GetItem(ix);
-                int iy = ix - first_index_;
-                it = files_.find(filename);
+                int i1 = it->second;
+                int i2 = jt->second;
 
-                if(it != files_.end())
+                if (i1 != i2)
                 {
-                    std::swap(readers_[iy], readers_[it->second]);
-                    new_files[it->first] = iy;
-            }
-                else
-                    new_files[filename] = iy;
-            }
+                    // Search index previously used by this file
+                    for (kt = files_.begin(); kt != files_.end(); ++kt)
+                    {
+                        if (kt->second == it->second)
+                            break;
+                    }
 
-            for (it = new_files.begin(); it != new_files.end(); ++it)
-            {
-                if (files_.find(it->first) == files_.end())
-                {
-                    Debug(str(boost::format("Loading %s from %s") % varname_
-                        % it->first));
-                    readers_[it->second]->Open(it->first);
-                    readers_[it->second]->Load(varname_, unit_);
+                    // If the index exists (it can not exist if we create a
+                    // new driver) we update the information about these files
+                    if (kt != files_.end())
+                    {
+                        files_[jt->first] = i1;
+                        files_[kt->first] = i2;
+                    }
+
+                    // Swap readers
+                    std::swap(readers_[i2], readers_[i1]);
                 }
             }
-            files_ = new_files;
+        }
+
+        for (it = new_files.begin(); it != new_files.end(); ++it)
+        {
+
+            // If it is a new file, you must open it
+            if (files_.find(it->first) == files_.end())
+            {
+                Debug(str(boost::format("Loading %s from %s") % varname_
+                                        % it->first));
+                readers_[it->second]->Open(it->first);
+                readers_[it->second]->Load(varname_, unit_);
+            }
+        }
+        files_ = new_files;
     }
 }
 

@@ -23,20 +23,13 @@
 
 // ___________________________________________________________________________//
 
+
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
 
-/**
- * @brief Print debug message
- *
- * @param message Message to print
- **/
 void Debug(std::string const& message);
 
-/**
- * @brief Enables or disables the display of traces.
- *
- * @param value True if the user wishes to view the trace debugging.
- */
 void SetVerbose(const bool value);
 }

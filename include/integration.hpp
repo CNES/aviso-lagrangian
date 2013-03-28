@@ -45,7 +45,7 @@ private:
     double ix_;
 
 public:
-
+    
     /**
      * @brief Default constructor
      *
@@ -59,43 +59,22 @@ public:
         end_(end), inc_(begin > end ? -inc : inc), ix_(begin)
     {
     }
-
-    /**
-     * @brief Test whether there is still a time step to cross into the time
-     * interval defined.
-     *
-     * @return True if the path in the time interval is not complete.
-     */
+    
     inline bool GoAfter() const
     {
         return inc_ > 0 ? ix_ <= end_ : ix_ >= end_;
     }
-
-
-    /**
-     * @brief Move to the next time step.
-     */
+    
     inline void operator++()
     {
         ix_ += inc_;
     }
-
-    /**
-     * @brief Get the current time in the time interval defined
-     *
-     * @return The current time expressed in number of seconds elapsed since
-     * 1970
-     */
+    
     inline double operator()() const
     {
         return ix_;
     }
-
-    /**
-     * @brief Get the time step defined
-     *
-     * @return The time step expressed in seconds
-     */
+    
     inline double inc() const
     {
         return inc_;
