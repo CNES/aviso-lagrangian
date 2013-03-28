@@ -56,8 +56,7 @@ def load_cfg(env):
             else:
                 env[key] = []
                 for item in values:
-                    env[key].append(item)
-
+                    env[key] += item.split()
 
 def zipdist(target, source, env):
     file = zipfile.ZipFile("lagrangian.zip", mode="w")
@@ -102,6 +101,7 @@ load_cfg(env)
 env.Decider('MD5-timestamp')
 
 env.AppendUnique(CXXFLAGS=['-I./include', '-I.'])
+print str(env['CXXFLAGS'])
 
 dist_files = ['COPYING', 'configure.py', 'SConstruct', 'SConfigure']
 dist_files += source_list('src', mask='\.(cpp|hpp|h)$')
