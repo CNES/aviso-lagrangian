@@ -1032,16 +1032,14 @@ def usage():
                         'file or an ASCII file')
     parser.add_argument('outputfile',
                         help='The path to the image to create')
+    parser.add_argument('variable',
+                        help='NetCDF variable name to map',
+                        metavar='variable_name')
 
     # optional arguments
     parser.add_argument('--debug',
                         help='Print debugging message',
                         action='store_true')
-
-    # exclusive group
-    parser.add_argument('--variable',
-                        help='NetCDF variable name to map',
-                        metavar='NAME')
 
     # mapping options
     mapping_options(parser)
