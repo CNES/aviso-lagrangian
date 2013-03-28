@@ -14,6 +14,7 @@
 import re
 import os
 import site
+import time
 import distutils.sysconfig
 import zipfile
 
@@ -62,8 +63,12 @@ def zipdist(target, source, env):
     file = zipfile.ZipFile("lagrangian.zip", mode="w")
     for item in source:
         src = str(item)
-        dst = os.path.join("lagrangian", src)
-        file.write(src, dst, zipfile.ZIP_DEFLATED)
+        stat = os.stat(src)
+        mtime = time.localtime(stat[8])
+        info = zipfile.ZipInfo(src, mtime[0:6])
+        info.filename = os.path.join("lagrangian", src)
+        info.external_attr = stat[0] << 16L
+        file.writestr(info, open(src, 'rb').read())
     file.close()
     return None
 
