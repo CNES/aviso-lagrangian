@@ -135,7 +135,6 @@ load_cfg(env)
 env.Decider('MD5-timestamp')
 
 env.AppendUnique(CXXFLAGS=['-I./include', '-I.'])
-print str(env['CXXFLAGS'])
 
 dist_files = ['COPYING', 'configure.py', 'SConstruct', 'SConfigure']
 dist_files += source_list('src', mask='\.(cpp|hpp|h)$')

@@ -41,7 +41,7 @@ private:
 public:
 
     /**
-     * @brief Default constructor
+     * @brief Constructor setting coordinate values
      *
      * @param ix0
      * @param ix1
@@ -54,17 +54,11 @@ public:
     }
 
     /**
-     * @brief Represent an undefined coordinates
-     *
-     * @return an undefined coordinates
+     * @brief Default constructor that represent an undefined coordinates
      */
-    static Coordinates& UNDEF()
+    Coordinates()
+        : ix0_(std::numeric_limits<int>::max()), ix1_(), iy0_(), iy1_()
     {
-        static Coordinates coordinates(std::numeric_limits<int>::max(),
-                0,
-                0,
-                0);
-        return coordinates;
     }
 
     /**
@@ -137,15 +131,15 @@ public:
      * relative to the definition of its axis.
      * @param latitude in degrees
      * @param coordinates Coordinates will be calculated if the parameter
-     * coordinates is equal to Coordinates::UNDEF() otherwise the coordinates
-     * defined by the parameter will be used to interpolate the value.
+     * coordinates is undefined otherwise the coordinates defined by the
+     * parameter will be used to interpolate the value.
      *
      * @return Interpolated velocity or std::numeric_limits<double>::quiet_NaN()
      * if point is outside the grid.
      */
     virtual double Interpolate(double& longitude,
             const double latitude,
-            Coordinates& coordinates=Coordinates::UNDEF()) const = 0;
+            Coordinates& coordinates) const = 0;
 
     /**
      * @brief Returns the date of the grid expressed in JulianDay.

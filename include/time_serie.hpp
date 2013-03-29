@@ -191,18 +191,21 @@ public:
     /**
      * @brief Computes the value of point (x, y, t) in the series.
      *
-     * @param date t (in number of seconds elapsed since 1970-1-1
+     * @param date Date (in number of seconds elapsed since 1970-1-1
      * 00:00:00.0+00:00)
-     * @param longitude x
-     * @param latitude y
+     * @param longitude in degrees . In output, the longitude is normalized
+     * relative to the definition of its axis.
+     * @param latitude in degrees
+     * @param coordinates Coordinates will be calculated if the parameter
+     * coordinates is undefined otherwise the coordinates defined by the
+     * parameter will be used to interpolate the value.
      *
      * @return the interpolated value
-     *
      */
     double Interpolate(const double date,
             double& longitude,
             const double latitude,
-            Coordinates& coordinates=Coordinates::UNDEF());
+            Coordinates& coordinates);
 
     /**
      * @brief Returns the first date of the time series.

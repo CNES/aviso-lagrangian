@@ -53,21 +53,26 @@ bool TimeSerie::Compute(const double t,
         double& u,
         double& v) const
 {
+    Coordinates coordinates;
     double longitude = x;
 
     // If the time series consists of data with the same spatial coverage
     if(same_coordinates_)
     {
-        Coordinates coordinates = Coordinates::UNDEF();
-
         // Velocity interpolation
         u = u_->Interpolate(t, longitude, y, coordinates);
         v = v_->Interpolate(t, longitude, y, coordinates);
     }
     else
     {
-        u = u_->Interpolate(t, longitude, y);
-        v = v_->Interpolate(t, longitude, y);
+        u = u_->Interpolate(t, longitude, y, coordinates);
+
+        // Coordinates must be calculated. Longitude must be renormalized
+        // with respect to the axis of the new grid
+        coordinates = Coordinates();
+        longitude = x;
+
+        v = v_->Interpolate(t, longitude, y, coordinates);
     }
 
     return std::isnan(u) || std::isnan(v) ? false : true;

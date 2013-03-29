@@ -129,7 +129,7 @@ void Netcdf::WrapperOpen(std::string const & filename)
 void ReaderPythonModule()
 {
     //
-    // lagangian::Reader
+    // lagangian::Coordinates
     //
     bp::class_<Coordinates>(
             "Coordinates",
@@ -139,9 +139,7 @@ void ReaderPythonModule()
                 bp::arg("iy0"),
                 bp::arg("iy1"))))
         .def(
-            "UNDEF",
-            (Coordinates (*)())
-                (&Coordinates::UNDEF))
+            bp::init<>())
         .def(
             "Undef",
             (bool (Coordinates::*)())
@@ -162,8 +160,21 @@ void ReaderPythonModule()
             "iy1",
             (int (Coordinates::*)() const)
                 (&Coordinates::iy1))
-        .staticmethod( "UNDEF" );
-
+        .def(
+            "Update",
+            (void (Coordinates::*)
+                (const int,
+                 const int,
+                 const int,
+                 const int))
+                    (&Coordinates::Update),
+            (bp::arg("ix0"),
+             bp::arg("ix1"),
+             bp::arg("iy0"),
+             bp::arg("iy1")));
+    //
+    // lagrangian::Reader
+    //
     bp::class_<Reader, boost::noncopyable >("Reader")
         .def(
             "GetJulianDay",
@@ -207,7 +218,7 @@ void ReaderPythonModule()
                      (&Netcdf::WrapperInterpolate),
             (bp::arg("longitude"),
              bp::arg("latitude"),
-             bp::arg("coordinates")=Coordinates::UNDEF()))
+             bp::arg("coordinates")))
         .def(
             "Load",
             (void (lagrangian::reader::Netcdf::*)

@@ -43,15 +43,9 @@ struct Coordinates: public lagrangian::Coordinates
     {
     }
 
-    Coordinates(lagrangian::Coordinates& arg):
-        lagrangian::Coordinates(arg)
+    Coordinates():
+        lagrangian::Coordinates()
     {
-    }
-
-    static Coordinates UNDEF()
-    {
-        static Coordinates result(lagrangian::Coordinates::UNDEF());
-        return result;
     }
 };
 
@@ -66,7 +60,7 @@ struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
 
     virtual double Interpolate(double& longitude,
             double const latitude,
-            lagrangian::Coordinates& coordinates=lagrangian::Coordinates::UNDEF()) const;
+            lagrangian::Coordinates& coordinates) const;
 
 
     virtual lagrangian::Axis& axis_x();
@@ -93,7 +87,7 @@ struct Netcdf: lagrangian::reader::Netcdf, bp::wrapper<
 
     bp::tuple WrapperInterpolate(double longitude,
             double const latitude,
-            Coordinates coordinates=Coordinates::UNDEF()) const;
+            Coordinates coordinates) const;
 
     virtual void Load(std::string const & varname,
             std::string const & unit = "");

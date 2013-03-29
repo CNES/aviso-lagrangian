@@ -109,16 +109,15 @@ public:
      * @param x coordinate
      * @param y coordinate
      * @param coordinates Coordinates will be calculated if the parameter
-     * coordinates is equal to Coordinates::UNDEF() otherwise the coordinates
-     * defined by the parameter Coordinates::UNDEF() will be used to
-     * interpolate the value.
+     * coordinates is undefined otherwise the coordinates defined by the
+     * parameter will be used to interpolate the value.
      *
      * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
      * point is outside the grid.
      */
     double Interpolate(double& longitude,
             const double latitude,
-            Coordinates& coordinates=Coordinates::UNDEF()) const;
+            Coordinates& coordinates) const;
 
     /**
      * @brief Returns the date of the grid expressed in JulianDay.
