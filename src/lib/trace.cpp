@@ -25,14 +25,14 @@
 namespace lagrangian
 {
 
-class Trace
+class Configuration
 {
 private:
     bool verbose_;
 
 public:
 
-    Trace() :
+    Configuration() :
         verbose_(false)
     {
 
@@ -54,18 +54,28 @@ public:
     {
         verbose_ = value;
     }
+
+    static std::string Version()
+    {
+        return "__VERSION__";
+    }
 };
 
-static Trace g_trace;
+static Configuration g_configuration;
 
 void SetVerbose(const bool value)
 {
-    g_trace.set_verbose(value);
+    g_configuration.set_verbose(value);
 }
 
 void Debug(std::string const& message)
 {
-    g_trace.Debug(message);
+    g_configuration.Debug(message);
+}
+
+std::string Version()
+{
+    return g_configuration.Version();
 }
 
 }

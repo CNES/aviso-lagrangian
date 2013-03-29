@@ -18,11 +18,23 @@ import datetime
 import argparse
 import numpy
 import re
+import sys
 
 # __________________________________________________________________________ #
 
 def usage():
     parser = argparse.ArgumentParser(description='Compute path')
+
+    parser.add_argument('--version',
+                        help='print the version number and exit',
+                        action='store_true')
+
+    # Checks whether the user wishes to display the version number
+    args, _ = parser.parse_known_args()
+    if args.version:
+        print lagrangian.Version()
+        sys.exit(0)
+
     parser.add_argument('configuration', help='Configuration file')
     parser.add_argument('input', help='Input positions')
     parser.add_argument('output', help='Output positions')

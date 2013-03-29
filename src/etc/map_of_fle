@@ -46,16 +46,15 @@ def usage():
     Program syntax
     """
     parser = argparse.ArgumentParser(description='Compute Map of FLE')
-    parser.add_argument('configuration', help='Configuration file')
-    parser.add_argument('fle', help='Map of FLE in NetCDF format')
-    parser.add_argument('start_time', help='Start time')
-    parser.add_argument('end_time', help='End time')
     parser.add_argument('--step',
                         help='Grid step in degrees',
                         type=positive_value,
                         default=1)
     parser.add_argument('--verbose',
                         help='Verbose mode',
+                        action='store_true')
+    parser.add_argument('--version',
+                        help='print the version number and exit',
                         action='store_true')
     parser.add_argument('--separation',
                         help='Minimum separation in degrees',
@@ -82,6 +81,16 @@ def usage():
                         help='Y max in degrees',
                         type=float,
                         default=90)
+    args, _ = parser.parse_known_args()
+    if args.version:
+        print lagrangian.Version()
+        sys.exit(0)
+
+    parser.add_argument('configuration', help='Configuration file')
+    parser.add_argument('fle', help='Map of FLE in NetCDF format')
+    parser.add_argument('start_time', help='Start time')
+    parser.add_argument('end_time', help='End time')
+
     return parser.parse_args()
 
 # __________________________________________________________________________ #
@@ -105,7 +114,7 @@ def main():
 
     # Set debug
     lagrangian.SetVerbose(args.verbose)
-    
+
     # Check X & Y range
     if not args.x_min < args.x_max:
         raise RuntimeError("Invalid definition of x range.")
@@ -218,7 +227,7 @@ def signal_handler(signum, _):
 # __________________________________________________________________________ #
 
 if __name__ == '__main__':
-    
+
     # Initialize signal handler
     signal.signal(signal.SIGINT, signal_handler)
 

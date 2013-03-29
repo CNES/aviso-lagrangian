@@ -14,6 +14,8 @@
 import re
 import os
 import site
+import subprocess
+import tempfile
 import time
 import distutils.sysconfig
 import zipfile
@@ -59,8 +61,35 @@ def load_cfg(env):
                 for item in values:
                     env[key] += item.split()
 
+
+def get_version():
+    process = subprocess.Popen("LANG=C hg tags",
+                              shell=True,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+    stdout, _ = process.communicate()
+
+    for item in stdout.split("\n"):
+        if not item.startswith('tip'):
+            return item.split()[0].strip()
+
+def export(path, version):
+    if 'trace.cpp' in path:
+        result = tempfile.TemporaryFile()
+        with open(path, 'rb') as handle:
+            for line in handle:
+                if '__VERSION__' in line:
+                    line = line.replace('__VERSION__', version)
+                result.write(line)
+        result.seek(0)
+    else:
+        result = open(path, 'rb')
+    return result.read()
+
+
 def zipdist(target, source, env):
-    file = zipfile.ZipFile("lagrangian.zip", mode="w")
+    version = get_version()
+    file = zipfile.ZipFile("lagrangian-%s.zip" % version, mode="w")
     for item in source:
         src = str(item)
         stat = os.stat(src)
@@ -68,7 +97,7 @@ def zipdist(target, source, env):
         info = zipfile.ZipInfo(src, mtime[0:6])
         info.filename = os.path.join("lagrangian", src)
         info.external_attr = stat[0] << 16L
-        file.writestr(info, open(src, 'rb').read())
+        file.writestr(info, export(src, version))
     file.close()
     return None
 

@@ -59,4 +59,5 @@ BOOST_PYTHON_MODULE(lagrangian)
     wrapper::IntegrationPythonModule();
     wrapper::MapPythonModule();
     bp::def("SetVerbose", lagrangian::SetVerbose);
+    bp::def("Version", lagrangian::Version);
 }

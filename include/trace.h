@@ -32,4 +32,6 @@ namespace lagrangian
 void Debug(std::string const& message);
 
 void SetVerbose(const bool value);
+
+std::string Version();
 }
