@@ -140,7 +140,6 @@ private:
     int first_index_, last_index_;
     std::string varname_;
     std::string unit_;
-    bool same_coordinates_;
     reader::Factory::Type type_;
     std::map<std::string, int> files_;
 
@@ -203,9 +202,9 @@ public:
      * @return the interpolated value
      */
     double Interpolate(const double date,
-            double& longitude,
+            const double longitude,
             const double latitude,
-            Coordinates& coordinates);
+            CellProperties& cell);
 
     /**
      * @brief Returns the first date of the time series.
@@ -235,18 +234,6 @@ public:
     inline int GetNumElements() const
     {
         return time_serie_->GetNumElements();
-    }
-
-    /**
-     * @brief Returns true if the time series data have the same spatial
-     * coordinates.
-     *
-     * @return false if the time series data have different spatial
-     * coordinates.
-     */
-    inline bool same_coordinates() const
-    {
-        return same_coordinates_;
     }
 };
 

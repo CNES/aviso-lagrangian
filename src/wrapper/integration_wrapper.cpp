@@ -77,8 +77,9 @@ bp::tuple FiniteLyapunovExponents::WrapperCompute(
         const lagrangian::Iterator& it) const
 {
     lagrangian::Triplet p;
+    lagrangian::CellProperties cell;
 
-    bool result = lagrangian::FiniteLyapunovExponents::Compute(it, p);
+    bool result = lagrangian::FiniteLyapunovExponents::Compute(it, p, cell);
 
     return bp::make_tuple(result, p);
 }

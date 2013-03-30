@@ -44,7 +44,8 @@ struct Field: lagrangian::Field, bp::wrapper<lagrangian::Field>
             double const x,
             double const y,
             double & u,
-            double & v) const;
+            double & v,
+            lagrangian::CellProperties & cell) const;
 };
 
 // ___________________________________________________________________________//

@@ -24,6 +24,10 @@
 
 // ___________________________________________________________________________//
 
+#include "reader.hpp"
+
+// ___________________________________________________________________________//
+
 namespace lagrangian
 {
 
@@ -88,6 +92,7 @@ public:
      * @param y Latitude in degree
      * @param u Velocity
      * @param v Velocity
+     * @param cell TODO
      *
      * @return true if the value of the speed is set otherwise false.
      */
@@ -95,7 +100,8 @@ public:
             const double x,
             const double y,
             double& u,
-            double& v) const = 0;
+            double& v,
+            CellProperties& cell=CellProperties::NONE()) const = 0;
 
     /**
      * @brief Unit type used by this field.

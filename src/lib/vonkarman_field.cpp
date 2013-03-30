@@ -32,7 +32,8 @@ bool Vonkarman::Compute(const double t,
         const double x,
         const double y,
         double& u,
-        double& v) const
+        double& v,
+        CellProperties& cell) const
 {
     const double x2 = Square(x);
     const double y2 = Square(y);

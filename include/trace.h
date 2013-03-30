@@ -23,15 +23,27 @@
 
 // ___________________________________________________________________________//
 
-
-// ___________________________________________________________________________//
-
 namespace lagrangian
 {
 
+/**
+ * @brief Display a debugging message
+ *
+ * @param message Message to display
+ */
 void Debug(std::string const& message);
 
+/**
+ * @brief Enable or disable verbose mode
+ * @param value True to enable verbose mode
+ */
 void SetVerbose(const bool value);
 
+/**
+ * @brief Return the version number
+ *
+ * @return Version number
+ */
 std::string Version();
-}
+
+} // namespace lagrangian

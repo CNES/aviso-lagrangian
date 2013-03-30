@@ -54,7 +54,8 @@ public:
             const double x,
             const double y,
             double& u,
-            double& v) const;
+            double& v,
+            CellProperties& cell=CellProperties::NONE()) const;
 };
 
 } // namespace field

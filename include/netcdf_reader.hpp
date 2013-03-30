@@ -31,6 +31,38 @@ namespace lagrangian
 namespace reader
 {
 
+/**
+ * @brief Grid NetCDF CF reader.
+ *
+ * The grid must contain at least one variable and two vectors defining the
+ * axes of the longitudes and latitudes of the variable. For example :
+ *
+ * @code
+ * dimensions:
+ *   y = 915 ;
+ *   x = 1080 ;
+ * variables:
+ *    double y(y) ;
+ *        y:long_name = "Latitudes" ;
+ *        y:units = "degrees_north" ;
+ *    double x(x) ;
+ *        x:long_name = "Longitudes" ;
+ *        x:units = "degrees_east" ;
+ *    float u(x, y) ;
+ *        u:_FillValue = 999f ;
+ *        u:long_name = "U" ;
+ *        u:units = "cm/s" ;
+ *        u:date = "2012-01-01 00:00:00.000000 UTC" ;
+ *     float v(y, x) ;
+ *        v:_FillValue = 999f ;
+ *        v:long_name = "U" ;
+ *        v:units = "cm/s" ;
+ *        V:date = "2012-01-01 00:00:00.000000 UTC" ;
+ * @endcode
+ *
+ * @note: The variable to be read must set an attribute named "date" that
+ * define the date of data contained in the variable.
+ */
 class Netcdf: public Reader
 {
 private:
@@ -108,16 +140,14 @@ public:
      *
      * @param x coordinate
      * @param y coordinate
-     * @param coordinates Coordinates will be calculated if the parameter
-     * coordinates is undefined otherwise the coordinates defined by the
-     * parameter will be used to interpolate the value.
+     * @param cell Cell properties of the grid used for the interpolation.
      *
      * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
      * point is outside the grid.
      */
-    double Interpolate(double& longitude,
+    double Interpolate(const double longitude,
             const double latitude,
-            Coordinates& coordinates) const;
+            CellProperties& cell=CellProperties::NONE()) const;
 
     /**
      * @brief Returns the date of the grid expressed in JulianDay.
@@ -127,21 +157,6 @@ public:
      * @return the date
      */
     JulianDay GetJulianDay(const std::string& name) const;
-    /**
-     * @brief Returns the longitude coordinate
-     */
-    inline Axis& axis_x()
-    {
-        return axis_x_;
-    }
-
-    /**
-     * @brief Returns the latitude coordinate
-     */
-    inline Axis& axis_y()
-    {
-        return axis_y_;
-    }
 };
 
 } // namespace::reader

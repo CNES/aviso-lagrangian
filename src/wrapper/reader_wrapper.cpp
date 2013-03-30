@@ -34,31 +34,21 @@ lagrangian::JulianDay Reader::GetJulianDay(std::string const &name) const
     return function(name);
 }
 
-double Reader::Interpolate(double& longitude,
+double Reader::Interpolate(const double longitude,
         double const latitude,
-        lagrangian::Coordinates& coordinates) const
+        lagrangian::CellProperties& cell) const
 {
     bp::override function = this->get_override("Interpolate");
-    return function(longitude, latitude, boost::ref(coordinates));
+    return function(longitude, latitude, boost::ref(cell));
 }
 
-lagrangian::Axis& Reader::axis_x()
-{
-    throw std::logic_error("This method could not be overriden in Python");
-}
-
-lagrangian::Axis& Reader::axis_y()
-{
-    throw std::logic_error("This method could not be overriden in Python");
-}
-
-void Reader::Load(::std::string const & name, ::std::string const & unit)
+void Reader::Load(std::string const & name, std::string const & unit)
 {
     bp::override function = this->get_override("Load");
     function(name, unit);
 }
 
-void Reader::Open(::std::string const & filename)
+void Reader::Open(std::string const & filename)
 {
     bp::override function = this->get_override("Open");
     function(filename);
@@ -89,12 +79,12 @@ lagrangian::JulianDay Netcdf::WrapperGetJulianDay(std::string const & name) cons
     return lagrangian::reader::Netcdf::GetJulianDay(name);
 }
 
-bp::tuple Netcdf::WrapperInterpolate(double longitude,
+bp::tuple Netcdf::WrapperInterpolate(const double longitude,
         double const latitude,
-        Coordinates coordinates) const
+        lagrangian::CellProperties& cell) const
 {
     double result = this->lagrangian::reader::Netcdf::Interpolate(longitude,
-                latitude, coordinates);
+                latitude, cell);
     return bp::make_tuple(result, longitude);
 }
 
@@ -129,49 +119,77 @@ void Netcdf::WrapperOpen(std::string const & filename)
 void ReaderPythonModule()
 {
     //
-    // lagangian::Coordinates
+    // lagangian::CellProperties
     //
-    bp::class_<Coordinates>(
-            "Coordinates",
-            bp::init<int, int, int, int>((
-                bp::arg("ix0"),
-                bp::arg("ix1"),
-                bp::arg("iy0"),
-                bp::arg("iy1"))))
-        .def(
+    bp::class_<CellProperties>(
+            "CellProperties",
             bp::init<>())
         .def(
-            "Undef",
-            (bool (Coordinates::*)())
-                (&Coordinates::Undef))
-        .def(
-            "ix0",
-            (int (Coordinates::*)() const)
-                (&Coordinates::ix0))
-        .def(
-            "ix1",
-            (int (Coordinates::*)() const)
-                (&Coordinates::ix1))
-        .def(
-            "iy0",
-            (int (Coordinates::*)() const)
-                (&Coordinates::iy0))
-        .def(
-            "iy1",
-            (int (Coordinates::*)() const)
-                (&Coordinates::iy1))
-        .def(
-            "Update",
-            (void (Coordinates::*)
-                (const int,
+            "Contains",
+            (bool (CellProperties::*)
+                (const double,
+                 const double) const)
+                (&CellProperties::Contains),
+            (bp::arg("x"),
+             bp::arg("y")))
+         .def(
+             "NONE",
+             (CellProperties (*)())
+                (&CellProperties::NONE))
+         .def(
+             "Update",
+             (void (CellProperties::*)
+                (const double,
+                 const double,
+                 const double,
+                 const double,
+                 const int,
                  const int,
                  const int,
                  const int))
-                    (&Coordinates::Update),
-            (bp::arg("ix0"),
-             bp::arg("ix1"),
-             bp::arg("iy0"),
-             bp::arg("iy1")));
+                 (&CellProperties::Update),
+                    (bp::arg("x0"),
+                     bp::arg("x1"),
+                     bp::arg("y0"),
+                     bp::arg("y1"),
+                     bp::arg("ix0"),
+                     bp::arg("ix1"),
+                     bp::arg("iy0"),
+                     bp::arg("iy1")))
+        .def(
+            "x0",
+            (double (CellProperties::*)() const)
+                (&CellProperties::x0))
+         .def(
+             "x1",
+             (double (CellProperties::*)() const)
+                (&CellProperties::x1))
+        .def(
+            "y0",
+            (double (CellProperties::*)() const)
+                (&CellProperties::y0))
+        .def(
+            "y1",
+            (double (CellProperties::*)() const)
+                (&CellProperties::y1))
+        .def(
+            "ix0",
+            (int (CellProperties::*)() const)
+                (&CellProperties::ix0))
+        .def(
+            "ix1",
+            (int (CellProperties::*)() const)
+                 (&CellProperties::ix1))
+         .def(
+             "iy0",
+             (int (CellProperties::*)() const)
+                 (&CellProperties::iy0))
+         .def(
+             "iy1",
+             (int (CellProperties::*)() const)
+                 (&CellProperties::iy1))
+         .staticmethod( "NONE" );
+
     //
     // lagrangian::Reader
     //
@@ -212,13 +230,13 @@ void ReaderPythonModule()
         .def(
             "Interpolate",
             (bp::tuple (Netcdf::*)
-                (double,
+                (double const,
                  double const,
-                 Coordinates & ) const)
+                 lagrangian::CellProperties & ) const)
                      (&Netcdf::WrapperInterpolate),
             (bp::arg("longitude"),
              bp::arg("latitude"),
-             bp::arg("coordinates")))
+             bp::arg("cell")))
         .def(
             "Load",
             (void (lagrangian::reader::Netcdf::*)

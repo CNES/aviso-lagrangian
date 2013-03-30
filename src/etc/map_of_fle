@@ -81,6 +81,10 @@ def usage():
                         help='Y max in degrees',
                         type=float,
                         default=90)
+    parser.add_argument('--mask',
+                        help='NetCDF grid for fixing undefined cells',
+                        nargs=2,
+                        metavar=('PATH','VARNAME'))
     args, _ = parser.parse_known_args()
     if args.version:
         print lagrangian.Version()
@@ -153,6 +157,17 @@ def main():
                                              args.separation,
                                              args.step,
                                              ts)
+
+    # The nodes of the grid result, located on land are undefined. To speed
+    # up the calculation we use a external grid to remove these cells from
+    # the calculation.
+    if args.mask:
+        reader = lagrangian.NetcdfReader()
+        reader.Open(args.mask[0])
+        reader.Load(args.mask[1])
+        map_of_fle.Initialize(fle, reader)
+    else:
+        map_of_fle.Initialize(fle)
 
     # Computes map
     map_of_fle.Compute(fle)

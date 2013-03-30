@@ -332,13 +332,14 @@ public:
         return mode_;
     }
 
-    inline bool Compute(const Iterator& it, Triplet& p) const
+    inline bool Compute(const Iterator& it, Triplet& p,
+            CellProperties& cell) const
     {
         double x[3], y[3];
 
-        if (!rk_.Compute(it(), p.get_x0(), p.get_y0(), x[0], y[0])
-                || !rk_.Compute(it(), p.get_x1(), p.get_y1(), x[1], y[1])
-                || !rk_.Compute(it(), p.get_x2(), p.get_y2(), x[2], y[2]))
+        if (!rk_.Compute(it(), p.get_x0(), p.get_y0(), x[0], y[0], cell)
+                || !rk_.Compute(it(), p.get_x1(), p.get_y1(), x[1], y[1], cell)
+                || !rk_.Compute(it(), p.get_x2(), p.get_y2(), x[2], y[2], cell))
             return false;
 
         p.Update(it(), x[0], x[1], x[2], y[0], y[1], y[2]);

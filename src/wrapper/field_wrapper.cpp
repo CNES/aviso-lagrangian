@@ -31,10 +31,11 @@ bool Field::Compute(double const t,
         double const x,
         double const y,
         double &u,
-        double &v) const
+        double &v,
+        lagrangian::CellProperties& cell) const
 {
     bp::override function = this->get_override( "Compute" );
-    return function(t, x, y, u, v);
+    return function(t, x, y, u, v, cell);
 }
 
 // ___________________________________________________________________________//
@@ -91,8 +92,9 @@ bp::tuple TimeSerieField::WrapperCompute(double const t,
         double const y) const
 {
     double u, v;
+    lagrangian::CellProperties cell;
 
-    bool result = lagrangian::field::TimeSerie::Compute(t, x, y, u, v);
+    bool result = lagrangian::field::TimeSerie::Compute(t, x, y, u, v, cell);
 
     return bp::make_tuple(result, u, v);
 }
@@ -125,13 +127,15 @@ void FieldPythonModule()
                          double const,
                          double const,
                          double &,
-                         double & ) const)
+                         double &,
+                         lagrangian::CellProperties &) const)
                     (&lagrangian::Field::Compute)),
                 (bp::arg("t"),
                  bp::arg("x"),
                  bp::arg("y"),
                  bp::arg("u"),
-                 bp::arg("v")));
+                 bp::arg("v"),
+                 bp::arg("data")));
 
         }
         { //lagrangian::Field::GetUnit

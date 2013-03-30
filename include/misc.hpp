@@ -125,4 +125,4 @@ inline double NormalizeLongitude(double x,
     return x;
 }
 
-}
+} // namespace lagrangian

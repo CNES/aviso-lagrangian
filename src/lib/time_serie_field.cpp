@@ -42,7 +42,6 @@ TimeSerie::TimeSerie(const std::string& configuration,
             p.Value<std::string> ("V_NAME"),
             GetUnit(),
             reader_type);
-    same_coordinates_ = u_->same_coordinates() && v_->same_coordinates();
 }
 
 // ___________________________________________________________________________//
@@ -51,29 +50,11 @@ bool TimeSerie::Compute(const double t,
         const double x,
         const double y,
         double& u,
-        double& v) const
+        double& v,
+        CellProperties& cell) const
 {
-    Coordinates coordinates;
-    double longitude = x;
-
-    // If the time series consists of data with the same spatial coverage
-    if(same_coordinates_)
-    {
-        // Velocity interpolation
-        u = u_->Interpolate(t, longitude, y, coordinates);
-        v = v_->Interpolate(t, longitude, y, coordinates);
-    }
-    else
-    {
-        u = u_->Interpolate(t, longitude, y, coordinates);
-
-        // Coordinates must be calculated. Longitude must be renormalized
-        // with respect to the axis of the new grid
-        coordinates = Coordinates();
-        longitude = x;
-
-        v = v_->Interpolate(t, longitude, y, coordinates);
-    }
+     u = u_->Interpolate(t, x, y, cell);
+     v = v_->Interpolate(t, x, y, cell);
 
     return std::isnan(u) || std::isnan(v) ? false : true;
 }

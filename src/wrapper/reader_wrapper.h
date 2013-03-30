@@ -36,17 +36,19 @@ namespace wrapper
 
 // ___________________________________________________________________________//
 
-struct Coordinates: public lagrangian::Coordinates
+struct CellProperties: public lagrangian::CellProperties
 {
-    Coordinates(const int ix0, const int ix1, const int iy0, const int iy1):
-        lagrangian::Coordinates(ix0, ix1, iy0, iy1)
+    CellProperties():
+        lagrangian::CellProperties()
     {
     }
 
-    Coordinates():
-        lagrangian::Coordinates()
+    static CellProperties NONE()
     {
+        static CellProperties result;
+        return result;
     }
+
 };
 
 // ___________________________________________________________________________//
@@ -58,14 +60,9 @@ struct Reader: lagrangian::Reader, bp::wrapper<lagrangian::Reader>
 
     virtual lagrangian::JulianDay GetJulianDay(std::string const &name) const;
 
-    virtual double Interpolate(double& longitude,
+    virtual double Interpolate(const double longitude,
             double const latitude,
-            lagrangian::Coordinates& coordinates) const;
-
-
-    virtual lagrangian::Axis& axis_x();
-
-    virtual lagrangian::Axis& axis_y();
+            lagrangian::CellProperties& cell) const;
 
     virtual void Load(::std::string const & name, ::std::string const & unit);
 
@@ -85,9 +82,9 @@ struct Netcdf: lagrangian::reader::Netcdf, bp::wrapper<
 
     lagrangian::JulianDay WrapperGetJulianDay(std::string const & name) const;
 
-    bp::tuple WrapperInterpolate(double longitude,
+    bp::tuple WrapperInterpolate(const double longitude,
             double const latitude,
-            Coordinates coordinates) const;
+            lagrangian::CellProperties& cell) const;
 
     virtual void Load(std::string const & varname,
             std::string const & unit = "");

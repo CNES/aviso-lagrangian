@@ -207,6 +207,17 @@ void MapPythonModule()
                     (&MapOfFiniteLyapunovExponents::Compute),
             (bp::arg("fle")))
         .def(
+            "Initialize",
+            (void (MapOfFiniteLyapunovExponents::*)
+                (lagrangian::FiniteLyapunovExponents &))
+                    (&MapOfFiniteLyapunovExponents::Initialize))
+        .def(
+            "Initialize",
+            (void (MapOfFiniteLyapunovExponents::*)
+                (lagrangian::FiniteLyapunovExponents &,
+                 lagrangian::reader::Netcdf&))
+                    (&MapOfFiniteLyapunovExponents::Initialize))
+        .def(
             "GetMapOfLambda1",
             (bp::numeric::array (MapOfFiniteLyapunovExponents::* )
                 (double const,

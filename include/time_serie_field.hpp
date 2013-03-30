@@ -41,7 +41,6 @@ class TimeSerie: public Field
 private:
     lagrangian::TimeSerie *u_;
     lagrangian::TimeSerie *v_;
-    bool same_coordinates_;
 
 public:
 
@@ -89,6 +88,7 @@ public:
      * @param y Latitude expressed as degree
      * @param u
      * @param v
+     * @param cell TODO
      *
      * @return true if the value of the speed is set otherwise false.
      */
@@ -96,7 +96,8 @@ public:
             const double x,
             const double y,
             double& u,
-            double& v) const;
+            double& v,
+            CellProperties& cell) const;
 
     /**
      * @brief Returns the date of the first grid constituting the time series.

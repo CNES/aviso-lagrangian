@@ -129,16 +129,6 @@ FileList::FileList(const std::vector<std::string>& filenames,
         reader->Open(*its);
         files.push_back(std::make_pair(reader->GetJulianDay(varname).ToUnixTime(),
                 *its));
-        if (its == filenames.begin())
-        {
-            axis_x = reader->axis_x();
-            axis_y = reader->axis_y();
-        }
-        else
-        {
-            if (axis_x != reader->axis_x() or axis_y != reader->axis_y())
-                same_coordinates_ = false;
-        }
     }
 
     // Data are sorted according file date
@@ -172,15 +162,14 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
 
     // Create the time series
     time_serie_ = new FileList(filenames, varname_, readers_[0]);
-    same_coordinates_ = time_serie_->same_coordinates();
 }
 
 // ___________________________________________________________________________//
 
 double TimeSerie::Interpolate(const double date,
-        double& longitude,
+        const double longitude,
         const double latitude,
-        Coordinates& coordinates)
+        CellProperties& cell)
 {
     int it0, it1;
 
@@ -196,10 +185,10 @@ double TimeSerie::Interpolate(const double date,
 
     const double x0 = readers_[it0]->Interpolate(longitude,
             latitude,
-            coordinates);
+            cell);
     const double x1 = readers_[it1]->Interpolate(longitude,
             latitude,
-            coordinates);
+            cell);
 
     const double w0 = (t1 - date) * dx;
     const double w1 = (date - t0) * dx;

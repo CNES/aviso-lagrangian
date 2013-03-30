@@ -120,36 +120,43 @@ void Netcdf::Load(const std::string& name, const std::string& unit)
 
 // ___________________________________________________________________________//
 
-double Netcdf::Interpolate(double& longitude,
+double Netcdf::Interpolate(const double longitude,
         const double latitude,
-        Coordinates& coordinates) const
+        CellProperties& cell) const
 {
     if (data_.size() == 0)
         throw std::logic_error("No data loaded into memory");
 
-    if (coordinates.Undef())
+    double x = axis_x_.Normalize(longitude, 360);
+
+    if (!cell.Contains(x, latitude))
     {
         int ix0, ix1;
         int iy0, iy1;
 
-        longitude = axis_x_.Normalize(longitude, 360);
-
-        if (!axis_x_.FindIndexes(longitude, ix0, ix1) ||
+        if (!axis_x_.FindIndexes(x, ix0, ix1) ||
                 !axis_y_.FindIndexes(latitude, iy0, iy1))
             return std::numeric_limits<double>::quiet_NaN();
 
-        coordinates.Update(ix0, ix1, iy0, iy1);
+        cell.Update(axis_x_.GetCoordinateValue(ix0),
+                axis_x_.GetCoordinateValue(ix1),
+                axis_y_.GetCoordinateValue(iy0),
+                axis_y_.GetCoordinateValue(iy1),
+                ix0,
+                ix1,
+                iy0,
+                iy1);
     }
 
-    return BilinearInterpolation(axis_x_.GetCoordinateValue(coordinates.ix0()),
-            axis_x_.GetCoordinateValue(coordinates.ix1()),
-            axis_y_.GetCoordinateValue(coordinates.iy0()),
-            axis_y_.GetCoordinateValue(coordinates.iy1()),
-            GetValue(coordinates.ix0(), coordinates.iy0()),
-            GetValue(coordinates.ix1(), coordinates.iy0()),
-            GetValue(coordinates.ix0(), coordinates.iy1()),
-            GetValue(coordinates.ix1(), coordinates.iy1()),
-            longitude,
+    return BilinearInterpolation(cell.x0(),
+            cell.x1(),
+            cell.y0(),
+            cell.y1(),
+            GetValue(cell.ix0(), cell.iy0()),
+            GetValue(cell.ix1(), cell.iy0()),
+            GetValue(cell.ix0(), cell.iy1()),
+            GetValue(cell.ix1(), cell.iy1()),
+            x,
             latitude);
 }
 

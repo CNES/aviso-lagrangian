@@ -20,11 +20,11 @@
 // ___________________________________________________________________________//
 
 #include <cstdlib>
-#include <boost/thread.hpp>
 
 // ___________________________________________________________________________//
 
 #include "integration.hpp"
+#include "netcdf_reader.hpp"
 #include "trace.h"
 
 // ___________________________________________________________________________//
@@ -39,6 +39,9 @@ namespace std
 namespace lagrangian
 {
 
+/**
+ * Properties of a regular grid
+ */
 class MapProperties
 {
 protected:
@@ -49,6 +52,16 @@ protected:
     int ny_;
 
 public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param nx Number of longitudes
+     * @param ny Number of latitudes
+     * @param x_min Minimal longitude
+     * @param y_min Minimal latitude
+     * @param step Step between two consecutive longitudes and latitudes
+     */
     MapProperties(const int nx,
             const int ny,
             const double x_min,
@@ -57,33 +70,81 @@ public:
         x_min_(x_min), y_min_(y_min), step_(step), nx_(nx), ny_(ny)
     {
     }
+
+    /**
+     * @brief Default method invoked when a MapProperties is destroyed.
+     */
     virtual ~MapProperties()
     {
     }
+
+    /**
+     * @brief Get the longitude value
+     *
+     * @param ix Index of the longitude in the grid
+     * @return The longitude
+     */
     inline double GetXValue(const int ix) const
     {
         return x_min_ + ix * step_;
     }
+
+    /**
+     * @brief Get the latitude value
+     *
+     * @param ix Index of the latitude in the grid
+     * @return The longitude
+     */
     inline double GetYValue(const int iy) const
     {
         return y_min_ + iy * step_;
     }
+
+    /**
+     * @brief Get the number of longitudes in the grid
+     *
+     * @return The number of longitudes
+     */
     inline int get_nx() const
     {
         return nx_;
     }
+
+    /**
+     * @brief Get the number of latitudes in the grid
+     *
+     * @return The number of latitudes
+     */
     inline int get_ny() const
     {
         return ny_;
     }
+
+    /**
+     * @brief Get the step between two consecutive longitudes and latitudes
+     *
+     * @return The step
+     */
     inline double get_step() const
     {
         return step_;
     }
+
+    /**
+     * @brief Get the minimal longitude
+     *
+     * @return The minimal longitude
+     */
     inline double get_x_min() const
     {
         return x_min_;
     }
+
+    /**
+     * @brief Get the minimal latitude
+     *
+     * @return The minimal latitude
+     */
     inline double get_y_min() const
     {
         return y_min_;
@@ -124,34 +185,15 @@ namespace map
 class FiniteLyapunovExponents
 {
 private:
-    void ComputeHt(const int i_start,
-            const int i_stop,
-            lagrangian::FiniteLyapunovExponents& fle,
-            Iterator& it)
+    struct Arguments
     {
-        for (int ix = i_start; ix < i_stop; ++ix)
-        {
-            for (int iy = 0; iy < map_.get_ny(); ++iy)
-            {
-                Triplet& t = map_.GetItem(ix, iy);
-
-                if (!t.get_completed() && !t.IsMissing())
-                {
-                    if (!fle.Compute(it, t))
-                    {
-                        map_.SetItem(ix, iy, Triplet::MISSING());
-                    }
-                    else
-                    {
-                        if(fle.Separation(t))
-                            t.set_completed();
-
-                        map_.SetItem(ix, iy, t);
-                    }
-                }
-            }
-        }
-    }
+        int i_start;
+        int i_stop;
+        double completed;
+    };
+    void ComputeHt(Arguments* args,
+            lagrangian::FiniteLyapunovExponents& fle,
+            Iterator& it);
     int num_threads_;
 
 protected:
@@ -187,53 +229,12 @@ public:
     {
     }
 
-    void Compute(lagrangian::FiniteLyapunovExponents& fle)
-    {
-        for (int ix = 0; ix < map_.get_nx(); ++ix)
-        {
-            for (int iy = 0; iy < map_.get_ny(); ++iy)
-            {
-                Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
-                        map_.GetYValue(iy));
-                map_.SetItem(ix, iy, t);
-            }
-        }
+    void Initialize(lagrangian::FiniteLyapunovExponents& fle);
 
-        Iterator it = fle.GetIterator();
-        boost::thread_group threads;
+    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
+            lagrangian::reader::Netcdf& reader);
 
-        while (it.GoAfter())
-        {
-            fle.Fetch(it());
-
-            std::string date =
-                    JulianDay(
-                            JulianDay::FromUnixTime(it())).
-                                ToString("%Y-%m-%d %H:%M:%S");
-
-            Debug(str(boost::format("Start time step %s") % date));
-
-            for(int ix = 0; ix < num_threads_; ++ix)
-            {
-                int from = (ix * map_.get_nx()) / num_threads_;
-                int to = ((ix + 1) * map_.get_nx()) / num_threads_;
-
-                threads.create_thread(boost::bind(
-                        &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
-                        this,
-                        from,
-                        to,
-                        fle,
-                        it));
-            }
-
-            threads.join_all();
-
-            Debug(str(boost::format("Close time step %s") % date));
-
-            ++it;
-        }
-    }
+    void Compute(lagrangian::FiniteLyapunovExponents& fle);
 };
 
 }
