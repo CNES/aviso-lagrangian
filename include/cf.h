@@ -39,39 +39,48 @@ public:
      * @brief Represents the number to be added to the data after it is read.
      */
     static const std::string ADD_OFFSET;
+
     /**
      * @brief Identifies generic spatial coordinates.
      */
     static const std::string AXIS;
+
     /**
      * @brief Specifies the fill value used to pre-fill disk space allocated to
      * the variable.
      */
     static const std::string FILL_VALUE;
+
     /**
      * @brief Represents the factor to be applied to the data after it is read.
      */
     static const std::string SCALE_FACTOR;
+
     /**
      * @brief The name used to identify the physical quantity.
      */
     static const std::string STANDARD_NAME;
+
     /**
      * @brief Specifies the unit used for the variable's data.
      */
     static const std::string UNITS;
+
     /**
      * @brief Values indicating missing data
      */
     static const std::string MISSING_VALUE;
+
     /**
      * @brief Specified the maximum valid value for this variable.
      */
     static const std::string VALID_MAX;
+
     /**
      * @brief Specified the minimum valid value for this variable.
      */
     static const std::string VALID_MIN;
+
     /**
      * @brief A vector of two numbers specifying the minimum and maximum valid
      * values for this variable.

@@ -37,10 +37,11 @@ namespace units
 class Exception: public std::runtime_error
 {
 public:
-    /*
+    /**
      * @brief Default Constructor
      */
     Exception();
+
     /**
      * @brief Constructs a new instance with a character string describing the
      * error raised by uduntis2

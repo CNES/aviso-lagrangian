@@ -195,9 +195,7 @@ public:
      * @param longitude in degrees . In output, the longitude is normalized
      * relative to the definition of its axis.
      * @param latitude in degrees
-     * @param coordinates Coordinates will be calculated if the parameter
-     * coordinates is undefined otherwise the coordinates defined by the
-     * parameter will be used to interpolate the value.
+     * @param cell Cell properties of the grid used for the interpolation
      *
      * @return the interpolated value
      */
@@ -237,4 +235,4 @@ public:
     }
 };
 
-}
+} //namespace lagrangian

@@ -28,13 +28,27 @@ namespace lagrangian
 {
 namespace reader
 {
+
+/**
+ * @brief Reader factory
+ */
 class Factory
 {
 public:
+
+    /**
+     * @brief Type of fields reader known
+     */
     enum Type
     {
-        kNetCDF
+        kNetCDF//!< kNetCDF
     };
+
+    /**
+     * @brief Get an instance of a given reader
+     * @param type Reader type
+     * @return An instance of a reader
+     */
     static Reader* NewReader(const Type type)
     {
         switch(type)
@@ -46,5 +60,5 @@ public:
     }
 };
 
-} // namespace::reader
-} // namespace::lagrangian
+} // namespace reader
+} // namespace lagrangian

@@ -53,7 +53,7 @@ private:
     int seconds_;
     int microseconds_;
 
-    /*
+    /**
      * @brief Comparison of Julian days
      *
      * @param j julian day compared with the current instance.

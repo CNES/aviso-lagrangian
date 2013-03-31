@@ -56,6 +56,8 @@ public:
      * @brief Default constructor
      *
      * @param unit_type Unit field
+     *
+     * @throw std::invalid_argument if the type of unit is unknown
      */
     Field(const Field::UnitType unit_type): unit_type_(unit_type)
     {
@@ -92,7 +94,7 @@ public:
      * @param y Latitude in degree
      * @param u Velocity
      * @param v Velocity
-     * @param cell TODO
+     * @param cell Cell properties of the grid used for the interpolation
      *
      * @return true if the value of the speed is set otherwise false.
      */
@@ -132,4 +134,4 @@ public:
     }
 };
 
-}
+} // namespace lagrangian

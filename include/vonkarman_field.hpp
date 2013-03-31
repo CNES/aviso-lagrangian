@@ -37,7 +37,21 @@ private:
     double y0_;
     double l_;
     double u0_;
+
 public:
+
+    /**
+     * @brief TODO
+     *
+     * @param a
+     * @param w
+     * @param r0
+     * @param tc
+     * @param alpha
+     * @param y0
+     * @param l
+     * @param u0
+     */
     Vonkarman(const double a = 1,
             const double w = 35.06,
             const double r0 = 0.35,
@@ -50,6 +64,19 @@ public:
                 y0_(y0), l_(l), u0_(u0)
     {
     }
+
+    /**
+     * @brief TODO
+     *
+     * @param t
+     * @param x
+     * @param y
+     * @param u
+     * @param v
+     * @param cell
+     *
+     * @return true
+     */
     bool Compute(const double t,
             const double x,
             const double y,

@@ -458,4 +458,4 @@ public:
     }
 };
 
-}
+} // namespace lagrangian

@@ -173,5 +173,5 @@ JulianDay Netcdf::GetJulianDay(const std::string& name) const
     return JulianDay(attribute.get_string());
 }
 
-} // namespace::reader
-} // namespace::lagrangian
+} // namespace reader
+} // namespace lagrangian

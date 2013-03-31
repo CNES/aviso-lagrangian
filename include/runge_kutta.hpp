@@ -89,9 +89,12 @@ private:
     }
 
 public:
-    /*
-     * time_intervals number of time intervals.
-     * (h) size of interval : (end_time - start_time) / time_intervals
+
+    /**
+     * @brief Default constructor
+     *
+     * @param size_of_interval Number of time interval
+     * @param field Field reader
      */
     RungeKutta(const double size_of_interval, const Field* const field) :
         h_(size_of_interval), h_2_(h_ / 2), h_6_(h_ / 6), field_(field)
@@ -107,6 +110,17 @@ public:
         }
     }
 
+    /**
+     * @brief TODO
+     *
+     * @param t
+     * @param x
+     * @param y
+     * @param xi
+     * @param yi
+     * @param cell
+     * @return
+     */
     inline bool Compute(const double t,
             const double x,
             const double y,
@@ -153,4 +167,5 @@ public:
         return false;
     }
 };
-}
+
+} // namespace lagangian

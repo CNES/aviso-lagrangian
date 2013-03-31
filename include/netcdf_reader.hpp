@@ -78,6 +78,7 @@ private:
 
     GetIndex pGetIndex_;
 
+    // Search for a variable in the NetCDF file
     netcdf::Variable FindVariable(const std::string& name) const
     {
         netcdf::Variable variable = netcdf_.FindVariable(name);
@@ -88,16 +89,19 @@ private:
         return variable;
     }
 
+    // Get the index of the cell of a grid [Y, X]
     inline size_t GetIndexXY(const double ix, const double iy) const
     {
         return ix * axis_y_.GetNumElements() + iy;
     }
 
+    // Get the index of the cell of a grid [X, Y]
     inline size_t GetIndexYX(const double ix, const double iy) const
     {
         return iy * axis_x_.GetNumElements() + ix;
     }
 
+    // Get the value of the cell [ix, iy] of the grid
     inline double GetValue(const int ix, const int iy) const
     {
         double result = data_[(this->*pGetIndex_)(ix, iy)];
@@ -118,7 +122,7 @@ public:
      *
      * @param filename Path to the NetCDF grid
      *
-     * @thow std::logic_error If the function can not find the definition of
+     * @throw std::logic_error If the function can not find the definition of
      * longitudes or latitudes in the file.
      */
     void Open(const std::string& filename);

@@ -35,6 +35,7 @@ void Debug(std::string const& message);
 
 /**
  * @brief Enable or disable verbose mode
+ *
  * @param value True to enable verbose mode
  */
 void SetVerbose(const bool value);

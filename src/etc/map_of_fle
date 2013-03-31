@@ -135,6 +135,18 @@ def main():
     start_time = lagrangian.JulianDay(args.start_time)
     end_time = lagrangian.JulianDay(args.end_time)
 
+    if start_time < ts.StartTime():
+        raise RuntimeError("The start date (%s) is before the beginning "
+                           "of the time series (%s)" % 
+                           (start_time.ToString("%Y-%m-%dT%H:%M:%S"),
+                            ts.StartTime().ToString("%Y-%m-%dT%H:%M:%S")))
+
+    if end_time > ts.EndTime():
+        raise RuntimeError("The end date (%s) is after the ending "
+                           "of the time series (%s)" % 
+                           (end_time.ToString("%Y-%m-%dT%H:%M:%S"),
+                            ts.EndTime().ToString("%Y-%m-%dT%H:%M:%S")))
+
     nx = int((args.x_max - args.x_min) / args.step)
     ny = int((args.y_max - args.y_min) / args.step)
 

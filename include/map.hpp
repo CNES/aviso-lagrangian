@@ -40,7 +40,7 @@ namespace lagrangian
 {
 
 /**
- * Properties of a regular grid
+ * @brief Properties of a regular grid
  */
 class MapProperties
 {
@@ -153,11 +153,24 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Regular grid
+ */
 template<class T> class Map: public MapProperties
 {
 private:
     std::vector<T> grid_;
 public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param nx Number of longitudes
+     * @param ny Number of latitudes
+     * @param x_min Minimal longitude
+     * @param y_min Minimal latitude
+     * @param step Step between two consecutive longitudes and latitudes
+     */
     Map(const int nx,
             const int ny,
             const double x_min,
@@ -167,10 +180,26 @@ public:
                 grid_(std::vector<T>(nx * ny))
     {
     }
+
+    /**
+     * @brief Set the value for the cell [ix, iy]
+     *
+     * @param ix Index of the longitude in the grid
+     * @param iy Index of the latitude in the grid
+     * @param item Value
+     */
     inline void SetItem(const int ix, const int iy, const T& item)
     {
         grid_[ix * get_ny() + iy] = item;
     }
+
+    /**
+     * @brief Get the value for the cell [ix, iy]
+     *
+     * @param ix Index of the longitude in the grid
+     * @param iy Index of the latitude in the grid
+     * @return The value of the cell
+     */
     inline T& GetItem(const int ix, const int iy)
     {
         return grid_[ix * get_ny() + iy];
@@ -185,12 +214,15 @@ namespace map
 class FiniteLyapunovExponents
 {
 private:
+
+    // Thread arguments
     struct Arguments
     {
         int i_start;
         int i_stop;
         double completed;
     };
+
     void ComputeHt(Arguments* args,
             lagrangian::FiniteLyapunovExponents& fle,
             Iterator& it);
@@ -200,6 +232,19 @@ protected:
     Map<Triplet> map_;
 
 public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param nx Number of longitudes
+     * @param ny Number of latitudes
+     * @param x_min Minimal longitude
+     * @param y_min Minimal latitude
+     * @param step Step between two consecutive longitudes and latitudes
+     *
+     * @throw std::runtime_error if the shell variable OMP_NUM_THREADS
+     * contains an invalid value
+     */
     FiniteLyapunovExponents(const int nx,
             const int ny,
             const double x_min,
@@ -208,6 +253,8 @@ public:
                 num_threads_(1), map_(nx, ny, x_min, y_min, step)
 
     {
+
+        // Get the number of threads wanted by the user
         char* omp_num_threads = std::getenv("OMP_NUM_THREADS");
         if( omp_num_threads )
         {
@@ -225,15 +272,35 @@ public:
         Debug(str(boost::format("Uses %d threads") % num_threads_));
     }
 
+    /**
+     * @brief Default method invoked when a map is destroyed.
+     */
     virtual ~FiniteLyapunovExponents()
     {
     }
 
+    /**
+     * @brief Initializing the grid cells
+     *
+     * @param fle Finite Lyapunov exponents
+     */
     void Initialize(lagrangian::FiniteLyapunovExponents& fle);
 
+    /**
+     * @brief Initializing the grid cells. Cells located on the hidden values
+     * ​​(eg continents) will be deleted from the calculation
+     *
+     * @param fle Finite Lyapunov exponents
+     * @param reader NetCDF reader allow to access of the mask's value.
+     */
     void Initialize(lagrangian::FiniteLyapunovExponents& fle,
             lagrangian::reader::Netcdf& reader);
 
+    /**
+     * @brief Compute the map
+     *
+     * @param fle Finite Lyapunov exponents
+     */
     void Compute(lagrangian::FiniteLyapunovExponents& fle);
 };
 
@@ -283,6 +350,16 @@ private:
         return result;
     }
 public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param nx Number of longitudes
+     * @param ny Number of latitudes
+     * @param x_min Minimal longitude
+     * @param y_min Minimal latitude
+     * @param step Step between two consecutive longitudes and latitudes
+     */
     MapOfFiniteLyapunovExponents(const int nx,
             const int ny,
             const double x_min,

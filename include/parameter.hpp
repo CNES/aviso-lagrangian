@@ -41,7 +41,7 @@ private:
 
     bool Parse(std::string& line, std::string& buffer);
 
-    /*
+    /**
      * @brief Return items associated with a parameter.
      *
      * @param key Parameter to read
@@ -62,7 +62,7 @@ private:
         return (*it).second;
     }
 
-    /*
+    /**
      * @brief Transforms a string to the type defined by the user.
      *
      * @param value

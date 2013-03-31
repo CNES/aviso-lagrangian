@@ -36,6 +36,9 @@ namespace lagrangian
 namespace field
 {
 
+/**
+ * @brief Time series of velocity field
+ */
 class TimeSerie: public Field
 {
 private:
@@ -86,9 +89,9 @@ public:
      * @param t Time expressed as a number of seconds elapsed since 1970.
      * @param x Longitude expressed as degree
      * @param y Latitude expressed as degree
-     * @param u
-     * @param v
-     * @param cell TODO
+     * @param u Velocity
+     * @param v Velocity
+     * @param cell Cell properties of the grid used for the interpolation
      *
      * @return true if the value of the speed is set otherwise false.
      */

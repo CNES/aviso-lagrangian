@@ -48,6 +48,9 @@ private:
 
     ScaleMissing scale_missing_;
 
+    /**
+     * @brief Default constructor
+     */
     Variable() :
         name_(""), shape_(), ncvar_(NULL), scale_missing_()
     {

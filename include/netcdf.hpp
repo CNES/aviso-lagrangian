@@ -69,6 +69,8 @@ public:
 
     /**
      * @brief Open an existing NetCDF file (read-only)
+     *
+     * @throw std::runtime_error if filename is not a valid NetCDF file
      */
     void Open(const std::string& filename);
 
@@ -106,4 +108,4 @@ public:
     }
 };
 
-}
+} // namespace lagrangian
