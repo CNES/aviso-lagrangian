@@ -152,9 +152,9 @@ public:
      * @brief Loads the data necessary for the interpolation of the values in
      * the interval [begin, end].
      *
-     * @param begin Date of the first measurement to compute in number of
+     * @param t0 Date of the first measurement to compute in number of
      *  seconds elapsed since 1/1/1970)
-     * @param end Date of the last measurement to compute in number of
+     * @param t1 Date of the last measurement to compute in number of
      *  seconds elapsed since 1/1/1970)
      */
     void Load(const double t0, const double t1);
@@ -168,7 +168,7 @@ public:
      * undefined or contains an empty string, the object will not do unit
      * conversion(i.e. the unit of the interpolated value is the unit of the
      * file)
-     * @param reader Instance of an object implementing the class Reader. By
+     * @param type Instance of an object implementing the class Reader. By
      * default the class uses the reader of NetCDF grids.
      */
     TimeSerie(const std::vector<std::string>& filenames,

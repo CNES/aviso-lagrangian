@@ -142,8 +142,8 @@ public:
      * @brief Computes the value of the grid point requested by bilinear
      * interpolation
      *
-     * @param x coordinate
-     * @param y coordinate
+     * @param longitude Longitude in degrees
+     * @param latitude Latitude in degrees
      * @param cell Cell properties of the grid used for the interpolation.
      *
      * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
@@ -163,5 +163,5 @@ public:
     JulianDay GetJulianDay(const std::string& name) const;
 };
 
-} // namespace::reader
-} // namespace::lagrangian
+} // namespace reader
+} // namespace lagrangian

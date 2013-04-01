@@ -89,7 +89,6 @@ public:
      *
      * @param t Instance of a ptime object. If t isn't set, the new instance
      * will be contain the current date.
-     * @param coordinate_time Coordinate time
      */
     JulianDay(const boost::posix_time::ptime& t =
             boost::posix_time::microsec_clock::universal_time())
@@ -117,7 +116,7 @@ public:
      * @param seconds Seconds
      * @param microseconds Microseconds
      *
-     * @throw std::runtime_error if the number of seconds is greater than 86400
+     * @throw std::invalid_argument if the number of seconds is greater than 86400
      * or the number of microseconds is greater than 1000000
      */
     JulianDay(
@@ -306,10 +305,10 @@ inline std::istream& operator>>(std::istream& is, JulianDay& jd)
     static boost::regex triplet("(\\d+)\\s+(\\d+)\\s+(\\d+)");
     static boost::regex real("([-+]?\\d*\\.?\\d+)");
     boost::smatch match;
-    
+
     std::string line;
     std::getline(is, line);
-    
+
     // if the line contains three integers we construct a julian day from a
     // triplet: date, seconds, microseconds
     if (boost::regex_match(line, match, triplet))
@@ -421,7 +420,7 @@ public:
     /**
      * @brief Returns the julian day number that defines the modified julian
      * day.
-     * 
+     *
      * @return the julian day of reference
      */
     static JulianDay Gap()

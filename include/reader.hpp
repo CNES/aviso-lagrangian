@@ -66,6 +66,11 @@ public:
         return x >= x0_ && x <= x1_ && y >= y0_ && y <= y1_;
     }
 
+    /**
+     * @brief Return the representation of a cell unhandled
+     *
+     * @return A cell unhandled
+     */
     static CellProperties& NONE()
     {
         static CellProperties result;
@@ -203,7 +208,7 @@ public:
     /**
      * @brief Load into memory grid data
      *
-     * @param varname name of the grid who contains data
+     * @param name Name of the grid who contains data
      * @param unit Unit of data loaded into memory.
      */
     virtual void Load(const std::string& name, const std::string& unit) = 0;

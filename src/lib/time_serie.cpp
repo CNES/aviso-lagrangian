@@ -100,8 +100,19 @@ void TimeSerie::Load(int ix0, const int ix1)
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Predicate sorting time series
+ */
 struct SortPredicate
 {
+    /**
+     * @brief Test dates for two elements of the time series
+     *
+     * @param a Date a
+     * @param b Date b
+     *
+     * @return true if date a is less than the date b otherwise false
+     */
     bool operator()(const std::pair<double, std::string>& a,
             const std::pair<double, std::string>& b)
     {
@@ -224,4 +235,4 @@ void TimeSerie::Load(const double t0, const double t1)
     Load(it00, it11);
 }
 
-}
+} // namespace lagrangian

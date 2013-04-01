@@ -459,9 +459,9 @@ public:
      * @param start_time Start time of the integration
      * @param end_time End date of the integration
      * @param delta_t Time interval
-     * @param Integration mode
-     * @param Minimal separation in degrees
-     * @param The gap between two consecutive dots, in degrees, of the grid
+     * @param mode Integration mode
+     * @param min_separation Minimal separation in degrees
+     * @param delta The gap between two consecutive dots, in degrees, of the grid
      * @param field Field to use for computing the velocity of a point.
      *
      * @throw std::invalid_argument if the mode of integration is unknown.

@@ -229,6 +229,7 @@ private:
     int num_threads_;
 
 protected:
+    /// Grid
     Map<Triplet> map_;
 
 public:
@@ -304,7 +305,7 @@ public:
     void Compute(lagrangian::FiniteLyapunovExponents& fle);
 };
 
-}
+} // namespace map
 
 // ___________________________________________________________________________//
 
@@ -402,4 +403,4 @@ public:
     }
 };
 
-}
+} // namespace lagrangian

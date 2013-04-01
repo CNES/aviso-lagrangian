@@ -25,6 +25,9 @@
 namespace lagrangian
 {
 
+/**
+ * @brief Configuration manager
+ */
 class Configuration
 {
 private:
@@ -32,12 +35,20 @@ private:
 
 public:
 
+    /**
+     * @brief Default constructor
+     */
     Configuration() :
         verbose_(false)
     {
 
     }
 
+    /**
+     * @brief Display a debug message
+     *
+     * @param message Message to display
+     */
     inline void Debug(std::string const& message)
     {
         if (verbose_)
@@ -50,11 +61,21 @@ public:
         }
     }
 
+    /**
+     * @brief Enable or disable verbose mode
+     *
+     * @param value Value to enable (true) or disable (false) verbose mode
+     */
     inline void set_verbose(const bool value)
     {
         verbose_ = value;
     }
 
+    /**
+     * @brief Get the version number
+     *
+     * @return The version number
+     */
     static std::string Version()
     {
         return "__VERSION__";

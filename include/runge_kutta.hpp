@@ -49,6 +49,7 @@ private:
 
     MoveFunction pMove_;
 
+    // Move a point in a field speed expressed in degrees per second
     inline void MoveAngular(const double t,
             const double x0,
             const double y0,
@@ -61,6 +62,7 @@ private:
         y1 = y0 + v * t;
     }
 
+    // Move a point in a field speed expressed in meters per second
     inline void MoveMetric(const double t,
             const double x0,
             const double y0,
@@ -111,14 +113,14 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief Move a point in a field
      *
-     * @param t
-     * @param x
-     * @param y
-     * @param xi
-     * @param yi
-     * @param cell
+     * @param t Time in number of seconds elapsed since 1970
+     * @param x Longitude in degrees
+     * @param y Latitude in degrees
+     * @param xi Longitude after the move
+     * @param yi Latitude after the move
+     * @param cell Cell properties of the grid used for the interpolation
      * @return
      */
     inline bool Compute(const double t,
