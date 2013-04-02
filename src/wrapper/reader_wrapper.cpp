@@ -36,10 +36,11 @@ lagrangian::JulianDay Reader::GetJulianDay(std::string const &name) const
 
 double Reader::Interpolate(const double longitude,
         double const latitude,
+        double const fill_value,
         lagrangian::CellProperties& cell) const
 {
     bp::override function = this->get_override("Interpolate");
-    return function(longitude, latitude, boost::ref(cell));
+    return function(longitude, latitude, fill_value, boost::ref(cell));
 }
 
 void Reader::Load(std::string const & name, std::string const & unit)
@@ -79,13 +80,29 @@ lagrangian::JulianDay Netcdf::WrapperGetJulianDay(std::string const & name) cons
     return lagrangian::reader::Netcdf::GetJulianDay(name);
 }
 
-bp::tuple Netcdf::WrapperInterpolate(const double longitude,
+double Netcdf::Interpolate(const double longitude,
         double const latitude,
+        double const fill_value,
         lagrangian::CellProperties& cell) const
 {
-    double result = this->lagrangian::reader::Netcdf::Interpolate(longitude,
-                latitude, cell);
-    return bp::make_tuple(result, longitude);
+    if ( bp::override function = this->get_override( "Interpolate" ) )
+        return function(longitude, latitude, fill_value, boost::ref(cell));
+    else
+        return this->lagrangian::reader::Netcdf::Interpolate(longitude,
+                latitude,
+                fill_value,
+                boost::ref(cell));
+}
+
+double Netcdf::WrapperInterpolate(const double longitude,
+        double const latitude,
+        double const fill_value,
+        lagrangian::CellProperties& cell) const
+{
+    return lagrangian::reader::Netcdf::Interpolate(longitude,
+            latitude,
+            fill_value,
+            boost::ref(cell));
 }
 
 void Netcdf::Load(std::string const & varname, std::string const & unit)
@@ -121,24 +138,24 @@ void ReaderPythonModule()
     //
     // lagangian::CellProperties
     //
-    bp::class_<CellProperties>(
+    bp::class_<lagrangian::CellProperties>(
             "CellProperties",
             bp::init<>())
         .def(
             "Contains",
-            (bool (CellProperties::*)
+            (bool (lagrangian::CellProperties::*)
                 (const double,
                  const double) const)
-                (&CellProperties::Contains),
+                (&lagrangian::CellProperties::Contains),
             (bp::arg("x"),
              bp::arg("y")))
          .def(
              "NONE",
-             (CellProperties (*)())
-                (&CellProperties::NONE))
+             (lagrangian::CellProperties (*)())
+                (&lagrangian::CellProperties::NONE))
          .def(
              "Update",
-             (void (CellProperties::*)
+             (void (lagrangian::CellProperties::*)
                 (const double,
                  const double,
                  const double,
@@ -147,7 +164,7 @@ void ReaderPythonModule()
                  const int,
                  const int,
                  const int))
-                 (&CellProperties::Update),
+                 (&lagrangian::CellProperties::Update),
                     (bp::arg("x0"),
                      bp::arg("x1"),
                      bp::arg("y0"),
@@ -158,36 +175,36 @@ void ReaderPythonModule()
                      bp::arg("iy1")))
         .def(
             "x0",
-            (double (CellProperties::*)() const)
-                (&CellProperties::x0))
+            (double (lagrangian::CellProperties::*)() const)
+                (&lagrangian::CellProperties::x0))
          .def(
              "x1",
-             (double (CellProperties::*)() const)
-                (&CellProperties::x1))
+             (double (lagrangian::CellProperties::*)() const)
+                (&lagrangian::CellProperties::x1))
         .def(
             "y0",
-            (double (CellProperties::*)() const)
-                (&CellProperties::y0))
+            (double (lagrangian::CellProperties::*)() const)
+                (&lagrangian::CellProperties::y0))
         .def(
             "y1",
-            (double (CellProperties::*)() const)
-                (&CellProperties::y1))
+            (double (lagrangian::CellProperties::*)() const)
+                (&lagrangian::CellProperties::y1))
         .def(
             "ix0",
-            (int (CellProperties::*)() const)
-                (&CellProperties::ix0))
+            (int (lagrangian::CellProperties::*)() const)
+                (&lagrangian::CellProperties::ix0))
         .def(
             "ix1",
-            (int (CellProperties::*)() const)
-                 (&CellProperties::ix1))
+            (int (lagrangian::CellProperties::*)() const)
+                 (&lagrangian::CellProperties::ix1))
          .def(
              "iy0",
-             (int (CellProperties::*)() const)
-                 (&CellProperties::iy0))
+             (int (lagrangian::CellProperties::*)() const)
+                 (&lagrangian::CellProperties::iy0))
          .def(
              "iy1",
-             (int (CellProperties::*)() const)
-                 (&CellProperties::iy1))
+             (int (lagrangian::CellProperties::*)() const)
+                 (&lagrangian::CellProperties::iy1))
          .staticmethod( "NONE" );
 
     //
@@ -200,6 +217,18 @@ void ReaderPythonModule()
                 (std::string const &) const)
                     (&lagrangian::Reader::GetJulianDay)),
             (bp::arg("name")))
+        .def( 
+            "Interpolate",
+            bp::pure_virtual((double (lagrangian::Reader::*)
+                (double const,
+                 double const,
+                 double const,
+                 lagrangian::CellProperties& ) const)
+                     (&lagrangian::Reader::Interpolate)),
+            (bp::arg("longitude"),
+             bp::arg("latitude"),
+             bp::arg("fill_value")=0,
+             bp::arg("cell")=lagrangian::CellProperties::NONE()))
         .def(
             "Load",
             bp::pure_virtual((void (lagrangian::Reader::*)
@@ -227,16 +256,25 @@ void ReaderPythonModule()
                 (std::string const &) const)
                     (&Netcdf::WrapperGetJulianDay),
             (bp::arg("name")))
-        .def(
+
+        .def( 
             "Interpolate",
-            (bp::tuple (Netcdf::*)
+            (double (lagrangian::reader::Netcdf::*)
                 (double const,
                  double const,
-                 lagrangian::CellProperties & ) const)
+                 double const,
+                 lagrangian::CellProperties&) const)
+                     (&lagrangian::reader::Netcdf::Interpolate),
+            (double (Netcdf::*)
+                (double const,
+                 double const,
+                 double const,
+                 lagrangian::CellProperties&) const)
                      (&Netcdf::WrapperInterpolate),
             (bp::arg("longitude"),
              bp::arg("latitude"),
-             bp::arg("cell")))
+             bp::arg("fill_value")=0,
+             bp::arg("cell")=lagrangian::CellProperties::NONE()))
         .def(
             "Load",
             (void (lagrangian::reader::Netcdf::*)

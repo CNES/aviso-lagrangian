@@ -218,9 +218,14 @@ private:
     // Thread arguments
     struct Arguments
     {
+        bool enabled;
         int i_start;
         int i_stop;
         double completed;
+        
+        Arguments() : enabled(true), i_start(), i_stop(), completed()
+        {
+        }
     };
 
     void ComputeHt(Arguments* args,

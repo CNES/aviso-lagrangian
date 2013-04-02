@@ -38,6 +38,19 @@ bool Field::Compute(double const t,
     return function(t, x, y, u, v, cell);
 }
 
+void Field::Fetch( double const t0, double const t1 )
+{
+    if(bp::override function = this->get_override("Fetch"))
+        function(t0, t1);
+    else
+        this->lagrangian::Field::Fetch(t0, t1);
+}
+
+void Field::WrapperFetch(double const t0, double const t1)
+{
+    lagrangian::Field::Fetch(t0, t1);
+}
+
 // ___________________________________________________________________________//
 
 VonkarmanField::VonkarmanField(lagrangian::field::Vonkarman const & arg) :
@@ -99,6 +112,19 @@ bp::tuple TimeSerieField::WrapperCompute(double const t,
     return bp::make_tuple(result, u, v);
 }
 
+void TimeSerieField::Fetch( double const t0, double const t1 )
+{
+    if(bp::override function = this->get_override("Fetch"))
+        function(t0, t1);
+    else
+        this->lagrangian::field::TimeSerie::Fetch(t0, t1);
+}
+
+void TimeSerieField::WrapperFetch(double const t0, double const t1)
+{
+    lagrangian::field::TimeSerie::Fetch(t0, t1);
+}
+
 // ___________________________________________________________________________//
 
 void FieldPythonModule()
@@ -122,20 +148,36 @@ void FieldPythonModule()
 
             FieldExposer.def(
                 "Compute",
-                bp::pure_virtual((bool ( lagrangian::Field::* )
+                (bool ( lagrangian::Field::* )
                         (double const,
                          double const,
                          double const,
                          double &,
                          double &,
                          lagrangian::CellProperties &) const)
-                    (&lagrangian::Field::Compute)),
+                    (&lagrangian::Field::Compute),
                 (bp::arg("t"),
                  bp::arg("x"),
                  bp::arg("y"),
                  bp::arg("u"),
                  bp::arg("v"),
                  bp::arg("data")));
+
+        }
+        { //lagrangian::Field::Fetch
+
+            FieldExposer.def( 
+                "Fetch",
+                 (void (lagrangian::Field::*)
+                     (double const,
+                      double const))
+                         (&lagrangian::Field::Fetch),
+                 (void (Field::*)
+                     (double const,
+                      double const))
+                         (&Field::WrapperFetch),
+                 (bp::arg("t0"),
+                  bp::arg("t1")));
 
         }
         { //lagrangian::Field::GetUnit
@@ -204,6 +246,18 @@ void FieldPythonModule()
             (bp::arg("t"),
              bp::arg("x"),
              bp::arg("y")))
+        .def( 
+            "Fetch",
+            (void (lagrangian::field::TimeSerie::*)
+                (double const,
+                 double const))
+                    (&lagrangian::field::TimeSerie::Fetch),
+            (void (TimeSerieField::*)
+                (double const,
+                 double const))
+                    (&TimeSerieField::WrapperFetch),
+            (bp::arg("t0"),
+             bp::arg("t1")))
         .def(
             "EndTime",
             (lagrangian::JulianDay (lagrangian::field::TimeSerie::*)() const)

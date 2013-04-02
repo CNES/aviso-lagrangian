@@ -46,6 +46,10 @@ struct Field: lagrangian::Field, bp::wrapper<lagrangian::Field>
             double & u,
             double & v,
             lagrangian::CellProperties & cell) const;
+            
+    virtual void Fetch(double const t0, double const t1);
+   
+    void WrapperFetch(double const t0, double const t1);
 };
 
 // ___________________________________________________________________________//
@@ -86,6 +90,10 @@ struct TimeSerieField: lagrangian::field::TimeSerie, bp::wrapper<
     bp::tuple WrapperCompute(double const t,
             double const x,
             double const y) const;
+
+    virtual void Fetch(double const t0, double const t1);
+   
+    void WrapperFetch(double const t0, double const t1);
 };
 
 void FieldPythonModule();

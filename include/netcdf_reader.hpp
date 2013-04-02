@@ -102,10 +102,12 @@ private:
     }
 
     // Get the value of the cell [ix, iy] of the grid
-    inline double GetValue(const int ix, const int iy) const
+    inline double GetValue(const int ix,
+            const int iy,
+            const double fill_value=0) const
     {
         double result = data_[(this->*pGetIndex_)(ix, iy)];
-        return boost::math::isnan<double>(result) ? 0 : result;
+        return boost::math::isnan<double>(result) ? fill_value : result;
     }
 
 public:
@@ -144,6 +146,7 @@ public:
      *
      * @param longitude Longitude in degrees
      * @param latitude Latitude in degrees
+     * @param fill_value Value to be taken into account for fill values
      * @param cell Cell properties of the grid used for the interpolation.
      *
      * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
@@ -151,6 +154,7 @@ public:
      */
     double Interpolate(const double longitude,
             const double latitude,
+            const double fill_value=0,
             CellProperties& cell=CellProperties::NONE()) const;
 
     /**

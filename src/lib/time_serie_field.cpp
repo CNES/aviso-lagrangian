@@ -53,8 +53,8 @@ bool TimeSerie::Compute(const double t,
         double& v,
         CellProperties& cell) const
 {
-     u = u_->Interpolate(t, x, y, cell);
-     v = v_->Interpolate(t, x, y, cell);
+     u = u_->Interpolate(t, x, y, 0, cell);
+     v = v_->Interpolate(t, x, y, 0, cell);
 
     return std::isnan(u) || std::isnan(v) ? false : true;
 }

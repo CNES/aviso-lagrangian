@@ -219,6 +219,7 @@ public:
      * @param longitude in degrees . In output, the longitude is normalized
      * relative to the definition of its axis.
      * @param latitude in degrees
+     * @param fill_value Value to be taken into account for fill values
      * @param cell Cell properties of the grid used for the interpolation.
      *
      * @return Interpolated velocity or std::numeric_limits<double>::quiet_NaN()
@@ -226,6 +227,7 @@ public:
      */
     virtual double Interpolate(const double longitude,
             const double latitude,
+            const double fill_value=0,
             CellProperties& cell=CellProperties::NONE()) const = 0;
 
     /**

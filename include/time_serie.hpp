@@ -195,6 +195,7 @@ public:
      * @param longitude in degrees . In output, the longitude is normalized
      * relative to the definition of its axis.
      * @param latitude in degrees
+     * @param fill_value Value to be taken into account for fill values
      * @param cell Cell properties of the grid used for the interpolation
      *
      * @return the interpolated value
@@ -202,6 +203,7 @@ public:
     double Interpolate(const double date,
             const double longitude,
             const double latitude,
+            const double fill_value,
             CellProperties& cell);
 
     /**

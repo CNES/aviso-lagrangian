@@ -122,6 +122,7 @@ void Netcdf::Load(const std::string& name, const std::string& unit)
 
 double Netcdf::Interpolate(const double longitude,
         const double latitude,
+        const double fill_value,
         CellProperties& cell) const
 {
     if (data_.size() == 0)
@@ -152,10 +153,10 @@ double Netcdf::Interpolate(const double longitude,
             cell.x1(),
             cell.y0(),
             cell.y1(),
-            GetValue(cell.ix0(), cell.iy0()),
-            GetValue(cell.ix1(), cell.iy0()),
-            GetValue(cell.ix0(), cell.iy1()),
-            GetValue(cell.ix1(), cell.iy1()),
+            GetValue(cell.ix0(), cell.iy0(), fill_value),
+            GetValue(cell.ix1(), cell.iy0(), fill_value),
+            GetValue(cell.ix0(), cell.iy1(), fill_value),
+            GetValue(cell.ix1(), cell.iy1(), fill_value),
             x,
             latitude);
 }

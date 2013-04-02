@@ -180,6 +180,7 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
 double TimeSerie::Interpolate(const double date,
         const double longitude,
         const double latitude,
+        const double fill_value,
         CellProperties& cell)
 {
     int it0, it1;
@@ -196,9 +197,11 @@ double TimeSerie::Interpolate(const double date,
 
     const double x0 = readers_[it0]->Interpolate(longitude,
             latitude,
+            fill_value,
             cell);
     const double x1 = readers_[it1]->Interpolate(longitude,
             latitude,
+            fill_value,
             cell);
 
     const double w0 = (t1 - date) * dx;

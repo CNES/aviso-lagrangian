@@ -49,6 +49,7 @@ void FiniteLyapunovExponents::Initialize(
         lagrangian::reader::Netcdf& reader)
 {
     CellProperties cell;
+    int i = 0;
 
     for (int ix = 0; ix < map_.get_nx(); ++ix)
     {
@@ -58,8 +59,13 @@ void FiniteLyapunovExponents::Initialize(
                     map_.GetYValue(iy));
 
             if (std::isnan(reader.Interpolate(map_.GetXValue(ix),
-                    map_.GetYValue(iy), cell)))
+                    map_.GetYValue(iy),
+                    std::numeric_limits<double>::quiet_NaN(),
+                    cell)))
+            {
                 t.set_completed();
+                ++i;
+            }
             map_.SetItem(ix, iy, t);
         }
     }
@@ -71,6 +77,8 @@ void FiniteLyapunovExponents::ComputeHt(Arguments* args,
         lagrangian::FiniteLyapunovExponents& fle,
         Iterator& it)
 {
+    bool enabled = false;
+
     // Creating an object containing the properties of the interpolation
     CellProperties cell;
 
@@ -99,9 +107,11 @@ void FiniteLyapunovExponents::ComputeHt(Arguments* args,
 
                     map_.SetItem(ix, iy, t);
                 }
+                enabled = true;
             }
         }
     }
+    args->enabled = enabled;
 }
 
 // ___________________________________________________________________________//
@@ -141,6 +151,9 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
 
         for (int ix = 0; ix < num_threads_; ++ix)
         {
+            if (!args[ix].enabled)
+                continue;
+
             args[ix].i_start = (ix * map_.get_nx()) / num_threads_;
             args[ix].i_stop = ((ix + 1) * map_.get_nx()) / num_threads_;
 
@@ -153,7 +166,11 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
         threads.join_all();
 
         for (int ix = 0; ix < num_threads_; ++ix)
+        {
+            if (!args[ix].enabled)
+                continue;
             completed += args[ix].completed;
+        }
 
         Debug(str(boost::format("Close time step %s (%.02f%% completed)")
                 % date % (completed/items*100)));

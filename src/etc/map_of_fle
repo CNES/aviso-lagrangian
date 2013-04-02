@@ -81,6 +81,7 @@ def usage():
                         help='Y max in degrees',
                         type=float,
                         default=90)
+
     parser.add_argument('--mask',
                         help='NetCDF grid for fixing undefined cells',
                         nargs=2,
@@ -134,7 +135,7 @@ def main():
 
     start_time = lagrangian.JulianDay(args.start_time)
     end_time = lagrangian.JulianDay(args.end_time)
-
+    
     if start_time < ts.StartTime():
         raise RuntimeError("The start date (%s) is before the beginning "
                            "of the time series (%s)" % 
@@ -146,7 +147,6 @@ def main():
                            "of the time series (%s)" % 
                            (end_time.ToString("%Y-%m-%dT%H:%M:%S"),
                             ts.EndTime().ToString("%Y-%m-%dT%H:%M:%S")))
-
     nx = int((args.x_max - args.x_min) / args.step)
     ny = int((args.y_max - args.y_min) / args.step)
 
@@ -169,7 +169,6 @@ def main():
                                              args.separation,
                                              args.step,
                                              ts)
-
     # The nodes of the grid result, located on land are undefined. To speed
     # up the calculation we use a external grid to remove these cells from
     # the calculation.

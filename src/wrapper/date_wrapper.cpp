@@ -390,8 +390,8 @@ void DatePythonModule()
     JulianDayExposer.def(
             bp::init<int,int,int >((
                     bp::arg("day"),
-                    bp::arg("seconds"),
-                    bp::arg("microseconds"))));
+                    bp::arg("seconds")=0,
+                    bp::arg("microseconds")=0)));
     JulianDayExposer.def(bp::init<double>((
             bp::arg("day"))));
 
@@ -470,6 +470,7 @@ void DatePythonModule()
     JulianDayExposer.def( bp::self - bp::self );
     JulianDayExposer.def( bp::self_ns::str( bp::self ) );
   }
+  bp::implicitly_convertible< lagrangian::JulianDay, double >();
 
   //
   // lagrangian::ModifiedJulianDay
@@ -707,6 +708,5 @@ void DatePythonModule()
     CCSDSJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 }
-
 
 }
