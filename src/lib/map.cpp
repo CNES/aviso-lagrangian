@@ -49,7 +49,6 @@ void FiniteLyapunovExponents::Initialize(
         lagrangian::reader::Netcdf& reader)
 {
     CellProperties cell;
-    int i = 0;
 
     for (int ix = 0; ix < map_.get_nx(); ++ix)
     {
@@ -62,10 +61,7 @@ void FiniteLyapunovExponents::Initialize(
                     map_.GetYValue(iy),
                     std::numeric_limits<double>::quiet_NaN(),
                     cell)))
-            {
                 t.set_completed();
-                ++i;
-            }
             map_.SetItem(ix, iy, t);
         }
     }
