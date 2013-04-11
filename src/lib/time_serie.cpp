@@ -185,6 +185,10 @@ double TimeSerie::Interpolate(const double date,
 {
     int it0, it1;
 
+    // Verify that the user has loaded the grids needed for interpolation
+    if (first_index_ == -1)
+        throw std::logic_error("No data loaded into memory");
+
     time_serie_->FindIndexes(date, it0, it1);
 
     const double t0 = time_serie_->GetDate(it0);

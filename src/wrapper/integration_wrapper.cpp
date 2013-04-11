@@ -125,7 +125,14 @@ void IntegrationPythonModule()
         .def(
             "GetIterator",
             (lagrangian::Iterator (lagrangian::Integration::*)() const)
-                (&lagrangian::Integration::GetIterator));
+                (&lagrangian::Integration::GetIterator))
+        .def(
+            "Fetch",
+            (void (lagrangian::Integration::*)
+                (double const) const)
+                    (&lagrangian::Integration::Fetch),
+            (bp::arg("t")));
+
     //
     // lagrangian::Path
     //
