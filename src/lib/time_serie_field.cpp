@@ -42,6 +42,9 @@ TimeSerie::TimeSerie(const std::string& configuration,
             p.Value<std::string> ("V_NAME"),
             GetUnit(),
             reader_type);
+    fill_value_ = p.Exists("FILL_VALUE")
+        ? p.Value<double> ("FILL_VALUE")
+        : 0;
 }
 
 // ___________________________________________________________________________//
@@ -53,8 +56,8 @@ bool TimeSerie::Compute(const double t,
         double& v,
         CellProperties& cell) const
 {
-     u = u_->Interpolate(t, x, y, 0, cell);
-     v = v_->Interpolate(t, x, y, 0, cell);
+     u = u_->Interpolate(t, x, y, fill_value_, cell);
+     v = v_->Interpolate(t, x, y, fill_value_, cell);
 
     return std::isnan(u) || std::isnan(v) ? false : true;
 }

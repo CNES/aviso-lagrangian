@@ -44,6 +44,7 @@ class TimeSerie: public Field
 private:
     lagrangian::TimeSerie *u_;
     lagrangian::TimeSerie *v_;
+    double fill_value_;
 
 public:
 
