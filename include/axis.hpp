@@ -179,9 +179,6 @@ private:
         int index = static_cast<int> (boost::math::round((coordinate - start_)
                 / increment_));
 
-        if(is_circle_)
-            index %= GetNumElements();
-
         if (index < 0)
             return bounded ? 0 : -1;
 
@@ -403,9 +400,10 @@ public:
     {
         i0 = i1 = FindIndex(coordinate);
 
-        if (i0 == -1)
+        if (i0 == -1 && is_circle_)
         {
-            return false;
+            i0 = 0;
+            i1 = GetNumElements() - 1;
         }
         else if (GetNumElements() < 2)
         {

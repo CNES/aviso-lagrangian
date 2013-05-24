@@ -139,16 +139,8 @@ double Netcdf::Interpolate(const double longitude,
                 !axis_y_.FindIndexes(latitude, iy0, iy1))
             return std::numeric_limits<double>::quiet_NaN();
 
-        double x0 = axis_x_.GetCoordinateValue(ix0);
-        double x1 = axis_x_.GetCoordinateValue(ix1);
-
-        // If the point is located on the border 0 360 the west point has a
-        // longitude greater than the east point
-        if (x0 > x1)
-            x1 += 360;
-
-        cell.Update(x0,
-                x1,
+        cell.Update(axis_x_.GetCoordinateValue(ix0),
+                axis_x_.GetCoordinateValue(ix1),
                 axis_y_.GetCoordinateValue(iy0),
                 axis_y_.GetCoordinateValue(iy1),
                 ix0,
