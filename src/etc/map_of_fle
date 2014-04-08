@@ -25,6 +25,13 @@ import sys
 
 # __________________________________________________________________________ #
 
+SYSTEM_UNITS = {
+    "metric": lagrangian.kMetric,
+    "angular": lagrangian.kAngular
+}
+
+# __________________________________________________________________________ #
+
 def positive_value(value):
     """
     Check options for defining values strictly positive.
@@ -81,7 +88,10 @@ def usage():
                         help='Y max in degrees',
                         type=float,
                         default=90)
-
+    parser.add_argument('--unit',
+                        help='System of units for velocity',
+                        choices=SYSTEM_UNITS.keys(),
+                        default="metric")
     parser.add_argument('--mask',
                         help='NetCDF grid for fixing undefined cells',
                         nargs=2,
@@ -130,21 +140,22 @@ def main():
     NC_FILL_DOUBLE = 9.9692099683868690e+36
 
     # Initializes the time series to process
-    ts = lagrangian.TimeSerieField(args.configuration)
+    ts = lagrangian.TimeSerieField(args.configuration,
+                                   SYSTEM_UNITS[args.unit])
     delta = datetime.timedelta(0, args.delta * 60 * 60)
 
     start_time = lagrangian.JulianDay(args.start_time)
     end_time = lagrangian.JulianDay(args.end_time)
-    
+
     if start_time < ts.StartTime():
         raise RuntimeError("The start date (%s) is before the beginning "
-                           "of the time series (%s)" % 
+                           "of the time series (%s)" %
                            (start_time.ToString("%Y-%m-%dT%H:%M:%S"),
                             ts.StartTime().ToString("%Y-%m-%dT%H:%M:%S")))
 
     if end_time > ts.EndTime():
         raise RuntimeError("The end date (%s) is after the ending "
-                           "of the time series (%s)" % 
+                           "of the time series (%s)" %
                            (end_time.ToString("%Y-%m-%dT%H:%M:%S"),
                             ts.EndTime().ToString("%Y-%m-%dT%H:%M:%S")))
     nx = int((args.x_max - args.x_min) / args.step)
