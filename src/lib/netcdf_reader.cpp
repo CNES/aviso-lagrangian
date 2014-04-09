@@ -35,22 +35,13 @@ static inline double BilinearInterpolation(const double x0,
         const double x,
         const double y)
 {
-    const double dx = 1 / (x1 - x0);
-    const double dy = 1 / (y1 - y0);
+    double dx0 = x - x0;
+    double dy0 = y - y0;
+    double dx1 = x1 - x;
+    double dy1 = y1 - y;
 
-    const double wx0 = (x1 - x) * dx;
-    const double wx1 = (x - x0) * dx;
-
-    const double wy0 = (y1 - y) * dy;
-    const double wy1 = (y - y0) * dy;
-
-    const double w00 = wx0 * wy0; // 0
-    const double w01 = wx0 * wy1; // 2
-    const double w10 = wx1 * wy0; // 1
-    const double w11 = wx1 * wy1; // 3
-
-    return (z00 * w00 + z01 * w01 + z10 * w10 + z11 * w11) / (w00 + w01 + w10
-            + w11);
+    return (dy1 * (dx1 * z00 + dx0 * z10) + dy0 * (dx1 * z01 + dx0 * z11))
+            / ((x1 - x0) * (y1 - y0));
 }
 
 // ___________________________________________________________________________//

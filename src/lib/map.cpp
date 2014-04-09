@@ -38,6 +38,7 @@ void FiniteLyapunovExponents::Initialize(
             Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
                     map_.GetYValue(iy));
             map_.SetItem(ix, iy, t);
+            indexes_.PushBack(Index(ix, iy));
         }
     }
 }
@@ -62,6 +63,8 @@ void FiniteLyapunovExponents::Initialize(
                     std::numeric_limits<double>::quiet_NaN(),
                     cell)))
                 t.set_completed();
+            else
+                indexes_.PushBack(Index(ix, iy));
             map_.SetItem(ix, iy, t);
         }
     }
@@ -73,41 +76,29 @@ void FiniteLyapunovExponents::ComputeHt(Arguments* args,
         lagrangian::FiniteLyapunovExponents& fle,
         Iterator& it)
 {
-    bool enabled = false;
-
     // Creating an object containing the properties of the interpolation
     CellProperties cell;
 
-    // Resets the number of nodes completed
-    args->completed = 0;
-
-    for (int ix = args->i_start; ix < args->i_stop; ++ix)
+    for (int iz = args->i_start; iz < args->i_stop; ++iz)
     {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
+        const int ix = indexes_[iz].get_i();
+        const int iy = indexes_[iz].get_j();
+
+        Triplet& t = map_.GetItem(ix, iy);
+
+        if (!fle.Compute(it, t, cell))
         {
-            Triplet& t = map_.GetItem(ix, iy);
-
-            if (!t.get_completed() && !t.IsMissing())
+            map_.SetItem(ix, iy, Triplet::MISSING());
+        }
+        else
+        {
+            if (fle.Separation(t))
             {
-                if (!fle.Compute(it, t, cell))
-                {
-                    map_.SetItem(ix, iy, Triplet::MISSING());
-                }
-                else
-                {
-                    if (fle.Separation(t))
-                    {
-                        ++args->completed;
-                        t.set_completed();
-                    }
-
-                    map_.SetItem(ix, iy, t);
-                }
-                enabled = true;
+                t.set_completed();
             }
+            map_.SetItem(ix, iy, t);
         }
     }
-    args->enabled = enabled;
 }
 
 // ___________________________________________________________________________//
@@ -121,21 +112,6 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
     // Number of cells to process
     double items = map_.get_nx() * map_.get_ny();
 
-    // Number of cells completed
-    double completed = 0;
-
-    // Lists the possible masked cells
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
-    {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
-        {
-            Triplet& t = map_.GetItem(ix, iy);
-
-            if (t.get_completed())
-                ++completed;
-        }
-    }
-
     while (it.GoAfter())
     {
         fle.Fetch(it());
@@ -143,15 +119,13 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
         std::string date = JulianDay(JulianDay::FromUnixTime(it())).ToString(
                 "%Y-%m-%d %H:%M:%S");
 
-        Debug(str(boost::format("Start time step %s") % date));
+        Debug(str(boost::format("Start time step %s (%d cells)")
+                % date % indexes_.Size()));
 
         for (int ix = 0; ix < num_threads_; ++ix)
         {
-            if (!args[ix].enabled)
-                continue;
-
-            args[ix].i_start = (ix * map_.get_nx()) / num_threads_;
-            args[ix].i_stop = ((ix + 1) * map_.get_nx()) / num_threads_;
+            args[ix].i_start = (ix * indexes_.Size()) / num_threads_;
+            args[ix].i_stop = ((ix + 1) * indexes_.Size()) / num_threads_;
 
             threads.create_thread(
                     boost::bind(
@@ -161,15 +135,11 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
 
         threads.join_all();
 
-        for (int ix = 0; ix < num_threads_; ++ix)
-        {
-            if (!args[ix].enabled)
-                continue;
-            completed += args[ix].completed;
-        }
+        // Removing cells that are completed
+        indexes_.Erase(boost::bind(&FiniteLyapunovExponents::Completed, this, _1));
 
         Debug(str(boost::format("Close time step %s (%.02f%% completed)")
-                % date % (completed/items*100)));
+                % date % ((items - indexes_.Size()) / items * 100)));
 
         ++it;
     }

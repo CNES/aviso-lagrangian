@@ -180,6 +180,7 @@ def main():
                                              args.separation,
                                              args.step,
                                              ts)
+
     # The nodes of the grid result, located on land are undefined. To speed
     # up the calculation we use a external grid to remove these cells from
     # the calculation.

@@ -24,6 +24,7 @@
 // ___________________________________________________________________________//
 
 #include "integration.hpp"
+#include "list.hpp"
 #include "netcdf_reader.hpp"
 #include "trace.h"
 
@@ -215,23 +216,45 @@ class FiniteLyapunovExponents
 {
 private:
 
-    // Thread arguments
+    /// Thread arguments
     struct Arguments
     {
-        bool enabled;
         int i_start;
         int i_stop;
-        double completed;
         
-        Arguments() : enabled(true), i_start(), i_stop(), completed()
+        Arguments() : i_start(), i_stop()
         {
         }
     };
 
+    /**
+     * @brief Compute a sub part of the map in a separate thread
+     *
+     * @param args Parameters of the sub-matrix to compute
+     * @param fle Finite Lyapunov exponents
+     * @param it Current time step
+     */
     void ComputeHt(Arguments* args,
             lagrangian::FiniteLyapunovExponents& fle,
             Iterator& it);
+
+    /**
+     * @brief Test if the computation for a cell is over
+     *
+     * @param index Index of the cell
+     * @return True if the computation is over otherwise false
+     */
+    inline bool Completed(const Index& index)
+    {
+        Triplet& t = map_.GetItem(index.get_i(), index.get_j());
+        return t.get_completed() || t.IsMissing();
+    }
+
+    /// Number of threads
     int num_threads_;
+    
+    /// List of cells of the matrix to be solved
+    List<Index> indexes_;
 
 protected:
     /// Grid

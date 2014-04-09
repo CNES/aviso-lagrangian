@@ -413,6 +413,58 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Index a matrix cell
+ */
+class Index
+{
+private:
+    int i_, j_;
+
+public:
+
+    /**
+     * @brief Default constructor
+     */
+    Index() :
+            i_(), j_()
+    {
+    }
+
+    /**
+     * @brief Construct a new object defining an index
+     *
+     * @param i Index i
+     * @param j Index j
+     */
+    Index(const int i, const int j) :
+            i_(i), j_(j)
+    {
+    }
+
+    /**
+     * @brief Get the index i
+     *
+     * @return The nth i
+     */
+    inline int get_i() const
+    {
+        return i_;
+    }
+
+    /**
+     * @brief Get the index j
+     *
+     * @return The nth j
+     */
+    inline double get_j() const
+    {
+        return j_;
+    }
+};
+
+// ___________________________________________________________________________//
+
 class FiniteLyapunovExponents: public Integration
 {
 public:
