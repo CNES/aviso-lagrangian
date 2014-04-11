@@ -22,6 +22,16 @@ import os
 
 # __________________________________________________________________________ #
 
+def directory(path):
+    """
+    Check if path is a directory
+    """
+    if not os.path.isdir(path):
+        raise argparse.ArgumentTypeError('%r must be a directory' % path)
+    return path
+
+# __________________________________________________________________________ #
+
 def usage():
     """
     Parse commands line
@@ -31,10 +41,12 @@ def usage():
 
     parser.add_argument('src',
                         help='Directory containing the NetCDF grids to '
-                        'convert')
+                        'convert',
+                        type=directory)
     parser.add_argument('dst',
                         help='Directory containing the NetCDF grids '
-                        'converted')
+                        'converted',
+                        type=directory)
     parser.add_argument('u',
                         help='NetCDF variable containing the U component')
     parser.add_argument('v',
@@ -49,19 +61,6 @@ def usage():
 def get_files(directory, pattern):
     """
     Get the list of files to convert
-    """
-    result = []
-    for root, dirs, files in os.walk(directory):
-        result += [os.path.join(root, item)
-                for item in files
-                        if fnmatch.fnmatch(item, pattern)]
-    return result
-
-# __________________________________________________________________________ #
-
-def copy(src, directory):
-    """
-    Creating a copy of the file
     """
     result = []
     for root, dirs, files in os.walk(directory):
@@ -128,6 +127,9 @@ def copy(src, dst, u, v):
 # __________________________________________________________________________ #
 
 def read_var(variable):
+    """
+    Read velocity component and convert it in m/s if needed
+    """
     offset, scale = lagrangian.Units.GetConverter(
         variable.units.encode('ASCII'), "m/s")
     return variable[:] * scale + offset
@@ -138,8 +140,17 @@ def convert(x, y, u, v):
     """
     Convert U V components from metric to angular system units
     """
+    assert(u.shape == v.shape)
+
     nx = len(x)
     ny = len(y)
+
+    if nx == u.shape[0]:
+        assert(u.shape == (nx, ny))
+        transpose = False
+    else:
+        assert(u.shape == (ny, nx))
+        transpose = True
 
     # Keep longitude between -180, 180
     x[x > 180] -= 360
@@ -152,6 +163,10 @@ def convert(x, y, u, v):
         y0[ix,:] = y
     for ix in range(ny):
         x0[:,ix] = x
+
+    if transpose:
+        x0 = x0.transpose()
+        y0 = y0.transpose()
 
     # Conversion from spherical to cartesian coordinates and move it
     # for one second using U and V component 
@@ -167,9 +182,9 @@ def convert(x, y, u, v):
     yc =  u * cos_x - v * sin_y * sin_x
     zc =  v * cos_y
 
-    xc += 6367000 * cos_y * cos_x
-    yc += 6367000 * cos_y * sin_x
-    zc += 6367000 * sin_y
+    xc += 6371000 * cos_y * cos_x
+    yc += 6371000 * cos_y * sin_x
+    zc += 6371000 * sin_y
 
     # Conversion from cartesian to spherical coordinates
     x1 = numpy.degrees(numpy.arctan2(yc, xc))

@@ -43,8 +43,9 @@ def check_python_module(cfg, module):
     PATTERN = re.compile("module '(.+)' from '(.+)'")
     cfg.Message('Checking for Python module %s... ' % module)
     try:
-        
         m = PATTERN.search(str(__import__(module)))
+        if m is None:
+            raise ImportError(module)
         cfg.Result('yes')
         return (m.group(2), m.group(1))
     except ImportError:

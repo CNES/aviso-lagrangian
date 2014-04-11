@@ -29,7 +29,7 @@ namespace lagrangian
 /**
  * Earth Radius in centimeters
  */
-const double kEarthRadius = 6367000;
+const double kEarthRadius = 6371000;
 
 // ___________________________________________________________________________//
 
