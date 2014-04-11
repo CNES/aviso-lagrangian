@@ -15,6 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "axis_wrapper.h"
 #include "date_wrapper.h"
 #include "field_wrapper.h"
 #include "integration_wrapper.h"
@@ -22,6 +23,7 @@
 #include "map_wrapper.h"
 #include "parameter_wrapper.h"
 #include "trace.h"
+#include "units_wrapper.h"
 
 #include "boost/python/suite/indexing/vector_indexing_suite.hpp"
 
@@ -52,12 +54,14 @@ BOOST_PYTHON_MODULE(lagrangian)
                 bp::vector_indexing_suite<std::vector<std::string>, true>());
     }
 
+    wrapper::AxisPythonModule();
     wrapper::ParameterPythonModule();
     wrapper::DatePythonModule();
     wrapper::FieldPythonModule();
     wrapper::ReaderPythonModule();
     wrapper::IntegrationPythonModule();
     wrapper::MapPythonModule();
+    wrapper::UnitsPythonModule();
     bp::def("SetVerbose", lagrangian::SetVerbose);
     bp::def("Version", lagrangian::Version);
 }

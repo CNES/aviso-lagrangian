@@ -356,8 +356,8 @@ class Variable(object):
             logging.debug('x_min=%f, x_max=%f' % (numpy.min(self._x),
                                                   numpy.max(self._x)))
         if len(self._y):
-            logging.debug('y_min=%f, y_max=%f' % (numpy.min(self._z),
-                                                  numpy.max(self._z)))
+            logging.debug('y_min=%f, y_max=%f' % (numpy.min(self._y),
+                                                  numpy.max(self._y)))
         if len(self._z):
             logging.debug('z_mean=%f, z_std=%f, z_min=%f, z_max=%f' %
                           (numpy.mean(self._z),

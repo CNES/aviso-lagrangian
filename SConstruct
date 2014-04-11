@@ -167,6 +167,7 @@ env.Alias('install', lib_prefix)
 env.InstallPerm(bin_prefix,
                 ['src/etc/map_of_fle',
                  'src/etc/mapping',
+                 'src/etc/metric_to_angular'
                  'src/etc/path'],
                 0555)
 env.InstallPerm(lib_prefix, [lagrangian[0]], 0555)
