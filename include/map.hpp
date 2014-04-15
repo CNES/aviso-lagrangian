@@ -216,17 +216,6 @@ class FiniteLyapunovExponents
 {
 private:
 
-    /// Thread arguments
-    struct Arguments
-    {
-        int i_start;
-        int i_stop;
-        
-        Arguments() : i_start(), i_stop()
-        {
-        }
-    };
-
     /**
      * @brief Compute a sub part of the map in a separate thread
      *
@@ -234,7 +223,7 @@ private:
      * @param fle Finite Lyapunov exponents
      * @param it Current time step
      */
-    void ComputeHt(Arguments* args,
+    void ComputeHt(Splitter<Index>& splitter,
             lagrangian::FiniteLyapunovExponents& fle,
             Iterator& it);
 
@@ -252,9 +241,9 @@ private:
 
     /// Number of threads
     int num_threads_;
-    
+
     /// List of cells of the matrix to be solved
-    List<Index> indexes_;
+    SplitList<Index> indexes_;
 
 protected:
     /// Grid
@@ -285,7 +274,7 @@ public:
 
         // Get the number of threads wanted by the user
         char* omp_num_threads = std::getenv("OMP_NUM_THREADS");
-        if( omp_num_threads )
+        if (omp_num_threads)
         {
             try
             {

@@ -38,7 +38,7 @@ void FiniteLyapunovExponents::Initialize(
             Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
                     map_.GetYValue(iy));
             map_.SetItem(ix, iy, t);
-            indexes_.PushBack(Index(ix, iy));
+            indexes_.push_back(Index(ix, iy));
         }
     }
 }
@@ -64,7 +64,7 @@ void FiniteLyapunovExponents::Initialize(
                     cell)))
                 t.set_completed();
             else
-                indexes_.PushBack(Index(ix, iy));
+                indexes_.push_back(Index(ix, iy));
             map_.SetItem(ix, iy, t);
         }
     }
@@ -72,17 +72,18 @@ void FiniteLyapunovExponents::Initialize(
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::ComputeHt(Arguments* args,
+void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
         lagrangian::FiniteLyapunovExponents& fle,
         Iterator& it)
 {
     // Creating an object containing the properties of the interpolation
     CellProperties cell;
 
-    for (int iz = args->i_start; iz < args->i_stop; ++iz)
+    std::list<Index>::iterator first = splitter.begin();
+    while (first != splitter.end())
     {
-        const int ix = indexes_[iz].get_i();
-        const int iy = indexes_[iz].get_j();
+        const int ix = first->get_i();
+        const int iy = first->get_j();
 
         Triplet& t = map_.GetItem(ix, iy);
 
@@ -98,6 +99,7 @@ void FiniteLyapunovExponents::ComputeHt(Arguments* args,
             }
             map_.SetItem(ix, iy, t);
         }
+        ++first;
     }
 }
 
@@ -107,10 +109,11 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
 {
     Iterator it = fle.GetIterator();
     boost::thread_group threads;
-    std::vector<Arguments> args(num_threads_);
 
     // Number of cells to process
     double items = map_.get_nx() * map_.get_ny();
+
+    std::list<Splitter<Index> > splitters = indexes_.Split(num_threads_);
 
     while (it.GoAfter())
     {
@@ -120,26 +123,26 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
                 "%Y-%m-%d %H:%M:%S");
 
         Debug(str(boost::format("Start time step %s (%d cells)")
-                % date % indexes_.Size()));
+                % date % indexes_.size()));
 
-        for (int ix = 0; ix < num_threads_; ++ix)
+        for (std::list<lagrangian::Splitter<Index> >::iterator its =
+            splitters.begin(); its != splitters.end(); ++its)
         {
-            args[ix].i_start = (ix * indexes_.Size()) / num_threads_;
-            args[ix].i_stop = ((ix + 1) * indexes_.Size()) / num_threads_;
-
             threads.create_thread(
                     boost::bind(
                             &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
-                            this, &args[ix], fle, it));
+                            this, *its, fle, it));
         }
 
         threads.join_all();
 
         // Removing cells that are completed
-        indexes_.Erase(boost::bind(&FiniteLyapunovExponents::Completed, this, _1));
+        splitters = indexes_.Erase(boost::bind(
+                        &FiniteLyapunovExponents::Completed, this, _1),
+                        num_threads_);
 
         Debug(str(boost::format("Close time step %s (%.02f%% completed)")
-                % date % ((items - indexes_.Size()) / items * 100)));
+                % date % ((items - indexes_.size()) / items * 100)));
 
         ++it;
     }

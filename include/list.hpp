@@ -28,55 +28,84 @@ namespace lagrangian
 {
 
 /**
- * @brief List which support indexing
+ * @brief Iterators for traversing a sublist
  */
 template<class T>
-class List
+class Splitter
 {
 private:
-    std::list<T> items_;
-    std::vector<typename std::list<T>::iterator> it_;
+    typename std::list<T>::iterator begin_;
+    typename std::list<T>::iterator end_;
+
+public:
+
+    /**
+     * @brief Default constructor
+     *
+     * @param begin Start of the sublist
+     * @param end End of the sublist
+     */
+    Splitter(typename std::list<T>::iterator& begin,
+        typename std::list<T>::iterator& end) :
+            begin_(begin), end_(end)
+    {
+
+    }
+
+    /**
+     * @brief Start of the sublist
+     */
+    inline const typename std::list<T>::iterator begin() const
+    {
+        return begin_;
+    }
+
+    /**
+     * @brief End of the sublist
+     */
+    inline const typename std::list<T>::iterator& end() const
+    {
+        return end_;
+    }
+};
+
+/**
+ * @brief List that can be splitted into n sub-list.
+ */
+template<class T>
+class SplitList: public std::list<T>
+{
+private:
+
+    /**
+     * @brief To split a list into n sublists without deleting items
+     * @param value Value to test
+     * @return false
+     */
+    static inline bool predicate(const T& value)
+    {
+        return false;
+    }
 
 public:
 
     /**
      * @brief Default constructor
      */
-    List() :
-            items_(), it_()
+    SplitList() :
+            std::list<T>()
     {
     }
 
     /**
-     * @brief Returns the number of elements in the list.
+     * @brief Divides the list in sublists
      *
-     * @return The number of elements in the list
+     * @param splitters List of sublist.
+     * @param n_sublist Number of sublist to handle
      */
-    inline std::size_t Size() const
+    inline std::list< Splitter<T> > Split(const int n_sublist)
     {
-        return items_.size();
-    }
-
-    /**
-     * @brief Add data to the end of the list
-     *
-     * @param item Data to be added
-     */
-    inline void PushBack(const T& item)
-    {
-        items_.push_back(item);
-        it_.push_back(--(items_.end()));
-    }
-
-    /**
-     * @brief Returns a reference to the element at position n in the list
-     *
-     * @param n Position of an element in the list.
-     * @return The element at the specified position in the list
-     */
-    T& operator[](std::size_t n)
-    {
-        return *it_[n];
+        return Erase(predicate, n_sublist);
     }
 
     /**
@@ -86,26 +115,55 @@ public:
      * @param predicate Unary predicate that, taking a value of the same type
      * as those contained in the list object, returns true for those values
      * to be removed from the list, and false for those remaining.
+     * @param n_sublist Number of sublist to handle
+     * @return List of sublist.
      */
     template<typename Predicate>
-    void Erase(Predicate predicate)
-    {
-        typename std::list<T>::iterator it = items_.begin();
-        typename std::list<T>::iterator last = items_.end();
-        int ix = 0;
-
-        while (it != last)
-        {
-            if (predicate(*it))
-                it = items_.erase(it);
-            else
-            {
-                it_[ix++] = it;
-                ++it;
-            }
-        }
-        it_.resize(ix);
-    }
+    std::list< Splitter<T> > Erase(Predicate predicate, const int n_sublist);
 };
+
+template<class T> template<typename Predicate>
+std::list< Splitter<T> > SplitList<T>::Erase(Predicate predicate, const int n_sublist)
+{
+    typename std::list<T>::iterator it = this->begin();
+    typename std::list<T>::iterator last = this->end();
+    typename std::list<T>::iterator first = it;
+    std::list< Splitter<T> > splitters;
+    int ix = 0;
+    int i_sublist = 0;
+    int size = this->size();
+    int stop = size / n_sublist;
+
+    // For all items
+    while (it != last)
+    {
+        // Deletes the current element if the user wishes
+        if (predicate(*it))
+        {
+            // Resets the first iterator if needed
+            it = first == it
+                ? first = this->erase(it) : this->erase(it);
+        }
+        else
+        {
+            // We need to create a division
+            if (ix == stop)
+            {
+                splitters.push_back(Splitter<T>(first, it));
+
+                // Index of the last item of the next division
+                ++i_sublist;
+                stop = ((i_sublist + 1) * size) / n_sublist;
+                // Sets the first iterator
+                first = it;
+            }
+            ++ix;
+            ++it;
+        }
+    }
+    if (first != it)
+        splitters.push_back(Splitter<T>(first, it));
+    return splitters;
+}
 
 } // namespace lagrangian
