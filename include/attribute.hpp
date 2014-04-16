@@ -19,7 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include <netcdfcpp.h>
+#include <netcdf>
 #include <stdexcept>
 #include <vector>
 
@@ -54,24 +54,17 @@ public:
      *
      * @param ncatt An instance of NcAtt
      */
-    Attribute(const NcAtt* const ncatt) :
-        name_(ncatt->name())
+    Attribute(const netCDF::NcAtt& ncatt) :
+        name_(ncatt.getName())
     {
         // Attribute is a string ?
-        if (ncatt->type() == ncChar && ncatt->num_vals() > 1)
-        {
-            char* s = new char[ncatt->num_vals() + 1];
-            for (int ix = 0; ix < ncatt->num_vals(); ++ix)
-                s[ix] = ncatt->as_char(ix);
-            s[ncatt->num_vals()] = '\0';
-            svalue_ = std::string(s);
-            delete[] s;
-        }
+        if (ncatt.getType() == netCDF::ncChar || ncatt.getType() == netCDF::ncString)
+            ncatt.getValues(svalue_);
         // Get Attributes values as double
         else
         {
-            for (int ix = 0; ix < ncatt->num_vals(); ++ix)
-                value_.push_back(ncatt->as_double(ix));
+            value_.resize(ncatt.getAttLength());
+            ncatt.getValues(&value_[0]);
         }
     }
 

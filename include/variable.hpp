@@ -44,7 +44,7 @@ private:
     std::string name_;
     std::vector<long int> shape_;
 
-    NcVar* ncvar_;
+    netCDF::NcVar ncvar_;
 
     ScaleMissing scale_missing_;
 
@@ -52,7 +52,7 @@ private:
      * @brief Default constructor
      */
     Variable() :
-        name_(""), shape_(), ncvar_(NULL), scale_missing_()
+        name_(""), shape_(), ncvar_(), scale_missing_()
     {
     }
 
@@ -150,7 +150,7 @@ public:
      *
      * @param var an instance of NcVar object
      */
-    Variable(NcVar* var);
+    Variable(const netCDF::NcVar& var);
 
     /**
      * @brief Calculate if this is a classic coordinate variable: has same name

@@ -77,7 +77,7 @@ bool Variable::GetUnitsString(std::string& units) const
 void Variable::Read(std::vector<double>& data) const
 {
     data.resize(GetSize());
-    ncvar_->get(&data[0], &shape_[0]);
+    ncvar_.getVar(&data[0]);
 
     // Set "missing" data to nan
     scale_missing_.SetMissingToNan(data);
@@ -101,27 +101,25 @@ void Variable::Read(std::vector<double>& data, const std::string& to) const
 
 // ___________________________________________________________________________//
 
-Variable::Variable(NcVar* ncvar) :
-    name_(ncvar->name()), ncvar_(ncvar)
+Variable::Variable(const netCDF::NcVar& ncvar) :
+        name_(ncvar.getName()), ncvar_(ncvar)
 {
-    // Set globals attributes
-    for (int ix = 0; ix < ncvar_->num_atts(); ++ix)
-    {
-        NcAtt* ncatt = ncvar_->get_att(ix);
+    std::map<std::string, netCDF::NcVarAtt> atts = ncvar_.getAtts();
+    std::vector<netCDF::NcDim> dims = ncvar_.getDims();
 
-        attributes_.push_back(Attribute(ncatt));
-        delete ncatt;
-    }
+    // Set globals attributes
+    for (std::map<std::string, netCDF::NcVarAtt>::iterator it = atts.begin();
+            it != atts.end(); ++it)
+        attributes_.push_back(Attribute(it->second));
 
     // populates defined variables
-    for (int ix = 0; ix < ncvar_->num_dims(); ++ix)
+    for (std::vector<netCDF::NcDim>::iterator it = dims.begin();
+            it != dims.end(); ++it)
     {
-        NcDim* dim = ncvar_->get_dim(ix);
-
-        shape_.push_back(dim->size());
-        dimensions_.push_back(Dimension(dim->name(),
-                dim->size(),
-                dim->is_unlimited() == 1));
+        shape_.push_back(it->getSize());
+        dimensions_.push_back(Dimension(it->getName(),
+                it->getSize(),
+                it->isUnlimited()));
     }
 
     // Set scale, offset, missing and invalid data from attributes

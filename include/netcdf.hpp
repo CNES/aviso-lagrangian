@@ -21,7 +21,7 @@
 
 #include <boost/smart_ptr.hpp>
 #include <list>
-#include <netcdfcpp.h>
+#include <netcdf>
 
 // ___________________________________________________________________________//
 
@@ -39,7 +39,7 @@ namespace lagrangian
 class Netcdf: public netcdf::Group
 {
 private:
-    boost::shared_ptr<NcFile> ncfile_;
+    boost::shared_ptr<netCDF::NcFile> ncfile_;
     std::list<netcdf::Variable> variables_;
 
 public:
@@ -73,11 +73,6 @@ public:
      * @throw std::runtime_error if filename is not a valid NetCDF file
      */
     void Open(const std::string& filename);
-
-    /**
-     * @brief Close all resources associated with this file
-     */
-    void Close();
 
     /**
      * @brief Get all of the variables in the files.

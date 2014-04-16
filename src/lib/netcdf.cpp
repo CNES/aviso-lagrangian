@@ -27,37 +27,28 @@ namespace lagrangian
 
 void Netcdf::Open(const std::string& filename)
 {
-    ncfile_ = boost::shared_ptr<NcFile>(new NcFile(filename.c_str(),
-            NcFile::ReadOnly));
+    ncfile_ = boost::shared_ptr<netCDF::NcFile>(new netCDF::NcFile(filename,
+            netCDF::NcFile::read));
 
-    if (ncfile_->is_valid() == 0)
-        throw std::runtime_error(filename + " is not a valid netCDF file");
+    std::multimap<std::string, netCDF::NcDim> dims = ncfile_->getDims();
 
-    for (int ix = 0; ix < ncfile_->num_dims(); ++ix)
+    for (std::multimap<std::string, netCDF::NcDim>::iterator it = dims.begin();
+            it != dims.end(); ++it)
     {
-        NcDim* ncdim = ncfile_->get_dim(ix);
-        netcdf::Dimension dim(ncdim->name(),
-                ncdim->size(),
-                ncdim->is_unlimited() == 1);
+        netcdf::Dimension dim(it->second.getName(),
+                it->second.getSize(),
+                it->second.isUnlimited());
 
         dimensions_.push_back(dim);
     }
 
-    for (int ix = 0; ix < ncfile_->num_vars(); ++ix)
+    std::multimap<std::string, netCDF::NcVar> vars = ncfile_->getVars();
+
+    for (std::multimap<std::string, netCDF::NcVar>::iterator it = vars.begin();
+            it != vars.end(); ++it)
     {
-        NcVar* ncvar(ncfile_->get_var(ix));
-        netcdf::Variable variable(ncvar);
-
-        variables_.push_back(variable);
+        variables_.push_back(netcdf::Variable(it->second));
     }
-}
-
-// ___________________________________________________________________________//
-
-void Netcdf::Close()
-{
-    if (ncfile_->is_valid())
-        ncfile_->close();
 }
 
 }

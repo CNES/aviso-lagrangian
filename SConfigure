@@ -179,7 +179,7 @@ if not cfg.CheckCHeader('netcdf.h'):
     print 'NetCDF header not found'
     Exit(1)
 
-if not cfg.CheckCXXHeader('netcdfcpp.h'):
+if not cfg.CheckCXXHeader('netcdf'):
     print 'NetCDF C++ header not found'
     Exit(1)
 
@@ -207,7 +207,7 @@ if not cfg.CheckLib('netcdf', language='c'):
     print 'NetCDF C library not found'
     Exit(1)
 
-if not cfg.CheckLib('netcdf_c++', language='c++'):
+if not cfg.CheckLib('netcdf_c++4', language='c++'):
     print 'NetCDF C++ library not found'
     Exit(1)
 
