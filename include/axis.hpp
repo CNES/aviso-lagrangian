@@ -409,7 +409,7 @@ public:
         {
             i1 = i0;
         }
-        else
+        else if (i0 != -1)
         {
             GetCoordinateValue(i0) - coordinate > 1e-4 ? --i0 : ++i1;
 
