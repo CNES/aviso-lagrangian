@@ -47,10 +47,19 @@
 
     FSLE is defined as
 
-    \sigma = 1/T log( \sqrt( \lamda_max( \Delta ) ) / \delta_0 )
-           = ( 1 / (2*T) ) * log( ( \lamda_max( \Delta ) ) / \delta_0 )
+    \sigma = 1/T log( \sqrt( \lamda_max( \Delta ) )
+           = ( 1 / (2*T) ) * log( ( \lamda_max( \Delta ) )
 
     where \delta_0 is the initial separation distance of the particules
+
+    For more details see:
+
+    1. G. Haller, Lagrangian coherent structures and the rate of strain in two-dimensional turbulence
+    Phys. Fluids A 13 (2001) 3365-3385 (http://georgehaller.com/reprints/approx.pdf)
+    Remark: In this paper, FTLE is referred to as the Direct Lyapunov Exponent (DLE)
+    
+    2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
+
 
   */
 
@@ -78,8 +87,9 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
 
       Get element of the gradient of the flow map 
 
-      \grad \Phi = [ a00 a01 ]
-                   [ a10 a11 ]
+      \grad \Phi = (1 / \delta_0) * [ a00 a01 ]
+                                    [ a10 a11 ]
+      where \delta_0 is the initial separation distance of the particules
 
      */
     
@@ -98,13 +108,20 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
 
       Compute the eigenvalue of the Cauchy-Green strain tensor
       \Delta = (\grad \Phi)^* (\grad \Phi)
+      ( * is the transposition operator )
+
+      \grad \Phi = [ a00/\delta_x0 a01/\delta_y0 ]
+                   [ a10/\delta_x0 a11/\delta_y0 ]
+
+      Here the initial separation distance is isotropic: (i.e. delta_x0 = delta_y0 = delta_0)
+      then
       
-      \Delta = [ a00^2 + a01^2       a00*a10 + a01*a11 ]
-               [ a00*a10 + a01*a11       a11^2 + a10^2 ]
+      \Delta = ( 1 / \delta_0^2 ) * [ a00^2 + a01^2       a00*a10 + a01*a11 ]
+                                    [ a00*a10 + a01*a11       a11^2 + a10^2 ]
 
       Then eigenvalues of a 2x2 matrix are given by
 
-      \sigma_(+/-) = ( Tr(\Delta) +/- \sqrt( Tr(\Delta)^2 - 4 det(\Delta) ) ) / 2
+      \sigma_(+/-) = ( 1 / \delta_0^2 ) * [ Tr(\Delta) +/- \sqrt( Tr(\Delta)^2 - 4 det(\Delta) ) ] / 2
 
       where
       Tr(\Delta) = a00^2 + a01^2 + a11^2 + a10^2
@@ -129,14 +146,16 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
     const double s2 = sqrt((Square(a01 + a10) + Square(a00 - a11))
 			   * (Square(a01 - a10) + Square(a00 + a11)));
 
-    // (s1 + s2)/2 is the maximum eigenvalue
-    // (s1 - s2)/2 is the minimum eigenvalue
-    // f2_ = 1/ ( 2 delta_0^2) where delta_0 is the initial spatial separation
+    // f2_ = 1 / ( 2 delta_0^2) 
+    // f2_ * (s1 + s2) is the maximum eigenvalue
+    // f2_ * (s1 - s2) is the minimum eigenvalue
 
-    // lambda1 is the exponent computed from the maximum eigenvalue
+    // lambda1_ is the exponent computed from the maximum eigenvalue:
+    // lambda1_ = ( 1 / (2*T) ) * log( ( \lamda_max( \Delta ) )
     lambda1_ = f1 * log(f2_ * (s1 + s2));
 
     // lambda2 is the exponent computed from the minimum eigenvalue
+    // lambda1_ = ( 1 / (2*T) ) * log( ( \lamda_min( \Delta ) )
     lambda2_ = f1 * log(f2_ * (s1 - s2));
 
     // Compute the orientation theta1 and theta2
@@ -172,8 +191,9 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
   Details about the factorization of the eigenvalue of \Delta
 
    \Delta is a 2x2 symmetric matrix of the form
-   [ a b ]
-   [ b d ]
+   (1/\delta_0) * A where
+   A = [ a b ]
+       [ b d ]
    whith
    a = a00^2 + a01^2
    b = a00*a10 + a01*a11
@@ -181,9 +201,8 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
 
    On the first hand we have:
    
-   Tr(\Delta)^2 - 4 det(\Delta) = ( a - d )^2 + 4 b^2
+   Tr(A)^2 - 4 det(A) = ( a - d )^2 + 4 b^2
    = (a00^2 + a01^2 - a11^2 - a10^2 ) + 4 * (a00*a10 + a01*a11)^2
-
 
    On the second hand we have:
 
@@ -227,6 +246,6 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
    = 4 b^2
 
    Finally we get
-   s2^2 = (a-d)^2 + 4 b^2 = Tr(\Delta)^2 + 4 det(\Delta)
+   s2^2 = (a-d)^2 + 4 b^2 = Tr(A)^2 + 4 det(A)
    
 */
