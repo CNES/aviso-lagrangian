@@ -15,6 +15,50 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+    Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that represents
+    the rate of separation of initially neighbouring particles over a finite-time
+    window [t0, t0 + T ], where T is the time two particules need
+    to be advected in order to be separated from a given distance d.
+    
+    Let x(t ) = x(t ; x0, t0) be the position of a lagrangian particle
+    at time t, started at x0 at t=t0 and advected by the time-dependent
+    fluid flow u(x, t). 
+    
+    The Forward Finite-Time Lyapunov Exponent at a point x0 
+    and for the advection time T is defined as the growth factor of
+    the norm of the perturbation dx0 started around x0 and advected
+    by the flow after the finite advection time T.
+
+    Maximal stretching occurs when dx0 is aligned with the eigenvector associated
+    with the maximum eigenvalue \lambda_max of the Cauchy-Green strain tensor \Delta:
+
+    \Delta = [ \grad \Phi_0^T (x0) ]^* [ \grad \Phi_0^T (x0) ]
+
+    where \Phi_0^t : x0 -> x(t,x0,t0) is the flow map of the advection equation:
+    it links the location x0 of a lagragian particule at t=t0 to its position x(t,x0,t0)
+    at time t. * denotes the transposition operator.
+
+    FTLE is defined as
+
+    \sigma = ( 1 / (2*T) ) * log( \lamda_max( \Delta ) ) 
+
+    Finite-Size Lyapunov Exponent is similary defined: T is choosen so that neighbouring
+    particules separate from a given distance d.
+
+    Exponents(const Triplet& p) function implements the computation of the lyapunov exponents based on
+    maximal and minimal eigenvalues and orientation of eigenvectors of \Delta given the
+    elements of \grad \Phi_0^T matrix.
+    
+    For more details see:
+
+    1. G. Haller, Lagrangian coherent structures and the rate of strain in two-dimensional turbulence
+    Phys. Fluids A 13 (2001) 3365-3385 (http://georgehaller.com/reprints/approx.pdf)
+    Remark: In this paper, FTLE is referred to as the Direct Lyapunov Exponent (DLE)
+    
+    2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
+
+*/
 #pragma once
 
 // ___________________________________________________________________________//
