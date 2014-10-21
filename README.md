@@ -1,97 +1,28 @@
-Finite Size Lyapunov Exponent (FSLE) 
-is a local lagrangian diagnostics that is widely used for the study of 
-transport and mixing processes of oceanographic tracers (Sea surface temperature,
-Ocean color ...).
-Its computation is derived from the definition of Finite-Time Lyapunov 
-Exponent that allows the identification of  Lagrangian Coherent Structures.
+Finite Size Lyapunov Exponent (FSLE) is a local lagrangian diagnostics that is widely used for the study of transport and mixing processes of oceanographic tracers (Sea surface temperature, Ocean color ...).
+Its computation is derived from the definition of Finite-Time Lyapunov Exponent that allows the identification of  Lagrangian Coherent Structures.
 
-Given a time series of meso-scale velocity field, this code computes 
-corresponding sub-mesoscale maps of backward FLSE or FTLE. It also compute
-other diagnostics such as orientation of Finite-Time Lyapunov Vectors.
+Given a time series of meso-scale velocity field, this code computes corresponding sub-mesoscale maps of backward FLSE or FTLE. It also compute other diagnostics such as orientation of Finite-Time Lyapunov Vectors.
 
 Lagrangian Coherent Structures and Finite-Time Lyapunov Exponents
 ========================================================
 
-The transport of a tracer in a fluid is closely related to emergent
-patterns that are commonly referred to as \textit{coherent
- structures} or Lagrangian Coherent Structures (LCS) when they are defined 
-using fluid trajectories. For time-independant dynamic systems, 
-they correspond to  stable  and  unstable  manifolds  of  hyperbolic
-trajectories \cite{1992-WIGGINS}.  Coherent structures delimit
-regions  of whirls,  stretching,  or contraction  of
-tracer [1989-OTTINO][1989-OTTINO]: contraction is observed along stable
-manifolds whereas unstable manifolds correspond to divergent
-directions along which the tracer is stretched. Stable and unstable
-manifolds are material curves that act as transport barriers
-and that exhibits locally the strongest attraction, repulsion  or shearing  
-in the  flow over  a finite-time  interval \cite{2000b_HALLER}.
-LCSs are usually indentified in a
-practicall manner as maximizing ridges of Finite-Time Lyapunov
-Exponents (FTLE) field
-\cite{2001a-HALLER,2001-HALLER,2002-HALLER,2005-SHADDEN,2007-MATHUR-PhysRevLett}.
+The transport of a tracer in a fluid is closely related to emergent patterns that are commonly referred to as *coherent structures* or Lagrangian Coherent Structures (LCS) when they are defined using fluid trajectories. For time-independant dynamic systems, they correspond to  stable  and  unstable  manifolds  of  hyperbolic trajectories. Coherent structures delimit regions  of whirls,  stretching,  or contraction  of tracer: contraction is observed along stable manifolds whereas unstable manifolds correspond to divergent directions along which the tracer is stretched. Stable and unstable manifolds are material curves that act as transport barriers and that exhibits locally the strongest attraction, repulsion  or shearing in the  flow over  a finite-time  interval.
+LCSs are usually indentified in a practicall manner as maximizing ridges of Finite-Time Lyapunov Exponents (FTLE) field.
 
-FTLE is defined  as the largest eigenvalue of  the Cauchy-Green strain
-tensor  of   the  flow  map   (see  below  for  more   details).   The
-corresponding eigenvector is called Finite-Time Lyapunov Vector.
-FTLE and FSLE are  widely  used  to
-characterise  transport  and mixing processes in  oceanographic  flows where  the
-velocity field is only known as a finite data set
-\cite{%
-  2008-BERON-VERA-ATMO,%
-  2009-BERON-VERA-JPO,%
-  2010-BERON-VERA-JPO,%
-  2005a-LEKIEN-PhysicaD,%
-  2010-OLASCOAGA-NPG,%
-  2008-OLASCOAGA-JGR,%
-  2009-SHADDEN-DeepSeaRes%
-  1997-AURELL,1997-ARTALE%
-  2004-DOVIDIO%
-  2009-DOVIDIO%
-  2009b-DOVIDIO%
-  2007-LEHAHN	
-}.       
-Recent work also demonstrate the potential use of FTLE in tracer image assimilation in geophysical models
-\cite{2011-Titaud,2012-Gautier}. See also \cite{2010-PEACOCK-Chaos} which reviews the use  of  FTLE for
-detecting LCSs in other contexts.
+FTLE is defined  as the largest eigenvalue of  the Cauchy-Green strain tensor  of   the  flow  map   (see  below  for  more   details).   The corresponding eigenvector is called Finite-Time Lyapunov Vector. FTLE and FSLE are  widely  used  to characterise  transport  and mixing processes in  oceanographic  flows where  the velocity field is only known as a finite data set. Recent work also demonstrate the potential use of FTLE in tracer image assimilation in geophysical models. [See also](http://core.kmi.open.ac.uk/download/pdf/4884607.pdf) which reviews the use  of  FTLE for detecting LCSs in other contexts.
 
 FTLE and FSLE: definition and properties
-=========================================================================
+=================================
 
-FTLE is a  scalar local  notion that represents  the rate of  separation of
-initially   neighboring   particules   over   a   finite-time   window
-[t,t+T]. FTLE at a point x is defined as the growth factor of the norm of 
-the perturbation delta started  around x at time t and  advected by
-the flow after an advection time T. Maximal stretching
-occurs  when delta is aligned  with the eigenvector
-associated to the maximum eigenvalue lambda_max of the Cauchy-Green strain tensor:
-D = M^*M
-where M : x(t) -> x(t+T)  is the flow map of the advection system.
-This eigenvector  is referred  to as the  \textit{forward} Finite-Time
-Lyapunov Vector. The \textit{forward} FTLE at the point x 
-is then defined as:
-FTLE(x) = (1/2T) log(lambda_max).
+FTLE is a  scalar local  notion that represents  the rate of  separation of initially   neighboring   particules   over   a   finite-time   window *[t,t+T]*. FTLE at a point x is defined as the growth factor of the norm of the perturbation delta started  around x at time t and  advected by the flow after an advection time T. Maximal stretching occurs  when delta is aligned  with the eigenvector associated to the maximum eigenvalue lambda_max of the Cauchy-Green strain tensor: D = M^*M where M : x(t) -> x(t+T)  is the flow map of the advection system.
+This eigenvector  is referred  to as the *forward* Finite-Time Lyapunov Vector. The \textit{forward} FTLE at the point x is then defined as: FTLE(x) = (1/2T) log(lambda_max).
 
-FSLE are FTLE where T is not fixed a-priori but determined so that the particule
-separate from a given distance. FSLE at a point x and for a final separation distance 
-d is defined as:
-FSLE(x,d) = (1/2T(d)) log(lambda_max(d)).
-Seeding a  domain with
-particules initially located  on a grid leads to  the computation of a
-discretized  FSLE and FSLV fields.
+FSLE are FTLE where T is not fixed a-priori but determined so that the particule separate from a given distance. FSLE at a point x and for a final separation distance d is defined as: FSLE(x,d) = (1/2T(d)) log(lambda_max(d)). Seeding a  domain with particules initially located  on a grid leads to  the computation of a discretized  FSLE and FSLV fields.
 
-\textit{Backward} FSLE-Vs are  similarly defined, with the time
-direction  being  inverted  in the advection equation resolution.
-Ridges of BFTLE fields approximate attracting  LCSs \cite{2011-HALLER-PhysicaD}.
+*Backward* FSLE-Vs are  similarly defined, with the time direction  being  inverted  in the advection equation resolution. Ridges of BFTLE fields approximate attracting  LCSs.
 
-Backward FTLE fields  show contours  that  correspond reasonably  well  to the  main
-structures  such  as filaments,  fronts  and  spirals  that appear  in
-geophysical       and        bio-geochemical       tracer       fields
-\cite{2010-BERON-VERA-JPO,2009-SHADDEN-DeepSeaRes,2008-OLASCOAGA-JGR,2006-OLASCOAGA-GRL}.
-Also, orientation  of the gradient of 
-of a \textit{passive}    tracer   converges   to   that of
-backward FTLVs freely decaying  2D turbulence flow \cite{2002-LAPEYRE} 
-but this behaviour has been observed for  realistic
-oceanic  flows and  tracers~\cite{2009b-DOVIDIO}. 
+Backward FTLE fields  show contours  that  correspond reasonably  well  to the  main structures  such  as filaments,  fronts  and  spirals  that appear  in geophysical and bio-geochemical tracer fields.
+Also, orientation  of the gradient of a *passive* tracer   converges   to   that of backward FTLVs freely decaying  2D turbulence flow but this behaviour has been observed for  realistic oceanic  flows and  tracers. 
 
 Furthermore,
 \cite{2010-BERON-VERA-JPO,2010-BERON-VERA-JGR}
@@ -257,7 +188,10 @@ Olascoaga, M.~J., Rypina, I.~I., Brown, M.~G., Beron-Vera, F.~J., Ko\c{c}ak,
 Ott, E. 1993. Chaos in dynamical systems. {\em Chaos in Dynamical Systems} Ott,
   E. Cambridge University Press, New York, USA.
 
-[1989-OTTINO]: "Ottino, J. 1989. The kinematics of mixing: Stretching, chaos, and transport. {\em The Kinematics of Mixing: Stretching, Chaos, and Transport} Ottino, J. Cambridge University Press, Cambridge."
+\harvarditem{Ottino}{1989}{1989-OTTINO}
+Ottino, J. 1989. The kinematics of mixing: Stretching, chaos, and transport.
+  {\em The Kinematics of Mixing: Stretching, Chaos, and Transport} Ottino, J.
+  Cambridge University Press, Cambridge.
 
 \harvarditem{Peacock and Dabiri}{2010}{2010-PEACOCK-Chaos}
 Peacock, T. and Dabiri, J. 2010. Introduction to focus issue: Lagrangian
