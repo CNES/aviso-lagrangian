@@ -8,7 +8,7 @@ Given a time series of meso-scale velocity field, this code computes correspondi
 
 First steps with the software
 ======================
-[First read the documentation on how to build the library from source and learn to use the software](https://bitbucket.org/fbriol/lagrangian/wiki/INSTALL).
+[To know on how to build the library from sources and how to use the software](https://bitbucket.org/fbriol/lagrangian/wiki/INSTALL).
 
 Contents
 =======
