@@ -20,7 +20,6 @@ import netCDF4
 import numpy
 import os
 
-# __________________________________________________________________________ #
 
 def directory(path):
     """
@@ -30,14 +29,14 @@ def directory(path):
         raise argparse.ArgumentTypeError('%r must be a directory' % path)
     return path
 
-# __________________________________________________________________________ #
 
 def usage():
     """
     Parse commands line
     """
-    parser = argparse.ArgumentParser(description='Convert the U and V components '
-            'speeds from metric to angular system units')
+    parser = argparse.ArgumentParser(description='Convert the U and V '
+                                     'components speeds from metric to '
+                                     'angular system units')
 
     parser.add_argument('src',
                         help='Directory containing the NetCDF grids to '
@@ -56,7 +55,6 @@ def usage():
                         default="*.nc")
     return parser.parse_args()
 
-# __________________________________________________________________________ #
 
 def get_files(directory, pattern):
     """
@@ -65,11 +63,10 @@ def get_files(directory, pattern):
     result = []
     for root, dirs, files in os.walk(directory):
         result += [os.path.join(root, item)
-                for item in files
-                        if fnmatch.fnmatch(item, pattern)]
+                   for item in files
+                   if fnmatch.fnmatch(item, pattern)]
     return result
 
-# __________________________________________________________________________ #
 
 def get_axis(variables):
     """
@@ -89,7 +86,6 @@ def get_axis(variables):
         raise RuntimeError("Could not find the Y-axis")
     return x, y
 
-# __________________________________________________________________________ #
 
 def copy(src, dst, u, v):
     """
@@ -124,7 +120,6 @@ def copy(src, dst, u, v):
         if var_name not in [u, v]:
             new_var[:] = old_var[:]
 
-# __________________________________________________________________________ #
 
 def read_var(variable):
     """
@@ -134,7 +129,6 @@ def read_var(variable):
         variable.units.encode('ASCII'), "m/s")
     return variable[:] * scale + offset
 
-# __________________________________________________________________________ #
 
 def convert(x, y, u, v):
     """
@@ -160,16 +154,16 @@ def convert(x, y, u, v):
 
     # Build a matrix of latitude and longitude
     for ix in range(nx):
-        y0[ix,:] = y
+        y0[ix, :] = y
     for ix in range(ny):
-        x0[:,ix] = x
+        x0[:, ix] = x
 
     if transpose:
         x0 = x0.transpose()
         y0 = y0.transpose()
 
     # Conversion from spherical to cartesian coordinates and move it
-    # for one second using U and V component 
+    # for one second using U and V component
     lon = numpy.radians(x0)
     lat = numpy.radians(y0)
 
@@ -179,8 +173,8 @@ def convert(x, y, u, v):
     cos_y = numpy.cos(lat)
 
     xc = -u * sin_x - v * cos_x * sin_y
-    yc =  u * cos_x - v * sin_y * sin_x
-    zc =  v * cos_y
+    yc = u * cos_x - v * sin_y * sin_x
+    zc = v * cos_y
 
     xc += 6371000 * cos_y * cos_x
     yc += 6371000 * cos_y * sin_x
@@ -188,8 +182,8 @@ def convert(x, y, u, v):
 
     # Conversion from cartesian to spherical coordinates
     x1 = numpy.degrees(numpy.arctan2(yc, xc))
-    y1 = numpy.degrees(numpy.arcsin(zc / 
-        numpy.sqrt(xc * xc + yc * yc + zc * zc)))
+    y1 = numpy.degrees(numpy.arcsin(
+        zc / numpy.sqrt(xc * xc + yc * yc + zc * zc)))
 
     dx = x1 - x0
     dy = y1 - y0
@@ -197,7 +191,6 @@ def convert(x, y, u, v):
     # Return the velocity in degrees/s
     return (dx + 180) % 360 - 180, dy
 
-# __________________________________________________________________________ #
 
 def main():
     """
@@ -237,7 +230,6 @@ def main():
                 os.unlink(path)
             raise
 
-# __________________________________________________________________________ #
 
 if __name__ == '__main__':
     main()

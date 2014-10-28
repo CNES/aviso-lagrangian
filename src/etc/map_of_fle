@@ -23,14 +23,12 @@ import multiprocessing
 import signal
 import sys
 
-# __________________________________________________________________________ #
 
 SYSTEM_UNITS = {
     "metric": lagrangian.kMetric,
     "angular": lagrangian.kAngular
 }
 
-# __________________________________________________________________________ #
 
 def positive_value(value):
     """
@@ -46,7 +44,6 @@ def positive_value(value):
         raise argparse.ArgumentTypeError(msg)
     return value
 
-# __________________________________________________________________________ #
 
 def usage():
     """
@@ -95,7 +92,7 @@ def usage():
     parser.add_argument('--mask',
                         help='NetCDF grid for fixing undefined cells',
                         nargs=2,
-                        metavar=('PATH','VARNAME'))
+                        metavar=('PATH', 'VARNAME'))
     args, _ = parser.parse_known_args()
     if args.version:
         print lagrangian.Version()
@@ -108,7 +105,6 @@ def usage():
 
     return parser.parse_args()
 
-# __________________________________________________________________________ #
 
 def convert_from_sec_to_day(a, fill_value):
     """
@@ -118,7 +114,6 @@ def convert_from_sec_to_day(a, fill_value):
     result *= 86400
     return result.data
 
-# __________________________________________________________________________ #
 
 def main():
     """
@@ -247,7 +242,6 @@ def main():
         map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
     rootgrp.close()
 
-# __________________________________________________________________________ #
 
 def signal_handler(signum, _):
     """
@@ -262,7 +256,6 @@ def signal_handler(signum, _):
         process.terminate()
     sys.exit(0)
 
-# __________________________________________________________________________ #
 
 if __name__ == '__main__':
 

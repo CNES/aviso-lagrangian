@@ -19,11 +19,11 @@ import tempfile
 import time
 import distutils.sysconfig
 import zipfile
-
 import SCons
 from SCons.Script.SConscript import SConsEnvironment
 
-SConsEnvironment.Chmod = SCons.Action.ActionFactory(os.chmod,
+SConsEnvironment.Chmod = SCons.Action.ActionFactory(
+    os.chmod,
     lambda dest, mode: 'Chmod("%s", 0%o)' % (dest, mode))
 
 
@@ -64,14 +64,15 @@ def load_cfg(env):
 
 def get_version():
     process = subprocess.Popen("LANG=C hg tags",
-                              shell=True,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
+                               shell=True,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
     stdout, _ = process.communicate()
 
     for item in stdout.split("\n"):
         if not item.startswith('tip'):
             return item.split()[0].strip()
+
 
 def export(path, version):
     if 'trace.cpp' in path:
@@ -158,6 +159,7 @@ for header in source_list('include', mask='\.(hpp|h)$'):
 for header in source_list('src', mask='\.(hpp|h)$'):
     env.Depends(lagrangian, header)
 
+env.Install(bin_prefix, 'src/etc/metric_to_angular')
 env.Install(bin_prefix, 'src/etc/map_of_fle')
 env.Install(bin_prefix, 'src/etc/mapping')
 env.Install(bin_prefix, 'src/etc/path')
@@ -165,9 +167,9 @@ env.Install(lib_prefix, lagrangian[0])
 env.Alias('install', bin_prefix)
 env.Alias('install', lib_prefix)
 env.InstallPerm(bin_prefix,
-                ['src/etc/map_of_fle',
+                ['src/etc/metric_to_angular',
+                 'src/etc/map_of_fle',
                  'src/etc/mapping',
-                 'src/etc/metric_to_angular',
                  'src/etc/path'],
                 0555)
 env.InstallPerm(lib_prefix, [lagrangian[0]], 0555)

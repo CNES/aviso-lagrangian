@@ -7,9 +7,9 @@ Its computation is derived from the definition of Finite-Time Lyapunov Exponent 
 Given a time series of meso-scale velocity field, this code computes corresponding sub-mesoscale maps of backward FLSE or FTLE. It also compute other diagnostics such as orientation of Finite-Time Lyapunov Vectors.
 
 First steps with the software
-======================
+=============================
 [To know on how to build the library from sources and how to use the software](https://bitbucket.org/fbriol/lagrangian/wiki/INSTALL).
 
 Contents
-=======
+========
 [For a complete description on Lagrangian analysis](https://bitbucket.org/fbriol/lagrangian/wiki/contents)

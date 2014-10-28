@@ -25,11 +25,11 @@ for item in sys.argv[1:]:
     except ValueError:
         argv.append(item)
     else:
-        argv.append("%s='%s'" % (item[:ix], item[ix+1:])) 
+        argv.append("%s='%s'" % (item[:ix], item[ix+1:]))
 
 process = subprocess.Popen('scons --config=force -f SConfigure %s' %
-                              ' '.join(argv), shell=True)
+                           ' '.join(argv), shell=True)
 if process:
     process.wait()
     if process.returncode == 0:
-        print "Type scons to build the project"
+        print("Type scons to build the project")

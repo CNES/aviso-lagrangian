@@ -24,7 +24,6 @@ import matplotlib.pyplot
 import numpy
 import sys
 
-# __________________________________________________________________________ #
 
 class AxisUnit(list):
     """
@@ -50,7 +49,6 @@ class AxisUnit(list):
         """
         return self
 
-# __________________________________________________________________________ #
 
 class AxisLatitudeUnit(AxisUnit):
     """
@@ -66,7 +64,6 @@ class AxisLatitudeUnit(AxisUnit):
         self.append("degreeN")
         self.append("degreesN")
 
-# __________________________________________________________________________ #
 
 class AxisLongitudeUnit(AxisUnit):
     """
@@ -82,7 +79,6 @@ class AxisLongitudeUnit(AxisUnit):
         self.append("degreeE")
         self.append("degreesE")
 
-# __________________________________________________________________________ #
 
 class Axis(object):
     """
@@ -167,7 +163,6 @@ class Axis(object):
 
         return [axis._points[0], axis._points[1]]
 
-# __________________________________________________________________________ #
 
 class Variable(object):
     """
@@ -180,7 +175,13 @@ class Variable(object):
         """
         return group.getncattr(attr) if attr in group.ncattrs() else ''
 
-    def __init__(self, x=None, y=None, z=None, title='', long_name='', unit=''):
+    def __init__(self,
+                 x=None,
+                 y=None,
+                 z=None,
+                 title='',
+                 long_name='',
+                 unit=''):
         """
         Default constructor
         """
@@ -232,8 +233,8 @@ class Variable(object):
 
         # If we did not find the definition of the axes we throw an exception
         if (x_axis is None) or (y_axis is None):
-            raise RuntimeError('Unable to Find the description of latitude and '
-                               ' longitude axes.')
+            raise RuntimeError('Unable to Find the description of latitude '
+                               'and longitude axes.')
 
         # Longitude must be in [-180,180]
         x_axis.normalize()
@@ -365,7 +366,6 @@ class Variable(object):
                            numpy.min(self._z),
                            numpy.max(self._z)))
 
-# __________________________________________________________________________ #
 
 class OptionType(object):
     """
@@ -374,7 +374,7 @@ class OptionType(object):
     def __init__(self, default, *args):
         if len(args) == 0:
             raise TypeError("Required argument 'args' not found")
-        if type(args[0]) == type(dict()):
+        if isinstance(args[0], dict):
             self._data = args[0]
         else:
             self._data = {}
@@ -404,7 +404,7 @@ class OptionType(object):
     @property
     def default(self):
         return self._default
-# __________________________________________________________________________ #
+
 
 class ContinentType(OptionType):
     """
@@ -418,7 +418,6 @@ class ContinentType(OptionType):
             'wireframe',
             'none')
 
-# __________________________________________________________________________ #
 
 class ProjectionType(OptionType):
     """
@@ -428,13 +427,12 @@ class ProjectionType(OptionType):
     def __init__(self):
         super(ProjectionType, self).__init__(
             'equidistant', {
-                'equidistant':'cyl',
-                                               'gall': 'gall',
-                                               'mercator':'merc',
+                'equidistant': 'cyl',
+                'gall': 'gall',
+                'mercator': 'merc',
                 'miller': 'mill'
             })
 
-# __________________________________________________________________________ #
 
 class ResolutionType(OptionType):
     """
@@ -445,13 +443,12 @@ class ResolutionType(OptionType):
         super(ResolutionType, self).__init__(
             'low', {
                 'crude': 'c',
-                                               'low': 'l',
-                                               'intermediate': 'i',
-                                               'high': 'h',
+                'low': 'l',
+                'intermediate': 'i',
+                'high': 'h',
                 'full': 'f'
             })
 
-# __________________________________________________________________________ #
 
 class ColormapType(OptionType):
     """
@@ -461,12 +458,10 @@ class ColormapType(OptionType):
         super(ColormapType, self).__init__(
             'jet', {
                 m.lower(): m
-                                                for m in matplotlib.cm.datad
-                        if not m.endswith("_r")
+                for m in matplotlib.cm.datad
+                if not m.endswith("_r")
             })
 
-
-# __________________________________________________________________________ #
 
 class Mapping(object):
     """
@@ -574,7 +569,6 @@ class Mapping(object):
                 text.set_size(6)
             cbar.set_label(self._legend, fontsize=8)
 
-
     def __draw_latitude(self):
         """
         Draw latitudes lines
@@ -617,6 +611,7 @@ class Mapping(object):
         return numpy.arange(min_range,
                             max_range,
                             step)
+
     def __scatter(self, cm):
         """
         Displays scattered data
@@ -750,7 +745,7 @@ class Mapping(object):
         Sets the longitude of the variable to map
         """
         self._x = value
-        if not self.X_MIN in self._zone:
+        if self.X_MIN not in self._zone:
             self._zone[self.X_MIN] = self._x.min()
             self._zone[self.X_MAX] = self._x.max()
 
@@ -767,7 +762,7 @@ class Mapping(object):
         Sets the latitude of the variable to map
         """
         self._y = value
-        if not self.Y_MIN in self._zone:
+        if self.Y_MIN not in self._zone:
             self._zone[self.Y_MIN] = self._y.min()
             self._zone[self.Y_MAX] = self._y.max()
 
@@ -810,7 +805,7 @@ class Mapping(object):
         logging.debug("write `%s'" % output)
         self._figure.savefig(output, dpi=dpi, bbox_inches='tight',
                              pad_inches=0.4)
-# __________________________________________________________________________ #
+
 
 class DrawColormaps(argparse.Action):
     """
@@ -850,18 +845,16 @@ class DrawColormaps(argparse.Action):
         matplotlib.pyplot.savefig(values, dpi=200, facecolor='gray')
         sys.exit(0)
 
-# __________________________________________________________________________ #
 
 def type_resolution(value):
     """
     Checks resolution type
     """
-    if not value.lower() in ResolutionType():
+    if value.lower() not in ResolutionType():
         raise argparse.ArgumentTypeError('%s is not a type of resolution known'
-                                          % value)
+                                         % value)
     return value
 
-# __________________________________________________________________________ #
 
 def type_colormap(value):
     """
@@ -869,51 +862,40 @@ def type_colormap(value):
     """
     colormap_type = ColormapType()
     value = value.lower()
-    if not value in colormap_type:
+    if value not in colormap_type:
         raise argparse.ArgumentTypeError('%s is not a name of colormap known'
-                                          % value)
+                                         % value)
     return colormap_type[value]
 
-# __________________________________________________________________________ #
 
 def type_projection(value):
     """
     Checks projection type
     """
-    if not value.lower() in ProjectionType():
+    if value.lower() not in ProjectionType():
         raise argparse.ArgumentTypeError('%s is not a type of projection known'
-                                          % value)
+                                         % value)
     return value
 
-# __________________________________________________________________________ #
 
 def type_continent(value):
     """
     Checks continent type
     """
-    if not value.lower() in ContinentType():
+    if value.lower() not in ContinentType():
         raise argparse.ArgumentTypeError('%s is not a type of continent known'
-                                          % value)
+                                         % value)
     return value
 
-# __________________________________________________________________________ #
-
-
-def type_zone(value):
-    """
-    Checks longitudes interval
-    """
-    print value
-
-
-# __________________________________________________________________________ #
 
 def colormap_options(parser):
     """
     Definition of options that alters the appearance of the colormap
     """
     colormap = parser.add_argument_group('colormap', 'Setting up the colormap')
-    colormap.add_argument('--invert', help='Invert colors', action='store_true')
+    colormap.add_argument('--invert',
+                          help='Invert colors',
+                          action='store_true')
     colormap.add_argument('--colormap',
                           help='Name of the colormap. Can be: %s'
                           % ColormapType(),
@@ -935,7 +917,6 @@ def colormap_options(parser):
                           metavar=('MIN', 'MAX', 'N'),
                           type=float)
 
-# __________________________________________________________________________ #
 
 def mapping_options(parser):
     """
@@ -974,10 +955,9 @@ def mapping_options(parser):
     mapping.add_argument('--zone',
                          nargs=4,
                          help='Definition of the area to display',
-                         metavar=('XMIN', 'YMIN' , 'XMAX', 'YMAX'),
+                         metavar=('XMIN', 'YMIN', 'XMAX', 'YMAX'),
                          type=float)
 
-# __________________________________________________________________________ #
 
 def caption_options(parser):
     """
@@ -992,7 +972,6 @@ def caption_options(parser):
                          'replaced by the title of the input file.',
                          metavar='TEXT')
 
-# __________________________________________________________________________ #
 
 def netcdf_options(parser):
     """
@@ -1008,7 +987,6 @@ def netcdf_options(parser):
                         'latitudes',
                         metavar='NAME')
 
-# __________________________________________________________________________ #
 
 def scatter_options(parser):
     """
@@ -1018,7 +996,6 @@ def scatter_options(parser):
                                         'Setting up scatter plot')
     scatter.add_argument('--size', help='Dot size to display.', type=float)
 
-# __________________________________________________________________________ #
 
 def usage():
     """
@@ -1057,7 +1034,6 @@ def usage():
     scatter_options(parser)
     return parser.parse_args()
 
-# __________________________________________________________________________ #
 
 def setup_logger(enabled):
     """
@@ -1067,7 +1043,6 @@ def setup_logger(enabled):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG if enabled else logging.INFO)
 
-# __________________________________________________________________________ #
 
 def main():
     """
@@ -1108,8 +1083,14 @@ def main():
     if args.range:
         mapping.set_range(args.range[0], args.range[1], args.range[2])
     if args.zone:
-        var.select_zone(args.zone[0], args.zone[1], args.zone[2], args.zone[3])
-        mapping.set_zone(args.zone[0], args.zone[1], args.zone[2], args.zone[3])
+        var.select_zone(args.zone[0],
+                        args.zone[1],
+                        args.zone[2],
+                        args.zone[3])
+        mapping.set_zone(args.zone[0],
+                         args.zone[1],
+                         args.zone[2],
+                         args.zone[3])
     if args.size:
         mapping.size = args.size
     if args.meridian_width is not None:
@@ -1127,8 +1108,6 @@ def main():
     # Creates output file
     mapping.display(args.outputfile, var.title, args.dpi)
 
-# __________________________________________________________________________ #
 
 if __name__ == '__main__':
     main()
-

@@ -21,7 +21,6 @@ import os
 import re
 import sys
 
-# __________________________________________________________________________ #
 
 class FileType(object):
     """
@@ -36,7 +35,6 @@ class FileType(object):
         except (OSError, IOError) as e:
             raise argparse.ArgumentTypeError("can't open '%s': %s" % (path, e))
 
-# __________________________________________________________________________ #
 
 def path_type(value):
     """
@@ -46,7 +44,7 @@ def path_type(value):
     if not os.path.isfile(path):
         raise argparse.ArgumentTypeError('%s is not a file' % value)
     return path
-# __________________________________________________________________________ #
+
 
 def date_type(value):
     """
@@ -59,7 +57,6 @@ def date_type(value):
         raise argparse.ArgumentTypeError("'%s' could not be interpreted as a "
                                          "date" % value)
 
-# __________________________________________________________________________ #
 
 def usage():
     """
@@ -95,7 +92,6 @@ def usage():
                         type=date_type)
     return parser.parse_args()
 
-# __________________________________________________________________________ #
 
 class Position:
     """
@@ -143,7 +139,6 @@ class Position:
     def __str__(self):
         return "%d\t%f\t%f" % (self.__ident, self.__x, self.__y)
 
-# __________________________________________________________________________ #
 
 def decode_x(value):
     """
@@ -160,7 +155,6 @@ def decode_x(value):
                            % value)
     return value
 
-# __________________________________________________________________________ #
 
 def decode_y(value):
     """
@@ -175,7 +169,6 @@ def decode_y(value):
                            % value)
     return value
 
-# __________________________________________________________________________ #
 
 def main():
     """
@@ -229,7 +222,6 @@ def main():
                 item.update(result, x1, y1)
         it.Next()
 
-# __________________________________________________________________________ #
 
 if __name__ == '__main__':
     main()
