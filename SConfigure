@@ -28,7 +28,6 @@ def check_numpy(cfg):
     try:
         import numpy
         import os
-        cfg.Message(os.__path__)
         path = os.path.join(numpy.__path__[0],
                             os.path.join(os.path.join('core', 'include'),
                                          HEADER))
