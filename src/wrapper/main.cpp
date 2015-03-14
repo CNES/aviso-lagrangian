@@ -24,6 +24,7 @@
 #include "parameter_wrapper.h"
 #include "trace.h"
 #include "units_wrapper.h"
+#include "Python.h"
 
 #include "boost/python/suite/indexing/vector_indexing_suite.hpp"
 
@@ -31,11 +32,10 @@
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #include <numpy/noprefix.h>
 
-BOOST_PYTHON_MODULE(lagrangian)
+bool InitLagrangianModule()
 {
-    PyDateTime_IMPORT;
+    import_array1(false);
 
-    import_array();
     bp::numeric::array::set_module_and_type("numpy", "ndarray");
 
     wrapper::PtimeFromPythonDatetime();
@@ -64,4 +64,14 @@ BOOST_PYTHON_MODULE(lagrangian)
     wrapper::UnitsPythonModule();
     bp::def("SetVerbose", lagrangian::SetVerbose);
     bp::def("Version", lagrangian::Version);
+
+    return true;
+}
+
+
+BOOST_PYTHON_MODULE(lagrangian)
+{
+    PyDateTime_IMPORT;
+
+    (void) InitLagrangianModule();
 }

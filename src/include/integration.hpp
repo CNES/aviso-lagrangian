@@ -102,61 +102,17 @@ public:
 
 // ___________________________________________________________________________//
 
-/** 
- * Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that
- * represents the rate of separation of initially neighbouring particles
- * over a finite-time window [t₀, t₀ + T], where T is the time two
- * particules need to be advected in order to be separated from a given
- * distance d.
- *
- * Let x(t) = x(t; x₀, t₀) be the position of a lagrangian particle
- * at time t, started at x₀ at t=t₀ and advected by the time-dependent
- * fluid flow u(x, t). 
- *
- * The Forward Finite-Time Lyapunov Exponent at a point x₀ 
- * and for the advection time T is defined as the growth factor of
- * the norm of the perturbation dx0 started around x₀ and advected
- * by the flow after the finite advection time T.
- *
- * Maximal stretching occurs when dx0 is aligned with the eigenvector
- * associated with the maximum eigenvalue δmax of the Cauchy-Green strain
- * tensor Δ:
- *
- * Δ = [ ∇Φ₀ᵀ (x₀) ]^* [ ∇Φ₀ᵀ (x₀) ]
- *
- * where Φ₀ᵀ : x₀ ➜ x(t, x₀, t₀) is the flow map of the advection equation:
- * it links the location x₀ of a lagragian particule at t=t₀ to its position
- * x(t,x₀,t₀) at time t. (* denotes the transposition operator).
- *
- * FTLE is defined as
- *
- * σ = ( 1 / (2*T) ) * log( λmax( Δ ) ) 
- *
- * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
- * neighbouring particules separate from a given distance d.
- *
- * Exponents(const Triplet& p) function implements the computation of the
- * lyapunov exponents based on maximal and minimal eigenvalues and orientation
- * of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
- *
- * For more details see:
- *
- * 1. G. Haller, Lagrangian coherent structures and the rate of strain in
- * two-dimensional turbulence Phys. Fluids A 13 (2001) 3365-3385
- * (http://georgehaller.com/reprints/approx.pdf)
- * Remark: In this paper, FTLE is referred to as the Direct Lyapunov
- * Exponent (DLE)
- *
- * 2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
+/**
+ * @brief Handles the time integration
  */
 class Integration
 {
 protected:
-    double size_of_interval_;
-    Field* field_;
-    double start_time_;
-    double end_time_;
-    RungeKutta rk_;
+    double size_of_interval_;	//!< Integration time in number of seconds
+    Field* field_;				//!< Field used to compute the velocity
+    double start_time_;			//!< Start time of the integration
+    double end_time_;			//!< End time of the integration
+    RungeKutta rk_;				//!< Runge-Kutta object
 
 public:
 
@@ -218,6 +174,9 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Handles the movement of a particle using the Runge-Kutta method.
+ */
 class Path: public Integration
 {
 public:
@@ -511,6 +470,55 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Handles the computation of Lyapunov Exponent
+ *
+ * Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that
+ * represents the rate of separation of initially neighbouring particles
+ * over a finite-time window [t₀, t₀ + T], where T is the time two
+ * particules need to be advected in order to be separated from a given
+ * distance d.
+ *
+ * Let x(t) = x(t; x₀, t₀) be the position of a lagrangian particle
+ * at time t, started at x₀ at t=t₀ and advected by the time-dependent
+ * fluid flow u(x, t).
+ *
+ * The Forward Finite-Time Lyapunov Exponent at a point x₀
+ * and for the advection time T is defined as the growth factor of
+ * the norm of the perturbation dx0 started around x₀ and advected
+ * by the flow after the finite advection time T.
+ *
+ * Maximal stretching occurs when dx0 is aligned with the eigenvector
+ * associated with the maximum eigenvalue δmax of the Cauchy-Green strain
+ * tensor Δ:
+ *
+ * Δ = [ ∇Φ₀ᵀ (x₀) ]^* [ ∇Φ₀ᵀ (x₀) ]
+ *
+ * where Φ₀ᵀ : x₀ ➜ x(t, x₀, t₀) is the flow map of the advection equation:
+ * it links the location x₀ of a lagragian particule at t=t₀ to its position
+ * x(t,x₀,t₀) at time t. (* denotes the transposition operator).
+ *
+ * FTLE is defined as
+ *
+ * σ = ( 1 / (2*T) ) * log( λmax( Δ ) )
+ *
+ * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
+ * neighbouring particules separate from a given distance d.
+ *
+ * Exponents(const Triplet& p) function implements the computation of the
+ * lyapunov exponents based on maximal and minimal eigenvalues and orientation
+ * of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
+ *
+ * For more details see:
+ *
+ * 1. G. Haller, Lagrangian coherent structures and the rate of strain in
+ * two-dimensional turbulence Phys. Fluids A 13 (2001) 3365-3385
+ * (http://georgehaller.com/reprints/approx.pdf)
+ * Remark: In this paper, FTLE is referred to as the Direct Lyapunov
+ * Exponent (DLE)
+ *
+ * 2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
+ */
 class FiniteLyapunovExponents: public Integration
 {
 public:
@@ -519,7 +527,8 @@ public:
      */
     enum Mode
     {
-        kFSLE, kFTLE
+        kFSLE,	//!< Compute Finite Size Lyapunov Exponent
+		kFTLE	//!< Compute Finite Time Lyapunov Exponent
     };
 
 private:
@@ -600,6 +609,7 @@ public:
 
     /**
      * @brief Set the value of the initial point
+     *
      * @param x Longitude
      * @param y Latitude
      *
@@ -614,6 +624,7 @@ public:
      * @brief Determine whether the particle is deemed to be separate
      *
      * @param p Position of the particle
+     *
      * @return True if the particle is separated.
      */
     inline bool Separation(const Triplet& p) const
@@ -637,6 +648,7 @@ public:
      * @param it Iterator
      * @param p Position of the particle
      * @param cell Cell properties of the grid used for the interpolation
+     *
      * @return True the integration is defined otherwise false
      */
     inline bool Compute(const Iterator& it, Triplet& p,
@@ -658,6 +670,7 @@ public:
      * of the Cauchy-Green strain tensor
      *
      * @param p Position of the particle
+     *
      * @return True if the exponents are defined
      */
     bool Exponents(const Triplet& p);

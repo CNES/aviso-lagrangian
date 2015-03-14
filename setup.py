@@ -3,12 +3,53 @@ try:
 except ImportError:
     import ConfigParser as configparser
 import distutils.command.config
+import distutils.command.sdist
 import distutils.errors
 import distutils.extension
 import distutils.log
 import os
 import setuptools
+import subprocess
 import sysconfig
+
+
+class SDist(distutils.command.sdist.sdist):
+
+    @staticmethod
+    def get_version():
+        process = subprocess.Popen("LANG=C hg tags",
+                                   shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        stdout, _ = process.communicate()
+    
+        for item in stdout.decode('utf8').split("\n"):
+            if item and not item.startswith('tip'):
+                return item.split()[0].strip().encode('utf8')
+        return b"unofficial"
+
+    @classmethod
+    def patch_trace_cpp(cls, src, dst):
+        version = cls.get_version()
+        os.unlink(dst)
+        with open(src, 'rb') as h_src:
+            with open(dst, 'wb') as h_dst:
+                for line in h_src:
+                    if b'__VERSION__' in line:
+                        line = line.replace(b'__VERSION__', version)
+                        if not isinstance(line, bytes):
+                            line = line.encode('utf8')
+                    print(line)
+                    h_dst.write(line)
+    
+    def make_release_tree(self, base_dir, files):
+        distutils.command.sdist.sdist.make_release_tree(self,
+                                                        base_dir,
+                                                        files)
+        for item in files:
+            if item == 'src/lib/trace.cpp':
+                dest = os.path.join(base_dir, item)
+                self.patch_trace_cpp(item, dest)
 
 
 class SetupConfig(object):
@@ -263,6 +304,9 @@ extensions = [
 ]
 
 
+requires = ['netCDF4', 'numpy', 'matplotlib', 'basemap']
+
+
 distutils.core.setup(
     name="lagrangian",
     version="1.0.0",
@@ -274,8 +318,8 @@ distutils.core.setup(
             "GNU Library or Lesser General Public License (LGPL)",
     keywords="oceanography lagrangian analysis fsle ftle",
     #tests_require=requires,
-    #install_requires=requires,
-    #setup_requires=requires,
+    install_requires=requires,
+    setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
     #package_data={'': ['*.sql', '*.yaml']},
@@ -284,7 +328,8 @@ distutils.core.setup(
     classifiers=classifiers,
     cmdclass={
         'setup': Setup,
-        'config': Config
+        'config': Config,
+        'sdist': SDist
     },
     ext_modules=extensions
 )

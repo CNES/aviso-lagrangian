@@ -100,7 +100,6 @@ public:
     /**
      * @brief Divides the list in sublists
      *
-     * @param splitters List of sublist.
      * @param n_sublist Number of sublist to handle
      */
     inline std::list< Splitter<T> > Split(const int n_sublist)
