@@ -401,7 +401,7 @@ inline std::ostream& operator<<(std::ostream& os, const JulianDay& jd)
 }
 
 /**
- * @bried Reads a julian from the stream
+ * @brief Reads a julian from the stream
  *
  * @param is The stream used to read
  * @param jd The julian day read
@@ -529,6 +529,8 @@ public:
     /**
      * @brief Computes a modified julian day from Unix Time
      *
+     * @param time Unix time to convert
+     *
      * @return The modified julian day
      */
     static long double FromUnixTime(const long double time)
@@ -577,7 +579,7 @@ public:
  * @brief Writes the AbstractModifiedJulianDay to the stream
  *
  * @param os The stream used to write
- * @param jd The modified julian day to write
+ * @param mjd The modified julian day to write
  *
  * @return a reference to the stream updated
  */
@@ -591,10 +593,10 @@ inline std::ostream& operator<<(
 }
 
 /**
- * @bried Reads an AbstractModifiedJulianDay from the stream
+ * @brief Reads an AbstractModifiedJulianDay from the stream
  *
  * @param is The stream used to read
- * @param jd The modified julian day read
+ * @param mjd The modified julian day read
  *
  * @return a reference to the stream updated
  */

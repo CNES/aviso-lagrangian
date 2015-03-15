@@ -70,7 +70,7 @@ public:
 };
 
 /**
- * @brief List that can be splitted into n sub-list.
+ * @brief List that can be split into n sub-list.
  */
 template<class T>
 class SplitList: public std::list<T>

@@ -222,7 +222,7 @@ private:
     /**
      * @brief Compute a sub part of the map in a separate thread
      *
-     * @param args Parameters of the sub-matrix to compute
+     * @param splitter Parameters of the sub-matrix to compute
      * @param fle Finite Lyapunov exponents
      * @param it Current time step
      */
