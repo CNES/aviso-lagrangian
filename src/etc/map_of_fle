@@ -95,7 +95,7 @@ def usage():
                         metavar=('PATH', 'VARNAME'))
     args, _ = parser.parse_known_args()
     if args.version:
-        print lagrangian.Version()
+        print(lagrangian.Version())
         sys.exit(0)
 
     parser.add_argument('configuration', help='Configuration file')
@@ -251,7 +251,7 @@ def signal_handler(signum, _):
     for value, key in signal.__dict__.iteritems():
         if value.startswith('SIG'):
             signame[key] = value
-    print 'Stop with signal %s' % signame[signum]
+    print('Stop with signal %s' % signame[signum])
     for process in multiprocessing.process.active_children():
         process.terminate()
     sys.exit(0)

@@ -4,6 +4,7 @@ except ImportError:
     import ConfigParser as configparser
 import distutils.command.config
 import distutils.command.sdist
+import distutils.dist
 import distutils.errors
 import distutils.extension
 import distutils.log
@@ -11,6 +12,7 @@ import os
 import setuptools
 import subprocess
 import sysconfig
+import sys
 
 
 class SDist(distutils.command.sdist.sdist):
@@ -22,7 +24,7 @@ class SDist(distutils.command.sdist.sdist):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         stdout, _ = process.communicate()
-    
+
         for item in stdout.decode('utf8').split("\n"):
             if item and not item.startswith('tip'):
                 return item.split()[0].strip().encode('utf8')
@@ -41,7 +43,7 @@ class SDist(distutils.command.sdist.sdist):
                             line = line.encode('utf8')
                     print(line)
                     h_dst.write(line)
-    
+
     def make_release_tree(self, base_dir, files):
         distutils.command.sdist.sdist.make_release_tree(self,
                                                         base_dir,
@@ -57,7 +59,7 @@ class SetupConfig(object):
     Package configuration
     """
     CWD = os.path.dirname(os.path.abspath(__file__))
-    
+
     def __init__(self):
         super(SetupConfig, self).__init__()
         self.path = os.path.join(self.CWD, 'setup.cfg')
@@ -105,12 +107,12 @@ class SetupConfig(object):
                                                'library_dirs')
                 library_dirs = library_dirs.split(' ') \
                     if library_dirs else None
-        
+
         return include_dirs, libraries, library_dirs
 
     def set_build_ext(self, include_dirs, libraries, library_dirs):
         """
-        Sets the parameters to build the extension        
+        Sets the parameters to build the extension
         """
         if not self.parser.has_section('build_ext'):
             self.parser.add_section('build_ext')
@@ -132,7 +134,7 @@ class SetupConfig(object):
         self.parser.set('build_ext',
                         'libraries',
                         " ".join(libraries))
-        
+
     @classmethod
     def sources(cls):
         """
@@ -182,7 +184,7 @@ class Setup(setuptools.Command, SetupConfig):
         """
         self.boost_includes = None
         self.boost_libraries = None
-        self.boost_mt = '0'
+        self.boost_mt = int(sys.platform == 'darwin')
         self.netcdf_includes = None
         self.netcdf_libraries = None
         self.udunits_includes = None
@@ -238,8 +240,8 @@ class Config(distutils.command.config.config, SetupConfig):
     def __init__(self, *args, **kwargs):
         # old class style
         distutils.command.config.config.__init__(self, *args, **kwargs)
-        SetupConfig.__init__(self) 
-    
+        SetupConfig.__init__(self)
+
     def run(self):
         """
         Verification of the development environment
@@ -255,7 +257,7 @@ class Config(distutils.command.config.config, SetupConfig):
             if not self.check_header(header, include_dirs=include_dirs):
                 raise distutils.errors.DistutilsPlatformError(
                     'Cannot find %r header.' % header)
-        
+
         for header in ['netcdf',
                        'boost/date_time.hpp',
                        'boost/python.hpp',
@@ -266,7 +268,7 @@ class Config(distutils.command.config.config, SetupConfig):
             distutils.log.info('Checking for C++ header file %r' % header)
             # Work around a bug of the "check_header" that does not take into
             # account the parameter "lang".
-            #if not self.check_header(header, lang='c++'):
+            # if not self.check_header(header, lang='c++'):
             if not self.try_cpp(body="/* No body */",
                                 headers=[header],
                                 include_dirs=include_dirs,
@@ -307,6 +309,13 @@ extensions = [
 requires = ['netCDF4', 'numpy', 'matplotlib', 'basemap']
 
 
+# Create the default setup configuration
+setup = Setup(distutils.dist.Distribution())
+if not os.path.exists(setup.path):
+    setup.initialize_options()
+    setup.run()
+
+
 distutils.core.setup(
     name="lagrangian",
     version="1.0.0",
@@ -317,12 +326,12 @@ distutils.core.setup(
     license="License :: OSI Approved :: "
             "GNU Library or Lesser General Public License (LGPL)",
     keywords="oceanography lagrangian analysis fsle ftle",
-    #tests_require=requires,
+    # tests_require=requires,
     install_requires=requires,
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
-    #package_data={'': ['*.sql', '*.yaml']},
+    # package_data={'': ['*.sql', '*.yaml']},
     scripts=[os.path.join('src/etc', item)
              for item in os.listdir('src/etc')],
     classifiers=classifiers,

@@ -16,8 +16,8 @@
 */
 
 
-#include "numpy.hpp"
 #include "map_wrapper.h"
+#include "numpy.hpp"
 
 namespace wrapper
 {
@@ -34,7 +34,8 @@ MapProperties::MapProperties(const int nx,
 bp::numeric::array MapProperties::GetXAxis() const
 {
     bp::numeric::array result = MakeVector(get_nx());
-    double* data = static_cast<double*> PyArray_DATA(result.ptr());
+    double* data = static_cast<double*>(PyArray_DATA(
+        reinterpret_cast<PyArrayObject*>(result.ptr())));
     int temp = get_nx();
 
     for (int ix = 0; ix < temp; ++ix)
@@ -46,7 +47,8 @@ bp::numeric::array MapProperties::GetXAxis() const
 bp::numeric::array MapProperties::GetYAxis() const
 {
     bp::numeric::array result = MakeVector(get_ny());
-    double* data = static_cast<double*> PyArray_DATA(result.ptr());
+    double* data = static_cast<double*>(PyArray_DATA(
+        reinterpret_cast<PyArrayObject*>(result.ptr())));
     int temp = get_ny();
 
     for (int iy = 0; iy < temp; ++iy)
@@ -68,7 +70,8 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
     dims.push_back(map_.get_ny());
 
     bp::numeric::array result = MakeMatrix(dims);
-    double* data = static_cast<double*> PyArray_DATA(result.ptr());
+    double* data = static_cast<double*>(PyArray_DATA(
+        reinterpret_cast<PyArrayObject*>(result.ptr())));
 
     for (int ix = 0; ix < map_.get_nx(); ++ix)
     {

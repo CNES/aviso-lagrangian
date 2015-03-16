@@ -139,14 +139,14 @@ public:
      */
     JulianDay(const long double jd)
     {
-        double fractional, integer;
+        long double fractional, integer;
         long double integer_part = static_cast<int>(jd);
 
-        fractional = boost::math::round<double>(modf(jd - integer_part,
-              &integer) * 86400000000.0) * 1e-6;
+        fractional = boost::math::round<long double>(modfl(jd - integer_part,
+              &integer) * 864e8L) * 1e-6L;
 
         day_ = static_cast<int> (integer_part);
-        microseconds_ = static_cast<int> (modf(fractional, &integer) * 1e6);
+        microseconds_ = static_cast<int> (modfl(fractional, &integer) * 1e6L);
         seconds_ = static_cast<int> (integer);
     }
 
@@ -160,11 +160,15 @@ public:
     /**
      * @brief Computes a julian day from Unix Time
      *
+     * @param time Number of seconds elapsed since 1970
+     *
      * @return The julian day
      */
-    inline static long double FromUnixTime(const long double time)
+    inline static JulianDay FromUnixTime(const long double time)
     {
-        return time / 86400.0 + unix_time;
+        JulianDay result(time / 86400.0L);
+        result.day_ += unix_time;
+        return result;
     }
 
     /**
@@ -188,9 +192,9 @@ public:
     }
 
     /**
-     * @brief Returns the number of seconds since the start of the day.
+     * @brief Returns the number of microseconds.
      *
-     * @return The number of second
+     * @return The number of microseconds
      */
     inline int get_microseconds() const
     {
@@ -299,9 +303,9 @@ public:
      *
      * @return the fractionnal julian day
      */
-    virtual operator double() const
+    virtual operator long double() const
     {
-        return day_ + (seconds_ + microseconds_ * 1e-6) / 86400.0;
+        return day_ + (seconds_ + microseconds_ * 1e-6L) / 86400.0L;
     }
 
     /**
@@ -312,8 +316,7 @@ public:
      */
     inline long double ToUnixTime() const
     {
-        return (day_ * 86400.0 + seconds_ + microseconds_ * 1e-6) - unix_time
-                * 86400.0;
+        return (day_ - unix_time) * 86400.0L + seconds_ + microseconds_ * 1e-6L;
     }
 
     /**
@@ -459,7 +462,7 @@ protected:
      * @return The julian day
      */
     template<typename T>
-    inline T ToJulianDay(const T mjd) const
+    static inline T ToJulianDay(const T mjd)
     {
         return mjd + GAP;
     }
@@ -529,13 +532,15 @@ public:
     /**
      * @brief Computes a modified julian day from Unix Time
      *
-     * @param time Unix time to convert
-     *
      * @return The modified julian day
      */
-    static long double FromUnixTime(const long double time)
+    static AbstractModifiedJulianDay<GAP> FromUnixTime(const long double time)
     {
-        return JulianDay::FromUnixTime(time) - GAP;
+        JulianDay jd(JulianDay::FromUnixTime(time));
+        return AbstractModifiedJulianDay<GAP>(
+            jd.get_day() - GAP,
+            jd.get_seconds(),
+            jd.get_microseconds());
     }
 
     /**
@@ -553,10 +558,10 @@ public:
      *
      * @return The decimal julian day
      */
-    operator double() const
+    operator long double() const
     {
         return GetModifiedJulianDay() + (get_seconds() + get_microseconds()
-            * 1e-6) / 86400.0;
+            * 1e-6L) / 86400.0L;
     }
 
     /**

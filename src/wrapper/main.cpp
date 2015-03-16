@@ -24,11 +24,12 @@
 #include "parameter_wrapper.h"
 #include "trace.h"
 #include "units_wrapper.h"
-#include "Python.h"
+#include <Python.h>
 
-#include "boost/python/suite/indexing/vector_indexing_suite.hpp"
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #include <numpy/noprefix.h>
 
@@ -67,7 +68,6 @@ bool InitLagrangianModule()
 
     return true;
 }
-
 
 BOOST_PYTHON_MODULE(lagrangian)
 {

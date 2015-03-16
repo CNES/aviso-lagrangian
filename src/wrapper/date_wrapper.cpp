@@ -170,10 +170,15 @@ JulianDay::JulianDay(int const day, int const seconds, int const microseconds)
 {
 }
 
-JulianDay::JulianDay(double const jd)
-    : lagrangian::JulianDay(static_cast<long double>(jd)),
+JulianDay::JulianDay(long double const jd)
+    : lagrangian::JulianDay(jd),
       bp::wrapper<lagrangian::JulianDay>()
 {
+}
+
+boost::posix_time::ptime JulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::JulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -205,10 +210,15 @@ ModifiedJulianDay::ModifiedJulianDay(
 {
 }
 
-ModifiedJulianDay::ModifiedJulianDay(double const jd)
+ModifiedJulianDay::ModifiedJulianDay(long double const jd)
     : lagrangian::ModifiedJulianDay(jd),
       bp::wrapper<lagrangian::ModifiedJulianDay>()
 {
+}
+
+boost::posix_time::ptime ModifiedJulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::ModifiedJulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -240,7 +250,7 @@ CNESJulianDay::CNESJulianDay(
 {
 }
 
-CNESJulianDay::CNESJulianDay(double const jd)
+CNESJulianDay::CNESJulianDay(long double const jd)
     : lagrangian::CNESJulianDay(jd), bp::wrapper<lagrangian::CNESJulianDay>()
 {
 }
@@ -248,6 +258,11 @@ CNESJulianDay::CNESJulianDay(double const jd)
 int CNESJulianDay::GetModifiedJulianDay() const
 {
   return lagrangian::CNESJulianDay::GetModifiedJulianDay();
+}
+
+boost::posix_time::ptime CNESJulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::CNESJulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -279,7 +294,7 @@ LOPJulianDay::LOPJulianDay(
 {
 }
 
-LOPJulianDay::LOPJulianDay(double const jd)
+LOPJulianDay::LOPJulianDay(long double const jd)
     : lagrangian::LOPJulianDay(jd), bp::wrapper<lagrangian::LOPJulianDay>()
 {
 }
@@ -287,6 +302,11 @@ LOPJulianDay::LOPJulianDay(double const jd)
 int LOPJulianDay::GetModifiedJulianDay() const
 {
   return lagrangian::LOPJulianDay::GetModifiedJulianDay();
+}
+
+boost::posix_time::ptime LOPJulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::LOPJulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -318,7 +338,7 @@ NASAJulianDay::NASAJulianDay(
 {
 }
 
-NASAJulianDay::NASAJulianDay(double const jd)
+NASAJulianDay::NASAJulianDay(long double const jd)
     : lagrangian::NASAJulianDay(jd), bp::wrapper<lagrangian::NASAJulianDay>()
 {
 }
@@ -326,6 +346,11 @@ NASAJulianDay::NASAJulianDay(double const jd)
 int NASAJulianDay::GetModifiedJulianDay() const
 {
   return lagrangian::NASAJulianDay::GetModifiedJulianDay();
+}
+
+boost::posix_time::ptime NASAJulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::NASAJulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -357,7 +382,7 @@ CCSDSJulianDay::CCSDSJulianDay(
 {
 }
 
-CCSDSJulianDay::CCSDSJulianDay(double const jd)
+CCSDSJulianDay::CCSDSJulianDay(long double const jd)
     : lagrangian::CCSDSJulianDay(jd), bp::wrapper<lagrangian::CCSDSJulianDay>()
 {
 }
@@ -365,6 +390,11 @@ CCSDSJulianDay::CCSDSJulianDay(double const jd)
 int CCSDSJulianDay::GetModifiedJulianDay() const
 {
   return lagrangian::CCSDSJulianDay::GetModifiedJulianDay();
+}
+
+boost::posix_time::ptime CCSDSJulianDay::FromUnixTime(const long double time)
+{
+    return lagrangian::CCSDSJulianDay::FromUnixTime(time).ToPtime();
 }
 
 // ___________________________________________________________________________//
@@ -392,14 +422,14 @@ void DatePythonModule()
                     bp::arg("day"),
                     bp::arg("seconds")=0,
                     bp::arg("microseconds")=0)));
-    JulianDayExposer.def(bp::init<double>((
+    JulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
 
     { //lagrangian::JulianDay::FromUnixTime
         JulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::JulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &JulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::JulianDay::ToPtime
@@ -446,7 +476,7 @@ void DatePythonModule()
 
     // Operators
     JulianDayExposer.def("__float__",
-            &lagrangian::JulianDay::operator double );
+            &lagrangian::JulianDay::operator long double );
 
     JulianDayExposer.def(bp::self != bp::self);
     JulianDayExposer.def(bp::self += bp::self);
@@ -470,7 +500,7 @@ void DatePythonModule()
     JulianDayExposer.def( bp::self - bp::self );
     JulianDayExposer.def( bp::self_ns::str( bp::self ) );
   }
-  bp::implicitly_convertible< lagrangian::JulianDay, double >();
+  bp::implicitly_convertible< lagrangian::JulianDay, long double >();
 
   //
   // lagrangian::ModifiedJulianDay
@@ -491,13 +521,13 @@ void DatePythonModule()
             bp::arg("day"),
             bp::arg("seconds") = 0,
             bp::arg("microseconds") = 0)));
-    ModifiedJulianDayExposer.def(bp::init<double>((
+    ModifiedJulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
     { //lagrangian::ModifiedJulianDay::FromUnixTime
         ModifiedJulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::ModifiedJulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &ModifiedJulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::ModifiedJulianDay::GetModifiedJulianDay
@@ -515,7 +545,7 @@ void DatePythonModule()
     ModifiedJulianDayExposer.staticmethod("FromUnixTime");
     ModifiedJulianDayExposer.staticmethod("Gap");
     ModifiedJulianDayExposer.def("__float__",
-            &lagrangian::ModifiedJulianDay::operator double);
+            &lagrangian::ModifiedJulianDay::operator long double);
     ModifiedJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 
@@ -538,13 +568,13 @@ void DatePythonModule()
             bp::arg("day"),
             bp::arg("seconds") = 0,
             bp::arg("microseconds") = 0)));
-    CNESJulianDayExposer.def(bp::init<double>((
+    CNESJulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
     { //lagrangian::CNESJulianDay::FromUnixTime
         CNESJulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::CNESJulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &CNESJulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::CNESJulianDay::GetCNESJulianDay
@@ -562,7 +592,7 @@ void DatePythonModule()
     CNESJulianDayExposer.staticmethod("FromUnixTime");
     CNESJulianDayExposer.staticmethod("Gap");
     CNESJulianDayExposer.def("__float__",
-            &lagrangian::CNESJulianDay::operator double);
+            &lagrangian::CNESJulianDay::operator long double);
     CNESJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 
@@ -585,13 +615,13 @@ void DatePythonModule()
             bp::arg("day"),
             bp::arg("seconds") = 0,
             bp::arg("microseconds") = 0)));
-    LOPJulianDayExposer.def(bp::init<double>((
+    LOPJulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
     { //lagrangian::LOPJulianDay::FromUnixTime
         LOPJulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::LOPJulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &LOPJulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::LOPJulianDay::GetLOPJulianDay
@@ -609,7 +639,7 @@ void DatePythonModule()
     LOPJulianDayExposer.staticmethod("FromUnixTime");
     LOPJulianDayExposer.staticmethod("Gap");
     LOPJulianDayExposer.def("__float__",
-            &lagrangian::LOPJulianDay::operator double);
+            &lagrangian::LOPJulianDay::operator long double);
     LOPJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 
@@ -632,13 +662,13 @@ void DatePythonModule()
             bp::arg("day"),
             bp::arg("seconds") = 0,
             bp::arg("microseconds") = 0)));
-    NASAJulianDayExposer.def(bp::init<double>((
+    NASAJulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
     { //lagrangian::NASAJulianDay::FromUnixTime
         NASAJulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::NASAJulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &NASAJulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::NASAJulianDay::GetNASAJulianDay
@@ -656,7 +686,7 @@ void DatePythonModule()
     NASAJulianDayExposer.staticmethod("FromUnixTime");
     NASAJulianDayExposer.staticmethod("Gap");
     NASAJulianDayExposer.def("__float__",
-            &lagrangian::NASAJulianDay::operator double);
+            &lagrangian::NASAJulianDay::operator long double);
     NASAJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 
@@ -680,13 +710,13 @@ void DatePythonModule()
             bp::arg("day"),
             bp::arg("seconds") = 0,
             bp::arg("microseconds") = 0)));
-    CCSDSJulianDayExposer.def(bp::init<double>((
+    CCSDSJulianDayExposer.def(bp::init<long double>((
             bp::arg("day"))));
     { //lagrangian::CCSDSJulianDay::FromUnixTime
         CCSDSJulianDayExposer.def(
             "FromUnixTime",
-            (long double (*)( long double const ))
-                ( &lagrangian::CCSDSJulianDay::FromUnixTime ),
+            (boost::posix_time::ptime (*)( long double const ))
+                ( &CCSDSJulianDay::FromUnixTime ),
             (bp::arg("time")));
     }
     { //lagrangian::CCSDSJulianDay::GetCCSDSJulianDay
@@ -704,7 +734,7 @@ void DatePythonModule()
     CCSDSJulianDayExposer.staticmethod("FromUnixTime");
     CCSDSJulianDayExposer.staticmethod("Gap");
     CCSDSJulianDayExposer.def("__float__",
-          &lagrangian::CCSDSJulianDay::operator double);
+          &lagrangian::CCSDSJulianDay::operator long double);
     CCSDSJulianDayExposer.def(bp::self_ns::str(bp::self));
   }
 }
