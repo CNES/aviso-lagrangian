@@ -8,8 +8,8 @@ Given a time series of meso-scale velocity field, this code computes correspondi
 
 First steps with the software
 =============================
-[To know on how to build the library from sources and how to use the software](https://bitbucket.org/cnes_aviso/lagrangian/wiki/INSTALL).
+[To know on how to build the library from sources and how to use the software](https://bitbucket.org/cnes_aviso/lagrangian/wiki/Install).
 
 Contents
 ========
-[For a complete description on Lagrangian analysis](https://bitbucket.org/cnes_aviso/lagrangian/wiki/contents)
+[For a complete description on Lagrangian analysis](https://bitbucket.org/cnes_aviso/lagrangian/wiki/Contents)
