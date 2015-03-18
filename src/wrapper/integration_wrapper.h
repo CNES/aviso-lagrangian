@@ -59,7 +59,8 @@ struct FiniteLyapunovExponents: lagrangian::FiniteLyapunovExponents, bp::wrapper
             double const delta,
             lagrangian::Field* field);
 
-    bp::tuple WrapperCompute(const lagrangian::Iterator& it) const;
+    bp::tuple WrapperCompute(const lagrangian::Iterator& it,
+            lagrangian::Triplet& p) const;
 };
 
 // ___________________________________________________________________________//

@@ -41,7 +41,6 @@ class SDist(distutils.command.sdist.sdist):
                         line = line.replace(b'__VERSION__', version)
                         if not isinstance(line, bytes):
                             line = line.encode('utf8')
-                    print(line)
                     h_dst.write(line)
 
     def make_release_tree(self, base_dir, files):
@@ -100,12 +99,12 @@ class SetupConfig(object):
             if self.parser.has_option('build_ext', 'libraries'):
                 libraries = self.parser.get('build_ext',
                                             'libraries')
-                libraries = libraries.split(':') \
+                libraries = libraries.split(' ') \
                     if libraries else None
             if self.parser.has_option('build_ext', 'library_dirs'):
                 library_dirs = self.parser.get('build_ext',
                                                'library_dirs')
-                library_dirs = library_dirs.split(' ') \
+                library_dirs = library_dirs.split(':') \
                     if library_dirs else None
 
         return include_dirs, libraries, library_dirs
@@ -184,7 +183,7 @@ class Setup(setuptools.Command, SetupConfig):
         """
         self.boost_includes = None
         self.boost_libraries = None
-        self.boost_mt = int(sys.platform == 'darwin')
+        self.boost_mt = str(sys.platform == 'darwin')
         self.netcdf_includes = None
         self.netcdf_libraries = None
         self.udunits_includes = None
@@ -247,7 +246,9 @@ class Config(distutils.command.config.config, SetupConfig):
         Verification of the development environment
         """
         include_dirs, libraries, library_dirs = self.get_build_ext()
-        include_py = sysconfig.get_path('platinclude')
+        # Under Ubuntu sysconfig.get_path('include') does not return the path
+        # to pyconfig.h
+        include_py = os.path.dirname(sysconfig.get_config_h_filename())
         if include_dirs is None:
             include_dirs += []
         include_dirs.append(include_py)
@@ -318,7 +319,7 @@ if not os.path.exists(setup.path):
 
 distutils.core.setup(
     name="lagrangian",
-    version="1.0.0",
+    version="1.3.1",
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
@@ -331,7 +332,6 @@ distutils.core.setup(
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
-    # package_data={'': ['*.sql', '*.yaml']},
     scripts=[os.path.join('src/etc', item)
              for item in os.listdir('src/etc')],
     classifiers=classifiers,

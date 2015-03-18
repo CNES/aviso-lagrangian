@@ -527,8 +527,8 @@ public:
      */
     enum Mode
     {
-        kFSLE,	//!< Compute Finite Size Lyapunov Exponent
-		kFTLE	//!< Compute Finite Time Lyapunov Exponent
+        kFSLE,	//!< Finite Size Lyapunov Exponent
+		kFTLE	//!< Finite Time Lyapunov Exponent
     };
 
 private:

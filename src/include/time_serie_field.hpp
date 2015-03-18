@@ -19,8 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/algorithm/minmax.hpp>
+#include <algorithm>
 
 // ___________________________________________________________________________//
 
@@ -110,9 +109,8 @@ public:
      */
     inline JulianDay StartTime() const
     {
-        boost::tuple<double const&, double const&> minmax =
-                boost::minmax(u_->GetFirstDate(), v_->GetFirstDate());
-        return JulianDay(JulianDay::FromUnixTime(minmax.get<1> ()));
+        return JulianDay::FromUnixTime(std::max(u_->GetFirstDate(),
+        		v_->GetFirstDate()));
     }
 
     /**
@@ -122,9 +120,8 @@ public:
     */
     inline JulianDay EndTime() const
     {
-        boost::tuple<double const&, double const&> minmax =
-                boost::minmax(u_->GetLastDate(), v_->GetLastDate());
-        return JulianDay(JulianDay::FromUnixTime(minmax.get<0> ()));
+        return JulianDay::FromUnixTime(std::min(u_->GetLastDate(),
+        		v_->GetLastDate()));
     }
 };
 

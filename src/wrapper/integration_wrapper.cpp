@@ -74,9 +74,9 @@ FiniteLyapunovExponents::FiniteLyapunovExponents(
 }
 
 bp::tuple FiniteLyapunovExponents::WrapperCompute(
-        const lagrangian::Iterator& it) const
+        const lagrangian::Iterator& it,
+        lagrangian::Triplet& p) const
 {
-    lagrangian::Triplet p;
     lagrangian::CellProperties cell;
 
     bool result = lagrangian::FiniteLyapunovExponents::Compute(it, p, cell);
@@ -156,6 +156,108 @@ void IntegrationPythonModule()
             (bp::arg("it"),
              bp::arg("x0"),
              bp::arg("x1")));
+
+    //
+    // lagrangian::Triplet
+    //
+    {
+        bp::class_<lagrangian::Triplet> TripletExposer = bp::class_<lagrangian::Triplet>(
+        "Triplet",
+        bp::init< >());
+        // Constructors
+        TripletExposer.def(
+                bp::init<double, double, double, double, double, double>((
+                        bp::arg("x0"),
+                        bp::arg("x1"),
+                        bp::arg("x2"),
+                        bp::arg("y0"),
+                        bp::arg("y1"),
+                        bp::arg("y2"))));
+        { //lagrangian::Triplet::Update
+            TripletExposer.def(
+                "Update",
+                (void (lagrangian::Triplet::*)( double,
+                                                double,
+                                                double,
+                                                double,
+                                                double,
+                                                double ))
+                    ( &lagrangian::Triplet::Update ),
+                (bp::arg("x0"),
+                 bp::arg("x1"),
+                 bp::arg("x2"),
+                 bp::arg("y0"),
+                 bp::arg("y1"),
+                 bp::arg("y2")));
+        }
+        { //lagrangian::Triplet::get_x0
+            TripletExposer.def(
+                "get_x0",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_x0));
+        }
+        { //lagrangian::Triplet::get_x1
+            TripletExposer.def(
+                "get_x1",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_x1));
+        }
+        { //lagrangian::Triplet::get_x2
+            TripletExposer.def(
+                "get_x2",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_x2));
+        }
+        { //lagrangian::Triplet::get_y0
+            TripletExposer.def(
+                "get_y0",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_y0));
+        }
+        { //lagrangian::Triplet::get_y1
+            TripletExposer.def(
+                "get_y1",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_y1));
+        }
+        { //lagrangian::Triplet::get_y2
+            TripletExposer.def(
+                "get_y2",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_y2));
+        }
+        { //lagrangian::Triplet::get_time
+            TripletExposer.def(
+                "get_time",
+                (double (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_time));
+        }
+        { //lagrangian::Triplet::get_completed
+            TripletExposer.def(
+                "get_completed",
+                (bool (lagrangian::Triplet::*)() const)
+                    (&lagrangian::Triplet::get_completed));
+        }
+        { //lagrangian::Triplet::set_completed
+            TripletExposer.def(
+                "set_completed",
+                (void (lagrangian::Triplet::*)())
+                    (&lagrangian::Triplet::set_completed));
+        }
+        { //lagrangian::Triplet::IsMissing
+            TripletExposer.def(
+                "IsMissing",
+                (bool (lagrangian::Triplet::*)())
+                    (&lagrangian::Triplet::IsMissing));
+        }
+        { //lagrangian::Triplet::MISSING
+            TripletExposer.def(
+                "MISSING",
+                (lagrangian::Triplet const (*)())
+                    (&lagrangian::Triplet::MISSING));
+            TripletExposer.staticmethod( "MISSING" );
+        }
+    }
     //
     // lagrangian::FiniteLyapunovExponents
     //
@@ -183,9 +285,10 @@ void IntegrationPythonModule()
         .def(
             "Compute",
             (bp::tuple (lagrangian::FiniteLyapunovExponents::*)
-                (lagrangian::Iterator const &) const)
+                (lagrangian::Iterator const &,
+                 lagrangian::Triplet&) const)
                     (&FiniteLyapunovExponents::WrapperCompute),
-                                 (bp::arg("it")))
+                                 (bp::arg("it"), bp::arg("p")))
         .def(
             "Exponents",
             (void (lagrangian::FiniteLyapunovExponents::*)
