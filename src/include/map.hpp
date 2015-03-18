@@ -46,11 +46,11 @@ namespace lagrangian
 class MapProperties
 {
 protected:
-    double x_min_;
-    double y_min_;
-    double step_;
-    int nx_;
-    int ny_;
+    double x_min_;	//!< Minimal longitude
+    double y_min_;	//!< Minimal longitude
+    double step_;	//!< Step between two consecutive longitudes and latitudes
+    int nx_;		//!< Number of longitudes
+    int ny_;		//!< Number of latitudes
 
 public:
 
@@ -93,7 +93,7 @@ public:
     /**
      * @brief Get the latitude value
      *
-     * @param ix Index of the latitude in the grid
+     * @param iy Index of the latitude in the grid
      * @return The longitude
      */
     inline double GetYValue(const int iy) const
@@ -212,6 +212,9 @@ public:
 namespace map
 {
 
+/**
+ * @brief Handles the computation of the map
+ */
 class FiniteLyapunovExponents
 {
 private:
@@ -219,7 +222,7 @@ private:
     /**
      * @brief Compute a sub part of the map in a separate thread
      *
-     * @param args Parameters of the sub-matrix to compute
+     * @param splitter Parameters of the sub-matrix to compute
      * @param fle Finite Lyapunov exponents
      * @param it Current time step
      */
@@ -326,12 +329,22 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Handles a map of Finite Size or Time Lyapunov Exponents
+ */
 class MapOfFiniteLyapunovExponents: public map::FiniteLyapunovExponents
 {
 private:
     typedef double
     (lagrangian::FiniteLyapunovExponents::*GetExponent)() const;
 
+    /**
+     * @brief Default constructor
+     *
+     * @param nan Value of undefined cell
+     * @param fle Object used to compute the integration
+     * @param pGetExponent Function to use to calculate the exponent
+     */
     Map<double> GetMapOfExponents(const double nan,
             lagrangian::FiniteLyapunovExponents& fle,
             GetExponent pGetExponent)

@@ -1,0 +1,4 @@
+recursive-include src *.hpp
+recursive-include doc/source *
+include doc/Makefile doc/make.bat doc/cpp/*
+include README.md

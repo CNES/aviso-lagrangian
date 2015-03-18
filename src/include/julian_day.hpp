@@ -139,14 +139,14 @@ public:
      */
     JulianDay(const long double jd)
     {
-        double fractional, integer;
+        long double fractional, integer;
         long double integer_part = static_cast<int>(jd);
 
-        fractional = boost::math::round<double>(modf(jd - integer_part,
-              &integer) * 86400000000.0) * 1e-6;
+        fractional = boost::math::round<long double>(modfl(jd - integer_part,
+              &integer) * 864e8L) * 1e-6L;
 
         day_ = static_cast<int> (integer_part);
-        microseconds_ = static_cast<int> (modf(fractional, &integer) * 1e6);
+        microseconds_ = static_cast<int> (modfl(fractional, &integer) * 1e6L);
         seconds_ = static_cast<int> (integer);
     }
 
@@ -160,11 +160,15 @@ public:
     /**
      * @brief Computes a julian day from Unix Time
      *
+     * @param time Number of seconds elapsed since 1970
+     *
      * @return The julian day
      */
-    inline static long double FromUnixTime(const long double time)
+    inline static JulianDay FromUnixTime(const long double time)
     {
-        return time / 86400.0 + unix_time;
+        JulianDay result(time / 86400.0L);
+        result.day_ += unix_time;
+        return result;
     }
 
     /**
@@ -188,51 +192,120 @@ public:
     }
 
     /**
-     * @brief Returns the number of seconds since the start of the day.
+     * @brief Returns the number of microseconds.
      *
-     * @return The number of second
+     * @return The number of microseconds
      */
     inline int get_microseconds() const
     {
         return microseconds_;
     }
 
-    JulianDay& operator+=(const JulianDay& j);
-    JulianDay& operator-=(const JulianDay& j);
+    /**
+     * @brief Extends the date by adding an other julian day
+     *
+     * @param jd Julian day to add
+     *
+     * @return A reference to the extented julian day
+     */
+    JulianDay& operator+=(const JulianDay& jd);
 
+    /**
+     * @brief Reduces the date by subtracting an other julian day
+     *
+     * @param jd Julian day to add
+     *
+     * @return A reference to the reduced julian day
+     */
+    JulianDay& operator-=(const JulianDay& jd);
+
+    /**
+     * @brief Tests if this julian day is earlier than the other date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is earlier than the other date,
+     * otherwise false
+     */
     inline bool operator <(const JulianDay& jd) const
     {
         return Compare(jd) < 0;
     }
 
+    /**
+     * @brief Tests if this julian day is later than the other date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is later than the other date,
+     * otherwise false
+     */
     inline bool operator >(const JulianDay& jd) const
     {
         return Compare(jd) > 0;
     }
 
+    /**
+     * @brief Tests if this julian day is earlier than or equal to the other
+     * date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is earlier than or equal to the other
+     * date, otherwise false
+     */
     inline bool operator <=(const JulianDay& jd) const
     {
         return Compare(jd) <= 0;
     }
 
+    /**
+     * @brief Tests if this julian day is later than or equal to the other date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is later than or equal to the other date,
+     * otherwise false
+     */
     inline bool operator >=(const JulianDay& jd) const
     {
         return Compare(jd) >= 0;
     }
 
+    /**
+     * @brief Tests if this julian day is equal to the other date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is equal to the other date,
+     * otherwise false
+     */
     inline bool operator ==(const JulianDay& jd) const
     {
         return Compare(jd) == 0;
     }
 
+    /**
+     * @brief Tests if this julian day is different from the other date.
+     *
+     * @param jd Julian day to compare
+     *
+     * @return True if this julian day is different from the other date,
+     * otherwise false
+     */
     inline bool operator !=(const JulianDay& jd) const
     {
         return Compare(jd) != 0;
     }
 
-    virtual operator double() const
+    /**
+     * @brief Converts the julian day as a fractionnal julian day
+     *
+     * @return the fractionnal julian day
+     */
+    virtual operator long double() const
     {
-        return day_ + (seconds_ + microseconds_ * 1e-6) / 86400.0;
+        return day_ + (seconds_ + microseconds_ * 1e-6L) / 86400.0L;
     }
 
     /**
@@ -243,10 +316,16 @@ public:
      */
     inline long double ToUnixTime() const
     {
-        return (day_ * 86400.0 + seconds_ + microseconds_ * 1e-6) - unix_time
-                * 86400.0;
+        return (day_ - unix_time) * 86400.0L + seconds_ + microseconds_ * 1e-6L;
     }
 
+    /**
+     * @brief Makes a copy of an other julian day
+     *
+     * @param other An other julian day
+     *
+     * @return a reference to the copy
+     */
     JulianDay& operator=(const JulianDay& other)
     {
         day_ = other.day_;
@@ -282,24 +361,56 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Adds two julian day
+ *
+ * @param a A julian day
+ * @param b An other julian day
+ *
+ * @return A new julian day that contains the sum of the two julian day
+ */
 inline JulianDay operator+(const JulianDay& a, const JulianDay& b)
 {
     JulianDay r = a;
     return r += b;
 }
 
+/**
+ * @brief Removes two julian day
+ *
+ * @param a A julian day
+ * @param b An other julian day
+ *
+ * @return A new julian day that contains the subtraction of the two julian day
+ */
 inline JulianDay operator-(const JulianDay& a, const JulianDay& b)
 {
     JulianDay r = a;
     return r -= b;
 }
 
+/**
+ * @brief Writes the julian day to the stream
+ *
+ * @param os The stream used to write
+ * @param jd The julian day to write
+ *
+ * @return a reference to the stream updated
+ */
 inline std::ostream& operator<<(std::ostream& os, const JulianDay& jd)
 {
     return os << jd.get_day() << " " << jd.get_seconds() << " "
         << jd.get_microseconds();
 }
 
+/**
+ * @brief Reads a julian from the stream
+ *
+ * @param is The stream used to read
+ * @param jd The julian day read
+ *
+ * @return a reference to the stream updated
+ */
 inline std::istream& operator>>(std::istream& is, JulianDay& jd)
 {
     static boost::regex triplet("(\\d+)\\s+(\\d+)\\s+(\\d+)");
@@ -351,24 +462,47 @@ protected:
      * @return The julian day
      */
     template<typename T>
-    inline T ToJulianDay(const T mjd) const
+    static inline T ToJulianDay(const T mjd)
     {
         return mjd + GAP;
     }
 
 public:
 
+    /**
+     * @brief Construct a modified julian day from a
+     * boost::posix_time::ptime object
+     *
+     * @param t Instance of a ptime object. If t isn't set, the new instance
+     * will be contain the current date.
+     */
     AbstractModifiedJulianDay(const boost::posix_time::ptime& t =
         boost::posix_time::microsec_clock::universal_time()) :
       JulianDay(t)
     {
     }
 
+    /**
+     * @brief Creating a modified julian day from string.
+     *
+     * @param s String to parse.
+     */
     AbstractModifiedJulianDay(const std::string& s) :
       JulianDay(s)
     {
     }
 
+    /**
+     * @brief Creating a modified julian day from a triplet: day, seconds and
+     * microseconds.
+     *
+     * @param day julian day
+     * @param seconds Seconds
+     * @param microseconds Microseconds
+     *
+     * @throw std::invalid_argument if the number of seconds is greater than 86400
+     * or the number of microseconds is greater than 1000000
+     */
     AbstractModifiedJulianDay(
         const int day,
         const int seconds = 0,
@@ -377,11 +511,20 @@ public:
     {
     }
 
-    AbstractModifiedJulianDay(const double day) :
+    /**
+     * @brief Creating a modified julian day from a fractional julian day
+     *
+     * @param day julian day
+     */
+    AbstractModifiedJulianDay(const long double day) :
       JulianDay(ToJulianDay<long double> (day))
     {
     }
 
+    /**
+     * @brief Default method invoked when a AbstractModifiedJulianDay
+     * is destroyed.
+     */
     virtual ~AbstractModifiedJulianDay()
     {
     }
@@ -391,9 +534,13 @@ public:
      *
      * @return The modified julian day
      */
-    static long double FromUnixTime(const long double time)
+    static AbstractModifiedJulianDay<GAP> FromUnixTime(const long double time)
     {
-        return JulianDay::FromUnixTime(time) - GAP;
+        JulianDay jd(JulianDay::FromUnixTime(time));
+        return AbstractModifiedJulianDay<GAP>(
+            jd.get_day() - GAP,
+            jd.get_seconds(),
+            jd.get_microseconds());
     }
 
     /**
@@ -411,10 +558,10 @@ public:
      *
      * @return The decimal julian day
      */
-    operator double() const
+    operator long double() const
     {
         return GetModifiedJulianDay() + (get_seconds() + get_microseconds()
-            * 1e-6) / 86400.0;
+            * 1e-6L) / 86400.0L;
     }
 
     /**
@@ -433,6 +580,14 @@ public:
 
 // ___________________________________________________________________________//
 
+/**
+ * @brief Writes the AbstractModifiedJulianDay to the stream
+ *
+ * @param os The stream used to write
+ * @param mjd The modified julian day to write
+ *
+ * @return a reference to the stream updated
+ */
 template<int GAP>
 inline std::ostream& operator<<(
     std::ostream& os,
@@ -442,6 +597,14 @@ inline std::ostream& operator<<(
         << mjd.get_microseconds();
 }
 
+/**
+ * @brief Reads an AbstractModifiedJulianDay from the stream
+ *
+ * @param is The stream used to read
+ * @param mjd The modified julian day read
+ *
+ * @return a reference to the stream updated
+ */
 template<int GAP>
 inline std::istream& operator>>(
     std::istream& is,

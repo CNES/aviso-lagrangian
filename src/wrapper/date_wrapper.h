@@ -82,7 +82,9 @@ struct JulianDay: lagrangian::JulianDay, bp::wrapper<lagrangian::JulianDay>
     
     JulianDay(int const day, int const seconds, int const microseconds);
     
-    JulianDay(double const jd);
+    JulianDay(long double const jd);
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 // ___________________________________________________________________________//
@@ -102,9 +104,11 @@ struct ModifiedJulianDay: lagrangian::ModifiedJulianDay, bp::wrapper<
           int const seconds = 0,
           int const microseconds = 0);
     
-    ModifiedJulianDay(double const jd);
+    ModifiedJulianDay(long double const jd);
     
     int GetModifiedJulianDay() const;
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 // ___________________________________________________________________________//
@@ -124,9 +128,11 @@ struct CNESJulianDay: lagrangian::CNESJulianDay, bp::wrapper<
           int const seconds = 0,
           int const microseconds = 0);
     
-    CNESJulianDay(double const jd);
+    CNESJulianDay(long double const jd);
     
     int GetModifiedJulianDay() const;
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 // ___________________________________________________________________________//
@@ -146,9 +152,11 @@ struct LOPJulianDay: lagrangian::LOPJulianDay, bp::wrapper<
           int const seconds = 0,
           int const microseconds = 0);
     
-    LOPJulianDay(double const jd);
+    LOPJulianDay(long double const jd);
     
     int GetModifiedJulianDay() const;
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 // ___________________________________________________________________________//
@@ -168,9 +176,11 @@ struct NASAJulianDay: lagrangian::NASAJulianDay, bp::wrapper<
           int const seconds = 0,
           int const microseconds = 0);
     
-    NASAJulianDay(double const jd);
+    NASAJulianDay(long double const jd);
     
     int GetModifiedJulianDay() const;
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 // ___________________________________________________________________________//
@@ -190,9 +200,11 @@ struct CCSDSJulianDay: lagrangian::CCSDSJulianDay, bp::wrapper<
           int const seconds = 0,
           int const microseconds = 0);
     
-    CCSDSJulianDay(double const jd);
+    CCSDSJulianDay(long double const jd);
     
     int GetModifiedJulianDay() const;
+
+    static boost::posix_time::ptime FromUnixTime(const long double time);
 };
 
 void DatePythonModule();

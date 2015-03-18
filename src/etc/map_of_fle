@@ -95,7 +95,7 @@ def usage():
                         metavar=('PATH', 'VARNAME'))
     args, _ = parser.parse_known_args()
     if args.version:
-        print lagrangian.Version()
+        print(lagrangian.Version())
         sys.exit(0)
 
     parser.add_argument('configuration', help='Configuration file')
@@ -213,7 +213,8 @@ def main():
                                     'f8',
                                     ('x', 'y',),
                                     fill_value=NC_FILL_DOUBLE)
-    theta1.long_name = 'theta1'
+    theta1.long_name = 'FLE associated to the maximum eigenvalues of ' \
+        'Cauchy-Green strain tensor'
     theta1.units = 'degrees'
     theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle)
 
@@ -221,7 +222,8 @@ def main():
                                     'f8',
                                     ('x', 'y',),
                                     fill_value=NC_FILL_DOUBLE)
-    theta2.long_name = 'theta2'
+    theta2.long_name = 'FLE associated to the minimum eigenvalues of ' \
+        'Cauchy-Green strain tensor'
     theta2.units = 'degrees'
     theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle)
 
@@ -229,14 +231,16 @@ def main():
                                      'f8',
                                      ('x', 'y',),
                                      fill_value=NC_FILL_DOUBLE)
-    lambda1.long_name = 'lambda1'
+    lambda1.long_name = 'Orientation of the eigenvectors associated to the' \
+        'maximum eigenvalues of Cauchy-Green strain tensor'
     lambda1.units = '1/day'
     lambda1[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda1(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
 
     lambda2 = rootgrp.createVariable('lambda2', 'f8', ('x', 'y',),
                                      fill_value=NC_FILL_DOUBLE)
-    lambda2.long_name = 'lambda2'
+    lambda2.long_name = 'Orientation of the eigenvectors associated to the' \
+        'minimum eigenvalues of Cauchy-Green strain tensor'
     lambda2.units = '1/day'
     lambda2[:] = convert_from_sec_to_day(
         map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
@@ -251,7 +255,7 @@ def signal_handler(signum, _):
     for value, key in signal.__dict__.iteritems():
         if value.startswith('SIG'):
             signame[key] = value
-    print 'Stop with signal %s' % signame[signum]
+    print('Stop with signal %s' % signame[signum])
     for process in multiprocessing.process.active_children():
         process.terminate()
     sys.exit(0)

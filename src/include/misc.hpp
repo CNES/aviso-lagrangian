@@ -105,11 +105,11 @@ inline double Distance(const double lon0,
 }
 
 /**
- * @brief  Standardization of longitude
+ * @brief Standardization of longitude
  *
- * @param longitude position
- * @param circle value of the trigonometric circle in this coordinate system
- * @param half_circle value of the trigonometric circle / 2 in this coordinate
+ * @param x Longitude position
+ * @param circle Value of the trigonometric circle in this coordinate system
+ * @param half_circle Value of the trigonometric circle / 2 in this coordinate
  * system
  *
  * @return Longitude between [-half_circle, half_circle]

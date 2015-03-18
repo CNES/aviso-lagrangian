@@ -17,6 +17,7 @@
 
 #pragma once
 
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #define NO_IMPORT_ARRAY
 
@@ -30,14 +31,14 @@ namespace bp = boost::python;
 namespace wrapper
 {
 
-bp::numeric::array MakeVector(int n, PyArray_TYPES t = PyArray_DOUBLE)
+bp::numeric::array MakeVector(int n, NPY_TYPES t = NPY_DOUBLE)
 {
     bp::object obj(bp::handle<>(PyArray_FromDims(1, &n, t)));
     return bp::extract<bp::numeric::array>(obj);
 }
 
 bp::numeric::array MakeMatrix(std::vector<int> dimens,
-        PyArray_TYPES t = PyArray_DOUBLE)
+        NPY_TYPES t = NPY_DOUBLE)
 {
     bp::object obj(bp::handle<>(PyArray_FromDims(dimens.size(),
             &dimens[0],

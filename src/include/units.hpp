@@ -140,7 +140,7 @@ public:
      *
      * @param unit a unit.
      *
-     * @return Numeric values can be converted to time units.
+     * @return If unit represents a time
      */
     static bool IsTime(const std::string& unit)
     {

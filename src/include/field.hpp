@@ -44,7 +44,10 @@ public:
      */
     enum UnitType
     {
-        kMetric, kAngular
+        kMetric,	//!< The field velocity is expressed in the metric
+					//	system (eg. m/s)
+		kAngular	//!< The field velocity is expressed in the angular
+					// 	system (eg. deg/s)
     };
 
 private:

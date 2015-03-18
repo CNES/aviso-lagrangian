@@ -37,7 +37,7 @@ namespace axis
 {
 
 /**
- * @brief Unit known for a given type of axis.
+ * @brief Units known for a given type of axis.
  */
 class Unit
 {
@@ -50,6 +50,8 @@ protected:
 public:
     /**
      * @brief Checks if the unit can define this type of axis.
+     *
+     * @param unit Unit to check
      *
      * @return if the unit can define this type of axis
      */
