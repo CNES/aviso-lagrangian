@@ -13,8 +13,9 @@ other diagnostics such as orientation of Finite-Time Lyapunov Vectors.
 
 First steps with the software
 =============================
-[To know on how to build the library from sources and how to use the
-software](https://bitbucket.org/cnes_aviso/lagrangian/wiki/Install).
+[To know on how to build the library from
+sources](https://bitbucket.org/cnes_aviso/lagrangian/wiki/Install) and [how to
+use the software](https://bitbucket.org/cnes_aviso/lagrangian/wiki/Usage)
 
 Contents
 ========
