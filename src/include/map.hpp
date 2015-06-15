@@ -1,19 +1,19 @@
 /*
-    This file is part of lagrangian library.
+ This file is part of lagrangian library.
 
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ lagrangian is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ lagrangian is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #pragma once
 
@@ -27,12 +27,13 @@
 #include "list.hpp"
 #include "netcdf_reader.hpp"
 #include "trace.h"
+#include "stencil.hpp"
 
 // ___________________________________________________________________________//
 
 namespace std
 {
-    using ::getenv;
+using ::getenv;
 }
 
 // ___________________________________________________________________________//
@@ -68,7 +69,7 @@ public:
             const double x_min,
             const double y_min,
             const double step) :
-        x_min_(x_min), y_min_(y_min), step_(step), nx_(nx), ny_(ny)
+            x_min_(x_min), y_min_(y_min), step_(step), nx_(nx), ny_(ny)
     {
     }
 
@@ -177,8 +178,8 @@ public:
             const double x_min,
             const double y_min,
             const double step) :
-        MapProperties(nx, ny, x_min, y_min, step),
-                grid_(std::vector<T>(nx * ny))
+            MapProperties(nx, ny, x_min, y_min, step),
+                    grid_(std::vector<T>(nx * ny))
     {
     }
 
@@ -238,7 +239,7 @@ private:
      */
     inline bool Completed(const Index& index)
     {
-        Triplet& t = map_.GetItem(index.get_i(), index.get_j());
+        Position& t = map_.GetItem(index.get_i(), index.get_j());
         return t.get_completed() || t.IsMissing();
     }
 
@@ -250,7 +251,7 @@ private:
 
 protected:
     /// Grid
-    Map<Triplet> map_;
+    Map<Position> map_;
 
 public:
 
@@ -271,7 +272,7 @@ public:
             const double x_min,
             const double y_min,
             const double step) :
-                num_threads_(1), map_(nx, ny, x_min, y_min, step)
+            num_threads_(1), map_(nx, ny, x_min, y_min, step)
 
     {
 
@@ -282,12 +283,11 @@ public:
             try
             {
                 num_threads_ = boost::lexical_cast<int>(omp_num_threads);
-            }
-            catch (boost::bad_lexical_cast& e)
+            } catch (boost::bad_lexical_cast& e)
             {
                 throw std::runtime_error(
                         std::string("Invalid value for OMP_NUM_THREADS: ")
-                            + omp_num_threads);
+                                + omp_num_threads);
             }
         }
         Debug(str(boost::format("Uses %d threads") % num_threads_));
@@ -304,8 +304,12 @@ public:
      * @brief Initializing the grid cells
      *
      * @param fle Finite Lyapunov exponents
+     * @param stencil Type of stencil used for the calculation of finite
+     * difference.
      */
-    void Initialize(lagrangian::FiniteLyapunovExponents& fle);
+    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
+            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponents::kTriplet);
 
     /**
      * @brief Initializing the grid cells. Cells located on the hidden values
@@ -313,9 +317,13 @@ public:
      *
      * @param fle Finite Lyapunov exponents
      * @param reader NetCDF reader allow to access of the mask's value.
+     * @param stencil Type of stencil used for the calculation of finite
+     * difference.
      */
     void Initialize(lagrangian::FiniteLyapunovExponents& fle,
-            lagrangian::reader::Netcdf& reader);
+            lagrangian::reader::Netcdf& reader,
+            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponents::kTriplet);
 
     /**
      * @brief Compute the map
@@ -349,31 +357,30 @@ private:
             lagrangian::FiniteLyapunovExponents& fle,
             GetExponent pGetExponent)
     {
-        Map<double> result(map_.get_nx(),
-                map_.get_ny(),
-                map_.get_x_min(),
-                map_.get_y_min(),
-                map_.get_step());
+        Map<double> result(map_.get_nx(), map_.get_ny(), map_.get_x_min(),
+                map_.get_y_min(), map_.get_step());
 
         for (int ix = 0; ix < map_.get_nx(); ++ix)
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
             {
-                Triplet& t = map_.GetItem(ix, iy);
+                Position& t = map_.GetItem(ix, iy);
                 if (t.IsMissing())
                 {
                     result.SetItem(ix, iy, nan);
                 }
-                else if( !t.get_completed() && fle.get_mode() ==
-                        lagrangian::FiniteLyapunovExponents::kFSLE )
+                else if (!t.get_completed()
+                        && fle.get_mode()
+                                == lagrangian::FiniteLyapunovExponents::kFSLE)
                 {
                     result.SetItem(ix, iy, 0);
                 }
                 else
                 {
-                    double exponent = fle.Exponents(t)
-                        ? (fle.*pGetExponent)()
-                        : std::numeric_limits<double>::quiet_NaN();
+                    double exponent =
+                            fle.Exponents(t) ?
+                                    (fle.*pGetExponent)() :
+                                    std::numeric_limits<double>::quiet_NaN();
                     result.SetItem(ix, iy, exponent);
                 }
             }
@@ -396,39 +403,35 @@ public:
             const double x_min,
             const double y_min,
             const double step) :
-        map::FiniteLyapunovExponents(nx, ny, x_min, y_min, step)
+            map::FiniteLyapunovExponents(nx, ny, x_min, y_min, step)
     {
     }
 
     Map<double> GetMapOfLambda1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan,
-                fle,
+        return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda1);
     }
 
     Map<double> GetMapOfLambda2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan,
-                fle,
+        return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda2);
     }
 
     Map<double> GetMapOfTheta1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan,
-                fle,
+        return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta1);
     }
 
     Map<double> GetMapOfTheta2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan,
-                fle,
+        return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta2);
     }
 };

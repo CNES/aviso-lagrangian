@@ -22,7 +22,7 @@
 namespace lagrangian
 {
 
-bool FiniteLyapunovExponents::Exponents(const Triplet& p)
+bool FiniteLyapunovExponents::Exponents(const Position& p)
 {
     // Advection time T
     const double delta_t = p.get_time() - start_time_;
@@ -34,10 +34,12 @@ bool FiniteLyapunovExponents::Exponents(const Triplet& p)
     // ∇Φ =  1 / δ₀  * [ a₀₀ a₀₁ ]
     //                 [ a₁₀ a₁₁ ]
     // where δ₀ is the initial separation distance of the particules
-    double a00 = p.get_x1() - p.get_x0();
-    double a01 = p.get_x2() - p.get_x0();
-    double a10 = p.get_y1() - p.get_y0();
-    double a11 = p.get_y2() - p.get_y0();
+    double a00;
+    double a01;
+    double a10;
+    double a11;
+
+    p.StrainTensor(a00, a01, a10, a11);
 
     if (field_->get_unit_type() == Field::kAngular)
     {

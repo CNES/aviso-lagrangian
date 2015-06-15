@@ -77,7 +77,7 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            lagrangian::Triplet& t = map_.GetItem(ix, iy);
+            lagrangian::Position& t = map_.GetItem(ix, iy);
             if (t.IsMissing())
             {
                 data[ix * map_.get_ny() + iy] = nan;
@@ -153,6 +153,11 @@ MapProperties MapOfFiniteLyapunovExponents::get_map_properties() const
 
 void MapPythonModule()
 {
+    // lagrangian::reader::Factory::Type
+    bp::enum_<lagrangian::FiniteLyapunovExponents::Stencil>("Stencil")
+            .value("kTriplet", lagrangian::FiniteLyapunovExponents::kTriplet)
+            .value("kQuintuplet", lagrangian::FiniteLyapunovExponents::kQuintuplet)
+            .export_values();
     //
     // Map
     //
@@ -212,13 +217,15 @@ void MapPythonModule()
         .def(
             "Initialize",
             (void (MapOfFiniteLyapunovExponents::*)
-                (lagrangian::FiniteLyapunovExponents &))
+                (lagrangian::FiniteLyapunovExponents &,
+                 const lagrangian::FiniteLyapunovExponents::Stencil))
                     (&MapOfFiniteLyapunovExponents::Initialize))
         .def(
             "Initialize",
             (void (MapOfFiniteLyapunovExponents::*)
                 (lagrangian::FiniteLyapunovExponents &,
-                 lagrangian::reader::Netcdf&))
+                 lagrangian::reader::Netcdf&,
+                 const lagrangian::FiniteLyapunovExponents::Stencil))
                     (&MapOfFiniteLyapunovExponents::Initialize))
         .def(
             "GetMapOfLambda1",

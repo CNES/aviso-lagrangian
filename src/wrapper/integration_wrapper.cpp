@@ -75,7 +75,7 @@ FiniteLyapunovExponents::FiniteLyapunovExponents(
 
 bp::tuple FiniteLyapunovExponents::WrapperCompute(
         const lagrangian::Iterator& it,
-        lagrangian::Triplet& p) const
+        lagrangian::Position& p) const
 {
     lagrangian::CellProperties cell;
 
@@ -158,104 +158,96 @@ void IntegrationPythonModule()
              bp::arg("x1")));
 
     //
+    // lagrangian::Position
+    //
+    {
+        bp::class_<lagrangian::Position> PositionExposer = bp::class_<lagrangian::Position>(
+        "Position",
+        bp::init< >());
+        // Constructors
+        PositionExposer.def(
+                bp::init<double, double, double>((
+                        bp::arg("x"),
+                        bp::arg("y"),
+                        bp::arg("delta"))));
+        { //lagrangian::Position::get_xi
+            PositionExposer.def(
+                "get_xi",
+                (double (lagrangian::Position::*)(const size_t) const)
+                    (&lagrangian::Position::get_xi));
+        }
+        { //lagrangian::Position::get_yi
+            PositionExposer.def(
+                "get_yi",
+                (double (lagrangian::Position::*)(const size_t) const)
+                    (&lagrangian::Position::get_yi));
+        }
+        { //lagrangian::Position::get_time
+            PositionExposer.def(
+                "get_time",
+                (double (lagrangian::Position::*)() const)
+                    (&lagrangian::Position::get_time));
+        }
+        { //lagrangian::Position::get_completed
+            PositionExposer.def(
+                "get_completed",
+                (bool (lagrangian::Position::*)() const)
+                    (&lagrangian::Position::get_completed));
+        }
+        { //lagrangian::Position::set_completed
+            PositionExposer.def(
+                "set_completed",
+                (void (lagrangian::Position::*)())
+                    (&lagrangian::Position::set_completed));
+        }
+        { //lagrangian::Position::IsMissing
+            PositionExposer.def(
+                "IsMissing",
+                (bool (lagrangian::Position::*)())
+                    (&lagrangian::Position::IsMissing));
+        }
+        { //lagrangian::Position::MISSING
+            PositionExposer.def(
+                "MISSING",
+                (lagrangian::Position const (*)())
+                    (&lagrangian::Position::MISSING));
+            PositionExposer.staticmethod( "MISSING" );
+        }
+    }
+    //
     // lagrangian::Triplet
     //
     {
-        bp::class_<lagrangian::Triplet> TripletExposer = bp::class_<lagrangian::Triplet>(
-        "Triplet",
-        bp::init< >());
-        // Constructors
-        TripletExposer.def(
-                bp::init<double, double, double, double, double, double>((
-                        bp::arg("x0"),
-                        bp::arg("x1"),
-                        bp::arg("x2"),
-                        bp::arg("y0"),
-                        bp::arg("y1"),
-                        bp::arg("y2"))));
-        { //lagrangian::Triplet::Update
+        bp::class_<lagrangian::Triplet,
+            bp::bases<lagrangian::Position> > TripletExposer = bp::class_<
+                lagrangian::Triplet, bp::bases<lagrangian::Position> >(
+                    "Triplet", bp::no_init);
+        { //lagrangian::Triplet::StrainTensor
             TripletExposer.def(
-                "Update",
-                (void (lagrangian::Triplet::*)( double,
-                                                double,
-                                                double,
-                                                double,
-                                                double,
-                                                double ))
-                    ( &lagrangian::Triplet::Update ),
-                (bp::arg("x0"),
-                 bp::arg("x1"),
-                 bp::arg("x2"),
-                 bp::arg("y0"),
-                 bp::arg("y1"),
-                 bp::arg("y2")));
+                "StrainTensor",
+                (void (lagrangian::Triplet::*)
+                    (double&,
+                     double&,
+                     double&) const)
+                        (&lagrangian::Triplet::StrainTensor));
         }
-        { //lagrangian::Triplet::get_x0
-            TripletExposer.def(
-                "get_x0",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_x0));
-        }
-        { //lagrangian::Triplet::get_x1
-            TripletExposer.def(
-                "get_x1",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_x1));
-        }
-        { //lagrangian::Triplet::get_x2
-            TripletExposer.def(
-                "get_x2",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_x2));
-        }
-        { //lagrangian::Triplet::get_y0
-            TripletExposer.def(
-                "get_y0",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_y0));
-        }
-        { //lagrangian::Triplet::get_y1
-            TripletExposer.def(
-                "get_y1",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_y1));
-        }
-        { //lagrangian::Triplet::get_y2
-            TripletExposer.def(
-                "get_y2",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_y2));
-        }
-        { //lagrangian::Triplet::get_time
-            TripletExposer.def(
-                "get_time",
-                (double (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_time));
-        }
-        { //lagrangian::Triplet::get_completed
-            TripletExposer.def(
-                "get_completed",
-                (bool (lagrangian::Triplet::*)() const)
-                    (&lagrangian::Triplet::get_completed));
-        }
-        { //lagrangian::Triplet::set_completed
-            TripletExposer.def(
-                "set_completed",
-                (void (lagrangian::Triplet::*)())
-                    (&lagrangian::Triplet::set_completed));
-        }
-        { //lagrangian::Triplet::IsMissing
-            TripletExposer.def(
-                "IsMissing",
-                (bool (lagrangian::Triplet::*)())
-                    (&lagrangian::Triplet::IsMissing));
-        }
-        { //lagrangian::Triplet::MISSING
-            TripletExposer.def(
-                "MISSING",
-                (lagrangian::Triplet const (*)())
-                    (&lagrangian::Triplet::MISSING));
-            TripletExposer.staticmethod( "MISSING" );
+    }
+    //
+    // lagrangian::Quintuplet
+    //
+    {
+        bp::class_<lagrangian::Quintuplet,
+            bp::bases<lagrangian::Position> > QuintupletExposer = bp::class_<
+                lagrangian::Quintuplet, bp::bases<lagrangian::Position> >(
+                    "Quintuplet", bp::no_init);
+        { //lagrangian::Quintuplet::StrainTensor
+            QuintupletExposer.def(
+                "StrainTensor",
+                (void (lagrangian::Quintuplet::*)
+                    (double&,
+                     double&,
+                     double&) const)
+                        (&lagrangian::Quintuplet::StrainTensor));
         }
     }
     //
@@ -286,30 +278,31 @@ void IntegrationPythonModule()
             "Compute",
             (bp::tuple (lagrangian::FiniteLyapunovExponents::*)
                 (lagrangian::Iterator const &,
-                 lagrangian::Triplet&) const)
+                 lagrangian::Position&) const)
                     (&FiniteLyapunovExponents::WrapperCompute),
                                  (bp::arg("it"), bp::arg("p")))
         .def(
             "Exponents",
             (void (lagrangian::FiniteLyapunovExponents::*)
-                (lagrangian::Iterator const &,
-                 lagrangian::Triplet const &))
+                (lagrangian::Position const &))
                      (&lagrangian::FiniteLyapunovExponents::Exponents),
-            (bp::arg("it"),
-             bp::arg("p")))
+            (bp::arg("p")))
         .def(
             "Separation",
             (bool (lagrangian::FiniteLyapunovExponents::*)
-                (lagrangian::Triplet const &) const)
+                (lagrangian::Position const &) const)
                     (&lagrangian::FiniteLyapunovExponents::Separation),
             ( bp::arg("p")))
         .def(
             "SetInitialPoint",
-            (lagrangian::Triplet (lagrangian::FiniteLyapunovExponents::*)
-                (double const, double const) const)
+            (lagrangian::Position (lagrangian::FiniteLyapunovExponents::*)
+                (double const,
+                 double const,
+                 const lagrangian::FiniteLyapunovExponents::Stencil) const)
                     (&lagrangian::FiniteLyapunovExponents::SetInitialPoint),
             (bp::arg("x"),
-             bp::arg("y")))
+             bp::arg("y"),
+             bp::arg("stencil")))
         .def(
              "get_lambda1",
              (double (lagrangian::FiniteLyapunovExponents::*)() const)

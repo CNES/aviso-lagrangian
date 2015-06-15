@@ -56,7 +56,7 @@ public:
         case kNetCDF:
             return new Netcdf();
         }
-        throw std::invalid_argument("invalid ReaderFactory::Type value");
+        throw std::invalid_argument("invalid lagrangian::reader::Factory::Type value");
     }
 };
 

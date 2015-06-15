@@ -1,19 +1,19 @@
 /*
-    This file is part of lagrangian library.
+ This file is part of lagrangian library.
 
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ lagrangian is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ lagrangian is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #pragma once
 
 // ___________________________________________________________________________//
@@ -27,78 +27,12 @@
 #include "field.hpp"
 #include "julian_day.hpp"
 #include "runge_kutta.hpp"
+#include "stencil.hpp"
 
 // ___________________________________________________________________________//
 
 namespace lagrangian
 {
-
-/**
- * @brief Definition of an iterator over a time period
- */
-class Iterator
-{
-private:
-    double end_;
-    double inc_;
-    double ix_;
-
-public:
-
-    /**
-     * @brief Default constructor
-     *
-     * @param begin Begin of the period expressed in number of seconds
-     * elapsed since 1970
-     * @param end End of the period expressed in number of seconds
-     * elapsed since 1970
-     * @param inc Time increment in seconds
-     */
-    Iterator(const double begin, const double end, const double inc) :
-        end_(end), inc_(begin > end ? -inc : inc), ix_(begin)
-    {
-    }
-
-    /**
-     * @brief Test whether there is still a time step to cross into the time
-     * interval defined.
-     *
-     * @return True if the path in the time interval is not complete.
-     */
-    inline bool GoAfter() const
-    {
-        return inc_ > 0 ? ix_ <= end_ : ix_ >= end_;
-    }
-
-    /**
-     * @brief Move to the next time step.
-     */
-    inline void operator++()
-    {
-        ix_ += inc_;
-    }
-
-    /**
-     * @brief Get the current time in the time interval defined
-     *
-     * @return The current time expressed in number of seconds elapsed since
-     * 1970
-     */
-    inline double operator()() const
-    {
-        return ix_;
-    }
-
-    /**
-     * @brief Get the time step defined
-     *
-     * @return The time step expressed in seconds
-     */
-    inline double inc() const
-    {
-        return inc_;
-    }
-};
 
 // ___________________________________________________________________________//
 
@@ -132,11 +66,11 @@ public:
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
             Field* field) :
-        size_of_interval_(delta_t.total_seconds()), field_(field),
-                start_time_(start_time.ToUnixTime()),
-                end_time_(end_time.ToUnixTime()),
-                rk_(size_of_interval_ * (start_time_ > end_time_ ? -1: 1),
-                        field_)
+            size_of_interval_(delta_t.total_seconds()), field_(field),
+                    start_time_(start_time.ToUnixTime()),
+                    end_time_(end_time.ToUnixTime()),
+                    rk_(size_of_interval_ * (start_time_ > end_time_ ? -1 : 1),
+                            field_)
     {
         if (size_of_interval_ < 0)
             throw std::runtime_error("Time delta must be positive");
@@ -166,9 +100,9 @@ public:
      */
     void Fetch(const double t) const
     {
-        start_time_ < end_time_
-            ? field_->Fetch(t, t + size_of_interval_)
-            : field_->Fetch(t, t - size_of_interval_);
+        start_time_ < end_time_ ?
+                field_->Fetch(t, t + size_of_interval_) :
+                field_->Fetch(t, t - size_of_interval_);
     }
 };
 
@@ -191,14 +125,11 @@ public:
      * @param delta_t Time interval, in seconds
      * @param field Field to use for computing the velocity of a point.
      */
-     Path(const JulianDay& start_time,
+    Path(const JulianDay& start_time,
             const JulianDay& end_time,
             const boost::posix_time::time_duration& delta_t,
             Field* field) :
-                Integration(start_time,
-                        end_time,
-                        delta_t,
-                        field)
+            Integration(start_time, end_time, delta_t, field)
     {
     }
 
@@ -227,192 +158,6 @@ public:
             double& y1) const
     {
         return rk_.Compute(it(), x0, y0, x1, y1);
-    }
-};
-
-// ___________________________________________________________________________//
-
-/**
- * @brief Define the position of three points
- */
-class Triplet
-{
-private:
-    double x0_, x1_, x2_;
-    double y0_, y1_, y2_;
-    double time_;
-    bool completed_;
-
-public:
-
-    /**
-     * @brief Default constructor
-     */
-    Triplet() :
-            x0_(), x1_(), x2_(), y0_(), y1_(), y2_(), time_(), completed_()
-    {
-    }
-
-    /**
-     * @brief Construct a new object defining the position of the 3 points
-     *
-     * @param x0 Longitude of point #1
-     * @param x1 Longitude of point #2
-     * @param x2 Longitude of point #3
-     * @param y0 Latitude of point #1
-     * @param y1 Latitude of point #2
-     * @param y2 Latitude of point #3
-     */
-    Triplet(const double x0,
-            const double x1,
-            const double x2,
-            const double y0,
-            const double y1,
-            const double y2) :
-            x0_(x0), x1_(x1), x2_(x2), y0_(y0), y1_(y1), y2_(y2), time_(0), completed_(false)
-    {
-    }
-
-    /**
-     * @brief Update the position
-     *
-     * @param time Time step (number of seconds elapsed since 1970)
-     * @param x0 Longitude of point #1
-     * @param x1 Longitude of point #2
-     * @param x2 Longitude of point #3
-     * @param y0 Latitude of point #1
-     * @param y1 Latitude of point #2
-     * @param y2 Latitude of point #3
-     */
-    inline void Update(const double time,
-            const double x0,
-            const double x1,
-            const double x2,
-            const double y0,
-            const double y1,
-            const double y2)
-    {
-        x0_ = x0;
-        x1_ = x1;
-        x2_ = x2;
-        y0_ = y0;
-        y1_ = y1;
-        y2_ = y2;
-        time_ = time;
-    }
-
-    /**
-     * @brief Get the longitude of the point #1
-     *
-     * @return The longitude in degrees
-     */
-    inline double get_x0() const
-    {
-        return x0_;
-    }
-
-    /**
-     * @brief Get the longitude of the point #2
-     *
-     * @return The longitude in degrees
-     */
-    inline double get_x1() const
-    {
-        return x1_;
-    }
-
-    /**
-     * @brief Get the longitude of the point #3
-     *
-     * @return The longitude in degrees
-     */
-    inline double get_x2() const
-    {
-        return x2_;
-    }
-
-    /**
-     * @brief Get the latitude of the point #1
-     *
-     * @return The latitude in degrees
-     */
-    inline double get_y0() const
-    {
-        return y0_;
-    }
-
-    /**
-     * @brief Get the latitude of the point #2
-     *
-     * @return The latitude in degrees
-     */
-    inline double get_y1() const
-    {
-        return y1_;
-    }
-
-    /**
-     * @brief Get the latitude of the point #3
-     *
-     * @return The latitude in degrees
-     */
-    inline double get_y2() const
-    {
-        return y2_;
-    }
-
-    /**
-     * @brief Get the time at the end of the integration
-     *
-     * @return The time expressed in number of seconds elapsed since 1970
-     */
-    inline double get_time() const
-    {
-        return time_;
-    }
-
-    /**
-     * @brief Test if the integration is over
-     *
-     * @return True if the integration is over
-     */
-    inline bool get_completed() const
-    {
-        return completed_;
-    }
-
-    /**
-     * @brief Indicate that the integration is complete.
-     */
-    inline void set_completed()
-    {
-        completed_ = true;
-    }
-
-    /**
-     * @brief Test if the integration is defined.
-     *
-     * @return True if the integration is defined.
-     */
-    inline bool IsMissing()
-    {
-        return std::isnan(x0_) || std::isnan(x1_) || std::isnan(x2_)
-                || std::isnan(y0_) || std::isnan(y1_) || std::isnan(y2_);
-    }
-
-    /**
-     * @brief Return the location of a missing dot
-     *
-     * @return The missing dot
-     */
-    static Triplet const MISSING()
-    {
-        return Triplet(std::numeric_limits<double>::quiet_NaN(),
-                std::numeric_limits<double>::quiet_NaN(),
-                std::numeric_limits<double>::quiet_NaN(),
-                std::numeric_limits<double>::quiet_NaN(),
-                std::numeric_limits<double>::quiet_NaN(),
-                std::numeric_limits<double>::quiet_NaN());
     }
 };
 
@@ -505,7 +250,7 @@ public:
  * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
  * neighbouring particules separate from a given distance d.
  *
- * Exponents(const Triplet& p) function implements the computation of the
+ * Exponents(const Stencil& p) function implements the computation of the
  * lyapunov exponents based on maximal and minimal eigenvalues and orientation
  * of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
  *
@@ -528,12 +273,21 @@ public:
     enum Mode
     {
         kFSLE,	//!< Finite Size Lyapunov Exponent
-		kFTLE	//!< Finite Time Lyapunov Exponent
+        kFTLE	//!< Finite Time Lyapunov Exponent
+    };
+
+    /**
+     * @brief Type of stencil known
+     */
+    enum Stencil
+    {
+        kTriplet,    //!< kTriplet
+        kQuintuplet //!< kQuintuplet
     };
 
 private:
     typedef bool
-    (FiniteLyapunovExponents::*SeparationFunction)(const Triplet& p) const;
+    (FiniteLyapunovExponents::*SeparationFunction)(const Position& p) const;
 
     const double delta_;
     double min_separation_;
@@ -545,15 +299,12 @@ private:
     double theta1_;
     double theta2_;
 
-    inline bool SeparationFSLE(const Triplet& p) const
+    inline bool SeparationFSLE(const Position& p) const
     {
-        double d1 = Distance(p.get_x0(), p.get_y0(), p.get_x1(), p.get_y1());
-        double d2 = Distance(p.get_x0(), p.get_y0(), p.get_x2(), p.get_y2());
-
-        return (d1 > d2 ? d1: d2) > min_separation_;
+        return p.MaxDistance() > min_separation_;
     }
 
-    inline bool SeparationFTLE(const Triplet&) const
+    inline bool SeparationFTLE(const Position&) const
     {
         return false;
     }
@@ -580,9 +331,9 @@ public:
             const double min_separation,
             const double delta,
             Field* field) :
-        Integration(start_time, end_time, delta_t, field),
-                delta_(delta), mode_(mode), f2_(0.5 * (1 / (delta_ * delta_))),
-                lambda1_(), lambda2_(), theta1_(), theta2_()
+            Integration(start_time, end_time, delta_t, field), delta_(delta),
+                    mode_(mode), f2_(0.5 * (1 / (delta_ * delta_))), lambda1_(),
+                    lambda2_(), theta1_(), theta2_()
     {
         switch (mode_)
         {
@@ -612,12 +363,24 @@ public:
      *
      * @param x Longitude
      * @param y Latitude
+     * @param stencil Type of stencil used
      *
      * @return The position of the initial point
      */
-    inline Triplet SetInitialPoint(const double x, const double y) const
+    inline Position SetInitialPoint(const double x,
+            const double y,
+            const Stencil stencil) const
     {
-        return Triplet(x, x + delta_, x, y, y, y + delta_);
+        switch (stencil)
+        {
+        case kTriplet:
+            return Triplet(x, y, delta_);
+        case kQuintuplet:
+            return Quintuplet(x, y, delta_);
+        default:
+            throw std::invalid_argument(
+                    "invalid invalid FiniteLyapunovExponents::Stencil type");
+        }
     }
 
     /**
@@ -627,7 +390,7 @@ public:
      *
      * @return True if the particle is separated.
      */
-    inline bool Separation(const Triplet& p) const
+    inline bool Separation(const Position& p) const
     {
         return (this->*pSeparation_)(p);
     }
@@ -651,18 +414,11 @@ public:
      *
      * @return True the integration is defined otherwise false
      */
-    inline bool Compute(const Iterator& it, Triplet& p,
+    inline bool Compute(const Iterator& it,
+            Position& p,
             CellProperties& cell) const
     {
-        double x[3], y[3];
-
-        if (!rk_.Compute(it(), p.get_x0(), p.get_y0(), x[0], y[0], cell)
-                || !rk_.Compute(it(), p.get_x1(), p.get_y1(), x[1], y[1], cell)
-                || !rk_.Compute(it(), p.get_x2(), p.get_y2(), x[2], y[2], cell))
-            return false;
-
-        p.Update(it(), x[0], x[1], x[2], y[0], y[1], y[2]);
-        return true;
+        return p.Compute(rk_, it, cell);
     }
 
     /**
@@ -673,7 +429,7 @@ public:
      *
      * @return True if the exponents are defined
      */
-    bool Exponents(const Triplet& p);
+    bool Exponents(const Position& p);
 
     inline double get_lambda1() const
     {

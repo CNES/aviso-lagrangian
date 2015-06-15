@@ -60,7 +60,7 @@ struct FiniteLyapunovExponents: lagrangian::FiniteLyapunovExponents, bp::wrapper
             lagrangian::Field* field);
 
     bp::tuple WrapperCompute(const lagrangian::Iterator& it,
-            lagrangian::Triplet& p) const;
+            lagrangian::Position& p) const;
 };
 
 // ___________________________________________________________________________//
