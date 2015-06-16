@@ -18,6 +18,7 @@
 #include <vector>
 #include <stdexcept>
 #include <limits>
+#include "runge_kutta.hpp"
 #include "misc.hpp"
 
 namespace lagrangian
@@ -132,19 +133,6 @@ public:
      * @brief Default constructor
      */
     Position() :
-            x_(), y_(), time_(), completed_()
-    {
-    }
-
-    /**
-     * @brief Construct a new object defining the position of the N points
-     *
-     * @param x Longitude of the initial point
-     * @param y Latitude of the initial point
-     * @param step Initial initial separation in degrees of neighboring
-     *  particles
-     */
-    Position(const double x, const double y, const double delta) :
             x_(), y_(), time_(0), completed_(false)
     {
     }
@@ -205,6 +193,15 @@ public:
     }
 
     /**
+     * @brief Set the instance to represent a missing position.
+     */
+    inline void Missing()
+    {
+        x_.clear();
+        y_.clear();
+    }
+
+    /**
      * @brief Test if the integration is defined.
      *
      * @return True if the integration is defined.
@@ -247,7 +244,7 @@ public:
 
         for (size_t ix = 0; ix < x_.size(); ++ix)
         {
-            if (!rk.Compute(it(), x_[ix], y_[ix], x[ix], y[ix], cell))
+            if (!rk.Compute(it(), x_.at(ix), y_.at(ix), x[ix], y[ix], cell))
                 return false;
         }
         Update(it(), x, y);
@@ -260,23 +257,7 @@ public:
     virtual void StrainTensor(double& a00,
             double& a01,
             double& a10,
-            double& a11) const
-    {
-        a00 = std::numeric_limits<double>::quiet_NaN();
-        a01 = std::numeric_limits<double>::quiet_NaN();
-        a10 = std::numeric_limits<double>::quiet_NaN();
-        a11 = std::numeric_limits<double>::quiet_NaN();
-    }
-
-    /**
-     * @brief Return the location of a missing dot
-     *
-     * @return The missing dot
-     */
-    static Position const MISSING()
-    {
-        return Position();
-    }
+            double& a11) const = 0;
 };
 
 class Triplet: public Position
@@ -301,7 +282,7 @@ public:
      *  particles
      */
     Triplet(const double x, const double y, const double delta) :
-            Position(x, y, delta)
+            Position()
     {
         x_.push_back(x);
         x_.push_back(x + delta);
@@ -348,7 +329,7 @@ public:
      *  particles
      */
     Quintuplet(const double x, const double y, const double delta) :
-            Position(x, y, delta)
+            Position()
     {
         x_.push_back(x);
         x_.push_back(x + delta);

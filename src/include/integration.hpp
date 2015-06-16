@@ -42,11 +42,11 @@ namespace lagrangian
 class Integration
 {
 protected:
-    double size_of_interval_;	//!< Integration time in number of seconds
-    Field* field_;				//!< Field used to compute the velocity
-    double start_time_;			//!< Start time of the integration
-    double end_time_;			//!< End time of the integration
-    RungeKutta rk_;				//!< Runge-Kutta object
+    double size_of_interval_;   //!< Integration time in number of seconds
+    Field* field_;              //!< Field used to compute the velocity
+    double start_time_;         //!< Start time of the integration
+    double end_time_;           //!< End time of the integration
+    RungeKutta rk_;             //!< Runge-Kutta object
 
 public:
 
@@ -272,8 +272,8 @@ public:
      */
     enum Mode
     {
-        kFSLE,	//!< Finite Size Lyapunov Exponent
-        kFTLE	//!< Finite Time Lyapunov Exponent
+        kFSLE,  //!< Finite Size Lyapunov Exponent
+        kFTLE   //!< Finite Time Lyapunov Exponent
     };
 
     /**
@@ -287,7 +287,7 @@ public:
 
 private:
     typedef bool
-    (FiniteLyapunovExponents::*SeparationFunction)(const Position& p) const;
+    (FiniteLyapunovExponents::*SeparationFunction)(const Position* const p) const;
 
     const double delta_;
     double min_separation_;
@@ -299,12 +299,12 @@ private:
     double theta1_;
     double theta2_;
 
-    inline bool SeparationFSLE(const Position& p) const
+    inline bool SeparationFSLE(const Position* const p) const
     {
-        return p.MaxDistance() > min_separation_;
+        return p->MaxDistance() > min_separation_;
     }
 
-    inline bool SeparationFTLE(const Position&) const
+    inline bool SeparationFTLE(const Position* const) const
     {
         return false;
     }
@@ -367,16 +367,16 @@ public:
      *
      * @return The position of the initial point
      */
-    inline Position SetInitialPoint(const double x,
+    inline Position* SetInitialPoint(const double x,
             const double y,
             const Stencil stencil) const
     {
         switch (stencil)
         {
         case kTriplet:
-            return Triplet(x, y, delta_);
+            return new Triplet(x, y, delta_);
         case kQuintuplet:
-            return Quintuplet(x, y, delta_);
+            return new Quintuplet(x, y, delta_);
         default:
             throw std::invalid_argument(
                     "invalid invalid FiniteLyapunovExponents::Stencil type");
@@ -390,7 +390,7 @@ public:
      *
      * @return True if the particle is separated.
      */
-    inline bool Separation(const Position& p) const
+    inline bool Separation(const Position* const p) const
     {
         return (this->*pSeparation_)(p);
     }
@@ -409,16 +409,16 @@ public:
      * @brief Calculate the integration
      *
      * @param it Iterator
-     * @param p Position of the particle
+     * @param position Position of the particle
      * @param cell Cell properties of the grid used for the interpolation
      *
      * @return True the integration is defined otherwise false
      */
     inline bool Compute(const Iterator& it,
-            Position& p,
+            Position* const position,
             CellProperties& cell) const
     {
-        return p.Compute(rk_, it, cell);
+        return position->Compute(rk_, it, cell);
     }
 
     /**
@@ -429,7 +429,7 @@ public:
      *
      * @return True if the exponents are defined
      */
-    bool Exponents(const Position& p);
+    bool Exponents(const Position* const p);
 
     inline double get_lambda1() const
     {

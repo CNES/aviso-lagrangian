@@ -30,6 +30,12 @@ SYSTEM_UNITS = {
 }
 
 
+STENCIL = {
+    "triplet": lagrangian.kTriplet,
+    "quintuplet": lagrangian.kQuintuplet
+}
+
+
 def positive_value(value):
     """
     Check options for defining values strictly positive.
@@ -183,9 +189,9 @@ def main():
         reader = lagrangian.NetcdfReader()
         reader.Open(args.mask[0])
         reader.Load(args.mask[1])
-        map_of_fle.Initialize(fle, reader)
+        map_of_fle.Initialize(fle, reader, lagrangian.kTriplet)
     else:
-        map_of_fle.Initialize(fle)
+        map_of_fle.Initialize(fle, lagrangian.kTriplet)
 
     # Computes map
     map_of_fle.Compute(fle)
@@ -252,7 +258,7 @@ def signal_handler(signum, _):
     Signal handler
     """
     signame = {}
-    for value, key in signal.__dict__.iteritems():
+    for value, key in signal.__dict__.items():
         if value.startswith('SIG'):
             signame[key] = value
     print('Stop with signal %s' % signame[signum])

@@ -47,11 +47,11 @@ namespace lagrangian
 class MapProperties
 {
 protected:
-    double x_min_;	//!< Minimal longitude
-    double y_min_;	//!< Minimal longitude
-    double step_;	//!< Step between two consecutive longitudes and latitudes
-    int nx_;		//!< Number of longitudes
-    int ny_;		//!< Number of latitudes
+    double x_min_;  //!< Minimal longitude
+    double y_min_;  //!< Minimal longitude
+    double step_;   //!< Step between two consecutive longitudes and latitudes
+    int nx_;        //!< Number of longitudes
+    int ny_;        //!< Number of latitudes
 
 public:
 
@@ -239,8 +239,8 @@ private:
      */
     inline bool Completed(const Index& index)
     {
-        Position& t = map_.GetItem(index.get_i(), index.get_j());
-        return t.get_completed() || t.IsMissing();
+        Position* position = map_.GetItem(index.get_i(), index.get_j());
+        return position->get_completed() || position->IsMissing();
     }
 
     /// Number of threads
@@ -251,7 +251,7 @@ private:
 
 protected:
     /// Grid
-    Map<Position> map_;
+    Map<Position*> map_;
 
 public:
 
@@ -298,6 +298,9 @@ public:
      */
     virtual ~FiniteLyapunovExponents()
     {
+        for (int ix = 0; ix < map_.get_nx(); ++ix)
+            for (int iy = 0; iy < map_.get_ny(); ++iy)
+                delete map_.GetItem(ix, iy);
     }
 
     /**
@@ -364,12 +367,12 @@ private:
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
             {
-                Position& t = map_.GetItem(ix, iy);
-                if (t.IsMissing())
+                Position* position = map_.GetItem(ix, iy);
+                if (position->IsMissing())
                 {
                     result.SetItem(ix, iy, nan);
                 }
-                else if (!t.get_completed()
+                else if (!position->get_completed()
                         && fle.get_mode()
                                 == lagrangian::FiniteLyapunovExponents::kFSLE)
                 {
@@ -378,7 +381,7 @@ private:
                 else
                 {
                     double exponent =
-                            fle.Exponents(t) ?
+                            fle.Exponents(position) ?
                                     (fle.*pGetExponent)() :
                                     std::numeric_limits<double>::quiet_NaN();
                     result.SetItem(ix, iy, exponent);

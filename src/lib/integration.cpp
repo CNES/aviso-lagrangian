@@ -22,10 +22,10 @@
 namespace lagrangian
 {
 
-bool FiniteLyapunovExponents::Exponents(const Position& p)
+bool FiniteLyapunovExponents::Exponents(const Position* const position)
 {
     // Advection time T
-    const double delta_t = p.get_time() - start_time_;
+    const double delta_t = position->get_time() - start_time_;
 
     if (fabs(delta_t) < std::numeric_limits<double>::epsilon())
         return false;
@@ -39,7 +39,7 @@ bool FiniteLyapunovExponents::Exponents(const Position& p)
     double a10;
     double a11;
 
-    p.StrainTensor(a00, a01, a10, a11);
+    position->StrainTensor(a00, a01, a10, a11);
 
     if (field_->get_unit_type() == Field::kAngular)
     {
@@ -83,7 +83,7 @@ bool FiniteLyapunovExponents::Exponents(const Position& p)
     // Remark: the following factorized equivalent formula was obtained
     // using formal calculus: see end of this file
     const double s2 = sqrt((Square(a01 + a10) + Square(a00 - a11))
-			   * (Square(a01 - a10) + Square(a00 + a11)));
+               * (Square(a01 - a10) + Square(a00 + a11)));
 
     // f2_ = 1 / ( 2 δ₀²) 
     // f2_ * (s1 + s2) is the maximum eigenvalue

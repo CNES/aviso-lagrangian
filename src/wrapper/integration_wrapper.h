@@ -59,8 +59,64 @@ struct FiniteLyapunovExponents: lagrangian::FiniteLyapunovExponents, bp::wrapper
             double const delta,
             lagrangian::Field* field);
 
-    bp::tuple WrapperCompute(const lagrangian::Iterator& it,
-            lagrangian::Position& p) const;
+    bool WrapperCompute(const lagrangian::Iterator& it,
+            lagrangian::Position* const position) const;
+};
+
+struct Position : lagrangian::Position, bp::wrapper<
+        lagrangian::Position >
+{
+
+    Position();
+
+    virtual void StrainTensor(double & a00,
+        double& a01,
+        double& a10,
+        double& a11 ) const;
+};
+
+struct Triplet : lagrangian::Triplet, bp::wrapper<
+    lagrangian::Triplet >
+{
+
+    Triplet(lagrangian::Triplet const & arg );
+
+    Triplet( );
+
+    Triplet(double const x, double const y, double const delta);
+
+    virtual void StrainTensor(double & a00,
+        double& a01,
+        double& a10,
+        double& a11) const;
+    
+    
+    void default_StrainTensor(double & a00,
+        double& a01,
+        double& a10,
+        double& a11) const;
+};
+
+struct Quintuplet : lagrangian::Quintuplet, bp::wrapper<
+    lagrangian::Quintuplet >
+{
+
+    Quintuplet(lagrangian::Quintuplet const & arg );
+
+    Quintuplet( );
+
+    Quintuplet(double const x, double const y, double const delta);
+
+    virtual void StrainTensor(double & a00,
+        double& a01,
+        double& a10,
+        double& a11) const;
+    
+    
+    void default_StrainTensor(double& a00,
+        double& a01,
+        double& a10,
+        double& a11) const;
 };
 
 // ___________________________________________________________________________//

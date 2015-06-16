@@ -35,9 +35,9 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            Position t = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy), stencil);
-            map_.SetItem(ix, iy, t);
+            lagrangian::Position* position = fle.SetInitialPoint(
+                    map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+            map_.SetItem(ix, iy, position);
             indexes_.push_back(Index(ix, iy));
         }
     }
@@ -55,16 +55,16 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            Position t = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy), stencil);
+            lagrangian::Position* position = fle.SetInitialPoint(
+                    map_.GetXValue(ix), map_.GetYValue(iy), stencil);
 
             if (std::isnan(
                     reader.Interpolate(map_.GetXValue(ix), map_.GetYValue(iy),
                             std::numeric_limits<double>::quiet_NaN(), cell)))
-                t.set_completed();
+                position->set_completed();
             else
                 indexes_.push_back(Index(ix, iy));
-            map_.SetItem(ix, iy, t);
+            map_.SetItem(ix, iy, position);
         }
     }
 }
@@ -84,19 +84,18 @@ void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
         const int ix = first->get_i();
         const int iy = first->get_j();
 
-        Position& t = map_.GetItem(ix, iy);
+        lagrangian::Position* position = map_.GetItem(ix, iy);
 
-        if (!fle.Compute(it, t, cell))
+        if (!fle.Compute(it, position, cell))
         {
-            map_.SetItem(ix, iy, Position::MISSING());
+            position->Missing();
         }
         else
         {
-            if (fle.Separation(t))
+            if (fle.Separation(position))
             {
-                t.set_completed();
+                position->set_completed();
             }
-            map_.SetItem(ix, iy, t);
         }
         ++first;
     }

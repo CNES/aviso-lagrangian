@@ -77,19 +77,19 @@ bp::numeric::array MapOfFiniteLyapunovExponents::GetMapOfExponents(
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            lagrangian::Position& t = map_.GetItem(ix, iy);
-            if (t.IsMissing())
+            lagrangian::Position* position = map_.GetItem(ix, iy);
+            if (position->IsMissing())
             {
                 data[ix * map_.get_ny() + iy] = nan;
             }
-            else if( !t.get_completed() && fle.get_mode() ==
+            else if( !position->get_completed() && fle.get_mode() ==
                     lagrangian::FiniteLyapunovExponents::kFSLE )
             {
                 data[ix * map_.get_ny() + iy] = 0;
             }
             else
             {
-                data[ix * map_.get_ny() + iy] = fle.Exponents(t)
+                data[ix * map_.get_ny() + iy] = fle.Exponents(position)
                     ? (fle.*pGetExponent)()
                     : nan;
             }
