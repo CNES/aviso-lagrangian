@@ -84,10 +84,10 @@ public:
      * @param x1 Last longitude of the cell in degress
      * @param y0 First latitude of the cell in degrees
      * @param y1 Last latitude of the cell in degrees
-     * @param ix0 Index of the first longitude in the grid
-     * @param ix1 Index of the last longitude in the grid
-     * @param iy0 Index of the first latitude in the grid
-     * @param iy1 Index of the last latitude in the grid
+     * @param ix0 %Index of the first longitude in the grid
+     * @param ix1 %Index of the last longitude in the grid
+     * @param iy0 %Index of the first latitude in the grid
+     * @param iy1 %Index of the last latitude in the grid
      */
     inline void Update(const double x0,
             const double x1,
@@ -200,7 +200,7 @@ public:
     /**
      * @brief Opens a file in read-only.
      *
-     * @param filename Path to the grid
+     * @param filename %Path to the grid
      *
      */
     virtual void Open(const std::string& filename) = 0;

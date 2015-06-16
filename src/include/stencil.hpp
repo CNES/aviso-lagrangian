@@ -94,20 +94,30 @@ public:
 // ___________________________________________________________________________//
 
 /**
- * @brief Define the position of N points Mₖ= (xₖ, yₖ)
+ * @brief Define the position of N points Mₖ = (xₖ, yₖ)
  *
- *           Mₖ₊₁
- *           |
- *   Mₖ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mₖ
- *           |
- *           Mₖ₊ₙ
+ * <PRE>
+ *            Mₖ₊₁
+ *            |
+ *    Mₖ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mₖ
+ *            |
+ *            Mₖ₊ₙ
+ * </PRE>
  */
 class Position
 {
 protected:
+
+    /// Abscissas of the point
     std::vector<double> x_;
+
+    /// Ordinates of the point
     std::vector<double> y_;
+
+    /// Integration time (number of seconds elapsed since 1970)
     double time_;
+
+    /// Indicate whether the integration is over or not
     bool completed_;
 
 private:
@@ -145,7 +155,7 @@ public:
     }
 
     /**
-     * @brief Get the longitude of the point #i
+     * @brief Get the longitude of the point \#idx
      *
      * @return The longitude in degrees
      */
@@ -155,7 +165,7 @@ public:
     }
 
     /**
-     * @brief Get the latitude of the point #i
+     * @brief Get the latitude of the point \#idx
      *
      * @return The latitude in degrees
      */
@@ -230,12 +240,13 @@ public:
     }
 
     /**
-     * @brief TODO
+     * @brief To move a particle with a velocity field.
      *
-     * @param rk
-     * @param it
-     * @param cell
-     * @return
+     * @param rk Runge-Kutta handler
+     * @param it Iterator
+     * @param cell Cell properties of the grid used for the interpolation.
+     *
+     * @return True if the particle could be moved otherwise false
      */
     bool Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell)
     {
@@ -253,6 +264,11 @@ public:
 
     /**
      * @brief TODO
+     *
+     * @param a00
+     * @param a01
+     * @param a10
+     * @param a11
      */
     virtual void StrainTensor(double& a00,
             double& a01,
@@ -260,6 +276,9 @@ public:
             double& a11) const = 0;
 };
 
+/**
+ * @brief Define the position of 3 points
+ */
 class Triplet: public Position
 {
 public:
@@ -270,7 +289,6 @@ public:
     Triplet() :
             Position()
     {
-
     }
 
     /**
@@ -278,7 +296,7 @@ public:
      *
      * @param x Longitude of the initial point
      * @param y Latitude of the initial point
-     * @param step Initial initial separation in degrees of neighboring
+     * @param delta Initial initial separation in degrees of neighboring
      *  particles
      */
     Triplet(const double x, const double y, const double delta) :
@@ -294,6 +312,11 @@ public:
 
     /**
      * @brief TODO
+     *
+     * @param a00
+     * @param a01
+     * @param a10
+     * @param a11
      */
     inline void StrainTensor(double& a00,
             double& a01,
@@ -307,6 +330,9 @@ public:
     }
 };
 
+/**
+ * @brief Define the position of 5 points
+ */
 class Quintuplet: public Position
 {
 public:
@@ -317,7 +343,6 @@ public:
     Quintuplet() :
             Position()
     {
-
     }
 
     /**
@@ -325,7 +350,7 @@ public:
      *
      * @param x Longitude of the initial point
      * @param y Latitude of the initial point
-     * @param step Initial initial separation in degrees of neighboring
+     * @param delta Initial initial separation in degrees of neighboring
      *  particles
      */
     Quintuplet(const double x, const double y, const double delta) :
@@ -346,6 +371,11 @@ public:
 
     /**
      * @brief TODO
+     *
+     * @param a00
+     * @param a01
+     * @param a10
+     * @param a11
      */
     inline void StrainTensor(double& a00,
             double& a01,

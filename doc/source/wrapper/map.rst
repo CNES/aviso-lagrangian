@@ -1,6 +1,22 @@
 Map of FLE computation
 ======================
 
+Stencil
+-------
+
+.. py:class:: lagrangian.Stencil
+
+    Type of stencils known
+
+    .. py:data:: kTriplet = lagrangian.Stencil.kTriplet
+
+        Define a stencil with 3 points
+
+    .. py:data:: kQuintuplet = lagrangian.Stencil.kQuintuplet
+
+        Define a stencil with 5 points
+
+
 MapProperties
 -------------
 
@@ -100,7 +116,7 @@ MapOfFiniteLyapunovExponents
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map
+        :return: The map of λ₁ (unit 1/day)
         :rtype: numpy.ndarray
 
     .. py:method:: GetMapOfLambda2(fill_value, fle)
@@ -110,7 +126,7 @@ MapOfFiniteLyapunovExponents
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map
+        :return: The map of λ₂ (unit 1/day)
         :rtype: numpy.ndarray
 
     .. py:method:: GetMapOfTheta1(fill_value, fle)
@@ -120,7 +136,7 @@ MapOfFiniteLyapunovExponents
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map
+        :return: The map of θ₁ (unit degrees)
         :rtype: numpy.ndarray
 
     .. py:method:: GetMapOfTheta2(fill_value, fle)
@@ -130,18 +146,21 @@ MapOfFiniteLyapunovExponents
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map
+        :return: The map of θ₂ (unit degrees)
         :rtype: numpy.ndarray
 
 
-    .. py:method:: Initialize(fle)
+    .. py:method:: Initialize(fle, stencil)
 
         Initializing the grid cells
 
         :param fle: Finite Lyapunov exponents
         :type fle: :py:class:`lagrangian.FiniteLyapunovExponents`
+        :param stencil: Type of stencil used for the calculation of finite
+            difference.
+        :type stencil: :py:class:`lagrangian.Stencil`
 
-    .. py:method:: Initialize(fle, reader)
+    .. py:method:: Initialize(fle, reader, stencil)
 
         Initializing the grid cells. Cells located on the hidden values
         ​​(eg. continents) will be deleted from the calculation
@@ -150,6 +169,9 @@ MapOfFiniteLyapunovExponents
         :type fle: :py:class:`lagrangian.FiniteLyapunovExponents`
         :param reader: NetCDF reader allow to access of the mask's value.
         :type reader: :py:class:`lagrangian.NetcdfReader`
+        :param stencil: Type of stencil used for the calculation of finite
+            difference.
+        :type stencil: :py:class:`lagrangian.Stencil`
 
     .. py:method:: get_map_properties()
 

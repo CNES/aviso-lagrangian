@@ -83,7 +83,7 @@ public:
     /**
      * @brief Get the longitude value
      *
-     * @param ix Index of the longitude in the grid
+     * @param ix %Index of the longitude in the grid
      * @return The longitude
      */
     inline double GetXValue(const int ix) const
@@ -94,7 +94,7 @@ public:
     /**
      * @brief Get the latitude value
      *
-     * @param iy Index of the latitude in the grid
+     * @param iy %Index of the latitude in the grid
      * @return The longitude
      */
     inline double GetYValue(const int iy) const
@@ -186,8 +186,8 @@ public:
     /**
      * @brief Set the value for the cell [ix, iy]
      *
-     * @param ix Index of the longitude in the grid
-     * @param iy Index of the latitude in the grid
+     * @param ix %Index of the longitude in the grid
+     * @param iy %Index of the latitude in the grid
      * @param item Value
      */
     inline void SetItem(const int ix, const int iy, const T& item)
@@ -198,8 +198,8 @@ public:
     /**
      * @brief Get the value for the cell [ix, iy]
      *
-     * @param ix Index of the longitude in the grid
-     * @param iy Index of the latitude in the grid
+     * @param ix %Index of the longitude in the grid
+     * @param iy %Index of the latitude in the grid
      * @return The value of the cell
      */
     inline T& GetItem(const int ix, const int iy)
@@ -234,7 +234,7 @@ private:
     /**
      * @brief Test if the computation for a cell is over
      *
-     * @param index Index of the cell
+     * @param index %Index of the cell
      * @return True if the computation is over otherwise false
      */
     inline bool Completed(const Index& index)
@@ -411,6 +411,15 @@ public:
     {
     }
 
+    /**
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the maximum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of λ₁ (unit 1/day)
+     */
     Map<double> GetMapOfLambda1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
@@ -419,6 +428,15 @@ public:
                 &lagrangian::FiniteLyapunovExponents::get_lambda1);
     }
 
+    /**
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the minimum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of λ₂ (unit 1/day)
+     */
     Map<double> GetMapOfLambda2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
@@ -427,6 +445,15 @@ public:
                 &lagrangian::FiniteLyapunovExponents::get_lambda2);
     }
 
+    /**
+     * @brief Get the map of the FLE associated to the maximum eigenvalues of
+     * Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of θ₁ (unit degrees)
+     */
     Map<double> GetMapOfTheta1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
@@ -435,6 +462,15 @@ public:
                 &lagrangian::FiniteLyapunovExponents::get_theta1);
     }
 
+    /**
+     * @brief Get the map of the FLE associated to the minimum eigenvalues of
+     * Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of θ₂ (unit degrees)
+     */
     Map<double> GetMapOfTheta2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {

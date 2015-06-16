@@ -227,8 +227,8 @@ public:
     /**
      * @brief Returns the value of a parameter.
      *
-     * @param key Parameter
-     * @param index Index of the value to read
+     * @param key %Parameter
+     * @param index %Index of the value to read
      *
      * @result Value read
      *

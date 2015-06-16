@@ -29,7 +29,7 @@ namespace netcdf
 {
 
 /**
- * @brief A Dimension is used to define the array shape of a Variable.
+ * @brief A %Dimension is used to define the array shape of a Variable.
  */
 
 class Dimension
@@ -42,9 +42,9 @@ private:
 public:
 
     /**
-     * @brief Returns the name of this Dimension
+     * @brief Returns the name of this dimension
      *
-     * @return name of Dimension
+     * @return name of dimension
      */
     inline std::string const& get_name() const
     {
@@ -52,9 +52,9 @@ public:
     }
 
     /**
-     * @brief Get the length of the Dimension.
+     * @brief Get the length of the dimension.
      *
-     * @return length of Dimension
+     * @return length of the dimension
      */
     inline int get_length() const
     {
@@ -65,7 +65,7 @@ public:
      * @brief If unlimited, then the length can increase; otherwise it is
      * immutable.
      *
-     * @return if its an "unlimited" Dimension
+     * @return if its an "unlimited" dimension
      */
     inline bool is_unlimited() const
     {
@@ -75,8 +75,8 @@ public:
     /**
      * @brief Constructor
      *
-     * @param name of the Dimension, must be unique.
-     * @param length of the Dimension.
+     * @param name of the dimension, must be unique.
+     * @param length of the dimension.
      * @param unlimited whether the length can grow.
      */
     Dimension(const std::string& name,
@@ -87,9 +87,9 @@ public:
     }
 
     /**
-     * @brief compare two Dimensions instances
+     * @brief compare two dimensions instances
      *
-     * @param other Another instance of Dimension
+     * @param other Another instance of %Dimension
      * @return if dimensions are equals
      */
     inline bool operator==(Dimension& other)

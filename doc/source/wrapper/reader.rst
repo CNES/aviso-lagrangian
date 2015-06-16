@@ -46,7 +46,7 @@ CellProperties
         :param iy0: Index of the first latitude in the grid
         :type iy0: int
         :param iy1: Index of the last latitude in the grid
-        :type it1: int
+        :type iy1: int
 
     .. py:method:: ix0()
 

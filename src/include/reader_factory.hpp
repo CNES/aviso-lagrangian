@@ -30,7 +30,7 @@ namespace reader
 {
 
 /**
- * @brief Reader factory
+ * @brief %Reader factory
  */
 class Factory
 {
@@ -46,7 +46,7 @@ public:
 
     /**
      * @brief Get an instance of a given reader
-     * @param type Reader type
+     * @param type %Reader type
      * @return An instance of a reader
      */
     static Reader* NewReader(const Type type)

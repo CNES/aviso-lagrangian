@@ -70,7 +70,7 @@ multi-threading):
 .. code-block:: bash
 
     map_of_fle list.ini fsle.nc "2010-01-01 0" "2010-03-31 0" --step=0.05 \
-        --separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
+        --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
         --delta 6 --verbose
  
 or in backwards mode:
@@ -78,7 +78,7 @@ or in backwards mode:
 .. code-block:: bash
 
     map_of_fle list.ini fsle_backwards.nc "2010-03-31 0" "2010-01-01 0" \
-        --step=0.05 --separation 0.2 --x_min 40 --x_max 60 --y_min -60 \
+        --step=0.05 --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 \
         --y_max -40 --delta 6 --verbose
 
 Type ``map_of_fle --help`` to see the available options.

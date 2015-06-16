@@ -164,7 +164,7 @@ public:
 // ___________________________________________________________________________//
 
 /**
- * @brief Index a matrix cell
+ * @brief %Index a matrix cell
  */
 class Index
 {
@@ -184,8 +184,8 @@ public:
     /**
      * @brief Construct a new object defining an index
      *
-     * @param i Index i
-     * @param j Index j
+     * @param i %Index i
+     * @param j %Index j
      */
     Index(const int i, const int j) :
             i_(i), j_(j)
@@ -317,10 +317,11 @@ public:
      * @param start_time Start time of the integration
      * @param end_time End date of the integration
      * @param delta_t Time interval
-     * @param mode Integration mode
+     * @param mode %Integration mode
      * @param min_separation Minimal separation in degrees
-     * @param delta The gap between two consecutive dots, in degrees, of the grid
-     * @param field Field to use for computing the velocity of a point.
+     * @param delta The gap between two consecutive dots, in degrees, of the
+     * grid
+     * @param field %Field to use for computing the velocity of a point.
      *
      * @throw std::invalid_argument if the mode of integration is unknown.
      */
@@ -386,7 +387,7 @@ public:
     /**
      * @brief Determine whether the particle is deemed to be separate
      *
-     * @param position Position of the particle
+     * @param position %Position of the particle
      *
      * @return True if the particle is separated.
      */
@@ -408,8 +409,8 @@ public:
     /**
      * @brief Calculate the integration
      *
-     * @param it Iterator
-     * @param position Position of the particle
+     * @param it %Iterator
+     * @param position %Position of the particle
      * @param cell Cell properties of the grid used for the interpolation
      *
      * @return True the integration is defined otherwise false
@@ -425,27 +426,52 @@ public:
      * @brief Compute the eigenvalue and the orientation of the eigenvectors
      * of the Cauchy-Green strain tensor
      *
-     * @param position Position of the particle
+     * @param position %Position of the particle
      *
      * @return True if the exponents are defined
      */
     bool Exponents(const Position* const position);
 
+
+    /**
+     * @brief Get the orientation of the eigenvectors associated to the
+     * maximum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @return λ₁ (unit 1/day)
+     */
     inline double get_lambda1() const
     {
         return lambda1_;
     }
 
+    /**
+     * @brief Orientation of the eigenvectors associated to the minimum
+     * eigenvalues of Cauchy-Green strain tensor
+     *
+     * @return λ₂ (unit 1/day)
+     */
     inline double get_lambda2() const
     {
         return lambda2_;
     }
 
+    /**
+     * @brief FLE associated to the maximum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @return θ₁ (unit degrees)
+     */
     inline double get_theta1() const
     {
         return theta1_;
     }
 
+    /**
+     * @brief FLE associated to the minimum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @return θ₂ (unit degrees)
+     */
     inline double get_theta2() const
     {
         return theta2_;
