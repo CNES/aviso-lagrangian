@@ -285,9 +285,8 @@ public:
                 num_threads_ = boost::lexical_cast<int>(omp_num_threads);
             } catch (boost::bad_lexical_cast& e)
             {
-                throw std::runtime_error(
-                        std::string("Invalid value for OMP_NUM_THREADS: ")
-                                + omp_num_threads);
+                throw std::runtime_error(std::string("Invalid value for OMP_NUM_THREADS: ")
+                        + omp_num_threads);
             }
         }
         Debug(str(boost::format("Uses %d threads") % num_threads_));
@@ -360,8 +359,11 @@ private:
             lagrangian::FiniteLyapunovExponents& fle,
             GetExponent pGetExponent)
     {
-        Map<double> result(map_.get_nx(), map_.get_ny(), map_.get_x_min(),
-                map_.get_y_min(), map_.get_step());
+        Map<double> result(map_.get_nx(),
+                map_.get_ny(),
+                map_.get_x_min(),
+                map_.get_y_min(),
+                map_.get_step());
 
         for (int ix = 0; ix < map_.get_nx(); ++ix)
         {
@@ -380,10 +382,9 @@ private:
                 }
                 else
                 {
-                    double exponent =
-                            fle.Exponents(position) ?
-                                    (fle.*pGetExponent)() :
-                                    std::numeric_limits<double>::quiet_NaN();
+                    double exponent = fle.Exponents(position)
+                        ? (fle.*pGetExponent)()
+                        : std::numeric_limits<double>::quiet_NaN();
                     result.SetItem(ix, iy, exponent);
                 }
             }
@@ -413,28 +414,32 @@ public:
     Map<double> GetMapOfLambda1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan, fle,
+        return GetMapOfExponents(nan,
+                fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda1);
     }
 
     Map<double> GetMapOfLambda2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan, fle,
+        return GetMapOfExponents(nan,
+                fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda2);
     }
 
     Map<double> GetMapOfTheta1(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan, fle,
+        return GetMapOfExponents(nan,
+                fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta1);
     }
 
     Map<double> GetMapOfTheta2(const double nan,
             lagrangian::FiniteLyapunovExponents& fle)
     {
-        return GetMapOfExponents(nan, fle,
+        return GetMapOfExponents(nan,
+                fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta2);
     }
 };

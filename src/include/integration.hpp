@@ -250,9 +250,9 @@ public:
  * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
  * neighbouring particules separate from a given distance d.
  *
- * Exponents(const Stencil& p) function implements the computation of the
- * lyapunov exponents based on maximal and minimal eigenvalues and orientation
- * of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
+ * Exponents(const Position& position) function implements the computation of
+ * the lyapunov exponents based on maximal and minimal eigenvalues and
+ * orientation of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
  *
  * For more details see:
  *
@@ -282,7 +282,7 @@ public:
     enum Stencil
     {
         kTriplet,    //!< kTriplet
-        kQuintuplet //!< kQuintuplet
+        kQuintuplet  //!< kQuintuplet
     };
 
 private:
@@ -299,9 +299,9 @@ private:
     double theta1_;
     double theta2_;
 
-    inline bool SeparationFSLE(const Position* const p) const
+    inline bool SeparationFSLE(const Position* const position) const
     {
-        return p->MaxDistance() > min_separation_;
+        return position->MaxDistance() > min_separation_;
     }
 
     inline bool SeparationFTLE(const Position* const) const
@@ -379,20 +379,20 @@ public:
             return new Quintuplet(x, y, delta_);
         default:
             throw std::invalid_argument(
-                    "invalid invalid FiniteLyapunovExponents::Stencil type");
+                    "invalid FiniteLyapunovExponents::Stencil type");
         }
     }
 
     /**
      * @brief Determine whether the particle is deemed to be separate
      *
-     * @param p Position of the particle
+     * @param position Position of the particle
      *
      * @return True if the particle is separated.
      */
-    inline bool Separation(const Position* const p) const
+    inline bool Separation(const Position* const position) const
     {
-        return (this->*pSeparation_)(p);
+        return (this->*pSeparation_)(position);
     }
 
     /**
@@ -425,11 +425,11 @@ public:
      * @brief Compute the eigenvalue and the orientation of the eigenvectors
      * of the Cauchy-Green strain tensor
      *
-     * @param p Position of the particle
+     * @param position Position of the particle
      *
      * @return True if the exponents are defined
      */
-    bool Exponents(const Position* const p);
+    bool Exponents(const Position* const position);
 
     inline double get_lambda1() const
     {

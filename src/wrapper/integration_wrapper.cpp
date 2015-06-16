@@ -396,16 +396,16 @@ void IntegrationPythonModule()
                 (const lagrangian::Position* const) const)
                     (&lagrangian::FiniteLyapunovExponents::Separation),
             ( bp::arg("p")))
-        .def(
-            "SetInitialPoint",
-            (lagrangian::Position (lagrangian::FiniteLyapunovExponents::*)
-                (double const,
-                 double const,
-                 const lagrangian::FiniteLyapunovExponents::Stencil) const)
-                    (&lagrangian::FiniteLyapunovExponents::SetInitialPoint),
-            (bp::arg("x"),
-             bp::arg("y"),
-             bp::arg("stencil")))
+        // .def(
+        //     "SetInitialPoint",
+        //     (lagrangian::Position* (lagrangian::FiniteLyapunovExponents::*)
+        //         (double const,
+        //          double const,
+        //          const lagrangian::FiniteLyapunovExponents::Stencil) const)
+        //             (&lagrangian::FiniteLyapunovExponents::SetInitialPoint),
+        //     (bp::arg("x"),
+        //      bp::arg("y"),
+        //      bp::arg("stencil")))
         .def(
              "get_lambda1",
              (double (lagrangian::FiniteLyapunovExponents::*)() const)

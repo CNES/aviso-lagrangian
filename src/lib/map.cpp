@@ -35,8 +35,16 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            lagrangian::Position* position = fle.SetInitialPoint(
-                    map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+            // If the user restart initialization, it must release the
+            // allocated resources
+            Position* position = map_.GetItem(ix, iy);
+            if (position)
+                delete position;
+            
+            // Allocate and store the new stencil
+            position = fle.SetInitialPoint(map_.GetXValue(ix),
+                    map_.GetYValue(iy),
+                    stencil);
             map_.SetItem(ix, iy, position);
             indexes_.push_back(Index(ix, iy));
         }
@@ -55,12 +63,21 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            lagrangian::Position* position = fle.SetInitialPoint(
-                    map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+            // If the user restart initialization, it must release the
+            // allocated resources
+            Position* position = map_.GetItem(ix, iy);
+            if (position)
+                delete position;
 
-            if (std::isnan(
-                    reader.Interpolate(map_.GetXValue(ix), map_.GetYValue(iy),
-                            std::numeric_limits<double>::quiet_NaN(), cell)))
+            // Allocate and store the new stencil
+            position = fle.SetInitialPoint(map_.GetXValue(ix),
+                    map_.GetYValue(iy),
+                    stencil);
+
+            if (std::isnan(reader.Interpolate(map_.GetXValue(ix),
+                    map_.GetYValue(iy),
+                    std::numeric_limits<double>::quiet_NaN(),
+                    cell)))
                 position->set_completed();
             else
                 indexes_.push_back(Index(ix, iy));
@@ -120,10 +137,8 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
         std::string date = JulianDay(JulianDay::FromUnixTime(it())).ToString(
                 "%Y-%m-%d %H:%M:%S");
 
-        Debug(
-                str(
-                        boost::format("Start time step %s (%d cells)") % date
-                                % indexes_.size()));
+        Debug(str(boost::format("Start time step %s (%d cells)")
+                % date % indexes_.size()));
 
         for (std::list<lagrangian::Splitter<Index> >::iterator its =
                 splitters.begin(); its != splitters.end(); ++its)
@@ -137,15 +152,12 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
         threads.join_all();
 
         // Removing cells that are completed
-        splitters = indexes_.Erase(
-                boost::bind(&FiniteLyapunovExponents::Completed, this, _1),
-                num_threads_);
+        splitters = indexes_.Erase(boost::bind(
+                        &FiniteLyapunovExponents::Completed, this, _1),
+                        num_threads_);
 
-        Debug(
-                str(
-                        boost::format("Close time step %s (%.02f%% completed)")
-                                % date
-                                % ((items - indexes_.size()) / items * 100)));
+        Debug(str(boost::format("Close time step %s (%.02f%% completed)")
+                % date % ((items - indexes_.size()) / items * 100)));
 
         ++it;
     }
