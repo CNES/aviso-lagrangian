@@ -20,9 +20,9 @@
 
 // ___________________________________________________________________________//
 
-#include "time_serie.hpp"
-#include "parameter.hpp"
-#include "trace.h"
+#include "lagrangian/time_serie.hpp"
+#include "lagrangian/parameter.hpp"
+#include "lagrangian/trace.hpp"
 
 // ___________________________________________________________________________//
 
@@ -138,7 +138,7 @@ FileList::FileList(const std::vector<std::string>& filenames,
     for (its = filenames.begin(); its != filenames.end(); ++its)
     {
         reader->Open(*its);
-        files.push_back(std::make_pair(reader->GetJulianDay(varname).ToUnixTime(),
+        files.push_back(std::make_pair(reader->GetDateTime(varname).ToUnixTime(),
                 *its));
     }
 

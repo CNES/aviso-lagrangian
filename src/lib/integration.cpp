@@ -15,7 +15,7 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "integration.hpp"
+#include "lagrangian/integration.hpp"
 
 // ___________________________________________________________________________//
 

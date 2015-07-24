@@ -157,7 +157,7 @@ def main():
     args = usage()
 
     # Set debug
-    lagrangian.SetVerbose(args.verbose)
+    lagrangian.set_verbose(args.verbose)
 
     # Check X & Y range
     if not args.x_min < args.x_max:
@@ -169,24 +169,24 @@ def main():
     NC_FILL_DOUBLE = 9.9692099683868690e+36
 
     # Initializes the time series to process
-    ts = lagrangian.TimeSerieField(args.configuration,
-                                   SYSTEM_UNITS[args.unit])
+    ts = lagrangian.TimeSerie(args.configuration,
+                              SYSTEM_UNITS[args.unit])
     delta = datetime.timedelta(0, args.delta * 60 * 60)
 
-    start_time = lagrangian.JulianDay(args.start_time)
-    end_time = lagrangian.JulianDay(args.end_time)
+    start_time = lagrangian.DateTime(args.start_time)()
+    end_time = lagrangian.DateTime(args.end_time)()
 
-    if start_time < ts.StartTime():
+    if start_time < ts.start_time():
         raise RuntimeError("The start date (%s) is before the beginning "
                            "of the time series (%s)" %
-                           (start_time.ToString("%Y-%m-%dT%H:%M:%S"),
-                            ts.StartTime().ToString("%Y-%m-%dT%H:%M:%S")))
+                           (start_time.strftime("%Y-%m-%dT%H:%M:%S"),
+                            ts.start_time().strftime("%Y-%m-%dT%H:%M:%S")))
 
-    if end_time > ts.EndTime():
+    if end_time > ts.end_time():
         raise RuntimeError("The end date (%s) is after the ending "
                            "of the time series (%s)" %
-                           (end_time.ToString("%Y-%m-%dT%H:%M:%S"),
-                            ts.EndTime().ToString("%Y-%m-%dT%H:%M:%S")))
+                           (end_time.strftime("%Y-%m-%dT%H:%M:%S"),
+                            ts.end_time().strftime("%Y-%m-%dT%H:%M:%S")))
     nx = int((args.x_max - args.x_min) / args.step)
     ny = int((args.y_max - args.y_min) / args.step)
 
@@ -198,12 +198,13 @@ def main():
     mode = lagrangian.kFTLE if args.final_separation < 0 else lagrangian.kFSLE
     caption = 'FTLE' if args.final_separation < 0 else 'FSLE'
 
-    # Initializes the map to process
-    map_of_fle = lagrangian.MapOfFiniteLyapunovExponents(nx,
-                                                         ny,
-                                                         args.x_min,
-                                                         args.y_min,
-                                                         args.step)
+    # Build the map properties
+    map_properties = lagrangian.MapProperties(
+        nx,
+        ny,
+        args.x_min,
+        args.y_min,
+        args.step)
 
     # Initializes the FLE to process
     fle = lagrangian.FiniteLyapunovExponents(start_time,
@@ -221,15 +222,18 @@ def main():
         reader = lagrangian.NetcdfReader()
         reader.Open(args.mask[0])
         reader.Load(args.mask[1])
-        map_of_fle.Initialize(fle,
-                              reader,
-                              STENCIL[args.stencil])
     else:
-        map_of_fle.Initialize(fle,
-                              STENCIL[args.stencil])
+        reader = None
+
+    # Initializes the map to process
+    map_of_fle = lagrangian.MapOfFiniteLyapunovExponents(
+        map_properties,
+        fle,
+        STENCIL[args.stencil],
+        reader)
 
     # Computes map
-    map_of_fle.Compute(fle)
+    map_of_fle.compute()
 
     # Creates the NetCDF file
     rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
@@ -239,16 +243,16 @@ def main():
     if args.final_separation > 0:
         rootgrp.separation = ('Minimum separation (expansion) in degrees: %f'
                               % (args.final_separation))
-    rootgrp.start_time = start_time.ToString("%Y-%m-%d %T")
-    rootgrp.end_time = end_time.ToString("%Y-%m-%d %T")
+    rootgrp.start_time = start_time.strftime("%Y-%m-%d %T")
+    rootgrp.end_time = end_time.strftime("%Y-%m-%d %T")
 
     x_axis = rootgrp.createVariable('x', 'f8', ('x',))
     x_axis.units = 'degrees_east'
-    x_axis[:] = map_of_fle.get_map_properties().GetXAxis()
+    x_axis[:] = map_properties.get_x_axis()
 
     y_axis = rootgrp.createVariable('y', 'f8', ('y',))
     y_axis.units = 'degrees_north'
-    y_axis[:] = map_of_fle.get_map_properties().GetYAxis()
+    y_axis[:] = map_properties.get_y_axis()
 
     theta1 = rootgrp.createVariable('theta1',
                                     'f8',
@@ -257,7 +261,7 @@ def main():
     theta1.long_name = 'FLE associated to the maximum eigenvalues of ' \
         'Cauchy-Green strain tensor'
     theta1.units = 'degrees'
-    theta1[:] = map_of_fle.GetMapOfTheta1(NC_FILL_DOUBLE, fle)
+    theta1[:] = map_of_fle.get_map_of_theta1(NC_FILL_DOUBLE)
 
     theta2 = rootgrp.createVariable('theta2',
                                     'f8',
@@ -266,7 +270,7 @@ def main():
     theta2.long_name = 'FLE associated to the minimum eigenvalues of ' \
         'Cauchy-Green strain tensor'
     theta2.units = 'degrees'
-    theta2[:] = map_of_fle.GetMapOfTheta2(NC_FILL_DOUBLE, fle)
+    theta2[:] = map_of_fle.get_map_of_theta1(NC_FILL_DOUBLE)
 
     lambda1 = rootgrp.createVariable('lambda1',
                                      'f8',
@@ -276,7 +280,7 @@ def main():
         'maximum eigenvalues of Cauchy-Green strain tensor'
     lambda1.units = '1/day'
     lambda1[:] = convert_from_sec_to_day(
-        map_of_fle.GetMapOfLambda1(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
+        map_of_fle.get_map_of_lambda1(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
     lambda2 = rootgrp.createVariable('lambda2', 'f8', ('x', 'y',),
                                      fill_value=NC_FILL_DOUBLE)
@@ -284,7 +288,7 @@ def main():
         'minimum eigenvalues of Cauchy-Green strain tensor'
     lambda2.units = '1/day'
     lambda2[:] = convert_from_sec_to_day(
-        map_of_fle.GetMapOfLambda2(NC_FILL_DOUBLE, fle), NC_FILL_DOUBLE)
+        map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
     rootgrp.close()
 
 

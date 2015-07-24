@@ -6,10 +6,7 @@ Library allows to compute Lagrangian analysis with Python.
 .. toctree::
    :maxdepth: 2
 
-   wrapper/date
-   wrapper/field
-   wrapper/integration
-   wrapper/map
-   wrapper/parameter
-   wrapper/reader
-   wrapper/units
+.. automodule:: lagrangian
+    :synopsis: Obtenir les informations de version du logiciel
+    :members:
+    :show-inheritance:

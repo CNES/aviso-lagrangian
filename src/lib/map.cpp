@@ -19,7 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include "map.hpp"
+#include "lagrangian/map.hpp"
 
 // ___________________________________________________________________________//
 
@@ -134,7 +134,7 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
     {
         fle.Fetch(it());
 
-        std::string date = JulianDay(JulianDay::FromUnixTime(it())).ToString(
+        std::string date = DateTime(DateTime::FromUnixTime(it())).ToString(
                 "%Y-%m-%d %H:%M:%S");
 
         Debug(str(boost::format("Start time step %s (%d cells)")

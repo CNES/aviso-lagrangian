@@ -15,10 +15,8 @@
  along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// ___________________________________________________________________________//
-
-#include "julian_day.hpp"
-#include "trace.h"
+#include "lagrangian/datetime.hpp"
+#include "lagrangian/trace.hpp"
 
 // ___________________________________________________________________________//
 
@@ -39,7 +37,7 @@ public:
      * @brief Default constructor
      */
     Configuration() :
-        verbose_(false)
+            verbose_(false)
     {
 
     }
@@ -53,10 +51,12 @@ public:
     {
         if (verbose_)
         {
-            JulianDay now;
-            std::cerr << str(boost::format("[ %s ] %s") %
-                    now.ToString("%Y-%m-%d %H:%M:%S.%f") %
-                    message) << std::endl;
+            DateTime now;
+            std::cerr
+                    << str(
+                            boost::format("[ %s ] %s")
+                                    % now.ToString("%Y-%m-%d %H:%M:%S.%f")
+                                    % message) << std::endl;
             std::cerr.flush();
         }
     }
