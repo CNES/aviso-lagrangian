@@ -103,14 +103,14 @@ public:
 // ___________________________________________________________________________//
 
 /**
- * @brief Define the position of N points Mₖ = (xₖ, yₖ)
+ * @brief Define the position of N points Mᵢ = (xᵢ, yᵢ)
  *
  * <PRE>
- *            Mₖ₊₁
+ *            Mᵢ₊₁
  *            |
- *    Mₖ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mₖ
+ *    Mᵢ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mᵢ
  *            |
- *            Mₖ₊ₙ
+ *            Mᵢ₊ₙ
  * </PRE>
  */
 class Position

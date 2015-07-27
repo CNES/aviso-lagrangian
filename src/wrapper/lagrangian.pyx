@@ -1111,6 +1111,7 @@ cdef class Netcdf(Reader):
 
     .. note:: The variable to be read must set an attribute named "date" that
     define the date of data contained in the variable.
+
     """
     def __cinit__(self):
         self.wrapped = new cpp_lagrangian.NetcdfReader()
@@ -1277,6 +1278,9 @@ cdef class MapProperties:
 
     @cython.boundscheck(False)
     def get_x_axis(self):
+        """
+        Get X axis values
+        """
         cdef:
             numpy.ndarray result
             numpy.npy_intp dims[1]
@@ -1295,6 +1299,9 @@ cdef class MapProperties:
 
     @cython.boundscheck(False)
     def get_y_axis(self):
+        """
+        Get Y axis values
+        """
         cdef:
             numpy.ndarray result
             numpy.npy_intp dims[1]
@@ -1353,6 +1360,7 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def compute(self):
         """
+        Compute the map
         """
         cdef:
             cpp_lagrangian.FiniteLyapunovExponents* cpp_fle
