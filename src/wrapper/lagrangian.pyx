@@ -1313,9 +1313,9 @@ cdef class MapProperties:
                                      dims,
                                      numpy.NPY_DOUBLE,
                                      0)
-        ptr = <double*>numpy.PyArray_DATA(result)
+        data = <double*>numpy.PyArray_DATA(result)
         for ix in range(self.wrapped.get_ny()):
-            ptr[ix] = self.wrapped.GetYValue(ix);
+            data[ix] = self.wrapped.GetYValue(ix);
         return result
 
 
@@ -1385,11 +1385,11 @@ cdef class MapOfFiniteLyapunovExponents:
                                          dims,
                                          numpy.NPY_DOUBLE,
                                          0)
-            ptr = <double*>numpy.PyArray_DATA(result)
+            data = <double*>numpy.PyArray_DATA(result)
 
             for ix in range(map_of.get_nx()):
                 for iy in range(map_of.get_ny()):
-                    ptr[ix * map_of.get_ny() + iy] = map_of.GetItem(ix, iy)
+                    data[ix * map_of.get_ny() + iy] = map_of.GetItem(ix, iy)
 
             return result
         finally:
