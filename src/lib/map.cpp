@@ -1,25 +1,25 @@
 /*
-    This file is part of lagrangian library.
+ This file is part of lagrangian library.
 
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ lagrangian is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ lagrangian is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <boost/thread.hpp>
 
 // ___________________________________________________________________________//
 
-#include "map.hpp"
+#include "lagrangian/map.hpp"
 
 // ___________________________________________________________________________//
 
@@ -28,16 +28,24 @@ namespace lagrangian
 namespace map
 {
 
-void FiniteLyapunovExponents::Initialize(
-        lagrangian::FiniteLyapunovExponents& fle)
+void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fle,
+        const lagrangian::FiniteLyapunovExponents::Stencil stencil)
 {
     for (int ix = 0; ix < map_.get_nx(); ++ix)
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy));
-            map_.SetItem(ix, iy, t);
+            // If the user restart initialization, it must release the
+            // allocated resources
+            Position* position = map_.GetItem(ix, iy);
+            if (position)
+                delete position;
+            
+            // Allocate and store the new stencil
+            position = fle.SetInitialPoint(map_.GetXValue(ix),
+                    map_.GetYValue(iy),
+                    stencil);
+            map_.SetItem(ix, iy, position);
             indexes_.push_back(Index(ix, iy));
         }
     }
@@ -45,9 +53,9 @@ void FiniteLyapunovExponents::Initialize(
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::Initialize(
-        lagrangian::FiniteLyapunovExponents& fle,
-        lagrangian::reader::Netcdf& reader)
+void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fle,
+        lagrangian::reader::Netcdf& reader,
+        const lagrangian::FiniteLyapunovExponents::Stencil stencil)
 {
     CellProperties cell;
 
@@ -55,17 +63,25 @@ void FiniteLyapunovExponents::Initialize(
     {
         for (int iy = 0; iy < map_.get_ny(); ++iy)
         {
-            Triplet t = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy));
+            // If the user restart initialization, it must release the
+            // allocated resources
+            Position* position = map_.GetItem(ix, iy);
+            if (position)
+                delete position;
+
+            // Allocate and store the new stencil
+            position = fle.SetInitialPoint(map_.GetXValue(ix),
+                    map_.GetYValue(iy),
+                    stencil);
 
             if (std::isnan(reader.Interpolate(map_.GetXValue(ix),
                     map_.GetYValue(iy),
                     std::numeric_limits<double>::quiet_NaN(),
                     cell)))
-                t.set_completed();
+                position->set_completed();
             else
                 indexes_.push_back(Index(ix, iy));
-            map_.SetItem(ix, iy, t);
+            map_.SetItem(ix, iy, position);
         }
     }
 }
@@ -85,19 +101,18 @@ void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
         const int ix = first->get_i();
         const int iy = first->get_j();
 
-        Triplet& t = map_.GetItem(ix, iy);
+        lagrangian::Position* position = map_.GetItem(ix, iy);
 
-        if (!fle.Compute(it, t, cell))
+        if (!fle.Compute(it, position, cell))
         {
-            map_.SetItem(ix, iy, Triplet::MISSING());
+            position->Missing();
         }
         else
         {
-            if (fle.Separation(t))
+            if (fle.Separation(position))
             {
-                t.set_completed();
+                position->set_completed();
             }
-            map_.SetItem(ix, iy, t);
         }
         ++first;
     }
@@ -119,14 +134,14 @@ void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
     {
         fle.Fetch(it());
 
-        std::string date = JulianDay(JulianDay::FromUnixTime(it())).ToString(
+        std::string date = DateTime(DateTime::FromUnixTime(it())).ToString(
                 "%Y-%m-%d %H:%M:%S");
 
         Debug(str(boost::format("Start time step %s (%d cells)")
                 % date % indexes_.size()));
 
         for (std::list<lagrangian::Splitter<Index> >::iterator its =
-            splitters.begin(); its != splitters.end(); ++its)
+                splitters.begin(); its != splitters.end(); ++its)
         {
             threads.create_thread(
                     boost::bind(

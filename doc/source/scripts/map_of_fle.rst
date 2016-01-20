@@ -4,8 +4,8 @@ map_of_fle
 The **map_of_fle** script computes a map of FSLE or FTLE from a set of NetCDF
 grids containing velocity fields.
 
-To run this example you must download the test data `here
-<https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.7z>`_ .
+The files required to run this example are located in the ``test/data`` at the
+root of source distribution.
 
 Then you must create a configuration file as follows:
 
@@ -62,15 +62,22 @@ The path to the NetCDF file must contain an absolute path, for example:
 .. code-block:: cfg
 
     U = /home/lagrangian/dt_upd_global_merged_madt_uv_20100407_20100407_20110329.nc
+
+The path may also contain environment variables using the shell syntax, for
+example:
+
+.. code-block:: cfg
+
+    U = ${DATA}/dt_upd_global_merged_madt_uv_20100407_20100407_20110329.nc
  
 To compute a map of FSLE, in forwards mode, on selected area enter the command
-(don't forget to set ``OMP_NUM_THREADS`` to accelerate the calculation to use
-multi-threading):
+(don't forget to set ``OMP_NUM_THREADS`` to enable parallelization of code with
+the number of threads defined.
 
 .. code-block:: bash
 
     map_of_fle list.ini fsle.nc "2010-01-01 0" "2010-03-31 0" --step=0.05 \
-        --separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
+        --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
         --delta 6 --verbose
  
 or in backwards mode:
@@ -78,7 +85,7 @@ or in backwards mode:
 .. code-block:: bash
 
     map_of_fle list.ini fsle_backwards.nc "2010-03-31 0" "2010-01-01 0" \
-        --step=0.05 --separation 0.2 --x_min 40 --x_max 60 --y_min -60 \
+        --step=0.05 --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 \
         --y_max -40 --delta 6 --verbose
 
 Type ``map_of_fle --help`` to see the available options.

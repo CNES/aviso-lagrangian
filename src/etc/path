@@ -51,9 +51,8 @@ def date_type(value):
     The option must be define a date
     """
     try:
-        return lagrangian.JulianDay(value)
+        return lagrangian.DateTime(value)()
     except Exception as err:
-        print err
         raise argparse.ArgumentTypeError("'%s' could not be interpreted as a "
                                          "date" % value)
 
@@ -75,7 +74,7 @@ def usage():
     # Checks whether the user wishes to display the version number
     args, _ = parser.parse_known_args()
     if args.version:
-        print lagrangian.Version()
+        print(lagrangian.version())
         sys.exit(0)
 
     parser.add_argument('configuration',
@@ -148,7 +147,7 @@ def decode_x(value):
         value = float(value)
     except ValueError:
         raise RuntimeError("%r could not be interpreted as a float" % value)
-    while value > 360:
+    while value > 180:
         value -= 180
     if value < -180 or value > 180:
         raise RuntimeError("%f does not represent a correct longitude"
@@ -176,20 +175,20 @@ def main():
     """
     args = usage()
 
-    ts = lagrangian.TimeSerieField(args.configuration)
+    ts = lagrangian.TimeSerie(args.configuration)
     delta = datetime.timedelta(0, 6 * 60 * 60)
 
-    if args.start_time < ts.StartTime():
+    if args.start_time < ts.start_time():
         raise RuntimeError("The start date (%s) is before the beginning "
                            "of the time series (%s)" %
                            (args.start_time.ToString("%Y-%m-%dT%H:%M:%S"),
-                            ts.StartTime().ToString("%Y-%m-%dT%H:%M:%S")))
+                            ts.start_time().ToString("%Y-%m-%dT%H:%M:%S")))
 
-    if args.end_time > ts.EndTime():
+    if args.end_time > ts.end_time():
         raise RuntimeError("The end date (%s) is after the ending "
                            "of the time series (%s)" %
                            (args.end_time.ToString("%Y-%m-%dT%H:%M:%S"),
-                            ts.EndTime().ToString("%Y-%m-%dT%H:%M:%S")))
+                            ts.end_time().ToString("%Y-%m-%dT%H:%M:%S")))
 
     path = lagrangian.Path(args.start_time, args.end_time, delta, ts)
     positions = []
@@ -210,17 +209,22 @@ def main():
                                "line %d: %s" % (ix, ''.join(err.args)))
         ix += 1
 
-    it = path.GetIterator()
+    it = path.get_iterator()
 
-    while it.GoAfter():
-        path.Fetch(it())
+    for time_step in it:
+        path.fetch(time_step)
         for item in positions:
             if item.process:
-                (result, x1, y1) = path.Compute(it, item.x, item.y)
-                if result:
-                    args.output.write("%s\t%f\n" % (item, it()))
-                item.update(result, x1, y1)
-        it.Next()
+                result = path.compute(it, item.x, item.y)
+                if result is not None:
+                    args.output.write(
+                        "%s\t%s\n" % (
+                            item,
+                            datetime.datetime.fromtimestamp(
+                                time_step).isoformat()))
+                    item.update(True, result[0], result[1])
+                else:
+                    item.update(False, item.x, item.y)
 
 
 if __name__ == '__main__':

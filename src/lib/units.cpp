@@ -1,26 +1,26 @@
 /*
-    This file is part of lagrangian library.
+ This file is part of lagrangian library.
 
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ lagrangian is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ lagrangian is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 
 // ___________________________________________________________________________//
 
-#include "units.hpp"
+#include "lagrangian/units.hpp"
 
 // ___________________________________________________________________________//
 
@@ -39,8 +39,8 @@ static void HandleParseStatus(ut_unit* unit, const std::string& str)
         if (status == UT_UNKNOWN)
             throw units::Exception("'" + str
                     + "' string contained an unknown identifier");
-        throw units::Exception("Unhandled exception: " +
-                boost::lexical_cast<std::string>(status));
+        throw units::Exception("Unhandled exception: "
+                + boost::lexical_cast<std::string>(status));
     }
 }
 
@@ -60,8 +60,8 @@ static void HandleConverterStatus(cv_converter *converter,
             throw units::Exception("the units '" + from + "' and '" + to
                     + "' belong to the same unit-system but conversion "
                     + "between them is meaningless");
-        throw units::Exception("Unhandled exception: " +
-                boost::lexical_cast<std::string>(status));
+        throw units::Exception("Unhandled exception: "
+                + boost::lexical_cast<std::string>(status));
     }
 }
 
@@ -71,15 +71,12 @@ static units::SmartUtSystem g_system;
 
 // ___________________________________________________________________________//
 
-void Units::GetConverter(const std::string& from,
-        const std::string& to,
-        double& offset,
-        double& scale)
+UnitConverter Units::GetConverter(const std::string& from,
+        const std::string& to)
 {
     if (from == to)
     {
-        scale = 1;
-        offset = 0;
+        return UnitConverter();
     }
     else
     {
@@ -92,12 +89,14 @@ void Units::GetConverter(const std::string& from,
         cv_converter *converter = ut_get_converter(ut_from, ut_to);
         HandleConverterStatus(converter, from, to);
 
-        offset = cv_convert_double(converter, 0);
-        scale = cv_convert_double(converter, 1) - offset;
+        double offset = cv_convert_double(converter, 0);
+        double scale = cv_convert_double(converter, 1) - offset;
 
         ut_free(ut_from);
         ut_free(ut_to);
         cv_free(converter);
+
+        return UnitConverter(offset, scale);
     }
 }
 

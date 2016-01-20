@@ -15,15 +15,13 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// ___________________________________________________________________________//
-
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 #include <fstream>
 
 // ___________________________________________________________________________//
 
-#include "parameter.hpp"
+#include "lagrangian/parameter.hpp"
 
 // ___________________________________________________________________________//
 
@@ -131,8 +129,10 @@ void Parameter::Load(const std::string& filename)
 
     infile.open(filename.c_str(), std::ifstream::in);
     if (!infile.is_open())
-        throw std::runtime_error(str(boost::format("Couldn't open `%s' for reading")
-                % filename));
+        throw std::runtime_error(
+                boost::str(
+                        boost::format("Couldn't open `%s' for reading")
+                                % filename));
 
     while (!infile.eof())
     {
@@ -147,8 +147,10 @@ void Parameter::Load(const std::string& filename)
             Load(what[1].str());
 
         if (!Parse(line, buffer))
-            throw std::runtime_error(str(boost::format("syntax error line %d: %s")
-                    % line_number % line));
+            throw std::runtime_error(
+                    boost::str(
+                            boost::format("syntax error line %d: %s")
+                                    % line_number % line));
     }
 }
 

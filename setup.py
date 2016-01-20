@@ -13,12 +13,18 @@ import setuptools
 import subprocess
 import sysconfig
 import sys
+import Cython.Build
 
 
 class SDist(distutils.command.sdist.sdist):
-
+    """
+    Creation of the version tag from information provided by mercurial
+    """
     @staticmethod
     def get_version():
+        """
+        Read information tag from mercurial
+        """
         process = subprocess.Popen("LANG=C hg tags",
                                    shell=True,
                                    stdout=subprocess.PIPE,
@@ -32,6 +38,10 @@ class SDist(distutils.command.sdist.sdist):
 
     @classmethod
     def patch_trace_cpp(cls, src, dst):
+        """
+        Replace the string "__VERSION__" with the version tag read from
+        mercurial
+        """
         version = cls.get_version()
         os.unlink(dst)
         with open(src, 'rb') as h_src:
@@ -44,6 +54,9 @@ class SDist(distutils.command.sdist.sdist):
                     h_dst.write(line)
 
     def make_release_tree(self, base_dir, files):
+        """
+        Creating files list to insert in distribution package
+        """
         distutils.command.sdist.sdist.make_release_tree(self,
                                                         base_dir,
                                                         files)
@@ -140,12 +153,21 @@ class SetupConfig(object):
         Returns the list of necessary files to build the extension
         """
         result = []
-        for root, _, files in os.walk(os.path.join(cls.CWD, 'src')):
+        for root, dir, files in os.walk(os.path.join(cls.CWD, 'src')):
+            if 'wrapper' in dir:
+                dir.remove('wrapper')
             for item in files:
                 if item.endswith('.cpp'):
                     path = os.path.join(root, item)
                     result.append(os.path.relpath(path, cls.CWD))
         return result
+
+    @classmethod
+    def get_build_directory(cls, dirname):
+        return "{dirname}.{platform}-{version[0]}.{version[1]}".format(
+            dirname=dirname,
+            platform=sysconfig.get_platform(),
+            version=sys.version_info)
 
 
 class Setup(setuptools.Command, SetupConfig):
@@ -200,8 +222,7 @@ class Setup(setuptools.Command, SetupConfig):
         Set the values set by the user to build the library
         """
         # Needed boost libraries
-        boost = ['boost_python',
-                 'boost_date_time',
+        boost = ['boost_date_time',
                  'boost_regex',
                  'boost_thread']
 
@@ -261,8 +282,6 @@ class Config(distutils.command.config.config, SetupConfig):
 
         for header in ['netcdf',
                        'boost/date_time.hpp',
-                       'boost/python.hpp',
-                       'boost/python/numeric.hpp',
                        'boost/regex.hpp',
                        'boost/thread.hpp',
                        'boost/version.hpp']:
@@ -302,7 +321,9 @@ extensions = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
-        sources=SetupConfig.sources()
+        sources=["src/wrapper/lagrangian.pyx"] + SetupConfig.sources(),
+        library_dirs=[os.path.join('build',
+                                   SetupConfig.get_build_directory('lib'))]
     )
 ]
 
@@ -319,7 +340,7 @@ if not os.path.exists(setup.path):
 
 distutils.core.setup(
     name="lagrangian",
-    version="1.3.1",
+    version="2.0.0",
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
@@ -328,6 +349,7 @@ distutils.core.setup(
             "GNU Library or Lesser General Public License (LGPL)",
     keywords="oceanography lagrangian analysis fsle ftle",
     # tests_require=requires,
+    test_suite='test',
     install_requires=requires,
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
@@ -340,5 +362,5 @@ distutils.core.setup(
         'config': Config,
         'sdist': SDist
     },
-    ext_modules=extensions
+    ext_modules=Cython.Build.cythonize(extensions)
 )
