@@ -16,7 +16,6 @@ have Python and a C++ compiler installed on your system to use these programs.
 The compiling C++ requires the following development libraries:
 
     * `boost_date_time <http://www.boost.org>`_
-    * `boost_python <http://www.boost.org>`_
     * `boost_regexp <http://www.boost.org>`_
     * `boost_thread <http://www.boost.org>`_
     * `NetCDF <http://www.unidata.ucar.edu/software/netcdf>`_
