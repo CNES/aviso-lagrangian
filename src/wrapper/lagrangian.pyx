@@ -9,6 +9,13 @@ cimport libcpp.string
 cimport libcpp.vector
 cimport numpy
 
+
+cdef extern from "limits" namespace "std" nogil:
+    cdef cppclass numeric_limits[T]:
+        @staticmethod
+        T quiet_NaN()
+
+
 # datetime module initialization
 cpython.datetime.PyDateTime_IMPORT
 
@@ -201,7 +208,9 @@ cdef class Axis:
             points[i0] <= coordinate < points[i1]
         """
         cdef int i0, i1
-        
+
+        # Disable compiler complaints
+        i0 = i1 = -1
         if self.wrapped.FindIndexes(coordinate, i0, i1):
             return i0, i1
         return None
@@ -388,6 +397,8 @@ cdef class Vonkarman(Field):
         """
         cdef double u, v
 
+        # Disable compiler complaints
+        u = v = numeric_limits[double].quiet_NaN()
         self.wrapped.Compute(t, x, y, u, v)
         return (u, v)
 
@@ -510,6 +521,10 @@ cdef class RungeKutta:
         cdef:
             double xi, yi
             libcpp.bool defined
+
+        # Disable compiler complaints
+        xi = yi = numeric_limits[double].quiet_NaN()
+
         if cell is None:
             defined = self.wrapped.Compute(t, x, y, xi, yi)
         else:
@@ -631,6 +646,8 @@ cdef class Position:
         """
         cdef double a00, a01, a10, a11
 
+        # Disable compiler complaints
+        a00 = a01 = a10 = a11 = numeric_limits[double].quiet_NaN()
         self.wrapped.StrainTensor(a00, a01, a10, a11)
         return (a00, a01, a10, a11)
 
@@ -695,6 +712,9 @@ cdef class AbstractIntegration:
         cdef:
             double x1, y1
             libcpp.bool defined
+
+        # Disable compiler complaints
+        x1 = y1 = numeric_limits[double].quiet_NaN()
 
         defined = self.wrapped.Compute(it.wrapped[0], x0, y0, x1, y1)
         return (x1, y1) if defined else None   
@@ -1184,6 +1204,9 @@ cdef class TimeSerie(Field):
         cdef:
             double u, v
             libcpp.bool defined
+
+        # Disable compiler complaints
+        u = v = numeric_limits[double].quiet_NaN()
 
         if cell is None:
             defined = self.wrapped.Compute(t, x, y, u, v)
