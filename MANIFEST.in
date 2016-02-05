@@ -1,4 +1,4 @@
-recursive-include src *.hpp
+recursive-include src *.hpp *.h *.pxd *.pyx
 recursive-include doc/source *
 include doc/Makefile doc/make.bat doc/cpp/*
 include README.md
