@@ -187,8 +187,8 @@ def main():
                            "of the time series (%s)" %
                            (end_time.strftime("%Y-%m-%dT%H:%M:%S"),
                             ts.end_time().strftime("%Y-%m-%dT%H:%M:%S")))
-    nx = int((args.x_max - args.x_min) / args.step)
-    ny = int((args.y_max - args.y_min) / args.step)
+    nx = int((args.x_max - args.x_min) / args.step) + 1
+    ny = int((args.y_max - args.y_min) / args.step) + 1
 
     # By default the initial separation is the grid step
     if args.initial_separation is None:
