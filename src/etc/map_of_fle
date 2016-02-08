@@ -219,9 +219,9 @@ def main():
     # up the calculation we use a external grid to remove these cells from
     # the calculation.
     if args.mask:
-        reader = lagrangian.NetcdfReader()
-        reader.Open(args.mask[0])
-        reader.Load(args.mask[1])
+        reader = lagrangian.Netcdf()
+        reader.open(args.mask[0])
+        reader.load(args.mask[1])
     else:
         reader = None
 
