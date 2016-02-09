@@ -17,7 +17,7 @@ class TestIntegration(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testIntegration(self):
+    def test_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
         integration = lagrangian.Integration(start,
@@ -36,7 +36,7 @@ class TestIntegration(unittest.TestCase):
         self.assertAlmostEqual(x1, 13.29742324283439)
         self.assertAlmostEqual(y1, 1.492759792006086)
 
-    def testIntegration(self):
+    def test_path_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
         integration = lagrangian.Path(start,
@@ -55,10 +55,10 @@ class TestIntegration(unittest.TestCase):
         self.assertAlmostEqual(x1, 13.29742324283439)
         self.assertAlmostEqual(y1, 1.492759792006086)
 
-    def testFiniteLyapunovExponents(self):
+    def test_fle_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
-        integration = lagrangian.FiniteLyapunovExponents(
+        integration = lagrangian.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
@@ -89,13 +89,16 @@ class TestIntegration(unittest.TestCase):
             it,
             position,
             lagrangian.CellProperties()))
-        self.assertTrue(integration.exponents(position))
-        self.assertAlmostEqual(integration.lambda1, 0)
-        self.assertAlmostEqual(integration.lambda2, 0)
-        self.assertAlmostEqual(integration.theta1, 90)
-        self.assertAlmostEqual(integration.theta2, 0)
+        fle = lagrangian.FiniteLyapunovExponents()
+        self.assertTrue(integration.exponents(position, fle))
+        self.assertAlmostEqual(fle.lambda1, 0)
+        self.assertAlmostEqual(fle.lambda2, 0)
+        self.assertAlmostEqual(fle.theta1, 90)
+        self.assertAlmostEqual(fle.theta2, 0)
+        self.assertAlmostEqual(fle.final_separation, 0.5161084399903032)
+        self.assertAlmostEqual(fle.delta_t, 31622400)
 
-        integration = lagrangian.FiniteLyapunovExponents(
+        integration = lagrangian.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
@@ -109,6 +112,8 @@ class TestIntegration(unittest.TestCase):
             it,
             position,
             lagrangian.CellProperties()))
+        fle = lagrangian.FiniteLyapunovExponents()
+        self.assertTrue(integration.exponents(position, fle))
 
 
 class TestPath(unittest.TestCase):

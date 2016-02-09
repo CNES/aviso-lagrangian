@@ -42,7 +42,7 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         map_properties = lagrangian.MapProperties(360, 180, -180, -90, 1)
         start = datetime.datetime(2010, 1, 1)
         end = datetime.datetime(2010, 3, 30)
-        integration = lagrangian.FiniteLyapunovExponents(
+        integration = lagrangian.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
@@ -63,6 +63,8 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         lambda2 = map_of_fsle.get_map_of_lambda2(0)
         teta1 = map_of_fsle.get_map_of_theta1(0)
         teta2 = map_of_fsle.get_map_of_theta2(0)
+        delta_t = map_of_fsle.get_map_of_delta_t(0)
+        effective_separation = map_of_fsle.get_map_of_final_separation(0)
 
 
 if __name__ == "__main__":
