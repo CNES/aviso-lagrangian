@@ -235,7 +235,7 @@ private:
      * @param it Current time step
      */
     void ComputeHt(Splitter<Index>& splitter,
-            lagrangian::FiniteLyapunovExponents& fle,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle,
             Iterator& it);
 
     /**
@@ -317,9 +317,9 @@ public:
      * @param stencil Type of stencil used for the calculation of finite
      * difference.
      */
-    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
-            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
-                    lagrangian::FiniteLyapunovExponents::kTriplet);
+    void Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
+            const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
     /**
      * @brief Initializing the grid cells. Cells located on the hidden values
@@ -330,17 +330,17 @@ public:
      * @param stencil Type of stencil used for the calculation of finite
      * difference.
      */
-    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
+    void Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
             lagrangian::reader::Netcdf& reader,
-            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
-                    lagrangian::FiniteLyapunovExponents::kTriplet);
+            const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
     /**
      * @brief Compute the map
      *
      * @param fle Finite Lyapunov exponents
      */
-    void Compute(lagrangian::FiniteLyapunovExponents& fle);
+    void Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle);
 };
 
 } // namespace map
@@ -360,14 +360,16 @@ private:
      * @brief Default constructor
      *
      * @param nan Value of undefined cell
-     * @param fle Object used to compute the integration
+     * @param fle_integration integration object used to compute the
+     * 	integration
      * @param pGetExponent Function to use to calculate the exponent
      */
     Map<double>* GetMapOfExponents(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle_integration,
             GetExponent pGetExponent) const
     {
-        Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
+        lagrangian::FiniteLyapunovExponents fle;
+    	Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
                 map_.get_x_min(), map_.get_y_min(), map_.get_step());
 
         for (int ix = 0; ix < map_.get_nx(); ++ix)
@@ -379,16 +381,16 @@ private:
                 {
                     result->SetItem(ix, iy, nan);
                 }
-                else if (!position->get_completed()
-                        && fle.get_mode()
-                                == lagrangian::FiniteLyapunovExponents::kFSLE)
+				else if (!position->get_completed()
+				        && fle_integration.get_mode()
+				                == lagrangian::FiniteLyapunovExponentsIntegration::kFSLE)
                 {
                     result->SetItem(ix, iy, 0);
                 }
                 else
                 {
                     double exponent =
-                            fle.Exponents(position) ?
+                    		fle_integration.ComputeExponents(position, fle) ?
                                     (fle.*pGetExponent)() :
                                     std::numeric_limits<double>::quiet_NaN();
                     result->SetItem(ix, iy, exponent);
@@ -427,7 +429,7 @@ public:
      * @return The map of λ₁ (unit 1/day)
      */
     Map<double>* GetMapOfLambda1(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda1);
@@ -443,7 +445,7 @@ public:
      * @return The map of λ₂ (unit 1/day)
      */
     Map<double>* GetMapOfLambda2(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_lambda2);
@@ -459,7 +461,7 @@ public:
      * @return The map of θ₁ (unit degrees)
      */
     Map<double>* GetMapOfTheta1(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta1);
@@ -475,10 +477,42 @@ public:
      * @return The map of θ₂ (unit degrees)
      */
     Map<double>* GetMapOfTheta2(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
                 &lagrangian::FiniteLyapunovExponents::get_theta2);
+    }
+
+    /**
+     * @brief Get the map of the advection time
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of adevection time (unit number of seconds elapsed
+     * since the beginning of the integration)
+     */
+    Map<double>* GetMapOfDeltaT(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_delta_t);
+    }
+
+    /**
+     * @brief Get the map of the effective final separation distance
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     *
+     * @return The map of the effective final separation distance (unit
+     * degree)
+     */
+    Map<double>* GetMapOfFinalSeparation(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_final_separation);
     }
 };
 

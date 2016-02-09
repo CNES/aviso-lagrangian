@@ -22,18 +22,25 @@
 namespace lagrangian
 {
 
-bool FiniteLyapunovExponents::Exponents(const Position* const position)
+bool FiniteLyapunovExponentsIntegration::ComputeExponents(const Position* const position,
+        FiniteLyapunovExponents& fle)
 {
     // Advection time T
-    const double delta_t = position->get_time() - start_time_;
+    fle.set_delta_t(position->get_time() - start_time_);
 
-    if (fabs(delta_t) < std::numeric_limits<double>::epsilon())
-        return false;
+    // Compute the Effective separation
+    fle.set_final_separation(position->MaxDistance());
+
+    if (fabs(fle.get_delta_t()) < std::numeric_limits<double>::epsilon())
+    {
+    	fle.NaN();
+    	return false;
+    }
 
     // Get element of the gradient of the flow map
     // ∇Φ =  1 / δ₀  * [ a₀₀ a₀₁ ]
     //                 [ a₁₀ a₁₁ ]
-    // where δ₀ is the initial separation distance of the particules
+    // where δ₀ is the initial separation distance of the particles
     double a00;
     double a01;
     double a10;
@@ -74,7 +81,7 @@ bool FiniteLyapunovExponents::Exponents(const Position* const position)
     const double square_a10 = Square(a10);
     const double square_a11 = Square(a11);
     
-    const double f1 = 1 / (2 * delta_t);
+    const double f1 = 1 / (2 * fle.get_delta_t());
     
     // Compute Tr(Δ):
     const double s1 = square_a00 + square_a01 + square_a10 + square_a11;
@@ -91,11 +98,11 @@ bool FiniteLyapunovExponents::Exponents(const Position* const position)
 
     // lambda1_ is the exponent computed from the maximum eigenvalue:
     // lambda1_ = ( 1 / (2*T) ) * log( ( λmax( Δ ) )
-    lambda1_ = f1 * log(f2_ * (s1 + s2));
+    fle.set_lambda1(f1 * log(f2_ * (s1 + s2)));
 
     // lambda2 is the exponent computed from the minimum eigenvalue
     // lambda1_ = ( 1 / (2*T) ) * log( ( λmin( Δ ) )
-    lambda2_ = f1 * log(f2_ * (s1 - s2));
+    fle.set_lambda2(f1 * log(f2_ * (s1 - s2)));
 
     // Compute the orientation theta1 and theta2
     // of the corresponding eigenvalue of Δ
@@ -103,21 +110,21 @@ bool FiniteLyapunovExponents::Exponents(const Position* const position)
     {
         if (a00 > a11)
         {
-            theta1_ = 0;
-            theta2_ = 90;
+            fle.set_theta1(0);
+            fle.set_theta2(90);
         }
         else
         {
-            theta2_ = 0;
-            theta1_ = 90;
+        	fle.set_theta2(0);
+            fle.set_theta1(90);
         }
     }
     else
     {
         const double at1 = 2 * (a00 * a01 + a10 * a11);
         const double at2 = square_a00 - square_a01 + square_a10 - square_a11;
-        theta1_ = RadiansToDegrees(atan(at1 / (at2 + s2)));
-        theta2_ = RadiansToDegrees(-atan(at1 / (-at2 + s2)));
+        fle.set_theta1(RadiansToDegrees(atan(at1 / (at2 + s2))));
+        fle.set_theta2(RadiansToDegrees(-atan(at1 / (-at2 + s2))));
     }
 
     return true;
@@ -179,7 +186,7 @@ bool FiniteLyapunovExponents::Exponents(const Position* const position)
 //
 // and
 // (f*g - m*h)² =  [ (a₀₁+a₁₀) * (a₀₀+a₁₁) - (a₀₀-a₁₁)*(a₀₁-a₁₀) ] ^ 2
-// = [ 2 * (a₀₀*a₁₀ + a₁₁*a₀₁) ]² // after developpement 
+// = [ 2 * (a₀₀*a₁₀ + a₁₁*a₀₁) ]² // after development
 // = 4 b²
 //
 // Finally we get

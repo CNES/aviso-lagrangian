@@ -215,6 +215,161 @@ public:
 // ___________________________________________________________________________//
 
 /**
+ * Storing Lyapunov coefficients calculated.
+ *
+ * @see FiniteLyapunovExponentsIntegration
+ */
+class FiniteLyapunovExponents
+{
+private:
+    double delta_t_;
+	double final_separation_;
+    double lambda1_;
+    double lambda2_;
+    double theta1_;
+    double theta2_;
+public:
+    /**
+     * @brief Set the effective advection time
+     *
+     * @param delta_t The advection time (unit number of seconds elapsed since
+     * the beginning of the integration)
+     */
+    inline void set_delta_t(const double delta_t)
+    {
+    	delta_t_ = delta_t;
+    }
+
+    /**
+     * @brief Get the actual advection time
+     *
+     * @return The advection time (unit number of seconds elapsed since the
+     * beginning of the integration)
+     */
+    inline double get_delta_t() const
+    {
+    	return delta_t_;
+    }
+
+    /**
+     * @brief Set the orientation of the eigenvectors associated to the
+     * maximum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param lambda1 λ₁ (unit 1/day)
+     */
+    inline void set_lambda1(const double lambda1)
+    {
+    	lambda1_ = lambda1;
+    }
+
+    /**
+     * @brief Get the orientation of the eigenvectors associated to the
+     * maximum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @return λ₁ (unit 1/day)
+     */
+    inline double get_lambda1() const
+    {
+    	return lambda1_;
+    }
+
+    /**
+     * @brief Set the orientation of the eigenvectors associated to the
+     * minimum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param lambda1 λ₂ (unit 1/day)
+     */
+    inline void set_lambda2(const double lambda2)
+    {
+    	lambda2_ = lambda2;
+    }
+
+    /**
+     * @brief Get the orientation of the eigenvectors associated to the
+     * minimum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @return λ₂ (unit 1/day)
+     */
+    inline double get_lambda2() const
+    {
+    	return lambda2_;
+    }
+
+    /**
+     * @brief Set FLE associated to the maximum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @param theta1 θ₁ (unit degrees)
+     */
+    inline void set_theta1(const double theta1)
+    {
+    	theta1_ = theta1;
+    }
+
+    /**
+     * @brief Get FLE associated to the maximum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @return θ₁ (unit degrees)
+     */
+    inline double get_theta1() const
+    {
+    	return theta1_;
+    }
+
+    /**
+     * @brief Set FLE associated to the maximum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @param theta2 θ₂ (unit degrees)
+     */
+    inline void set_theta2(const double theta2)
+    {
+    	theta2_ = theta2;
+    }
+
+    /**
+     * @brief Get FLE associated to the maximum eigenvalues of Cauchy-Green
+     * strain tensor
+     *
+     * @return θ₂ (unit degrees)
+     */
+    inline double get_theta2() const
+    {
+    	return theta2_;
+    }
+
+    /**
+     * @brief Set the final separation distance
+     *
+     * @param separation The final separation distance (unit degree)
+     */
+    inline void set_final_separation(const double effective_separation)
+    {
+    	final_separation_ = effective_separation;
+    }
+
+    /**
+     * @brief Get the final separation distance
+     *
+     * @return the final separation distance (unit degree)
+     */
+    inline double get_final_separation() const
+    {
+    	return final_separation_;
+    }
+
+    /**
+     * Set Lyapunov coefficients to NaN when they are undefined.
+     */
+    inline void NaN()
+    {
+		lambda1_ = lambda2_ = theta1_ = theta2_ =
+		        std::numeric_limits<double>::quiet_NaN();
+    }
+};
+
+/**
  * @brief Handles the computation of Lyapunov Exponent
  *
  * Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that
@@ -249,9 +404,10 @@ public:
  * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
  * neighbouring particules separate from a given distance d.
  *
- * Exponents(const Position& position) function implements the computation of
- * the lyapunov exponents based on maximal and minimal eigenvalues and
- * orientation of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
+ * ComputeExponents(const Position& position) function implements the
+ * computation of the Lyapunov exponents based on maximal and minimal
+ * eigenvalues and orientation of eigenvectors of Δ given the elements of
+ * ∇Φ₀ᵀ matrix.
  *
  * For more details see:
  *
@@ -263,7 +419,7 @@ public:
  *
  * 2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
  */
-class FiniteLyapunovExponents: public Integration
+class FiniteLyapunovExponentsIntegration: public Integration
 {
 public:
     /**
@@ -286,17 +442,13 @@ public:
 
 private:
     typedef bool
-    (FiniteLyapunovExponents::*SeparationFunction)(const Position* const p) const;
+    (FiniteLyapunovExponentsIntegration::*SeparationFunction)(const Position* const p) const;
 
     const double delta_;
     double min_separation_;
     Mode mode_;
     SeparationFunction pSeparation_;
     double f2_;
-    double lambda1_;
-    double lambda2_;
-    double theta1_;
-    double theta2_;
 
     inline bool SeparationFSLE(const Position* const position) const
     {
@@ -324,7 +476,7 @@ public:
      *
      * @throw std::invalid_argument if the mode of integration is unknown.
      */
-    FiniteLyapunovExponents(const DateTime& start_time,
+    FiniteLyapunovExponentsIntegration(const DateTime& start_time,
             const DateTime& end_time,
             const boost::posix_time::time_duration& delta_t,
             const Mode mode,
@@ -332,17 +484,17 @@ public:
             const double delta,
             Field* field) :
             Integration(start_time, end_time, delta_t, field), delta_(delta), mode_(
-                    mode), f2_(0.5 * (1 / (delta_ * delta_))), lambda1_(), lambda2_(), theta1_(), theta2_()
+                    mode), f2_(0.5 * (1 / (delta_ * delta_)))
     {
         switch (mode_)
         {
         case kFSLE:
             min_separation_ = min_separation;
-            pSeparation_ = &FiniteLyapunovExponents::SeparationFSLE;
+            pSeparation_ = &FiniteLyapunovExponentsIntegration::SeparationFSLE;
             break;
         case kFTLE:
             min_separation_ = -1;
-            pSeparation_ = &FiniteLyapunovExponents::SeparationFTLE;
+            pSeparation_ = &FiniteLyapunovExponentsIntegration::SeparationFTLE;
             break;
         default:
             throw std::invalid_argument(
@@ -353,7 +505,7 @@ public:
     /**
      * @brief Default method invoked when an instance is destroyed.
      */
-    virtual ~FiniteLyapunovExponents()
+    virtual ~FiniteLyapunovExponentsIntegration()
     {
     }
 
@@ -425,54 +577,12 @@ public:
      * of the Cauchy-Green strain tensor
      *
      * @param position %Position of the particle
+     * @param fle Finite Lyapunov Exponents computed
      *
      * @return True if the exponents are defined
      */
-    bool Exponents(const Position* const position);
-
-    /**
-     * @brief Get the orientation of the eigenvectors associated to the
-     * maximum eigenvalues of Cauchy-Green strain tensor
-     *
-     * @return λ₁ (unit 1/day)
-     */
-    inline double get_lambda1() const
-    {
-        return lambda1_;
-    }
-
-    /**
-     * @brief Get the orientation of the eigenvectors associated to the
-     * minimum eigenvalues of Cauchy-Green strain tensor
-     *
-     * @return λ₂ (unit 1/day)
-     */
-    inline double get_lambda2() const
-    {
-        return lambda2_;
-    }
-
-    /**
-     * @brief FLE associated to the maximum eigenvalues of Cauchy-Green
-     * strain tensor
-     *
-     * @return θ₁ (unit degrees)
-     */
-    inline double get_theta1() const
-    {
-        return theta1_;
-    }
-
-    /**
-     * @brief FLE associated to the minimum eigenvalues of Cauchy-Green
-     * strain tensor
-     *
-     * @return θ₂ (unit degrees)
-     */
-    inline double get_theta2() const
-    {
-        return theta2_;
-    }
+	bool ComputeExponents(const Position* const position,
+	        FiniteLyapunovExponents& fle);
 };
 
 } // namespace lagrangian

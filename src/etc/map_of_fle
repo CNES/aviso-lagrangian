@@ -36,6 +36,46 @@ STENCIL = {
 }
 
 
+MODE = {
+    "fsle": lagrangian.kFSLE,
+    "ftle": lagrangian.kFTLE
+}
+
+
+def timedelta_type(value):
+    """
+    The option should define a time duration
+    """
+    try:
+        value = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError("invalid float value: %r" % value)
+    return datetime.timedelta(days=value)
+
+
+class TimeDirection(object):
+    """
+    Define the time integration direction
+    """
+    BACKWARD = 0
+    FORWARD = 1
+    
+    @staticmethod
+    def default():
+        """
+        Return the default time integration direction
+        """
+        return "backward"
+    
+    @classmethod
+    def choices(cls):
+        """
+        Return a hash that represents the possible choices for the
+        integration time.
+        """
+        return dict(backward=cls.BACKWARD, forward=cls.FORWARD)
+
+
 def positive_value(value):
     """
     Check options for defining values strictly positive.
@@ -59,9 +99,10 @@ def usage():
                                      add_help=False)
     grid = parser.add_argument_group('grid arguments',
                                      'Set the grid properties to create')
-    grid.add_argument('--step',
-                      help='grid step in degrees',
+    grid.add_argument('--resolution',
+                      help='output grid resolution in degrees',
                       type=positive_value,
+                      metavar='STEP',
                       default=1)
     grid.add_argument('--x_min',
                       help='x min in degrees',
@@ -82,6 +123,17 @@ def usage():
 
     integration = parser.add_argument_group('integration arguments',
                                             'Define integration')
+    integration.add_argument('--mode',
+                             help="define the integration mode: "
+                                  "fsle to compute Finite Size "
+                                  "Lyapunov Exponent, ftle to compute "
+                                  "Finite Time Lyapunov Exponent.",
+                             choices=MODE.keys(),
+                             default="fsle")
+    integration.add_argument('--time_direction',
+                             help='time integration direction',
+                             choices=TimeDirection.choices().keys(),
+                             default=TimeDirection.default())
     integration.add_argument('--stencil',
                              help='type of stencil used to compute the finite '
                                   'difference.',
@@ -89,21 +141,36 @@ def usage():
                              default="triplet")
     integration.add_argument('--initial_separation',
                              help='initial separation in degrees of '
-                                  'neighbouring particules (by default, this '
-                                  'option is set with the value of the option '
-                                  '--step)',
+                                  'neighbouring particules',
                              type=positive_value,
                              metavar='DELTA',
                              default=None)
+    integration.add_argument('--advection_time',
+                             help='time of advection in number of days '
+                                  'elapsed since the beginning of the '
+                                  'simulation. This option set the maximum '
+                                  'time of advection in FSLE mode',
+                             default=200,
+                             metavar='DURATION',
+                             type=timedelta_type)
     integration.add_argument('--final_separation',
                              help='maximum final separation in degrees',
                              type=positive_value,
                              metavar='DELTA',
                              default=-1)
-    integration.add_argument('--delta',
-                             help='time delta in hours',
+    integration.add_argument('--integration_time_step',
+                             help='particles time integration step in hours',
                              type=positive_value,
+                             metavar='DURATION',
                              default=6)
+    integration.add_argument('--diagnostic',
+                             help='write an additional variable containing a '
+                                  'diagnostic, depending on calculation mode. '
+                                  'This variable will be set with the '
+                                  'advection time, in FSLE mode, or with the '
+                                  'effective final separation distance, in '
+                                  'FTLE mode.',
+                             action='store_true')
 
     data = parser.add_argument_group('reader arguments',
                                      'Set options of the NetCDF reader.')
@@ -133,11 +200,15 @@ def usage():
                         default=argparse.SUPPRESS,
                         help='show this help message and exit')
     parser.add_argument('configuration', help='configuration file')
-    parser.add_argument('fle', help='map of FLE in NetCDF format')
+    parser.add_argument('output', help='map of FLE in NetCDF format')
     parser.add_argument('start_time', help='start of the integration')
-    parser.add_argument('end_time', help='end of the integration')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if MODE[args.mode] == lagrangian.kFTLE:
+        if args.final_separation != -1:
+            parser.error('argument --final_separation not allowed in FTLE '
+                         'mode')
+    return args
 
 
 def convert_from_sec_to_day(a, fill_value):
@@ -148,33 +219,12 @@ def convert_from_sec_to_day(a, fill_value):
     result *= 86400
     return result.data
 
-
-def main():
+def check_period(ts, start_time, end_time):
     """
-    Main function
+    Check the consistency of the defined period with the time series 
     """
-    # Initializes arguments from command line
-    args = usage()
-
-    # Set debug
-    lagrangian.set_verbose(args.verbose)
-
-    # Check X & Y range
-    if not args.x_min < args.x_max:
-        raise RuntimeError("Invalid definition of x range.")
-    if not args.y_min < args.y_max:
-        raise RuntimeError("Invalid definition of y range.")
-
-    # Fill value for double in NetCDF file
-    NC_FILL_DOUBLE = 9.9692099683868690e+36
-
-    # Initializes the time series to process
-    ts = lagrangian.TimeSerie(args.configuration,
-                              SYSTEM_UNITS[args.unit])
-    delta = datetime.timedelta(0, args.delta * 60 * 60)
-
-    start_time = lagrangian.DateTime(args.start_time)()
-    end_time = lagrangian.DateTime(args.end_time)()
+    if start_time > end_time:
+        start_time, end_time = end_time, start_time
 
     if start_time < ts.start_time():
         raise RuntimeError("The start date (%s) is before the beginning "
@@ -187,16 +237,54 @@ def main():
                            "of the time series (%s)" %
                            (end_time.strftime("%Y-%m-%dT%H:%M:%S"),
                             ts.end_time().strftime("%Y-%m-%dT%H:%M:%S")))
-    nx = int((args.x_max - args.x_min) / args.step) + 1
-    ny = int((args.y_max - args.y_min) / args.step) + 1
+
+
+def main():
+    """
+    Main function
+    """
+    # Initializes arguments from command line
+    args = usage()
+
+    # Set debug
+    lagrangian.set_verbose(args.verbose)
+    
+    # Display set parameter values for the integration
+    for item in args._get_kwargs():
+        option, value = item
+        lagrangian.debug("%s: %s" % (option, value))
+
+    # Check X & Y range
+    if not args.x_min < args.x_max:
+        raise RuntimeError("Invalid definition of x range.")
+    if not args.y_min < args.y_max:
+        raise RuntimeError("Invalid definition of y range.")
+
+    # Fill value for double in NetCDF file
+    NC_FILL_DOUBLE = netCDF4.default_fillvals['f8']
+
+    # Initializes the time series to process
+    ts = lagrangian.TimeSerie(args.configuration,
+                              SYSTEM_UNITS[args.unit])
+    delta = datetime.timedelta(0, args.integration_time_step * 60 * 60)
+
+    start_time = lagrangian.DateTime(args.start_time)()
+    
+    # Calculate the end of the integration depending on the advection time
+    # direction
+    if args.time_direction == TimeDirection.BACKWARD:
+        end_time = lagrangian.DateTime(args.start_time - delta)()
+    else:
+        end_time = lagrangian.DateTime(args.start_time + delta)()
+        
+    check_period(ts, start_time, end_time)
+
+    nx = int((args.x_max - args.x_min) / args.resolution) + 1
+    ny = int((args.y_max - args.y_min) / args.resolution) + 1
 
     # By default the initial separation is the grid step
     if args.initial_separation is None:
         args.initial_separation = args.step
-
-    # Initializes calculation mode
-    mode = lagrangian.kFTLE if args.final_separation < 0 else lagrangian.kFSLE
-    caption = 'FTLE' if args.final_separation < 0 else 'FSLE'
 
     # Build the map properties
     map_properties = lagrangian.MapProperties(
@@ -204,13 +292,13 @@ def main():
         ny,
         args.x_min,
         args.y_min,
-        args.step)
+        args.resolution)
 
     # Initializes the FLE to process
     fle = lagrangian.FiniteLyapunovExponents(start_time,
                                              end_time,
                                              delta,
-                                             mode,
+                                             MODE[args.mode],
                                              args.final_separation,
                                              args.initial_separation,
                                              ts)
@@ -236,27 +324,30 @@ def main():
     map_of_fle.compute()
 
     # Creates the NetCDF file
-    rootgrp = netCDF4.Dataset(args.fle, 'w', format='NETCDF4')
-    rootgrp.createDimension('x', nx)
-    rootgrp.createDimension('y', ny)
-    rootgrp.title = 'Map of %s' % caption
-    if args.final_separation > 0:
-        rootgrp.separation = ('Minimum separation (expansion) in degrees: %f'
-                              % (args.final_separation))
-    rootgrp.start_time = start_time.strftime("%Y-%m-%d %T")
-    rootgrp.end_time = end_time.strftime("%Y-%m-%d %T")
+    rootgrp = netCDF4.Dataset(args.output, 'w', format='NETCDF4')
+    rootgrp.createDimension('lon', nx)
+    rootgrp.createDimension('lat', ny)
+    rootgrp.title = 'Map of %s' % args.mode.upper()
 
-    x_axis = rootgrp.createVariable('x', 'f8', ('x',))
+    # Write parameter values used for the integration
+    for item in args._get_kwargs():
+        setattr(rootgrp, *item)
+
+    x_axis = rootgrp.createVariable('lon', 'f8', ('lon',))
+    y_axis.standard_name = "longitude"
     x_axis.units = 'degrees_east'
+    x_axis.axis = "X" ;
     x_axis[:] = map_properties.get_x_axis()
 
-    y_axis = rootgrp.createVariable('y', 'f8', ('y',))
+    y_axis = rootgrp.createVariable('lat', 'f8', ('lat',))
+    y_axis.standard_name = "latitude"
     y_axis.units = 'degrees_north'
+    y_axis.axis = "Y" ;
     y_axis[:] = map_properties.get_y_axis()
 
     theta1 = rootgrp.createVariable('theta1',
                                     'f8',
-                                    ('x', 'y',),
+                                    ('lon', 'lat',),
                                     fill_value=NC_FILL_DOUBLE)
     theta1.long_name = 'FLE associated to the maximum eigenvalues of ' \
         'Cauchy-Green strain tensor'
@@ -265,7 +356,7 @@ def main():
 
     theta2 = rootgrp.createVariable('theta2',
                                     'f8',
-                                    ('x', 'y',),
+                                    ('lon', 'lat',),
                                     fill_value=NC_FILL_DOUBLE)
     theta2.long_name = 'FLE associated to the minimum eigenvalues of ' \
         'Cauchy-Green strain tensor'
@@ -274,7 +365,7 @@ def main():
 
     lambda1 = rootgrp.createVariable('lambda1',
                                      'f8',
-                                     ('x', 'y',),
+                                     ('lon', 'lat',),
                                      fill_value=NC_FILL_DOUBLE)
     lambda1.long_name = 'Orientation of the eigenvectors associated to the' \
         'maximum eigenvalues of Cauchy-Green strain tensor'
@@ -282,13 +373,35 @@ def main():
     lambda1[:] = convert_from_sec_to_day(
         map_of_fle.get_map_of_lambda1(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
-    lambda2 = rootgrp.createVariable('lambda2', 'f8', ('x', 'y',),
+    lambda2 = rootgrp.createVariable('lambda2', 'f8', ('lon', 'lat',),
                                      fill_value=NC_FILL_DOUBLE)
     lambda2.long_name = 'Orientation of the eigenvectors associated to the' \
         'minimum eigenvalues of Cauchy-Green strain tensor'
     lambda2.units = '1/day'
     lambda2[:] = convert_from_sec_to_day(
         map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
+    
+    if args.diagnostic:
+        if MODE[args.mode] == lagrangian.FSLE:
+            diagnostic = rootgrp.createVariable(
+                'advection_time',
+                'f8',
+                ('lon', 'lat',),
+                fill_value=NC_FILL_DOUBLE)
+            diagnostic.long_name = 'actual advection time'
+            diagnostic.units = 'number of seconds elapsed ' \
+                'since %s' % start_time.isoformat()
+            diagnostic[:] = map_of_fle.get_map_of_delta_t(NC_FILL_DOUBLE)
+        else:
+            diagnostic = rootgrp.createVariable(
+                'separation distance',
+                'f8',
+                ('lon', 'lat',),
+                fill_value=NC_FILL_DOUBLE)
+            diagnostic.long_name = 'effective final separation distance'
+            diagnostic.units = 'degree'
+            diagnostic[:] = map_of_fle.get_map_of_effective_separation(
+               NC_FILL_DOUBLE)
     rootgrp.close()
 
 
