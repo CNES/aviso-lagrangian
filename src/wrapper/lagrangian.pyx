@@ -7,6 +7,7 @@ cimport cython
 cimport cpp_lagrangian
 cimport libcpp.string
 cimport libcpp.vector
+cimport libc.math
 cimport numpy
 
 
@@ -1441,12 +1442,13 @@ cdef class MapOfFiniteLyapunovExponents:
         self.wrapped.Compute(cpp_fle_integration[0])
 
     @cython.boundscheck(False)
-    cdef numpy.ndarray get_map(self, cpp_lagrangian.Map[double]* map_of):
+    cdef numpy.ndarray get_map(self, double fill_value, cpp_lagrangian.Map[double]* map_of):
         # Utility function to return the computed matrix to Python
         cdef:
             numpy.ndarray result
             numpy.npy_intp dims[2]
             double* data
+            double value
             int ix, iy
 
         try:
@@ -1459,9 +1461,11 @@ cdef class MapOfFiniteLyapunovExponents:
                                          0)
             data = <double*>numpy.PyArray_DATA(result)
 
-            for ix in range(map_of.get_nx()):
-                for iy in range(map_of.get_ny()):
-                    data[ix * map_of.get_ny() + iy] = map_of.GetItem(ix, iy)
+            for ix in range(dims[0]):
+                for iy in range(dims[1]):
+                    value = map_of.GetItem(ix, iy)
+                    data[ix * map_of.get_ny() + iy] = value \
+                        if not libc.math.isnan(value) else fill_value
 
             return result
         finally:
@@ -1479,7 +1483,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
 
     def get_map_of_lambda2(self, double nan):
         """
@@ -1493,7 +1497,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
 
     def get_map_of_theta1(self, double nan):
         """
@@ -1507,7 +1511,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
 
     def get_map_of_theta2(self, double nan):
         """
@@ -1521,7 +1525,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
 
     def get_map_of_delta_t(self, double nan):
         """
@@ -1535,7 +1539,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
 
     def get_map_of_final_separation(self, double nan):
         """
@@ -1548,7 +1552,7 @@ cdef class MapOfFiniteLyapunovExponents:
                         self.fle_integration.wrapped
 
         return self.get_map(
-            self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
+            nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
 
 def debug(str msg not None):
     """

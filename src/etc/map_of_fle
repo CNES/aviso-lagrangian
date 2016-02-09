@@ -269,14 +269,14 @@ def main():
     delta = datetime.timedelta(0, args.integration_time_step * 60 * 60)
 
     start_time = lagrangian.DateTime(args.start_time)()
-    
+
     # Calculate the end of the integration depending on the advection time
     # direction
-    if args.time_direction == TimeDirection.BACKWARD:
-        end_time = lagrangian.DateTime(args.start_time - delta)()
+    if TimeDirection.choices()[args.time_direction] == TimeDirection.BACKWARD:
+        end_time = lagrangian.DateTime(start_time - args.advection_time)()
     else:
-        end_time = lagrangian.DateTime(args.start_time + delta)()
-        
+        end_time = lagrangian.DateTime(start_time + args.advection_time)()
+
     check_period(ts, start_time, end_time)
 
     nx = int((args.x_max - args.x_min) / args.resolution) + 1
@@ -295,13 +295,14 @@ def main():
         args.resolution)
 
     # Initializes the FLE to process
-    fle = lagrangian.FiniteLyapunovExponents(start_time,
-                                             end_time,
-                                             delta,
-                                             MODE[args.mode],
-                                             args.final_separation,
-                                             args.initial_separation,
-                                             ts)
+    fle = lagrangian.FiniteLyapunovExponentsIntegration(
+        start_time,
+        end_time,
+        delta,
+        MODE[args.mode],
+        args.final_separation,
+        args.initial_separation,
+        ts)
 
     # The nodes of the grid result, located on land are undefined. To speed
     # up the calculation we use a external grid to remove these cells from
@@ -331,10 +332,11 @@ def main():
 
     # Write parameter values used for the integration
     for item in args._get_kwargs():
-        setattr(rootgrp, *item)
+        name, value = item
+        setattr(rootgrp, name, str(value))
 
     x_axis = rootgrp.createVariable('lon', 'f8', ('lon',))
-    y_axis.standard_name = "longitude"
+    x_axis.standard_name = "longitude"
     x_axis.units = 'degrees_east'
     x_axis.axis = "X" ;
     x_axis[:] = map_properties.get_x_axis()
@@ -382,7 +384,7 @@ def main():
         map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
     
     if args.diagnostic:
-        if MODE[args.mode] == lagrangian.FSLE:
+        if MODE[args.mode] == lagrangian.kFSLE:
             diagnostic = rootgrp.createVariable(
                 'advection_time',
                 'f8',
