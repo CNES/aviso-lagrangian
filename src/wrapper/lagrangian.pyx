@@ -1473,8 +1473,8 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def get_map_of_lambda1(self, double nan):
         """
-        Get the map of the orientation of the eigenvectors associated
-        to the maximum eigenvalues of Cauchy-Green strain tensor
+        Get the map of the FLE associated to the maximum eigenvalues of
+        Cauchy-Green strain tensor
         """
         cdef:
             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
@@ -1487,8 +1487,8 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def get_map_of_lambda2(self, double nan):
         """
-        Get the map of the orientation of the eigenvectors associated
-        to the minimum eigenvalues of Cauchy-Green strain tensor
+        Get the map of the FLE associated to the minimum eigenvalues of
+        Cauchy-Green strain tensor
         """
         cdef:
             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
@@ -1501,8 +1501,8 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def get_map_of_theta1(self, double nan):
         """
-        Get the map of the FLE associated to the maximum eigenvalues of
-        Cauchy-Green strain tensor
+        Get the map of the orientation of the eigenvectors associated
+        to the maximum eigenvalues of Cauchy-Green strain tensor
         """
         cdef:
             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
@@ -1515,8 +1515,8 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def get_map_of_theta2(self, double nan):
         """
-        Get the map of the FLE associated to the minimum eigenvalues of
-        Cauchy-Green strain tensor
+        Get the map of the orientation of the eigenvectors associated
+        to the minimum eigenvalues of Cauchy-Green strain tensor
         """
         cdef:
             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \

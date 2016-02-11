@@ -420,8 +420,8 @@ public:
     }
 
     /**
-     * @brief Get the map of the orientation of the eigenvectors associated
-     * to the maximum eigenvalues of Cauchy-Green strain tensor
+     * @brief Get the map of the FLE associated to the maximum eigenvalues of
+     * Cauchy-Green strain tensor
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
@@ -436,8 +436,8 @@ public:
     }
 
     /**
-     * @brief Get the map of the orientation of the eigenvectors associated
-     * to the minimum eigenvalues of Cauchy-Green strain tensor
+     * @brief Get the map of the FLE associated to the minimum eigenvalues of
+     * Cauchy-Green strain tensor
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
@@ -452,8 +452,8 @@ public:
     }
 
     /**
-     * @brief Get the map of the FLE associated to the maximum eigenvalues of
-     * Cauchy-Green strain tensor
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the maximum eigenvalues of Cauchy-Green strain tensor
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
@@ -468,8 +468,8 @@ public:
     }
 
     /**
-     * @brief Get the map of the FLE associated to the minimum eigenvalues of
-     * Cauchy-Green strain tensor
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the minimum eigenvalues of Cauchy-Green strain tensor
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler

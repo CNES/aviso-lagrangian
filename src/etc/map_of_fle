@@ -219,9 +219,10 @@ def convert_from_sec_to_day(a, fill_value):
     result *= 86400
     return result.data
 
+
 def check_period(ts, start_time, end_time):
     """
-    Check the consistency of the defined period with the time series 
+    Check the consistency of the defined period with the time series
     """
     if start_time > end_time:
         start_time, end_time = end_time, start_time
@@ -248,7 +249,7 @@ def main():
 
     # Set debug
     lagrangian.set_verbose(args.verbose)
-    
+
     # Display set parameter values for the integration
     for item in args._get_kwargs():
         option, value = item
@@ -338,51 +339,53 @@ def main():
     x_axis = rootgrp.createVariable('lon', 'f8', ('lon',))
     x_axis.standard_name = "longitude"
     x_axis.units = 'degrees_east'
-    x_axis.axis = "X" ;
+    x_axis.axis = "X"
     x_axis[:] = map_properties.get_x_axis()
 
     y_axis = rootgrp.createVariable('lat', 'f8', ('lat',))
     y_axis.standard_name = "latitude"
     y_axis.units = 'degrees_north'
-    y_axis.axis = "Y" ;
+    y_axis.axis = "Y"
     y_axis[:] = map_properties.get_y_axis()
 
     theta1 = rootgrp.createVariable('theta1',
                                     'f8',
                                     ('lon', 'lat',),
                                     fill_value=NC_FILL_DOUBLE)
-    theta1.long_name = 'FLE associated to the maximum eigenvalues of ' \
-        'Cauchy-Green strain tensor'
-    theta1.units = 'degrees'
+    theta1.long_name = 'Orientation of the eigenvectors associated to the' \
+        'maximum eigenvalues of Cauchy-Green strain tensor'
+    theta1.units = 'degree'
     theta1[:] = map_of_fle.get_map_of_theta1(NC_FILL_DOUBLE)
 
     theta2 = rootgrp.createVariable('theta2',
                                     'f8',
                                     ('lon', 'lat',),
                                     fill_value=NC_FILL_DOUBLE)
-    theta2.long_name = 'FLE associated to the minimum eigenvalues of ' \
-        'Cauchy-Green strain tensor'
-    theta2.units = 'degrees'
-    theta2[:] = map_of_fle.get_map_of_theta1(NC_FILL_DOUBLE)
+    theta2.long_name = 'Orientation of the eigenvectors associated to the' \
+        'minimum eigenvalues of Cauchy-Green strain tensor'
+    theta2.units = 'degree'
+    theta2[:] = map_of_fle.get_map_of_theta2(NC_FILL_DOUBLE)
 
     lambda1 = rootgrp.createVariable('lambda1',
                                      'f8',
                                      ('lon', 'lat',),
                                      fill_value=NC_FILL_DOUBLE)
-    lambda1.long_name = 'Orientation of the eigenvectors associated to the' \
-        'maximum eigenvalues of Cauchy-Green strain tensor'
+    lambda1.long_name = 'FLE associated to the maximum eigenvalues of ' \
+        'Cauchy-Green strain tensor'
     lambda1.units = '1/day'
     lambda1[:] = convert_from_sec_to_day(
         map_of_fle.get_map_of_lambda1(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
-    lambda2 = rootgrp.createVariable('lambda2', 'f8', ('lon', 'lat',),
+    lambda2 = rootgrp.createVariable('lambda2',
+                                     'f8',
+                                     ('lon', 'lat',),
                                      fill_value=NC_FILL_DOUBLE)
-    lambda2.long_name = 'Orientation of the eigenvectors associated to the' \
-        'minimum eigenvalues of Cauchy-Green strain tensor'
+    lambda2.long_name = 'FLE associated to the minimum eigenvalues of ' \
+        'Cauchy-Green strain tensor'
     lambda2.units = '1/day'
     lambda2[:] = convert_from_sec_to_day(
         map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
-    
+
     if args.diagnostic:
         if MODE[args.mode] == lagrangian.kFSLE:
             diagnostic = rootgrp.createVariable(
@@ -391,9 +394,11 @@ def main():
                 ('lon', 'lat',),
                 fill_value=NC_FILL_DOUBLE)
             diagnostic.long_name = 'actual advection time'
-            diagnostic.units = 'number of seconds elapsed ' \
+            diagnostic.units = 'number of days elapsed ' \
                 'since %s' % start_time.isoformat()
-            diagnostic[:] = map_of_fle.get_map_of_delta_t(NC_FILL_DOUBLE)
+            diagnostic[:] = convert_from_sec_to_day(
+                map_of_fle.get_map_of_delta_t(NC_FILL_DOUBLE),
+                NC_FILL_DOUBLE)
         else:
             diagnostic = rootgrp.createVariable(
                 'separation distance',
