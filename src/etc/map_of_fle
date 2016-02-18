@@ -16,6 +16,7 @@
 
 import lagrangian
 import datetime
+import dateutil.parser
 import netCDF4
 import numpy
 import argparse
@@ -53,20 +54,32 @@ def timedelta_type(value):
     return datetime.timedelta(days=value)
 
 
+def datetime_type(value):
+    """
+    The option should define a datetime
+    """
+    try:
+        value = dateutil.parser.parse(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "invalid date time %r: %s" % (value, error))
+    return value
+
+
 class TimeDirection(object):
     """
     Define the time integration direction
     """
     BACKWARD = 0
     FORWARD = 1
-    
+
     @staticmethod
     def default():
         """
         Return the default time integration direction
         """
         return "backward"
-    
+
     @classmethod
     def choices(cls):
         """
@@ -199,9 +212,13 @@ def usage():
                         action='help',
                         default=argparse.SUPPRESS,
                         help='show this help message and exit')
-    parser.add_argument('configuration', help='configuration file')
-    parser.add_argument('output', help='map of FLE in NetCDF format')
-    parser.add_argument('start_time', help='start of the integration')
+    parser.add_argument('configuration',
+                        help='configuration file')
+    parser.add_argument('output',
+                        help='map of FLE in NetCDF format')
+    parser.add_argument('start_time',
+                        help='start of the integration',
+                        type=datetime_type)
 
     args = parser.parse_args()
     if MODE[args.mode] == lagrangian.kFTLE:
@@ -408,7 +425,7 @@ def main():
             diagnostic.long_name = 'effective final separation distance'
             diagnostic.units = 'degree'
             diagnostic[:] = map_of_fle.get_map_of_final_separation(
-               NC_FILL_DOUBLE)
+                NC_FILL_DOUBLE)
     rootgrp.close()
 
 
