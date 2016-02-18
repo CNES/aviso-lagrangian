@@ -285,7 +285,7 @@ def main():
 
     # By default the initial separation is the grid step
     if args.initial_separation is None:
-        args.initial_separation = args.step
+        args.initial_separation = args.resolution
 
     # Build the map properties
     map_properties = lagrangian.MapProperties(
