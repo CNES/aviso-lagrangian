@@ -407,7 +407,7 @@ def main():
                 fill_value=NC_FILL_DOUBLE)
             diagnostic.long_name = 'effective final separation distance'
             diagnostic.units = 'degree'
-            diagnostic[:] = map_of_fle.get_map_of_effective_separation(
+            diagnostic[:] = map_of_fle.get_map_of_final_separation(
                NC_FILL_DOUBLE)
     rootgrp.close()
 
