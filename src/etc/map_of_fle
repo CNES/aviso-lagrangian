@@ -20,8 +20,8 @@ import dateutil.parser
 import netCDF4
 import numpy
 import argparse
-import multiprocessing
 import signal
+import threading
 import sys
 
 
@@ -41,6 +41,17 @@ MODE = {
     "fsle": lagrangian.kFSLE,
     "ftle": lagrangian.kFTLE
 }
+
+
+# List of ignored signals
+UNINTERRUPTIBLE = ['SIG_BLOCK', 'SIG_DFL', 'SIGSTOP', 'SIGKILL', 'SIGCHLD',
+                   'SIGCLD', 'SIGTERM', 'SIG_IGN', 'SIG_SETMASK',
+                   'SIG_UNBLOCK']
+
+
+# List of intercepted signals
+SIGNAL = dict((value, name) for name, value in signal.__dict__.items()
+              if name.startswith('SIG') and name not in UNINTERRUPTIBLE)
 
 
 def timedelta_type(value):
@@ -163,7 +174,7 @@ def usage():
                                   'elapsed since the beginning of the '
                                   'simulation. This option set the maximum '
                                   'time of advection in FSLE mode',
-                             default=200,
+                             default=datetime.timedelta(days=200),
                              metavar='DURATION',
                              type=timedelta_type)
     integration.add_argument('--final_separation',
@@ -429,27 +440,38 @@ def main():
     rootgrp.close()
 
 
-def signal_handler(signum, _):
+class Thread(threading.Thread):
     """
-    Signal handler
+    Signal handling in multi-threaded Python environment
     """
-    signame = {}
-    for value, key in signal.__dict__.items():
-        if value.startswith('SIG'):
-            signame[key] = value
-    print('Stop with signal %s' % signame[signum])
-    for process in multiprocessing.process.active_children():
-        process.terminate()
-    sys.exit(0)
+    def __init__(self, *args, **kwargs):
+        super(Thread, self).__init__(*args, **kwargs)
+        self.event = threading.Event()
+        for value in SIGNAL:
+            signal.signal(value, self.signal_handler)
+        self.signum = None
+
+    def join(self, timeout=None):
+        """
+        Wait for a thread ends by intercepting, if necessary, a signal
+        """
+        while True:
+            if self.event.is_set():
+                print("Stop with signal %s" % SIGNAL[self.signum])
+                break
+            while self.is_alive():
+                super(Thread, self).join(timeout=timeout)
+
+    def signal_handler(self, signum, _):
+        """
+        Signal handler
+        """
+        self.event.set()
+        self.signum = signum
 
 
 if __name__ == '__main__':
 
-    # Initialize signal handler
-    signal.signal(signal.SIGINT, signal_handler)
-
     # As the calculation is long, the calculation process is started in
     # parallel. Thus the user can stop the program
-    PROCESS = multiprocessing.Process(target=main)
-    PROCESS.start()
-    PROCESS.join()
+    Thread(target=main).join(timeout=5)
