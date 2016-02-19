@@ -21,7 +21,7 @@ import netCDF4
 import numpy
 import argparse
 import signal
-import threading
+import multiprocessing
 import sys
 
 
@@ -268,7 +268,7 @@ def check_period(ts, start_time, end_time):
                             ts.end_time().strftime("%Y-%m-%dT%H:%M:%S")))
 
 
-def main():
+def calculation():
     """
     Main function
     """
@@ -440,38 +440,30 @@ def main():
     rootgrp.close()
 
 
-class Thread(threading.Thread):
+def signal_handler(signum, _):
     """
-    Signal handling in multi-threaded Python environment
+    Signal handler
     """
-    def __init__(self, *args, **kwargs):
-        super(Thread, self).__init__(*args, **kwargs)
-        self.event = threading.Event()
-        for value in SIGNAL:
-            signal.signal(value, self.signal_handler)
-        self.signum = None
-
-    def join(self, timeout=None):
-        """
-        Wait for a thread ends by intercepting, if necessary, a signal
-        """
-        while True:
-            if self.event.is_set():
-                print("Stop with signal %s" % SIGNAL[self.signum])
-                break
-            while self.is_alive():
-                super(Thread, self).join(timeout=timeout)
-
-    def signal_handler(self, signum, _):
-        """
-        Signal handler
-        """
-        self.event.set()
-        self.signum = signum
+    print('Stop with signal %s' % SIGNAL[signum])
+    for process in multiprocessing.process.active_children():
+        process.terminate()
+    sys.exit(255)
 
 
-if __name__ == '__main__':
+def main():
+    """
+    Main function
+    """
+    # Initialize signal handler
+    for value in SIGNAL:
+        signal.signal(value, signal_handler)
 
     # As the calculation is long, the calculation process is started in
     # parallel. Thus the user can stop the program
-    Thread(target=main).join(timeout=5)
+    process = multiprocessing.Process(target=calculation)
+    process.start()
+    process.join()
+
+
+if __name__ == '__main__':
+    main()
