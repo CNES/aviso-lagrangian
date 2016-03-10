@@ -197,10 +197,7 @@ Axis::Axis(const netcdf::Variable& variable) :
 //
 static inline bool IsSame(const double a, const double b)
 {
-    return boost::test_tools::check_is_close(a,
-            b,
-            boost::test_tools::fraction_tolerance(1e-4));
-
+    return std::fabs(a - b < 1e-4);
 }
 
 // ___________________________________________________________________________//
