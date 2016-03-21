@@ -239,12 +239,20 @@ def usage():
     return args
 
 
+def convert_from_sec_to_day_inv(a, fill_value):
+    """
+    Converting values from second^{-1} to days^{-1}
+    """
+    result = numpy.ma.masked_equal(a, fill_value)
+    result *= 86400
+    return result.data
+
 def convert_from_sec_to_day(a, fill_value):
     """
     Converting values from second to days
     """
     result = numpy.ma.masked_equal(a, fill_value)
-    result *= 86400
+    result /= 86400
     return result.data
 
 
@@ -401,7 +409,7 @@ def calculation():
     lambda1.long_name = 'FLE associated to the maximum eigenvalues of ' \
         'Cauchy-Green strain tensor'
     lambda1.units = '1/day'
-    lambda1[:] = convert_from_sec_to_day(
+    lambda1[:] = convert_from_sec_to_day_inv(
         map_of_fle.get_map_of_lambda1(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
     lambda2 = rootgrp.createVariable('lambda2',
@@ -411,7 +419,7 @@ def calculation():
     lambda2.long_name = 'FLE associated to the minimum eigenvalues of ' \
         'Cauchy-Green strain tensor'
     lambda2.units = '1/day'
-    lambda2[:] = convert_from_sec_to_day(
+    lambda2[:] = convert_from_sec_to_day_inv(
         map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
     if args.diagnostic:
@@ -436,7 +444,7 @@ def calculation():
             diagnostic.long_name = 'effective final separation distance'
             diagnostic.units = 'degree'
             diagnostic[:] = map_of_fle.get_map_of_final_separation(
-                NC_FILL_DOUBLE)
+               NC_FILL_DOUBLE)
     rootgrp.close()
 
 
