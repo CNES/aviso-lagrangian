@@ -46,7 +46,7 @@ MODE = {
 # List of ignored signals
 UNINTERRUPTIBLE = ['SIG_BLOCK', 'SIG_DFL', 'SIGSTOP', 'SIGKILL', 'SIGCHLD',
                    'SIGCLD', 'SIGTERM', 'SIG_IGN', 'SIG_SETMASK',
-                   'SIG_UNBLOCK']
+                   'SIG_UNBLOCK', 'SIGWINCH']
 
 
 # List of intercepted signals
