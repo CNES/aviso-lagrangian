@@ -188,10 +188,11 @@ def usage():
                              metavar='DURATION',
                              default=6)
     integration.add_argument('--diagnostic',
-                             help='write an additional variable containing a '
-                                  'diagnostic, depending on calculation mode. '
-                                  'This variable will be set with the '
-                                  'advection time, in FSLE mode, or with the '
+                             help='write additional variables containing  '
+                                  'diagnostics, depending on calculation mode. '
+                                  'These variables are the '
+                                  'effective final separation distance and advection time,'
+                                  ' in FSLE mode, or the '
                                   'effective final separation distance, in '
                                   'FTLE mode.',
                              action='store_true')
@@ -423,28 +424,29 @@ def calculation():
         map_of_fle.get_map_of_lambda2(NC_FILL_DOUBLE), NC_FILL_DOUBLE)
 
     if args.diagnostic:
+        diag_sep = rootgrp.createVariable(
+                'separation_distance',
+                'f8',
+                ('lon', 'lat',),
+                fill_value=NC_FILL_DOUBLE)
+        diag_sep.long_name = 'effective final separation distance'
+        diag_sep.units = 'degree'
+        diag_sep[:] = map_of_fle.get_map_of_final_separation(
+               NC_FILL_DOUBLE)
+
         if MODE[args.mode] == lagrangian.kFSLE:
-            diagnostic = rootgrp.createVariable(
+            diag_advtime = rootgrp.createVariable(
                 'advection_time',
                 'f8',
                 ('lon', 'lat',),
                 fill_value=NC_FILL_DOUBLE)
-            diagnostic.long_name = 'actual advection time'
-            diagnostic.units = 'number of days elapsed ' \
+            diag_advtime.long_name = 'actual advection time'
+            diag_advtime.units = 'number of days elapsed ' \
                 'since %s' % start_time.isoformat()
-            diagnostic[:] = convert_from_sec_to_day(
+            diag_advtime[:] = convert_from_sec_to_day(
                 map_of_fle.get_map_of_delta_t(NC_FILL_DOUBLE),
                 NC_FILL_DOUBLE)
-        else:
-            diagnostic = rootgrp.createVariable(
-                'separation distance',
-                'f8',
-                ('lon', 'lat',),
-                fill_value=NC_FILL_DOUBLE)
-            diagnostic.long_name = 'effective final separation distance'
-            diagnostic.units = 'degree'
-            diagnostic[:] = map_of_fle.get_map_of_final_separation(
-               NC_FILL_DOUBLE)
+            
     rootgrp.close()
 
 
