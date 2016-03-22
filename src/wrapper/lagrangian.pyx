@@ -657,16 +657,16 @@ cdef class Triplet(Position):
     """
     Define the position of 3 points
     """
-    def __cinit__(self, double x, double y, double delta):
-        self.wrapped = new cpp_lagrangian.Triplet(x, y, delta)
+    def __cinit__(self, double x, double y, double delta, double start):
+        self.wrapped = new cpp_lagrangian.Triplet(x, y, delta, start)
 
 
 cdef class Quintuplet(Position):
     """
     Define the position of 5 points
     """
-    def __cinit__(self, double x, double y, double delta):
-        self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta)
+    def __cinit__(self, double x, double y, double delta, double start):
+        self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta, start)
 
 
 cdef class AbstractIntegration:

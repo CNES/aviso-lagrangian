@@ -195,11 +195,11 @@ cdef extern from "lagrangian/stencil.hpp" nogil:
 
     cdef cppclass Triplet "lagrangian::Triplet"(Position):
         Triplet()
-        Triplet(double, double, double)
+        Triplet(double, double, double, double)
 
     cdef cppclass Quintuplet "lagrangian::Quintuplet"(Position):
         Quintuplet()
-        Quintuplet(double, double, double)
+        Quintuplet(double, double, double, double)
 
 
 cdef extern from "lagrangian/integration.hpp" nogil:

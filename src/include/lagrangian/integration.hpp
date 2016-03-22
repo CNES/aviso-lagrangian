@@ -252,10 +252,24 @@ public:
     }
 
     /**
-     * @brief Set the orientation of the eigenvectors associated to the
-     * maximum eigenvalues of Cauchy-Green strain tensor
+     * @brief Get the effective advection time (delta_t) in case of undefined FLE
+     * @details FSLE and FTLE are undefined when stencil has not been advected 
+     * FSLE is also undefined when stencil has not been separated 
+     * from the final separation distance before maximum advection time
+     * This value serve as diagnostic.
+     * 
+     * @return The effective advection time (unit number of seconds elapsed since the
+     * beginning of the integration)
+     */
+    inline double GetUndefinedDeltaT() const
+    {
+    	return delta_t_;
+    }
+
+    /**
+     * @brief Set the FLE associated to the maximum eigenvalue of Cauchy-Green strain tensor
      *
-     * @param lambda1 λ₁ (unit 1/day)
+     * @param lambda1 λ₁ (unit 1/sec)
      */
     inline void set_lambda1(const double lambda1)
     {
@@ -263,10 +277,9 @@ public:
     }
 
     /**
-     * @brief Get the orientation of the eigenvectors associated to the
-     * maximum eigenvalues of Cauchy-Green strain tensor
+     * @brief Get the FLE associated to the maximum eigenvalue of the Cauchy-Green strain tensor
      *
-     * @return λ₁ (unit 1/day)
+     * @return λ₁ (unit 1/sec)
      */
     inline double get_lambda1() const
     {
@@ -274,10 +287,9 @@ public:
     }
 
     /**
-     * @brief Set the orientation of the eigenvectors associated to the
-     * minimum eigenvalues of Cauchy-Green strain tensor
+     * @brief Set the FLE associated to the minimum eigenvalue of the Cauchy-Green strain tensor
      *
-     * @param lambda1 λ₂ (unit 1/day)
+     * @param lambda1 λ₂ (unit 1/sec)
      */
     inline void set_lambda2(const double lambda2)
     {
@@ -285,10 +297,9 @@ public:
     }
 
     /**
-     * @brief Get the orientation of the eigenvectors associated to the
-     * minimum eigenvalues of Cauchy-Green strain tensor
+     * @brief Get the FLE associated to the minimum eigenvalue of the Cauchy-Green strain tensor
      *
-     * @return λ₂ (unit 1/day)
+     * @return λ₂ (unit 1/sec)
      */
     inline double get_lambda2() const
     {
@@ -296,8 +307,22 @@ public:
     }
 
     /**
-     * @brief Set FLE associated to the maximum eigenvalues of Cauchy-Green
-     * strain tensor
+     * @brief Get missing value of FLE in case of undefined FLE
+     * @details FSLE and FTLE are undefined when stencil has not been advected 
+     * FSLE is also undefined when stencil has not been separated 
+     * from the final separation distance before the maximum advection time
+     * This value may serve as diagnostic together with effective adection time information
+     * 
+     * @return default value (unit 1/sec)
+     */
+    inline double GetUndefinedExponent() const
+    {
+        return 0.0;
+    }
+
+    /**
+     * @brief Set the orientation of the eigenvector associated to the maximum eigenvalue 
+     * of the Cauchy-Green strain tensor
      *
      * @param theta1 θ₁ (unit degrees)
      */
@@ -307,8 +332,8 @@ public:
     }
 
     /**
-     * @brief Get FLE associated to the maximum eigenvalues of Cauchy-Green
-     * strain tensor
+     * @brief Get the orientation of the eigenvector associated to the maximum eigenvalue 
+     * of the Cauchy-Green strain tensor
      *
      * @return θ₁ (unit degrees)
      */
@@ -318,8 +343,8 @@ public:
     }
 
     /**
-     * @brief Set FLE associated to the maximum eigenvalues of Cauchy-Green
-     * strain tensor
+     * @brief Set the orientation of the eigenvector associated to the minimum eigenvalue 
+     * of the Cauchy-Green strain tensor
      *
      * @param theta2 θ₂ (unit degrees)
      */
@@ -329,8 +354,8 @@ public:
     }
 
     /**
-     * @brief Get FLE associated to the maximum eigenvalues of Cauchy-Green
-     * strain tensor
+     * @brief Get the orientation of the eigenvector associated to the minimum eigenvalue 
+     * of the Cauchy-Green strain tensor
      *
      * @return θ₂ (unit degrees)
      */
@@ -338,6 +363,22 @@ public:
     {
     	return theta2_;
     }
+
+    /**
+     * @brief Get the missing value of the orientation ot the eigenvectors of the Cauchy-Green 
+     * strain tensor in case of undefined FLE
+     * @details FSLE and FTLE are undefined when stencil has not been advected 
+     * FSLE is also undefined when stencil has not been separated 
+     * from the final separation distance before the maximum advection time
+     * This value may serve as diagnostic together with effective adection time information
+     *
+     * @return default value (unit degrees)
+     */
+    inline double GetUndefinedVector() const
+    {
+        return 0.0;
+    }
+
 
     /**
      * @brief Set the final separation distance
@@ -358,6 +399,23 @@ public:
     {
     	return final_separation_;
     }
+  
+    /**
+     * @brief Get the missing value of the final separation distance in case of 
+     * undefined FLE
+     * @details FSLE and FTLE are undefined when stencil has not been advected 
+     * FSLE is also undefined when stencil has not been separated 
+     * from the final separation distance before the maximum advection time
+     * missing value is the to the effective separation distance when advection is stopped
+     * This value may serve as diagnostic together with effective advection time information
+     *
+     * @return the missing value of final separation distance (unit degree)
+     */
+    inline double GetUndefinedFinalSeparation() const
+    {
+    	return final_separation_;
+    }
+
 
     /**
      * Set Lyapunov coefficients to NaN when they are undefined.
@@ -525,13 +583,14 @@ public:
         switch (stencil)
         {
         case kTriplet:
-            return new Triplet(x, y, delta_);
+            return new Triplet(x, y, delta_, start_time_);
         case kQuintuplet:
-            return new Quintuplet(x, y, delta_);
+            return new Quintuplet(x, y, delta_, start_time_);
         default:
             throw std::invalid_argument(
                     "invalid FiniteLyapunovExponents::Stencil type");
         }
+
     }
 
     /**

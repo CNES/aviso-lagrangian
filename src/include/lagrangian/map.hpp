@@ -355,23 +355,27 @@ class MapOfFiniteLyapunovExponents: public map::FiniteLyapunovExponents
 private:
     typedef double
     (lagrangian::FiniteLyapunovExponents::*GetExponent)() const;
+    
 
     /**
      * @brief Default constructor
      *
      * @param nan Value of undefined cell
      * @param fle_integration integration object used to compute the
-     * 	integration
+     *  integration
      * @param pGetExponent Function to use to calculate the exponent
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      */
     Map<double>* GetMapOfExponents(const double nan,
             lagrangian::FiniteLyapunovExponentsIntegration& fle_integration,
-            GetExponent pGetExponent) const
+            GetExponent pGetExponent,
+            GetExponent pGetUndefinedExponent) const
     {
         lagrangian::FiniteLyapunovExponents fle;
+    
     	Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
                 map_.get_x_min(), map_.get_y_min(), map_.get_step());
-
+        
         for (int ix = 0; ix < map_.get_nx(); ++ix)
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
@@ -381,24 +385,42 @@ private:
                 {
                     result->SetItem(ix, iy, nan);
                 }
-				else if (!position->get_completed()
-				        && fle_integration.get_mode()
-				                == lagrangian::FiniteLyapunovExponentsIntegration::kFSLE)
-                {
-                    result->SetItem(ix, iy, 0);
-                }
                 else
                 {
-                    double exponent =
-                    		fle_integration.ComputeExponents(position, fle) ?
-                                    (fle.*pGetExponent)() :
-                                    std::numeric_limits<double>::quiet_NaN();
-                    result->SetItem(ix, iy, exponent);
+                    bool defined = fle_integration.ComputeExponents(position, fle);
+            
+                    if (fle_integration.get_mode()
+                        ==lagrangian::FiniteLyapunovExponentsIntegration::kFTLE)
+                    {
+                        // In that case position is always completed
+                        double exponent =
+                                defined ?
+                                        (fle.*pGetExponent)() :
+                                        std::numeric_limits<double>::quiet_NaN();
+                        result->SetItem(ix, iy, exponent);   
+                    }
+                    else
+                    {
+                        if (position->get_completed())
+                        {
+                            double exponent =
+                                defined ?
+                                        (fle.*pGetExponent)() :
+                                        std::numeric_limits<double>::quiet_NaN();
+                            result->SetItem(ix, iy, exponent);
+
+                        }
+                        else
+                        {
+                            result->SetItem(ix, iy, (fle.*pGetUndefinedExponent)());       
+                        }
+                    }
                 }
             }
         }
         return result;
     }
+
 public:
 
     /**
@@ -425,14 +447,17 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_lambda1 Function to use to return the value of λ₁
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      *
-     * @return The map of λ₁ (unit 1/day)
+     * @return The map of λ₁ (unit 1/sec)
      */
     Map<double>* GetMapOfLambda1(const double nan,
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_lambda1);
+                &lagrangian::FiniteLyapunovExponents::get_lambda1,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
     }
 
     /**
@@ -441,14 +466,17 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_lambda2 Function to use to return the value of λ₂
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      *
-     * @return The map of λ₂ (unit 1/day)
+     * @return The map of λ₂ (unit 1/sec)
      */
     Map<double>* GetMapOfLambda2(const double nan,
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_lambda2);
+                &lagrangian::FiniteLyapunovExponents::get_lambda2,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
     }
 
     /**
@@ -457,6 +485,8 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_theta1 Function to use to return the value of θ₁
+     * @param pGetUndefinedVector Function to use to return default value for undefined vector
      *
      * @return The map of θ₁ (unit degrees)
      */
@@ -464,7 +494,8 @@ public:
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_theta1);
+                &lagrangian::FiniteLyapunovExponents::get_theta1,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
     }
 
     /**
@@ -473,14 +504,17 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
-     *
+     * @param get_theta1 Function to use to return the value of θ₂
+     * @param pGetUndefinedVector Function to use to return default value for undefined vector
+     * 
      * @return The map of θ₂ (unit degrees)
      */
     Map<double>* GetMapOfTheta2(const double nan,
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_theta2);
+                &lagrangian::FiniteLyapunovExponents::get_theta2,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
     }
 
     /**
@@ -488,15 +522,18 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
-     *
-     * @return The map of adevection time (unit number of seconds elapsed
+     * @param get_delta_t Function to use to return the value of delta_t
+     * @param GetUndefinedDeltaT Function to use the default value for undefined delta_t
+     * 
+     * @return The map of advection time (unit number of seconds elapsed
      * since the beginning of the integration)
      */
     Map<double>* GetMapOfDeltaT(const double nan,
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_delta_t);
+                &lagrangian::FiniteLyapunovExponents::get_delta_t,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedDeltaT);
     }
 
     /**
@@ -504,6 +541,9 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_final_separation Function to use to return the value of final_separation
+     * @param GetUndefinedFinalSeparation Function to use the default value for undefined 
+     * final_separation
      *
      * @return The map of the effective final separation distance (unit
      * degree)
@@ -512,7 +552,8 @@ public:
             lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_final_separation);
+                &lagrangian::FiniteLyapunovExponents::get_final_separation,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedFinalSeparation);
     }
 };
 
