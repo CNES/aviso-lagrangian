@@ -189,10 +189,10 @@ def usage():
                              default=6)
     integration.add_argument('--diagnostic',
                              help='write additional variables containing  '
-                                  'diagnostics, depending on calculation mode. '
-                                  'These variables are the '
-                                  'effective final separation distance and advection time,'
-                                  ' in FSLE mode, or the '
+                                  'diagnostics, depending on calculation mode.'
+                                  ' These variables are the '
+                                  'effective final separation distance and '
+                                  'advection time, in FSLE mode, or the '
                                   'effective final separation distance, in '
                                   'FTLE mode.',
                              action='store_true')
@@ -247,6 +247,7 @@ def convert_from_sec_to_day_inv(a, fill_value):
     result = numpy.ma.masked_equal(a, fill_value)
     result *= 86400
     return result.data
+
 
 def convert_from_sec_to_day(a, fill_value):
     """
@@ -446,7 +447,7 @@ def calculation():
             diag_advtime[:] = convert_from_sec_to_day(
                 map_of_fle.get_map_of_delta_t(NC_FILL_DOUBLE),
                 NC_FILL_DOUBLE)
-            
+
     rootgrp.close()
 
 

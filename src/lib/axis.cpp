@@ -35,8 +35,9 @@ static const axis::LongitudeUnit g_axis_longitude_unit;
 
 void Axis::NormalizeLongitude()
 {
-    is_ascending_ = points_.size() < 2 ? true : GetCoordinateValue(0)
-            < GetCoordinateValue(1);
+    is_ascending_ = points_.size() < 2
+            ? true
+            : GetCoordinateValue(0) < GetCoordinateValue(1);
 
     if (type_ == kLongitude)
     {

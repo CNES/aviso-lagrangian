@@ -223,7 +223,7 @@ class FiniteLyapunovExponents
 {
 private:
     double delta_t_;
-	double final_separation_;
+    double final_separation_;
     double lambda1_;
     double lambda2_;
     double theta1_;
@@ -237,7 +237,7 @@ public:
      */
     inline void set_delta_t(const double delta_t)
     {
-    	delta_t_ = delta_t;
+        delta_t_ = delta_t;
     }
 
     /**
@@ -248,7 +248,7 @@ public:
      */
     inline double get_delta_t() const
     {
-    	return delta_t_;
+        return delta_t_;
     }
 
     /**
@@ -263,7 +263,7 @@ public:
      */
     inline double GetUndefinedDeltaT() const
     {
-    	return delta_t_;
+        return delta_t_;
     }
 
     /**
@@ -273,7 +273,7 @@ public:
      */
     inline void set_lambda1(const double lambda1)
     {
-    	lambda1_ = lambda1;
+        lambda1_ = lambda1;
     }
 
     /**
@@ -283,7 +283,7 @@ public:
      */
     inline double get_lambda1() const
     {
-    	return lambda1_;
+        return lambda1_;
     }
 
     /**
@@ -293,7 +293,7 @@ public:
      */
     inline void set_lambda2(const double lambda2)
     {
-    	lambda2_ = lambda2;
+        lambda2_ = lambda2;
     }
 
     /**
@@ -303,7 +303,7 @@ public:
      */
     inline double get_lambda2() const
     {
-    	return lambda2_;
+        return lambda2_;
     }
 
     /**
@@ -328,7 +328,7 @@ public:
      */
     inline void set_theta1(const double theta1)
     {
-    	theta1_ = theta1;
+        theta1_ = theta1;
     }
 
     /**
@@ -339,7 +339,7 @@ public:
      */
     inline double get_theta1() const
     {
-    	return theta1_;
+        return theta1_;
     }
 
     /**
@@ -350,7 +350,7 @@ public:
      */
     inline void set_theta2(const double theta2)
     {
-    	theta2_ = theta2;
+        theta2_ = theta2;
     }
 
     /**
@@ -361,7 +361,7 @@ public:
      */
     inline double get_theta2() const
     {
-    	return theta2_;
+        return theta2_;
     }
 
     /**
@@ -387,7 +387,7 @@ public:
      */
     inline void set_final_separation(const double effective_separation)
     {
-    	final_separation_ = effective_separation;
+        final_separation_ = effective_separation;
     }
 
     /**
@@ -397,7 +397,7 @@ public:
      */
     inline double get_final_separation() const
     {
-    	return final_separation_;
+        return final_separation_;
     }
   
     /**
@@ -413,7 +413,7 @@ public:
      */
     inline double GetUndefinedFinalSeparation() const
     {
-    	return final_separation_;
+        return final_separation_;
     }
 
 
@@ -422,8 +422,8 @@ public:
      */
     inline void NaN()
     {
-		lambda1_ = lambda2_ = theta1_ = theta2_ =
-		        std::numeric_limits<double>::quiet_NaN();
+        lambda1_ = lambda2_ = theta1_ = theta2_ =
+                std::numeric_limits<double>::quiet_NaN();
     }
 };
 
@@ -590,7 +590,6 @@ public:
             throw std::invalid_argument(
                     "invalid FiniteLyapunovExponents::Stencil type");
         }
-
     }
 
     /**
@@ -640,8 +639,8 @@ public:
      *
      * @return True if the exponents are defined
      */
-	bool ComputeExponents(const Position* const position,
-	        FiniteLyapunovExponents& fle);
+    bool ComputeExponents(const Position* const position,
+            FiniteLyapunovExponents& fle);
 };
 
 } // namespace lagrangian

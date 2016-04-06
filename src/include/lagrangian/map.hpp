@@ -372,10 +372,10 @@ private:
             GetExponent pGetUndefinedExponent) const
     {
         lagrangian::FiniteLyapunovExponents fle;
-    
-    	Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
+
+        Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
                 map_.get_x_min(), map_.get_y_min(), map_.get_step());
-        
+
         for (int ix = 0; ix < map_.get_nx(); ++ix)
         {
             for (int iy = 0; iy < map_.get_ny(); ++iy)
@@ -387,32 +387,31 @@ private:
                 }
                 else
                 {
-                    bool defined = fle_integration.ComputeExponents(position, fle);
-            
+                    bool defined = fle_integration.ComputeExponents(position,
+                            fle);
+
                     if (fle_integration.get_mode()
-                        ==lagrangian::FiniteLyapunovExponentsIntegration::kFTLE)
+                            == lagrangian::FiniteLyapunovExponentsIntegration::kFTLE)
                     {
                         // In that case position is always completed
-                        double exponent =
-                                defined ?
-                                        (fle.*pGetExponent)() :
-                                        std::numeric_limits<double>::quiet_NaN();
-                        result->SetItem(ix, iy, exponent);   
+                        double exponent = defined
+                                ? (fle.*pGetExponent)()
+                                : std::numeric_limits<double>::quiet_NaN();
+                        result->SetItem(ix, iy, exponent);
                     }
                     else
                     {
                         if (position->get_completed())
                         {
-                            double exponent =
-                                defined ?
-                                        (fle.*pGetExponent)() :
-                                        std::numeric_limits<double>::quiet_NaN();
+                            double exponent = defined
+                                    ? (fle.*pGetExponent)()
+                                    : std::numeric_limits<double>::quiet_NaN();
                             result->SetItem(ix, iy, exponent);
-
                         }
                         else
                         {
-                            result->SetItem(ix, iy, (fle.*pGetUndefinedExponent)());       
+                            result->SetItem(ix, iy,
+                                    (fle.*pGetUndefinedExponent)());
                         }
                     }
                 }

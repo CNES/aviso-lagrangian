@@ -33,8 +33,8 @@ bool FiniteLyapunovExponentsIntegration::ComputeExponents(const Position* const 
 
     if (fabs(fle.get_delta_t()) < std::numeric_limits<double>::epsilon())
     {
-    	fle.NaN();
-    	return false;
+        fle.NaN();
+        return false;
     }
 
     // Get element of the gradient of the flow map
@@ -115,7 +115,7 @@ bool FiniteLyapunovExponentsIntegration::ComputeExponents(const Position* const 
         }
         else
         {
-        	fle.set_theta2(0);
+            fle.set_theta2(0);
             fle.set_theta1(90);
         }
     }
