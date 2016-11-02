@@ -1,3 +1,5 @@
+[![Build Status](https://drone.io/bitbucket.org/cnes_aviso/lagrangian/status.png)](https://drone.io/bitbucket.org/cnes_aviso/lagrangian/latest)
+
 Welcome
 =======
 
