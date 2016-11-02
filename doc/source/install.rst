@@ -28,10 +28,7 @@ You can install these packages on ubuntu by typing the following command:
 
     sudo apt-get install libboost-date-time-dev libboost-python-dev \
         libboost-regexp-dev libboost-thread-dev libnetcdf-dev \
-        libudunits2-dev
-
-The *NetCDF-4 C++* package is not yet distributed under Ubuntu, so you must
-install it manually.
+        libudunits2-dev libnetcdf-c++4-dev
 
 Configure
 #########
