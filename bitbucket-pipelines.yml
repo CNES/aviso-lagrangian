@@ -1,0 +1,13 @@
+image: gcc:6.1
+
+pipelines:
+  default:
+    - step:
+        script:
+          - sudo apt-get update -q -y
+          - sudo apt-get install autoconf libtool libnetcdf-dev uthash-dev -q -y
+          - mkdir -p m4
+          - autoreconf -i
+          - ./configure
+          - make
+          - make test
