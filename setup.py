@@ -351,8 +351,6 @@ distutils.core.setup(
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
-    scripts=[os.path.join('src/etc', item)
-             for item in os.listdir('src/etc')],
     classifiers=classifiers,
     cmdclass={
         'setup': Setup,
