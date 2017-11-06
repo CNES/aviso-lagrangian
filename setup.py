@@ -328,9 +328,6 @@ extensions = [
 ]
 
 
-requires = ['netCDF4', 'numpy', 'matplotlib', 'basemap']
-
-
 # Create the default setup configuration
 setup = Setup(distutils.dist.Distribution())
 if not os.path.exists(setup.path):
@@ -350,7 +347,7 @@ distutils.core.setup(
     keywords="oceanography lagrangian analysis fsle ftle",
     # tests_require=requires,
     test_suite='test',
-    install_requires=requires,
+    install_requires=['numpy'],
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
