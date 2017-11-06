@@ -195,11 +195,11 @@ cdef extern from "lagrangian/stencil.hpp" nogil:
 
     cdef cppclass Triplet "lagrangian::Triplet"(Position):
         Triplet()
-        Triplet(double, double, double)
+        Triplet(double, double, double, double)
 
     cdef cppclass Quintuplet "lagrangian::Quintuplet"(Position):
         Quintuplet()
-        Quintuplet(double, double, double)
+        Quintuplet(double, double, double, double)
 
 
 cdef extern from "lagrangian/integration.hpp" nogil:
@@ -218,31 +218,44 @@ cdef extern from "lagrangian/integration.hpp" nogil:
              boost.date_time.posix_time.time_duration,
              Field*) except+
 
-    enum Mode "lagrangian::FiniteLyapunovExponents::Mode":
-        kFSLE "lagrangian::FiniteLyapunovExponents::kFSLE"
-        kFTLE "lagrangian::FiniteLyapunovExponents::kFTLE"
+    enum Mode "lagrangian::FiniteLyapunovExponentsIntegration::Mode":
+        kFSLE "lagrangian::FiniteLyapunovExponentsIntegration::kFSLE"
+        kFTLE "lagrangian::FiniteLyapunovExponentsIntegration::kFTLE"
 
-    enum Stencil "lagrangian::FiniteLyapunovExponents::Stencil":
-        kTriplet "lagrangian::FiniteLyapunovExponents::kTriplet"
-        kQuintuplet "lagrangian::FiniteLyapunovExponents::kQuintuplet"
+    enum Stencil "lagrangian::FiniteLyapunovExponentsIntegration::Stencil":
+        kTriplet "lagrangian::FiniteLyapunovExponentsIntegration::kTriplet"
+        kQuintuplet "lagrangian::FiniteLyapunovExponentsIntegration::kQuintuplet"
 
-    cdef cppclass FiniteLyapunovExponents "lagrangian::FiniteLyapunovExponents"(Integration):
-        FiniteLyapunovExponents(DateTime,
-                                DateTime,
-                                boost.date_time.posix_time.time_duration,
-                                Mode,
-                                double,
-                                double,
-                                Field*) except+
-        Position* SetInitialPoint(double, double, Stencil) except+
-        libcpp.bool Separation(Position*)
-        Mode get_mode()
-        libcpp.bool Compute(Iterator, Position*, CellProperties)
-        libcpp.bool Exponents(Position*)
+    cdef cppclass FiniteLyapunovExponents "lagrangian::FiniteLyapunovExponents":
+        FiniteLyapunovExponents()
+        void set_delta_t(double)
+        void set_final_separation(double)
+        void set_lambda1(double)
+        void set_lambda2(double)
+        void set_theta1(double)
+        void set_theta2(double)
+
+        double get_delta_t()
+        double get_final_separation()
         double get_lambda1()
         double get_lambda2()
         double get_theta1()
         double get_theta2()
+        
+    
+    cdef cppclass FiniteLyapunovExponentsIntegration "lagrangian::FiniteLyapunovExponentsIntegration"(Integration):
+        FiniteLyapunovExponentsIntegration(DateTime,
+                                           DateTime,
+                                           boost.date_time.posix_time.time_duration,
+                                           Mode,
+                                           double,
+                                           double,
+                                           Field*) except+
+        Position* SetInitialPoint(double, double, Stencil) except+
+        libcpp.bool Separation(Position*)
+        Mode get_mode()
+        libcpp.bool Compute(Iterator, Position*, CellProperties)
+        libcpp.bool ComputeExponents(Position*, FiniteLyapunovExponents)
 
 cdef extern from "lagrangian/map.hpp" nogil:
     cdef cppclass MapProperties "lagrangian::MapProperties":
@@ -262,13 +275,16 @@ cdef extern from "lagrangian/map.hpp" nogil:
 
     cdef cppclass MapOfFiniteLyapunovExponents "lagrangian::MapOfFiniteLyapunovExponents":
         MapOfFiniteLyapunovExponents (int, int, double, double, double) except+
-        void Initialize(FiniteLyapunovExponents, Stencil) except+
-        void Initialize(FiniteLyapunovExponents, NetcdfReader, Stencil) except+
-        void Compute(FiniteLyapunovExponents) except+
-        Map[double]* GetMapOfLambda1(double, FiniteLyapunovExponents) except+
-        Map[double]* GetMapOfLambda2(double, FiniteLyapunovExponents) except+
-        Map[double]* GetMapOfTheta1(double, FiniteLyapunovExponents) except+
-        Map[double]* GetMapOfTheta2(double, FiniteLyapunovExponents) except+
+        void Initialize(FiniteLyapunovExponentsIntegration, Stencil) except+
+        void Initialize(FiniteLyapunovExponentsIntegration, NetcdfReader, Stencil) except+
+        void Compute(FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfLambda1(double, FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfLambda2(double, FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfTheta1(double, FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfTheta2(double, FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfDeltaT(double, FiniteLyapunovExponentsIntegration) except+
+        Map[double]* GetMapOfFinalSeparation(double,
+                                             FiniteLyapunovExponentsIntegration) except+
 
 
 cdef extern from "lagrangian/trace.hpp" namespace "lagrangian" nogil:

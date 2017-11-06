@@ -111,7 +111,7 @@ class TestPosition(unittest.TestCase):
 
 class TestTriplet(unittest.TestCase):
     def test(self):
-        position = lagrangian.Triplet(0, 0, 1)
+        position = lagrangian.Triplet(0, 0, 1, 2)
         self.assertEqual(
             (position.get_xi(0), position.get_yi(0)),
             (0, 0))
@@ -121,7 +121,7 @@ class TestTriplet(unittest.TestCase):
         self.assertEqual(
             (position.get_xi(2), position.get_yi(2)),
             (0, 1))
-        self.assertEqual(position.time, 0)
+        self.assertEqual(position.time, 2)
         self.assertFalse(position.completed)
         self.assertFalse(position.is_missing())
         self.assertAlmostEqual(position.max_distance(), 1)
@@ -153,7 +153,7 @@ class TestTriplet(unittest.TestCase):
 
 class TestQuintuplet(unittest.TestCase):
     def test(self):
-        position = lagrangian.Quintuplet(0, 0, 1)
+        position = lagrangian.Quintuplet(0, 0, 1, 2)
         self.assertEqual(
             (position.get_xi(0), position.get_yi(0)),
             (0, 0))
@@ -169,6 +169,11 @@ class TestQuintuplet(unittest.TestCase):
         self.assertEqual(
             (position.get_xi(4), position.get_yi(4)),
             (0, -1))
+
+        self.assertEqual(position.time, 2)
+        self.assertFalse(position.completed)
+        self.assertFalse(position.is_missing())
+        self.assertAlmostEqual(position.max_distance(), 1)
 
         for method in ['get_xi', 'get_yi']:
             try:

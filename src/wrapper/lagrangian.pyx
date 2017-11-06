@@ -7,7 +7,15 @@ cimport cython
 cimport cpp_lagrangian
 cimport libcpp.string
 cimport libcpp.vector
+cimport libc.math
 cimport numpy
+
+
+cdef extern from "limits" namespace "std" nogil:
+    cdef cppclass numeric_limits[T]:
+        @staticmethod
+        T quiet_NaN()
+
 
 # datetime module initialization
 cpython.datetime.PyDateTime_IMPORT
@@ -201,7 +209,9 @@ cdef class Axis:
             points[i0] <= coordinate < points[i1]
         """
         cdef int i0, i1
-        
+
+        # Disable compiler complaints
+        i0 = i1 = -1
         if self.wrapped.FindIndexes(coordinate, i0, i1):
             return i0, i1
         return None
@@ -388,6 +398,8 @@ cdef class Vonkarman(Field):
         """
         cdef double u, v
 
+        # Disable compiler complaints
+        u = v = numeric_limits[double].quiet_NaN()
         self.wrapped.Compute(t, x, y, u, v)
         return (u, v)
 
@@ -510,6 +522,10 @@ cdef class RungeKutta:
         cdef:
             double xi, yi
             libcpp.bool defined
+
+        # Disable compiler complaints
+        xi = yi = numeric_limits[double].quiet_NaN()
+
         if cell is None:
             defined = self.wrapped.Compute(t, x, y, xi, yi)
         else:
@@ -631,6 +647,8 @@ cdef class Position:
         """
         cdef double a00, a01, a10, a11
 
+        # Disable compiler complaints
+        a00 = a01 = a10 = a11 = numeric_limits[double].quiet_NaN()
         self.wrapped.StrainTensor(a00, a01, a10, a11)
         return (a00, a01, a10, a11)
 
@@ -639,16 +657,16 @@ cdef class Triplet(Position):
     """
     Define the position of 3 points
     """
-    def __cinit__(self, double x, double y, double delta):
-        self.wrapped = new cpp_lagrangian.Triplet(x, y, delta)
+    def __cinit__(self, double x, double y, double delta, double start=0):
+        self.wrapped = new cpp_lagrangian.Triplet(x, y, delta, start)
 
 
 cdef class Quintuplet(Position):
     """
     Define the position of 5 points
     """
-    def __cinit__(self, double x, double y, double delta):
-        self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta)
+    def __cinit__(self, double x, double y, double delta, double start=0):
+        self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta, start)
 
 
 cdef class AbstractIntegration:
@@ -695,6 +713,9 @@ cdef class AbstractIntegration:
         cdef:
             double x1, y1
             libcpp.bool defined
+
+        # Disable compiler complaints
+        x1 = y1 = numeric_limits[double].quiet_NaN()
 
         defined = self.wrapped.Compute(it.wrapped[0], x0, y0, x1, y1)
         return (x1, y1) if defined else None   
@@ -745,7 +766,88 @@ cpdef enum Stencil:
     kQuintuplet = cpp_lagrangian.kQuintuplet
 
 
-cdef class FiniteLyapunovExponents(AbstractIntegration):
+cdef class FiniteLyapunovExponents:
+    """
+    Storing Lyapunov coefficients calculated.
+    
+    .. seealso::
+    
+        FiniteLyapunovExponentsIntegration
+    """
+    cdef cpp_lagrangian.FiniteLyapunovExponents* wrapped
+
+    def __cinit__(self):
+        self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents()
+
+    def __dealloc__(self):
+        del self.wrapped
+    
+    @property
+    def lambda1(self):
+        """
+        Get the orientation of the eigenvectors associated to the
+        maximum eigenvalues of Cauchy-Green strain tensor
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_lambda1()
+
+    @property
+    def lambda2(self):
+        """
+        Get the orientation of the eigenvectors associated to the
+        minimum eigenvalues of Cauchy-Green strain tensor
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_lambda2()
+
+    @property
+    def theta1(self):
+        """
+        FLE associated to the maximum eigenvalues of Cauchy-Green
+        strain tensor
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_theta1()
+
+    @property
+    def theta2(self):
+        """
+        FLE associated to the minimum eigenvalues of Cauchy-Green
+        strain tensor
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_theta2()
+
+    @property
+    def delta_t(self):
+        """
+        Get the acutal advection time
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_delta_t()
+
+    @property
+    def final_separation(self):
+        """
+        Get the final separation distance
+        """
+        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
+            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+
+        return fle.get_final_separation()
+
+
+cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
     """
     Handles the computation of Lyapunov Exponent
     
@@ -803,7 +905,7 @@ cdef class FiniteLyapunovExponents(AbstractIntegration):
                   double delta,
                   Field field):
         self.set_field(field)
-        self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents(
+        self.wrapped = new cpp_lagrangian.FiniteLyapunovExponentsIntegration(
             cpp_lagrangian.from_pydatetime(start_time),
             cpp_lagrangian.from_pydatetime(end_time),
             cpp_lagrangian.from_pytimedelta(delta_t),
@@ -820,12 +922,13 @@ cdef class FiniteLyapunovExponents(AbstractIntegration):
         Set the value of the initial point
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* fle
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* fle_integration
             cpp_lagrangian.Position* cpp_position
             Position result
 
-        fle = <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
-        cpp_position = fle.SetInitialPoint(x, y, stencil)
+        fle_integration = \
+            <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+        cpp_position = fle_integration.SetInitialPoint(x, y, stencil)
 
         result = Position()
         result.assign(cpp_position)
@@ -836,85 +939,46 @@ cdef class FiniteLyapunovExponents(AbstractIntegration):
         """
         Determine whether the particle is deemed to be separate
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            fle_integration = \
+                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
-        return fle.Separation(position.wrapped)
+        return fle_integration.Separation(position.wrapped)
 
     @property
     def mode(self):
         """
         Get mode of integration
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            fle_integration = \
+                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
-        return fle.get_mode()
+        return fle_integration.get_mode()
 
     def compute(self, Iterator it, Position position, CellProperties cell):
         """
         Calculate the integration
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            fle_integration = \
+                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
-        return fle.Compute(it.wrapped[0],
-                           position.wrapped,
-                           cell.wrapped[0])
+        return fle_integration.Compute(it.wrapped[0],
+                                       position.wrapped,
+                                       cell.wrapped[0])
 
-    def exponents(self, Position position):
+    def exponents(self, Position position, FiniteLyapunovExponents fle):
         """
         Compute the eigenvalue and the orientation of the eigenvectors
         of the Cauchy-Green strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            fle_integration = \
+                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
-        return fle.Exponents(position.wrapped)
-
-    @property
-    def lambda1(self):
-        """
-        Get the orientation of the eigenvectors associated to the
-        maximum eigenvalues of Cauchy-Green strain tensor
-        """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
-
-        return fle.get_lambda1()
-
-    @property
-    def lambda2(self):
-        """
-        Get the orientation of the eigenvectors associated to the
-        minimum eigenvalues of Cauchy-Green strain tensor
-        """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
-
-        return fle.get_lambda2()
-
-    @property
-    def theta1(self):
-        """
-        FLE associated to the maximum eigenvalues of Cauchy-Green
-        strain tensor
-        """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
-
-        return fle.get_theta1()
-
-    @property
-    def theta2(self):
-        """
-        FLE associated to the minimum eigenvalues of Cauchy-Green
-        strain tensor
-        """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
-
-        return fle.get_theta2()
+        return fle_integration.ComputeExponents(position.wrapped,
+                                                fle.wrapped[0])
 
 
 # Call, from C++, a Python function that implement the pure virtual method
@@ -1185,6 +1249,9 @@ cdef class TimeSerie(Field):
             double u, v
             libcpp.bool defined
 
+        # Disable compiler complaints
+        u = v = numeric_limits[double].quiet_NaN()
+
         if cell is None:
             defined = self.wrapped.Compute(t, x, y, u, v)
         else:
@@ -1313,9 +1380,9 @@ cdef class MapProperties:
                                      dims,
                                      numpy.NPY_DOUBLE,
                                      0)
-        ptr = <double*>numpy.PyArray_DATA(result)
+        data = <double*>numpy.PyArray_DATA(result)
         for ix in range(self.wrapped.get_ny()):
-            ptr[ix] = self.wrapped.GetYValue(ix);
+            data[ix] = self.wrapped.GetYValue(ix);
         return result
 
 
@@ -1325,15 +1392,16 @@ cdef class MapOfFiniteLyapunovExponents:
     """
     cdef:
         cpp_lagrangian.MapOfFiniteLyapunovExponents* wrapped
-        FiniteLyapunovExponents fle
+        FiniteLyapunovExponentsIntegration fle_integration
 
     def __cinit__(self,
                   MapProperties map_properties,
-                  FiniteLyapunovExponents fle,
+                  FiniteLyapunovExponentsIntegration fle_integration,
                   Stencil stencil=kTriplet,
                   Netcdf netcdf_reader=None):
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration
             cpp_lagrangian.NetcdfReader* cpp_reader
 
         self.wrapped = new cpp_lagrangian.MapOfFiniteLyapunovExponents(
@@ -1342,17 +1410,19 @@ cdef class MapOfFiniteLyapunovExponents:
             map_properties.wrapped.get_x_min(),
             map_properties.wrapped.get_y_min(),
             map_properties.wrapped.get_step())
-        self.fle = fle
+        self.fle_integration = fle_integration
 
-        cpp_fle = <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
+        cpp_fle_integration = \
+            <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                self.fle_integration.wrapped
         cpp_reader = <cpp_lagrangian.NetcdfReader*> netcdf_reader.wrapped
 
         if netcdf_reader is not None:
-            self.wrapped.Initialize(cpp_fle[0],
+            self.wrapped.Initialize(cpp_fle_integration[0],
                                     cpp_reader[0],
                                     stencil)
         else:
-            self.wrapped.Initialize(cpp_fle[0],
+            self.wrapped.Initialize(cpp_fle_integration[0],
                                     stencil)
 
     def __dealloc__(self):
@@ -1363,18 +1433,22 @@ cdef class MapOfFiniteLyapunovExponents:
         Compute the map
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration
 
-        cpp_fle = <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
-        self.wrapped.Compute(cpp_fle[0])
+        cpp_fle_integration \
+            = <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                self.fle_integration.wrapped
+        self.wrapped.Compute(cpp_fle_integration[0])
 
     @cython.boundscheck(False)
-    cdef numpy.ndarray get_map(self, cpp_lagrangian.Map[double]* map_of):
+    cdef numpy.ndarray get_map(self, double fill_value, cpp_lagrangian.Map[double]* map_of):
         # Utility function to return the computed matrix to Python
         cdef:
             numpy.ndarray result
             numpy.npy_intp dims[2]
             double* data
+            double value
             int ix, iy
 
         try:
@@ -1385,11 +1459,13 @@ cdef class MapOfFiniteLyapunovExponents:
                                          dims,
                                          numpy.NPY_DOUBLE,
                                          0)
-            ptr = <double*>numpy.PyArray_DATA(result)
+            data = <double*>numpy.PyArray_DATA(result)
 
-            for ix in range(map_of.get_nx()):
-                for iy in range(map_of.get_ny()):
-                    ptr[ix * map_of.get_ny() + iy] = map_of.GetItem(ix, iy)
+            for ix in range(dims[0]):
+                for iy in range(dims[1]):
+                    value = map_of.GetItem(ix, iy)
+                    data[ix * map_of.get_ny() + iy] = value \
+                        if not libc.math.isnan(value) else fill_value
 
             return result
         finally:
@@ -1397,47 +1473,86 @@ cdef class MapOfFiniteLyapunovExponents:
 
     def get_map_of_lambda1(self, double nan):
         """
-        Get the map of the orientation of the eigenvectors associated
-        to the maximum eigenvalues of Cauchy-Green strain tensor
-        """
-        cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle = \
-                <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
-
-        return self.get_map(self.wrapped.GetMapOfLambda1(nan, cpp_fle[0]))
-
-    def get_map_of_lambda2(self, double nan):
-        """
-        Get the map of the orientation of the eigenvectors associated
-        to the minimum eigenvalues of Cauchy-Green strain tensor
-        """
-        cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle = \
-                <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
-
-        return self.get_map(self.wrapped.GetMapOfLambda2(nan, cpp_fle[0]))
-
-    def get_map_of_theta1(self, double nan):
-        """
         Get the map of the FLE associated to the maximum eigenvalues of
         Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle = \
-                <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
 
-        return self.get_map(self.wrapped.GetMapOfTheta1(nan, cpp_fle[0]))
+        return self.get_map(
+            nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
 
-    def get_map_of_theta2(self, double nan):
+    def get_map_of_lambda2(self, double nan):
         """
         Get the map of the FLE associated to the minimum eigenvalues of
         Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponents* cpp_fle = \
-                <cpp_lagrangian.FiniteLyapunovExponents*> self.fle.wrapped
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
 
-        return self.get_map(self.wrapped.GetMapOfTheta2(nan, cpp_fle[0]))
+        return self.get_map(
+            nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
+
+    def get_map_of_theta1(self, double nan):
+        """
+        Get the map of the orientation of the eigenvectors associated
+        to the maximum eigenvalues of Cauchy-Green strain tensor
+        """
+        cdef:
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
+
+        return self.get_map(
+            nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
+
+    def get_map_of_theta2(self, double nan):
+        """
+        Get the map of the orientation of the eigenvectors associated
+        to the minimum eigenvalues of Cauchy-Green strain tensor
+        """
+        cdef:
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
+
+        return self.get_map(
+            nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
+
+    def get_map_of_delta_t(self, double nan):
+        """
+        Get the effective advection time (unit number of seconds elapsed
+        since the of the integration)
+        """
+        cdef:
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
+
+        return self.get_map(
+            nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
+
+    def get_map_of_final_separation(self, double nan):
+        """
+        Get the map of the final separation distance (unit degree)
+        """
+        cdef:
+            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+                cpp_fle_integration = \
+                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                        self.fle_integration.wrapped
+
+        return self.get_map(
+            nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
 
 def debug(str msg not None):
     """

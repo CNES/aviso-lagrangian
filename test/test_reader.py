@@ -99,7 +99,7 @@ class TestFactory(unittest.TestCase):
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):
-        reader = lagrangian.Factory.NewReader(lagrangian.kNetCDF)
+        reader = lagrangian.Factory.new_reader(lagrangian.kNetCDF)
         self.assertTrue(type(reader).__name__, 'Reader')
         reader = lagrangian.Netcdf()
         reader.open(self.path)

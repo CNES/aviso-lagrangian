@@ -35,8 +35,9 @@ static const axis::LongitudeUnit g_axis_longitude_unit;
 
 void Axis::NormalizeLongitude()
 {
-    is_ascending_ = points_.size() < 2 ? true : GetCoordinateValue(0)
-            < GetCoordinateValue(1);
+    is_ascending_ = points_.size() < 2
+            ? true
+            : GetCoordinateValue(0) < GetCoordinateValue(1);
 
     if (type_ == kLongitude)
     {
@@ -197,10 +198,7 @@ Axis::Axis(const netcdf::Variable& variable) :
 //
 static inline bool IsSame(const double a, const double b)
 {
-    return boost::test_tools::check_is_close(a,
-            b,
-            boost::test_tools::fraction_tolerance(1e-4));
-
+    return std::fabs(a - b) <= 1e-4;
 }
 
 // ___________________________________________________________________________//

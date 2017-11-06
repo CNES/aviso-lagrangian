@@ -235,7 +235,7 @@ private:
      * @param it Current time step
      */
     void ComputeHt(Splitter<Index>& splitter,
-            lagrangian::FiniteLyapunovExponents& fle,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle,
             Iterator& it);
 
     /**
@@ -317,9 +317,9 @@ public:
      * @param stencil Type of stencil used for the calculation of finite
      * difference.
      */
-    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
-            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
-                    lagrangian::FiniteLyapunovExponents::kTriplet);
+    void Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
+            const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
     /**
      * @brief Initializing the grid cells. Cells located on the hidden values
@@ -330,17 +330,17 @@ public:
      * @param stencil Type of stencil used for the calculation of finite
      * difference.
      */
-    void Initialize(lagrangian::FiniteLyapunovExponents& fle,
+    void Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
             lagrangian::reader::Netcdf& reader,
-            const lagrangian::FiniteLyapunovExponents::Stencil stencil =
-                    lagrangian::FiniteLyapunovExponents::kTriplet);
+            const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+                    lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
     /**
      * @brief Compute the map
      *
      * @param fle Finite Lyapunov exponents
      */
-    void Compute(lagrangian::FiniteLyapunovExponents& fle);
+    void Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle);
 };
 
 } // namespace map
@@ -355,18 +355,24 @@ class MapOfFiniteLyapunovExponents: public map::FiniteLyapunovExponents
 private:
     typedef double
     (lagrangian::FiniteLyapunovExponents::*GetExponent)() const;
+    
 
     /**
      * @brief Default constructor
      *
      * @param nan Value of undefined cell
-     * @param fle Object used to compute the integration
+     * @param fle_integration integration object used to compute the
+     *  integration
      * @param pGetExponent Function to use to calculate the exponent
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      */
     Map<double>* GetMapOfExponents(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle,
-            GetExponent pGetExponent) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle_integration,
+            GetExponent pGetExponent,
+            GetExponent pGetUndefinedExponent) const
     {
+        lagrangian::FiniteLyapunovExponents fle;
+
         Map<double>* result = new Map<double>(map_.get_nx(), map_.get_ny(),
                 map_.get_x_min(), map_.get_y_min(), map_.get_step());
 
@@ -379,24 +385,41 @@ private:
                 {
                     result->SetItem(ix, iy, nan);
                 }
-                else if (!position->get_completed()
-                        && fle.get_mode()
-                                == lagrangian::FiniteLyapunovExponents::kFSLE)
-                {
-                    result->SetItem(ix, iy, 0);
-                }
                 else
                 {
-                    double exponent =
-                            fle.Exponents(position) ?
-                                    (fle.*pGetExponent)() :
-                                    std::numeric_limits<double>::quiet_NaN();
-                    result->SetItem(ix, iy, exponent);
+                    bool defined = fle_integration.ComputeExponents(position,
+                            fle);
+
+                    if (fle_integration.get_mode()
+                            == lagrangian::FiniteLyapunovExponentsIntegration::kFTLE)
+                    {
+                        // In that case position is always completed
+                        double exponent = defined
+                                ? (fle.*pGetExponent)()
+                                : std::numeric_limits<double>::quiet_NaN();
+                        result->SetItem(ix, iy, exponent);
+                    }
+                    else
+                    {
+                        if (position->get_completed())
+                        {
+                            double exponent = defined
+                                    ? (fle.*pGetExponent)()
+                                    : std::numeric_limits<double>::quiet_NaN();
+                            result->SetItem(ix, iy, exponent);
+                        }
+                        else
+                        {
+                            result->SetItem(ix, iy,
+                                    (fle.*pGetUndefinedExponent)());
+                        }
+                    }
                 }
             }
         }
         return result;
     }
+
 public:
 
     /**
@@ -418,51 +441,22 @@ public:
     }
 
     /**
-     * @brief Get the map of the orientation of the eigenvectors associated
-     * to the maximum eigenvalues of Cauchy-Green strain tensor
-     *
-     * @param nan Value representing an undefined data
-     * @param fle FLE handler
-     *
-     * @return The map of λ₁ (unit 1/day)
-     */
-    Map<double>* GetMapOfLambda1(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
-    {
-        return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_lambda1);
-    }
-
-    /**
-     * @brief Get the map of the orientation of the eigenvectors associated
-     * to the minimum eigenvalues of Cauchy-Green strain tensor
-     *
-     * @param nan Value representing an undefined data
-     * @param fle FLE handler
-     *
-     * @return The map of λ₂ (unit 1/day)
-     */
-    Map<double>* GetMapOfLambda2(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
-    {
-        return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_lambda2);
-    }
-
-    /**
      * @brief Get the map of the FLE associated to the maximum eigenvalues of
      * Cauchy-Green strain tensor
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_lambda1 Function to use to return the value of λ₁
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      *
-     * @return The map of θ₁ (unit degrees)
+     * @return The map of λ₁ (unit 1/sec)
      */
-    Map<double>* GetMapOfTheta1(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+    Map<double>* GetMapOfLambda1(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_theta1);
+                &lagrangian::FiniteLyapunovExponents::get_lambda1,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
     }
 
     /**
@@ -471,14 +465,94 @@ public:
      *
      * @param nan Value representing an undefined data
      * @param fle FLE handler
+     * @param get_lambda2 Function to use to return the value of λ₂
+     * @param pGetUndefinedExponent Function to use to return default value for undefined exponent
      *
+     * @return The map of λ₂ (unit 1/sec)
+     */
+    Map<double>* GetMapOfLambda2(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_lambda2,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
+    }
+
+    /**
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the maximum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     * @param get_theta1 Function to use to return the value of θ₁
+     * @param pGetUndefinedVector Function to use to return default value for undefined vector
+     *
+     * @return The map of θ₁ (unit degrees)
+     */
+    Map<double>* GetMapOfTheta1(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_theta1,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
+    }
+
+    /**
+     * @brief Get the map of the orientation of the eigenvectors associated
+     * to the minimum eigenvalues of Cauchy-Green strain tensor
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     * @param get_theta1 Function to use to return the value of θ₂
+     * @param pGetUndefinedVector Function to use to return default value for undefined vector
+     * 
      * @return The map of θ₂ (unit degrees)
      */
     Map<double>* GetMapOfTheta2(const double nan,
-            lagrangian::FiniteLyapunovExponents& fle) const
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
     {
         return GetMapOfExponents(nan, fle,
-                &lagrangian::FiniteLyapunovExponents::get_theta2);
+                &lagrangian::FiniteLyapunovExponents::get_theta2,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
+    }
+
+    /**
+     * @brief Get the map of the advection time
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     * @param get_delta_t Function to use to return the value of delta_t
+     * @param GetUndefinedDeltaT Function to use the default value for undefined delta_t
+     * 
+     * @return The map of advection time (unit number of seconds elapsed
+     * since the beginning of the integration)
+     */
+    Map<double>* GetMapOfDeltaT(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_delta_t,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedDeltaT);
+    }
+
+    /**
+     * @brief Get the map of the effective final separation distance
+     *
+     * @param nan Value representing an undefined data
+     * @param fle FLE handler
+     * @param get_final_separation Function to use to return the value of final_separation
+     * @param GetUndefinedFinalSeparation Function to use the default value for undefined 
+     * final_separation
+     *
+     * @return The map of the effective final separation distance (unit
+     * degree)
+     */
+    Map<double>* GetMapOfFinalSeparation(const double nan,
+            lagrangian::FiniteLyapunovExponentsIntegration& fle) const
+    {
+        return GetMapOfExponents(nan, fle,
+                &lagrangian::FiniteLyapunovExponents::get_final_separation,
+                &lagrangian::FiniteLyapunovExponents::GetUndefinedFinalSeparation);
     }
 };
 

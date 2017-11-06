@@ -418,7 +418,23 @@ public:
         }
         else if (i0 != -1)
         {
-            GetCoordinateValue(i0) - coordinate > 1e-4 ? --i0 : ++i1;
+            // The element found is mingled with the first axis item, so the
+            // next item is located after it.
+            if (i0 == 0)
+            {
+                ++i1;
+            }
+            // The element found is mingled with the last axis item, so the
+            // previous item is located before it.
+            else if (i0 == GetNumElements() - 1)
+            {
+                --i0;
+            }
+            // General case
+            else
+            {
+                GetCoordinateValue(i0) - coordinate > 1e-4 ? --i0 : ++i1;
+            }
 
             if(is_circle_)
             {

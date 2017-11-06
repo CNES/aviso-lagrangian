@@ -28,8 +28,8 @@ namespace lagrangian
 namespace map
 {
 
-void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fle,
-        const lagrangian::FiniteLyapunovExponents::Stencil stencil)
+void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
+        const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil)
 {
     for (int ix = 0; ix < map_.get_nx(); ++ix)
     {
@@ -53,9 +53,9 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fle,
+void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
         lagrangian::reader::Netcdf& reader,
-        const lagrangian::FiniteLyapunovExponents::Stencil stencil)
+        const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil)
 {
     CellProperties cell;
 
@@ -89,7 +89,7 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponents& fl
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
-        lagrangian::FiniteLyapunovExponents& fle,
+        lagrangian::FiniteLyapunovExponentsIntegration& fle,
         Iterator& it)
 {
     // Creating an object containing the properties of the interpolation
@@ -120,7 +120,7 @@ void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponents& fle)
+void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle)
 {
     Iterator it = fle.GetIterator();
     boost::thread_group threads;

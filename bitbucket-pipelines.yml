@@ -1,0 +1,13 @@
+image: ubuntu:xenial
+
+pipelines:
+  default:
+    - step:
+        script:
+          - apt-get update -q -y
+          - apt-get install python-setuptools python-pip python-dev cython -q -y
+          - apt-get install libhdf5-serial-dev libnetcdf-dev python-numpy libudunits2-dev libnetcdf-c++4-dev -q -y
+          - apt-get install libboost-date-time-dev libboost-regex-dev libboost-thread-dev -q -y
+          - python setup.py setup
+          - python setup.py config
+          - python setup.py build

@@ -16,7 +16,6 @@ have Python and a C++ compiler installed on your system to use these programs.
 The compiling C++ requires the following development libraries:
 
     * `boost_date_time <http://www.boost.org>`_
-    * `boost_python <http://www.boost.org>`_
     * `boost_regexp <http://www.boost.org>`_
     * `boost_thread <http://www.boost.org>`_
     * `NetCDF <http://www.unidata.ucar.edu/software/netcdf>`_
@@ -29,10 +28,7 @@ You can install these packages on ubuntu by typing the following command:
 
     sudo apt-get install libboost-date-time-dev libboost-python-dev \
         libboost-regexp-dev libboost-thread-dev libnetcdf-dev \
-        libudunits2-dev
-
-The *NetCDF-4 C++* package is not yet distributed under Ubuntu, so you must
-install it manually.
+        libudunits2-dev libnetcdf-c++4-dev
 
 Configure
 #########

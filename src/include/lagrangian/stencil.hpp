@@ -150,9 +150,22 @@ private:
 public:
     /**
      * @brief Default constructor
+     * @details this constructor may lead to an error in diagnostic 
+     * because start time is set to zero: if stencil has not been advected then 
+     * delta_t is equal to minus advection starting time (- start_time_) which is not correct.
+     * (see FiniteLyapunovExponentsIntegration::ComputeExponents in integration.cpp)
      */
     Position() :
             x_(), y_(), time_(0), completed_(false)
+    {
+    }
+
+    /**
+     * @brief Constructor with start_time setting
+     * 
+     */
+    Position(const double start_time) :
+            x_(), y_(), time_(start_time), completed_(false)
     {
     }
 
@@ -305,11 +318,12 @@ public:
      *
      * @param x Longitude of the initial point
      * @param y Latitude of the initial point
-     * @param delta Initial initial separation in degrees of neighboring
+     * @param delta Initial separation in degrees of neighboring
+     * @param start_time Advection starting time
      *  particles
      */
-    Triplet(const double x, const double y, const double delta) :
-            Position()
+    Triplet(const double x, const double y, const double delta, const double start_time) :
+            Position(start_time)
     {
         x_.push_back(x);
         x_.push_back(x + delta);
@@ -359,11 +373,12 @@ public:
      *
      * @param x Longitude of the initial point
      * @param y Latitude of the initial point
-     * @param delta Initial initial separation in degrees of neighboring
+     * @param delta Initial separation in degrees of neighboring
+     * @param start_time Advection starting time
      *  particles
      */
-    Quintuplet(const double x, const double y, const double delta) :
-            Position()
+    Quintuplet(const double x, const double y, const double delta, const double start_time) :
+            Position(start_time)
     {
         x_.push_back(x);
         x_.push_back(x + delta);
