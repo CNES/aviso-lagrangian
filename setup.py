@@ -337,7 +337,7 @@ class Install(setuptools.command.install.install):
 
     def run(self):
         """
-        Exécution de la commande principale
+        Running the main command
         """
         setuptools.command.install.install.run(self)
         cwd = os.path.dirname(os.path.abspath(__file__))
