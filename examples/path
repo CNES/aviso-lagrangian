@@ -13,13 +13,12 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
-import lagrangian
 import datetime
 import argparse
-import numpy
 import os
 import re
 import sys
+import lagrangian
 
 
 class FileType(object):
@@ -52,7 +51,7 @@ def date_type(value):
     """
     try:
         return lagrangian.DateTime(value)()
-    except Exception as err:
+    except Exception:
         raise argparse.ArgumentTypeError("'%s' could not be interpreted as a "
                                          "date" % value)
 
@@ -198,7 +197,7 @@ def main():
     for line in args.input:
         try:
             line = line[:line.find('#')].strip()
-            if len(line):
+            if line:
                 columns = re.split(r'\s+', line)
                 if len(columns) < 2:
                     raise RuntimeError("missing position")
