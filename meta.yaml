@@ -3,8 +3,9 @@ package:
   version: "2.1.1"
 
 source:
-  hg_url: https://bitbucket.org/cnes_aviso/lagrangian
-  hg_tag: "2.1.1"
+  #hg_url: https://bitbucket.org/cnes_aviso/lagrangian
+  #hg_tag: "2.1.1"
+  path: .
 
 requirements:
   build:

@@ -10,6 +10,7 @@ import distutils.extension
 import distutils.log
 import os
 import setuptools
+import setuptools.command.install
 import subprocess
 import sysconfig
 import sys
@@ -306,7 +307,48 @@ class Config(distutils.command.config.config, SetupConfig):
                     'Cannot find library %r.' % library)
 
 
-classifiers = [
+class Install(setuptools.command.install.install):
+    """
+    Install
+    """
+    def tree_copy(self, path, target, chmod=False):
+        """
+        Copying a tree structure
+        """
+        handle = open(self.record, "a") if self.record else None
+        try:
+            for root, _dirs, files in os.walk(path):
+                for item in files:
+                    src = os.path.join(root, item)
+                    dst = os.path.join(target,
+                                       os.path.relpath(src, path))
+                    directory = os.path.dirname(dst)
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                    self.copy_file(src, dst)
+                    if handle is not None:
+                        handle.write(dst + "\n")
+                    if chmod:
+                        distutils.log.info("changing mode of %s to 755", dst)
+                        os.chmod(dst, 0o755)
+        finally:
+            if handle is not None:
+                handle.close()
+
+    def run(self):
+        """
+        Exécution de la commande principale
+        """
+        setuptools.command.install.install.run(self)
+        cwd = os.path.dirname(os.path.abspath(__file__))
+        self.tree_copy(
+            os.path.join(cwd, "examples"),
+            os.path.join(
+                self.install_data, "share", "lagrangien", "examples"),
+            chmod=True)
+
+
+CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
     'OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
@@ -317,7 +359,7 @@ classifiers = [
 ]
 
 
-extensions = [
+EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
@@ -329,15 +371,15 @@ extensions = [
 
 
 # Create the default setup configuration
-setup = Setup(distutils.dist.Distribution())
-if not os.path.exists(setup.path):
-    setup.initialize_options()
-    setup.run()
+SETUP = Setup(distutils.dist.Distribution())
+if not os.path.exists(SETUP.path):
+    SETUP.initialize_options()
+    SETUP.run()
 
 
 distutils.core.setup(
     name="lagrangian",
-    version="2.1.0",
+    version="2.1.1",
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
@@ -351,11 +393,14 @@ distutils.core.setup(
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
-    classifiers=classifiers,
+    scripts=[os.path.join('src/etc', item)
+             for item in os.listdir('src/etc')],
+    classifiers=CLASSIFIERS,
     cmdclass={
         'setup': Setup,
         'config': Config,
+        'install': Install,
         'sdist': SDist
     },
-    ext_modules=Cython.Build.cythonize(extensions)
+    ext_modules=Cython.Build.cythonize(EXTENSIONS)
 )
