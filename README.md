@@ -1,3 +1,5 @@
+![alt-text](https://anaconda.org/fbriol/lagrangian/badges/installer/conda.svg)
+
 Welcome
 =======
 
