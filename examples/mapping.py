@@ -509,8 +509,8 @@ class Mapping(object):
         (z, x, y) = self._basemap.transform_scalar(self._z,
                                                    self._x,
                                                    self._y,
-                                                   float(len(self._x)),
-                                                   float(len(self._y)),
+                                                   len(self._x),
+                                                   len(self._y),
                                                    returnxy=True)
         args = (x, y, z)
 

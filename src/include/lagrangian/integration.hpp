@@ -181,6 +181,16 @@ public:
     }
 
     /**
+     * @brief Move constructor
+     */
+    Index(Index && rhs) = default;
+
+    /**
+     * @brief Move assignment operator
+     */
+    Index& operator=(Index&& rhs) = default;
+
+    /**
      * @brief Construct a new object defining an index
      *
      * @param i %Index i
@@ -229,6 +239,7 @@ private:
     double theta1_;
     double theta2_;
 public:
+
     /**
      * @brief Set the effective advection time
      *

@@ -169,6 +169,21 @@ public:
     {
     }
 
+
+    /**
+     * Move constructor
+     *
+     * @param rhs right value
+     */
+    Position(Position&& rhs) = default;
+
+    /**
+     * Move assignment operator
+     *
+     * @param rhs right value
+     */
+    Position& operator=(Position&& rhs) = default;
+
     /**
      * @brief Destructor
      */
@@ -334,6 +349,20 @@ public:
     }
 
     /**
+     * Move constructor
+     *
+     * @param rhs right value
+     */
+    Triplet(Triplet&& rhs) = default;
+
+    /**
+     * Move assignment operator
+     *
+     * @param rhs right value
+     */
+    Triplet& operator=(Triplet&& rhs) = default;
+
+    /**
      * @brief TODO
      *
      * @param a00
@@ -392,6 +421,20 @@ public:
         y_.push_back(y);
         y_.push_back(y - delta);
     }
+
+    /**
+     * Move constructor
+     *
+     * @param rhs right value
+     */
+    Quintuplet(Quintuplet&& rhs) = default;
+
+    /**
+     * Move assignment operator
+     *
+     * @param rhs right value
+     */
+    Quintuplet& operator=(Quintuplet&& rhs) = default;
 
     /**
      * @brief TODO
