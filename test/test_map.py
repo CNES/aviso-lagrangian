@@ -1,8 +1,10 @@
+"""
+FSLE map generation unit tests.
+"""
 import datetime
-import lagrangian
-import math
 import os
 import unittest
+import lagrangian
 
 
 class TestMapProperties(unittest.TestCase):
