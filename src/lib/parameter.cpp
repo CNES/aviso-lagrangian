@@ -16,7 +16,7 @@
 */
 
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 #include <fstream>
 
 // ___________________________________________________________________________//
@@ -32,13 +32,13 @@ namespace lagrangian
 // part of the chain containing the variable is not changed.
 static std::string ExpandShell(std::string& s)
 {
-    static const boost::regex re("\\$\\{(\\w+)\\}");
+    static const std::regex re("\\$\\{(\\w+)\\}");
 
-    boost::match_results<std::string::const_iterator> what;
+    std::match_results<std::string::const_iterator> what;
     std::string::const_iterator start = s.begin();
     std::string::const_iterator end = s.end();
 
-    while (regex_search(start, end, what, re, boost::match_default))
+    while (regex_search(start, end, what, re))
     {
         char* env = getenv(what.str(1).c_str());
 
@@ -69,8 +69,7 @@ bool Parameter::Parse(std::string& line, std::string& buffer)
     boost::trim(line);
 
     // Delete comment
-    boost::iterator_range<std::string::iterator> it = boost::find_first(line,
-            "#");
+    auto it = boost::find_first(line, "#");
     if (!it.empty())
     {
         boost::erase_range(line,
@@ -90,10 +89,10 @@ bool Parameter::Parse(std::string& line, std::string& buffer)
     {
         if (buffer.length())
         {
-            static const boost::regex re("^([^=]*)=(.*)");
-            boost::smatch what;
+            static const std::regex re("^([^=]*)=(.*)");
+            std::smatch what;
 
-            if (boost::regex_match(buffer, what, re))
+            if (std::regex_match(buffer, what, re))
             {
                 std::string key = what[1].str();
                 std::string val = what[2].str();
@@ -136,9 +135,9 @@ void Parameter::Load(const std::string& filename)
 
     while (!infile.eof())
     {
-        static const boost::regex re("^\\s*#include\\s+\"(.*)\\\"");
+        static const std::regex re("^\\s*#include\\s+\"(.*)\\\"");
         std::string line;
-        boost::smatch what;
+        std::smatch what;
 
         ++line_number;
 

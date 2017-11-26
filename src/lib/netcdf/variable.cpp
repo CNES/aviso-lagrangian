@@ -104,22 +104,19 @@ void Variable::Read(std::vector<double>& data, const std::string& to) const
 Variable::Variable(const netCDF::NcVar& ncvar) :
         name_(ncvar.getName()), ncvar_(ncvar)
 {
-    std::map<std::string, netCDF::NcVarAtt> atts = ncvar_.getAtts();
-    std::vector<netCDF::NcDim> dims = ncvar_.getDims();
-
     // Set globals attributes
-    for (std::map<std::string, netCDF::NcVarAtt>::iterator it = atts.begin();
-            it != atts.end(); ++it)
-        attributes_.push_back(Attribute(it->second));
+    for (auto& item: ncvar_.getAtts())
+        attributes_.push_back(Attribute(item.second));
 
     // populates defined variables
-    for (std::vector<netCDF::NcDim>::iterator it = dims.begin();
-            it != dims.end(); ++it)
+    for (auto& item: ncvar_.getDims())
     {
-        shape_.push_back(it->getSize());
-        dimensions_.push_back(Dimension(it->getName(),
-                it->getSize(),
-                it->isUnlimited()));
+        auto size = item.getSize();
+
+        shape_.push_back(size);
+        dimensions_.push_back(Dimension(item.getName(),
+                size,
+                item.isUnlimited()));
     }
 
     // Set scale, offset, missing and invalid data from attributes

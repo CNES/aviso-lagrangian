@@ -193,10 +193,9 @@ public:
         if (!has_scale_offset_)
             return;
 
-        std::vector<double>::iterator it = array.begin();
-        for (; it != array.end(); ++it)
-            *it = !IsMissing(*it) ?
-                    (*it) * scale_ + offset_ :
+        for (auto& item: array)
+            item = !IsMissing(item) ?
+                    item * scale_ + offset_ :
                     std::numeric_limits<double>::quiet_NaN();
     }
 
@@ -212,10 +211,9 @@ public:
         if (!HasMissing())
             return;
 
-        std::vector<double>::iterator it = array.begin();
-        for (; it != array.end(); ++it)
-            if (IsMissing(*it))
-                *it = std::numeric_limits<double>::quiet_NaN();
+        for (auto& item: array)
+            if (IsMissing(item))
+                item = std::numeric_limits<double>::quiet_NaN();
     }
 };
 

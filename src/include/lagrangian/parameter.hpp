@@ -162,8 +162,7 @@ public:
      */
     inline bool Exists(const std::string& key) const
     {
-        std::map<std::string, std::vector<std::string> >::const_iterator it =
-                data_.find(key);
+        auto it = data_.find(key);
         return it != data_.end();
     }
 
@@ -196,13 +195,11 @@ public:
      */
     std::vector<std::string> Keys() const
     {
-        std::map<std::string, std::vector<std::string> >::const_iterator it;
         std::vector<std::string> result;
 
-        for (it = data_.begin(); it != data_.end(); it++)
-        {
-            result.push_back((*it).first);
-        }
+        for (auto& item : data_)
+            result.push_back(item.first);
+
         return result;
     }
 
@@ -214,17 +211,12 @@ public:
     template<class T>
     std::vector<T> Values(const std::string& key) const
     {
-        std::vector<std::string>::iterator it;
         std::vector<T> result;
 
         if (Exists(key))
         {
-            std::vector<std::string> values = Items(key);
-
-            for (it = values.begin(); it != values.end(); ++it)
-            {
-                result.push_back(ParameterCast<T> (*it));
-            }
+            for (auto& item : Items(key))
+                result.push_back(ParameterCast<T> (item));
         }
         return result;
     }

@@ -19,8 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/special_functions/round.hpp>
+#include <cmath>
 #include <set>
 
 // ___________________________________________________________________________//
@@ -178,7 +177,7 @@ private:
     // (value - start) / step
     inline int FindIndexRegular(const double coordinate, bool bounded) const
     {
-        int index = static_cast<int> (boost::math::round((coordinate - start_)
+        int index = static_cast<int> (std::round((coordinate - start_)
                 / increment_));
 
         if (index < 0)

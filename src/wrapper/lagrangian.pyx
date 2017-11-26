@@ -7,7 +7,6 @@ cimport cython
 cimport cpp_lagrangian
 cimport libcpp.string
 cimport libcpp.vector
-cimport libc.math
 cimport numpy
 
 
@@ -15,6 +14,10 @@ cdef extern from "limits" namespace "std" nogil:
     cdef cppclass numeric_limits[T]:
         @staticmethod
         T quiet_NaN()
+
+
+cdef extern from "cmath" namespace "std" nogil:
+    int isnan(double)
 
 
 # datetime module initialization
@@ -1465,7 +1468,7 @@ cdef class MapOfFiniteLyapunovExponents:
                 for iy in range(dims[1]):
                     value = map_of.GetItem(ix, iy)
                     data[ix * map_of.get_ny() + iy] = value \
-                        if not libc.math.isnan(value) else fill_value
+                        if not isnan(value) else fill_value
 
             return result
         finally:

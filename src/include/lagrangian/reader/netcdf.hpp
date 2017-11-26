@@ -107,7 +107,7 @@ private:
             const double fill_value=0) const
     {
         double result = data_[(this->*pGetIndex_)(ix, iy)];
-        return boost::math::isnan<double>(result) ? fill_value : result;
+        return std::isnan(result) ? fill_value : result;
     }
 
 public:

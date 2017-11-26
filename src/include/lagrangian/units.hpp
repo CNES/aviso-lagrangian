@@ -143,11 +143,8 @@ public:
         if (offset_ == 0 && scale_ == 1)
             return;
 
-        typename std::vector<T>::iterator it;
-        for (it = values.begin(); it != values.end(); ++it)
-        {
-            *it = (*it) * scale_ + offset_;
-        }
+        for (auto& item: values)
+            item = item * scale_ + offset_;
     }
 
     template<class T>

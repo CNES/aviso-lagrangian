@@ -49,7 +49,7 @@ void TimeSerie::Load(int ix0, const int ix1)
         }
 
         // Swap readers
-        for (it = new_files.begin(); it != new_files.end(); ++it)
+        for (auto it = new_files.begin(); it != new_files.end(); ++it)
         {
             jt = files_.find(it->first);
 
@@ -126,7 +126,6 @@ FileList::FileList(const std::vector<std::string>& filenames,
         const std::string& varname,
         Reader* const reader)
 {
-    std::vector<std::string>::const_iterator its;
     std::vector<std::pair<double, std::string> > files;
     Axis axis_x;
     Axis axis_y;
@@ -135,24 +134,23 @@ FileList::FileList(const std::vector<std::string>& filenames,
 
     // For all files, find the time to create an associative array: date,
     // filename.
-    for (its = filenames.begin(); its != filenames.end(); ++its)
+    for (auto& item : filenames)
     {
-        reader->Open(*its);
+        reader->Open(item);
         files.push_back(std::make_pair(reader->GetDateTime(varname).ToUnixTime(),
-                *its));
+                item));
     }
 
     // Data are sorted according file date
     std::sort(files.begin(), files.end(), SortPredicate());
 
     std::vector<double> points;
-    std::vector<std::pair<double, std::string> >::iterator itp;
 
     // Creates the axis to obtain a filename from a date.
-    for (itp = files.begin(); itp != files.end(); ++itp)
+    for (auto& item : files)
     {
-        points.push_back((*itp).first);
-        filenames_.push_back((*itp).second);
+        points.push_back(item.first);
+        filenames_.push_back(item.second);
     }
     axis_ = Axis(points, Axis::kTime);
 }

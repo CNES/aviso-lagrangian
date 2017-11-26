@@ -15,7 +15,7 @@
  along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/thread.hpp>
+#include <thread>
 
 // ___________________________________________________________________________//
 
@@ -31,13 +31,13 @@ namespace map
 void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
         const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil)
 {
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
+    for (auto ix = 0; ix < map_.get_nx(); ++ix)
     {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
+        for (auto iy = 0; iy < map_.get_ny(); ++iy)
         {
             // If the user restart initialization, it must release the
             // allocated resources
-            Position* position = map_.GetItem(ix, iy);
+            auto position = map_.GetItem(ix, iy);
             if (position)
                 delete position;
             
@@ -59,13 +59,13 @@ void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsInte
 {
     CellProperties cell;
 
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
+    for (auto ix = 0; ix < map_.get_nx(); ++ix)
     {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
+        for (auto iy = 0; iy < map_.get_ny(); ++iy)
         {
             // If the user restart initialization, it must release the
             // allocated resources
-            Position* position = map_.GetItem(ix, iy);
+            auto position = map_.GetItem(ix, iy);
             if (position)
                 delete position;
 
@@ -95,13 +95,12 @@ void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
     // Creating an object containing the properties of the interpolation
     CellProperties cell;
 
-    std::list<Index>::iterator first = splitter.begin();
+    auto first = splitter.begin();
     while (first != splitter.end())
     {
-        const int ix = first->get_i();
-        const int iy = first->get_j();
-
-        lagrangian::Position* position = map_.GetItem(ix, iy);
+        auto ix = first->get_i();
+        auto iy = first->get_j();
+        auto position = map_.GetItem(ix, iy);
 
         if (!fle.Compute(it, position, cell))
         {
@@ -122,38 +121,38 @@ void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
 
 void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle)
 {
-    Iterator it = fle.GetIterator();
-    boost::thread_group threads;
+    auto it = fle.GetIterator();
+    std::list<std::thread> threads;
 
     // Number of cells to process
     double items = map_.get_nx() * map_.get_ny();
-
-    std::list<Splitter<Index> > splitters = indexes_.Split(num_threads_);
+    auto splitters = indexes_.Split(num_threads_);
 
     while (it.GoAfter())
     {
         fle.Fetch(it());
 
-        std::string date = DateTime(DateTime::FromUnixTime(it())).ToString(
+        auto date = DateTime(DateTime::FromUnixTime(it())).ToString(
                 "%Y-%m-%d %H:%M:%S");
 
         Debug(str(boost::format("Start time step %s (%d cells)")
                 % date % indexes_.size()));
 
-        for (std::list<lagrangian::Splitter<Index> >::iterator its =
-                splitters.begin(); its != splitters.end(); ++its)
+        for (auto& item : splitters)
         {
-            threads.create_thread(
-                    boost::bind(
-                            &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
-                            this, *its, fle, it));
+            threads.push_back(
+                std::thread(
+                    &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
+                    this, std::ref(item), std::ref(fle), std::ref(it)));
         }
 
-        threads.join_all();
+        for (auto& item : threads)
+            item.join();
+        threads.clear();
 
         // Removing cells that are completed
-        splitters = indexes_.Erase(boost::bind(
-                        &FiniteLyapunovExponents::Completed, this, _1),
+        splitters = indexes_.Erase(std::bind(
+                        &FiniteLyapunovExponents::Completed, this, std::placeholders::_1),
                         num_threads_);
 
         Debug(str(boost::format("Close time step %s (%.02f%% completed)")

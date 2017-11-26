@@ -223,9 +223,7 @@ class Setup(setuptools.Command, SetupConfig):
         Set the values set by the user to build the library
         """
         # Needed boost libraries
-        boost = ['boost_date_time',
-                 'boost_regex',
-                 'boost_thread']
+        boost = ['boost_date_time']
 
         include_dirs = []
         library_dirs = []
@@ -283,8 +281,6 @@ class Config(distutils.command.config.config, SetupConfig):
 
         for header in ['netcdf',
                        'boost/date_time.hpp',
-                       'boost/regex.hpp',
-                       'boost/thread.hpp',
                        'boost/version.hpp']:
             distutils.log.info('Checking for C++ header file %r' % header)
             # Work around a bug of the "check_header" that does not take into
@@ -363,6 +359,7 @@ EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
+        extra_compile_args=['-std=c++11'],
         sources=["src/wrapper/lagrangian.pyx"] + SetupConfig.sources(),
         library_dirs=[os.path.join('build',
                                    SetupConfig.get_build_directory('lib'))]

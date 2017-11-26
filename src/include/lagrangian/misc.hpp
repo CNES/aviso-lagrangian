@@ -19,7 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/math/special_functions.hpp>
+#include <cmath>
 
 // ___________________________________________________________________________//
 
@@ -40,9 +40,9 @@ const double kEarthRadius = 6371000;
  */
 inline double FractionnalPart(const double x)
 {
-    int i;
+    double i;
 
-    return boost::math::modf<double>(x, &i);
+    return std::modf(x, &i);
 }
 
 // ___________________________________________________________________________//

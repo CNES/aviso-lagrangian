@@ -30,12 +30,10 @@ namespace netcdf
 
 Attribute const& Group::FindAttribute(const std::string& name) const
 {
-    std::list<Attribute>::const_iterator it;
-
-    for (it = attributes_.begin(); it != attributes_.end(); ++it)
+    for (auto& item: attributes_)
     {
-        if ((*it).get_name() == name)
-            return *it;
+        if (item.get_name() == name)
+            return item;
     }
     return Attribute::MISSING;
 }
@@ -44,12 +42,10 @@ Attribute const& Group::FindAttribute(const std::string& name) const
 
 Attribute const& Group::FindAttributeIgnoreCase(const std::string& name) const
 {
-    std::list<Attribute>::const_iterator it;
-
-    for (it = attributes_.begin(); it != attributes_.end(); ++it)
+    for (auto& item: attributes_)
     {
-        if (boost::iequals((*it).get_name(), name))
-            return *it;
+        if (boost::iequals(item.get_name(), name))
+            return item;
     }
     return Attribute::MISSING;
 }

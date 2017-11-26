@@ -28,28 +28,20 @@ namespace lagrangian
 
 void Netcdf::Open(const std::string& filename)
 {
-    ncfile_ = boost::shared_ptr<netCDF::NcFile>(new netCDF::NcFile(filename,
+    ncfile_ = std::shared_ptr<netCDF::NcFile>(new netCDF::NcFile(filename,
             netCDF::NcFile::read));
 
-    std::multimap<std::string, netCDF::NcDim> dims = ncfile_->getDims();
-
-    for (std::multimap<std::string, netCDF::NcDim>::iterator it = dims.begin();
-            it != dims.end(); ++it)
+    for (auto& item: ncfile_->getDims())
     {
-        netcdf::Dimension dim(it->second.getName(),
-                it->second.getSize(),
-                it->second.isUnlimited());
+        netcdf::Dimension dim(item.second.getName(),
+                item.second.getSize(),
+                item.second.isUnlimited());
 
         dimensions_.push_back(dim);
     }
 
-    std::multimap<std::string, netCDF::NcVar> vars = ncfile_->getVars();
-
-    for (std::multimap<std::string, netCDF::NcVar>::iterator it = vars.begin();
-            it != vars.end(); ++it)
-    {
-        variables_.push_back(netcdf::Variable(it->second));
-    }
+    for (auto& item: ncfile_->getVars())
+        variables_.push_back(netcdf::Variable(item.second));
 }
 
 }

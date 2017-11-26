@@ -50,8 +50,8 @@ void Netcdf::Open(const std::string& filename)
 {
     netcdf_ = lagrangian::Netcdf(filename);
 
-    std::list<netcdf::Variable> variables = netcdf_.get_variables();
-    std::list<netcdf::Variable>::iterator it = variables.begin();
+    auto variables = netcdf_.get_variables();
+    auto it = variables.begin();
 
     while (it != variables.end())
     {

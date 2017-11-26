@@ -106,7 +106,7 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const
         while (high > low + 1)
         {
             mid = (low + high) >> 1;
-            register double value = edges_[mid];
+            auto value = edges_[mid];
 
             if (value == coordinate)
                 return mid;
@@ -121,7 +121,7 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const
         while (high > low + 1)
         {
             mid = (low + high) >> 1;
-            register double value = edges_[mid];
+            auto value = edges_[mid];
 
             if (value == coordinate)
                 return mid;
@@ -146,7 +146,7 @@ Axis::Axis(const netcdf::Variable& variable) :
         unit_ = "";
 
     // Determines axis from standard_name
-    netcdf::Attribute attribute =
+    auto attribute =
             variable.FindAttributeIgnoreCase(netcdf::CF::STANDARD_NAME);
     if (attribute != netcdf::Attribute::MISSING)
     {
@@ -220,7 +220,7 @@ void Axis::CalcIsRegular()
         increment_ = (GetCoordinateValue(n - 1) - start_) / (n - 1);
         is_regular_ = true;
 
-        for (int ix = 1; ix < n; ++ix)
+        for (auto ix = 1; ix < n; ++ix)
         {
             if (!IsSame(GetCoordinateValue(ix) - GetCoordinateValue(ix - 1),
                     increment_))

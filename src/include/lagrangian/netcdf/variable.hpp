@@ -98,8 +98,8 @@ public:
         long result = 1;
         std::vector<size_t>::const_iterator it;
 
-        for (it = shape_.begin(); it < shape_.end(); ++it)
-            result *= *it;
+        for (auto& item: shape_)
+            result *= item;
 
         return result;
     }

@@ -19,7 +19,7 @@
 
 // ___________________________________________________________________________//
 
-#include <boost/smart_ptr.hpp>
+#include <memory>
 #include <list>
 #include <netcdf>
 
@@ -39,7 +39,7 @@ namespace lagrangian
 class Netcdf: public netcdf::Group
 {
 private:
-    boost::shared_ptr<netCDF::NcFile> ncfile_;
+    std::shared_ptr<netCDF::NcFile> ncfile_;
     std::list<netcdf::Variable> variables_;
 
 public:
@@ -92,12 +92,10 @@ public:
      */
     netcdf::Variable const& FindVariable(const std::string& name) const
     {
-        std::list<netcdf::Variable>::const_iterator it;
-
-        for (it = variables_.begin(); it != variables_.end(); ++it)
+        for (auto& item: variables_)
         {
-            if ((*it).get_name() == name)
-                return *it;
+            if (item.get_name() == name)
+                return item;
         }
         return netcdf::Variable::MISSING;
     }
