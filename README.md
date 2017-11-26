@@ -16,6 +16,15 @@ Given a time series of meso-scale velocity field, this code computes
 corresponding sub-mesoscale maps of backward or forward FLSE or FTLE. It also
 compute other diagnostics such as orientation of Finite-Time Lyapunov Vectors.
 
+Install with conda
+==================
+
+The easiest route to installing Lagrangion is through
+[conda](http://conda.pydata.org/miniconda.html). For all platforms installing
+this package can be done with:
+
+    conda install -c fbriol lagrangian
+
 Install with Ubuntu package
 ===========================
 
