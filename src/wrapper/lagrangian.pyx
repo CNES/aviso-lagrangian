@@ -1,5 +1,19 @@
 # cython: c_string_type=unicode, c_string_encoding=utf8
 # distutils: sources=src/wrapper/field.cpp src/wrapper/reader.cpp
+
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+#
+# You should have received a copy of GNU Lesser General Public License along
+# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 cimport cpp_lagrangian
 cimport cpython
 cimport cpython.datetime
@@ -37,7 +51,7 @@ cdef class AxisUnit:
 
     def __dealloc__(self):
         del self.wrapped
-    
+
     def __call__(self, str unit not None):
         """
         Checks if the unit can define this type of axis.
@@ -75,7 +89,7 @@ cdef class Axis:
     """
     A coordinate axis is a Variable that specifies one of the coordinates
     of a Variable's values.
- 
+
     Mathematically it is a vector function F from index space to Sn: ::
 
         F(i, j, k,...) -> (S1, S2, ...Sn)
@@ -83,7 +97,7 @@ cdef class Axis:
     where i, j, k are integers, and S is the set of reals (R).
 
     The components of F are just its coordinate axes: ::
-    
+
         F = (A1, A2, ...An)
          A1(i, j, k, ...) -> S1
          A2(i, j, k, ...) -> S1
@@ -101,7 +115,7 @@ cdef class Axis:
             libcpp.string.string cpp_unit
             size_t size
             size_t idx
-        
+
         size = numpy.PyArray_SIZE(points)
 
         if unit is None:
@@ -112,19 +126,19 @@ cdef class Axis:
 
         for idx in range(size):
             cpp_points[idx] = points[idx]
-        
+
         self.wrapped = new cpp_lagrangian.Axis(cpp_points,
                                                axis_type,
                                                cpp_unit)
-    
+
     def __dealloc__(self):
         del self.wrapped
-    
+
     @property
     def type(self):
         """
         Get type of axis
-        """ 
+        """
         return self.wrapped.get_type()
 
     def get_coordinate_value(self, int index):
@@ -150,21 +164,21 @@ cdef class Axis:
         Get the number of values for this axis
         """
         return self.wrapped.GetNumElements()
-    
+
     @property
     def is_regular(self):
         """
         The axis values are spaced regularly. Return true if: ::
-        
+
             value(i) = self.start + i * self.increment
         """
         return self.wrapped.is_regular()
-    
+
     def find_index(self, double coordinate):
         """
         Given a coordinate position, find what element contains it.
         This mean that: ::
-             
+
              edge[i] <= pos < edge[i+1] (if values are ascending)
              edge[i] > pos >= edge[i+1] (if values are descending)
         """
@@ -176,13 +190,13 @@ cdef class Axis:
         is closest to it.
         """
         return self.wrapped.FindIndexBounded(coordinate)
-    
+
     def normalize(self, double coordinate, double circle):
         """
         Standardization of longitude
         """
         return self.wrapped.Normalize(coordinate, circle)
-    
+
     @property
     def units(self):
         """
@@ -193,7 +207,7 @@ cdef class Axis:
             libcpp.bool result
         result = self.wrapped.get_units(cpp_units)
         return cpp_units if result else None
-    
+
     def convert(self, str unit not None):
         """
         Converts the axis data from unit `self.units` to unit. Can
@@ -203,12 +217,12 @@ cdef class Axis:
 
         cpp_unit = unit.encode('utf8')
         self.wrapped.Convert(cpp_unit)
-    
+
     def find_indexes(self, double coordinate):
         """
         Given a coordinate position, find grids elements around it.
         This mean that: ::
-        
+
             points[i0] <= coordinate < points[i1]
         """
         cdef int i0, i1
@@ -218,24 +232,24 @@ cdef class Axis:
         if self.wrapped.FindIndexes(coordinate, i0, i1):
             return i0, i1
         return None
-    
+
     @property
     def start(self):
         """
         Get starting value if is_regular
         """
         return self.wrapped.get_start()
-    
+
     @property
     def increment(self):
         """
         Get increment value if is_regular
         """
         return self.wrapped.get_increment()
-    
+
     def __richcmp__(Axis this, Axis other, int operator):
         cdef libcpp.bool result
-        
+
         if other is None:
             return False
         result = cpp_lagrangian.AxisCompare(this.wrapped[0],
@@ -335,7 +349,7 @@ cdef class Field:
     def __cinit__(self, *args):
         if type(self) is Field:
             raise RuntimeError("cannot instantiate abstract class")
-    
+
     def __dealloc__(self):
         del self.wrapped
 
@@ -374,7 +388,7 @@ cdef class PythonField(Field):
         if not hasattr(self, "compute"):
             raise NotImplementedError(
                 "unimplemented pure virtual method 'compute'")
-        
+
         self.wrapped = new cpp_lagrangian.WrappedField(
             <cpython.ref.PyObject*>self, unit_type)
 
@@ -418,7 +432,7 @@ cdef class CellProperties:
 
     def __dealloc__(self):
         del self.wrapped
-   
+
     def contains(self, double x, double y):
         """
         Test if the coordinate is in the cell.
@@ -438,7 +452,7 @@ cdef class CellProperties:
         Update the cell properties
         """
         self.wrapped.Update(x0, x1, y0, y1, ix0, ix1, iy0, iy1)
-   
+
     @property
     def x0(self):
         """
@@ -563,7 +577,7 @@ cdef class Iterator:
 cdef class Position:
     """
     Define the position of N points Mₖ = (xₖ, yₖ): ::
-     
+
                 Mₖ₊₁
                 |
         Mₖ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mₖ
@@ -721,7 +735,7 @@ cdef class AbstractIntegration:
         x1 = y1 = numeric_limits[double].quiet_NaN()
 
         defined = self.wrapped.Compute(it.wrapped[0], x0, y0, x1, y1)
-        return (x1, y1) if defined else None   
+        return (x1, y1) if defined else None
 
 
 
@@ -772,9 +786,9 @@ cpdef enum Stencil:
 cdef class FiniteLyapunovExponents:
     """
     Storing Lyapunov coefficients calculated.
-    
+
     .. seealso::
-    
+
         FiniteLyapunovExponentsIntegration
     """
     cdef cpp_lagrangian.FiniteLyapunovExponents* wrapped
@@ -784,7 +798,7 @@ cdef class FiniteLyapunovExponents:
 
     def __dealloc__(self):
         del self.wrapped
-    
+
     @property
     def lambda1(self):
         """
@@ -853,50 +867,50 @@ cdef class FiniteLyapunovExponents:
 cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
     """
     Handles the computation of Lyapunov Exponent
-    
+
     Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that
     represents the rate of separation of initially neighbouring particles
     over a finite-time window [t₀, t₀ + T], where T is the time two
     particules need to be advected in order to be separated from a given
     distance d.
-    
+
     Let x(t) = x(t; x₀, t₀) be the position of a lagrangian particle
     at time t, started at x₀ at t=t₀ and advected by the time-dependent
     fluid flow u(x, t).
-    
+
     The Forward Finite-Time Lyapunov Exponent at a point x₀
     and for the advection time T is defined as the growth factor of
     the norm of the perturbation dx0 started around x₀ and advected
     by the flow after the finite advection time T.
-    
+
     Maximal stretching occurs when dx0 is aligned with the eigenvector
     associated with the maximum eigenvalue δmax of the Cauchy-Green strain
     tensor Δ: ::
-    
+
         Δ = [ ∇Φ₀ᵀ (x₀) ]^* [ ∇Φ₀ᵀ (x₀) ]
-    
+
     where Φ₀ᵀ : x₀ ➜ x(t, x₀, t₀) is the flow map of the advection equation:
     it links the location x₀ of a lagragian particule at t=t₀ to its position
     x(t,x₀,t₀) at time t. (* denotes the transposition operator).
-    
+
     FTLE is defined as ::
-    
+
         σ = ( 1 / (2*T) ) * log( λmax( Δ ) )
-    
+
     Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
     neighbouring particules separate from a given distance d.
-    
+
     Exponents(const Position& position) function implements the computation of
     the lyapunov exponents based on maximal and minimal eigenvalues and
     orientation of eigenvectors of Δ given the elements of ∇Φ₀ᵀ matrix.
-    
+
     For more details see:
-    
+
         1. G. Haller, Lagrangian coherent structures and the rate of strain in
            two-dimensional turbulence Phys. Fluids A 13 (2001) 3365-3385
            (http://georgehaller.com/reprints/approx.pdf) Remark: In this
            paper, FTLE is referred to as the Direct Lyapunov Exponent (DLE)
-        
+
         2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
     """
     def __cinit__(self,
@@ -985,7 +999,7 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
 
 
 # Call, from C++, a Python function that implement the pure virtual method
-# void lagrangian::Reader::Open(const std::string& filename) 
+# void lagrangian::Reader::Open(const std::string& filename)
 cdef public api int PythonReaderOpen(object self,
                                      libcpp.string.string filename,
                                      libcpp.string.string* error):
@@ -1007,7 +1021,7 @@ cdef public api int PythonReaderOpen(object self,
 
 # Call, from C++, a Python function that implement the pure virtual method
 # void lagrangian::Reader::Load(const std::string& name,
-#       const std::string& unit) 
+#       const std::string& unit)
 cdef public api int PythonReaderLoad(object self,
                                      libcpp.string.string name,
                                      libcpp.string.string unit,
@@ -1103,7 +1117,7 @@ cdef class Reader(AbstractReader):
         """
         cdef libcpp.string.string cpp_string = filename.encode('utf8')
         self.wrapped.Open(cpp_string)
-                
+
     def load(self, str name not None, str unit=None):
         """
         Load into memory grid data
@@ -1115,7 +1129,7 @@ cdef class Reader(AbstractReader):
             unit = ""
         cpp_unit = unit.encode('utf8')
         self.wrapped.Load(cpp_name, cpp_unit)
-    
+
     def interpolate(self,
                     double longitude,
                     double latitude,
@@ -1126,24 +1140,24 @@ cdef class Reader(AbstractReader):
         """
         cdef:
             cpp_lagrangian.CellProperties cpp_cell
-        
+
         if cell is None:
             return self.wrapped.Interpolate(
                 longitude,
                 latitude,
-                fill_value)    
+                fill_value)
         return self.wrapped.Interpolate(
             longitude,
             latitude,
             fill_value,
-            cell.wrapped[0])    
+            cell.wrapped[0])
 
     def get_datetime(self, str name not None):
         """
         Returns the date of the grid.
         """
         cdef libcpp.string.string cpp_string = name.encode('utf8')
-        
+
         return cpp_lagrangian.to_pydatetime(
             self.wrapped.GetDateTime(cpp_string))
 
@@ -1189,10 +1203,10 @@ cdef class PythonReader(AbstractReader):
     Python base class for implementing a velocity reader fields.
     """
     def __cinit__(self):
-        
+
         self.wrapped = new cpp_lagrangian.WrappedReader(
             <cpython.ref.PyObject*>self)
-        
+
         # pure virtual methods must be implemented in a derived class
         for method in ['open', 'load', 'interpolate', 'get_datetime']:
             if not hasattr(self, method):
@@ -1295,7 +1309,7 @@ cdef class MapProperties:
                   double step):
         self.wrapped = new cpp_lagrangian.MapProperties(
             nx, ny, x_min, y_min, step)
-    
+
     def __dealloc__(self):
         del self.wrapped
 

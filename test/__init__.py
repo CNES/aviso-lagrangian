@@ -1,11 +1,25 @@
+"""
+This script is the entry point for unit tests.
+"""
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+#
+# You should have received a copy of GNU Lesser General Public License along
+# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import hashlib
 try:
     import urllib.request as urllib
-    PY3 = True
 except ImportError:
     import urllib as urllib
-    PY3 = False
 import os
 import tempfile
 import unittest
@@ -86,10 +100,7 @@ class DownloadData(object):
         Download data from bitbucket
         """
         url = "https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.zip"
-        if PY3:
-            response = urllib.request.urlopen(url)
-        else:
-            response = urllib.urlopen(url)
+        response = urllib.urlopen(url)
 
         while True:
             data = response.read(65536)
@@ -99,6 +110,9 @@ class DownloadData(object):
 
     @staticmethod
     def sha256sum(path):
+        """
+        Computes the SHA256 hash for a file
+        """
         sha256 = hashlib.sha256()
         with open(path, 'rb') as stream:
             for block in iter(lambda: stream.read(65536), b''):

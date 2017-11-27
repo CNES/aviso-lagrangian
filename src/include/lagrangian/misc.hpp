@@ -2,7 +2,7 @@
     This file is part of lagrangian library.
 
     lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
+    it under the terms of GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+    You should have received a copy of GNU Lesser General Public License
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -23,8 +23,7 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian
-{
+namespace lagrangian {
 
 /**
  * Earth Radius in centimeters
@@ -38,11 +37,10 @@ const double kEarthRadius = 6371000;
  *
  * @return the fractionnal part of x
  */
-inline double FractionnalPart(const double x)
-{
-    double i;
+inline double FractionnalPart(const double x) {
+  double i;
 
-    return std::modf(x, &i);
+  return std::modf(x, &i);
 }
 
 // ___________________________________________________________________________//
@@ -52,10 +50,7 @@ inline double FractionnalPart(const double x)
  *
  * @return x squared
  */
-inline double Square(const double x)
-{
-    return x * x;
-}
+inline double Square(const double x) { return x * x; }
 
 // ___________________________________________________________________________//
 
@@ -64,10 +59,9 @@ inline double Square(const double x)
  *
  * @return x converted in radians
  */
-inline double DegreesToRadians(const double x)
-{
-    static const double f = M_PI / 180.0;
-    return x * f;
+inline double DegreesToRadians(const double x) {
+  static const double f = M_PI / 180.0;
+  return x * f;
 }
 
 // ___________________________________________________________________________//
@@ -77,10 +71,9 @@ inline double DegreesToRadians(const double x)
  *
  * @return x converted in degrees
  */
-inline double RadiansToDegrees(const double x)
-{
-    static const double f = 180.0 / M_PI;
-    return x * f;
+inline double RadiansToDegrees(const double x) {
+  static const double f = 180.0 / M_PI;
+  return x * f;
 }
 
 // ___________________________________________________________________________//
@@ -90,18 +83,15 @@ inline double RadiansToDegrees(const double x)
  *
  * @return distance in degrees
  */
-inline double Distance(const double lon0,
-        const double lat0,
-        const double lon1,
-        const double lat1)
-{
-    double y0 = DegreesToRadians(lat0);
-    double x0 = DegreesToRadians(lon0);
-    double y1 = DegreesToRadians(lat1);
-    double x1 = DegreesToRadians(lon1);
+inline double Distance(const double lon0, const double lat0, const double lon1,
+                       const double lat1) {
+  double y0 = DegreesToRadians(lat0);
+  double x0 = DegreesToRadians(lon0);
+  double y1 = DegreesToRadians(lat1);
+  double x1 = DegreesToRadians(lon1);
 
-    return RadiansToDegrees(
-            acos(sin(y0) * sin(y1) + cos(y0) * cos(y1) * cos(x1 - x0)));
+  return RadiansToDegrees(
+      acos(sin(y0) * sin(y1) + cos(y0) * cos(y1) * cos(x1 - x0)));
 }
 
 /**
@@ -114,15 +104,11 @@ inline double Distance(const double lon0,
  *
  * @return Longitude between [-half_circle, half_circle]
  */
-inline double NormalizeLongitude(double x,
-        const double circle,
-        const double half_circle)
-{
-    while (x < -half_circle)
-        x += circle;
-    while (x >= half_circle)
-        x -= circle;
-    return x;
+inline double NormalizeLongitude(double x, const double circle,
+                                 const double half_circle) {
+  while (x < -half_circle) x += circle;
+  while (x >= half_circle) x -= circle;
+  return x;
 }
 
-} // namespace lagrangian
+}  // namespace lagrangian
