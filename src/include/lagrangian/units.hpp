@@ -20,6 +20,7 @@
 // ___________________________________________________________________________//
 
 #include <udunits2.h>
+#include <cstdarg>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -56,20 +57,13 @@ class Exception : public std::runtime_error {
  */
 class SmartUtSystem {
  private:
-  ut_system* system_;
+  ut_system* system_{nullptr};
 
  public:
   /**
-   * @brief Allocates resources used by uduntits2
+   * @brief Default constructor
    */
-  SmartUtSystem() {
-    if (system_ == nullptr) {
-      ut_set_error_message_handler(&ut_ignore);
-      system_ = ut_read_xml(nullptr);
-      if (ut_get_status() != UT_SUCCESS)
-        throw units::Exception("failed to initialize UDUnits2 library");
-    }
-  }
+  SmartUtSystem() = default;
 
   /**
    * @brief Frees resources used by udunits2
@@ -77,9 +71,33 @@ class SmartUtSystem {
   ~SmartUtSystem() { ut_free_system(system_); }
 
   /**
-   * @brief Returns the unit-system used
+   * @brief Allocates resources used by uduntits2 if needed and returns the
+   * unit system used.
    */
-  ut_system* get() const { return system_; }
+  inline ut_system* get() {
+    if (system_ == nullptr) {
+      ut_set_error_message_handler(&ut_ignore);
+      system_ = ut_read_xml(nullptr);
+
+      // We search for the type of error in order to point the user to the
+      // possible problem of definition for the variable UDUNITS2_XML_PATH.
+      auto status = ut_get_status();
+      if (status == UT_OPEN_ENV)
+        throw units::Exception(
+            std::string(
+                "The file defined by UDUNITS2_XML_PATH couldn't be opened: ") +
+            std::strerror(errno));
+      else if (status == UT_OPEN_DEFAULT)
+        throw units::Exception(
+            std::string("The variable UDUNITS2_XML_PATH is unset, and the "
+                        "installed, default unit, database couldn't be "
+                        "opened: ") +
+            std::strerror(errno));
+      else if (status != UT_SUCCESS)
+        throw units::Exception("failed to initialize UDUnits2 library");
+    }
+    return system_;
+  }
 };
 
 // ___________________________________________________________________________//

@@ -9,20 +9,22 @@ source:
 
 requirements:
   build:
-    - python
     - cython
+    - libnetcdf
+    - libboost
+    - netcdf-cxx4
     - numpy
+    - python
     - setuptools
     - udunits2
-    - libnetcdf
-    - netcdf-cxx4
-    - libboost
   run:
-    - numpy
-    - udunits2
     - libnetcdf
     - libboost
     - netcdf-cxx4
+    - netcdf4
+    - numpy
+    - python-dateutil
+    - udunits2
 
 test:
   imports:
