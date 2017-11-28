@@ -3,23 +3,23 @@
 # This file is part of lagrangian library.
 #
 # lagrangian is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
+# the terms of GNU Lesser General Public License as published by the Free Software
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
 # lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
+# You should have received a copy of GNU Lesser General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
-import lagrangian
 import datetime
 import argparse
-import numpy
 import os
 import re
 import sys
+import dateutil.parser
+import lagrangian
 
 
 class FileType(object):
@@ -51,10 +51,11 @@ def date_type(value):
     The option must be define a date
     """
     try:
-        return lagrangian.DateTime(value)()
-    except Exception as err:
-        raise argparse.ArgumentTypeError("'%s' could not be interpreted as a "
-                                         "date" % value)
+        value = dateutil.parser.parse(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "invalid date time %r: %s" % (value, error))
+    return value
 
 
 def usage():
@@ -198,7 +199,7 @@ def main():
     for line in args.input:
         try:
             line = line[:line.find('#')].strip()
-            if len(line):
+            if line:
                 columns = re.split(r'\s+', line)
                 if len(columns) < 2:
                     raise RuntimeError("missing position")

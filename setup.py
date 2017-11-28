@@ -1,3 +1,20 @@
+"""
+This script is the entry point for building, distributing and installing this
+package using Distutils.
+"""
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+#
+# You should have received a copy of GNU Lesser General Public License along
+# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 try:
     import configparser
 except ImportError:
@@ -10,6 +27,7 @@ import distutils.extension
 import distutils.log
 import os
 import setuptools
+import setuptools.command.install
 import subprocess
 import sysconfig
 import sys
@@ -164,6 +182,9 @@ class SetupConfig(object):
 
     @classmethod
     def get_build_directory(cls, dirname):
+        """
+        Returns the Python build directory name
+        """
         return "{dirname}.{platform}-{version[0]}.{version[1]}".format(
             dirname=dirname,
             platform=sysconfig.get_platform(),
@@ -222,9 +243,7 @@ class Setup(setuptools.Command, SetupConfig):
         Set the values set by the user to build the library
         """
         # Needed boost libraries
-        boost = ['boost_date_time',
-                 'boost_regex',
-                 'boost_thread']
+        boost = ['boost_date_time']
 
         include_dirs = []
         library_dirs = []
@@ -282,8 +301,6 @@ class Config(distutils.command.config.config, SetupConfig):
 
         for header in ['netcdf',
                        'boost/date_time.hpp',
-                       'boost/regex.hpp',
-                       'boost/thread.hpp',
                        'boost/version.hpp']:
             distutils.log.info('Checking for C++ header file %r' % header)
             # Work around a bug of the "check_header" that does not take into
@@ -306,7 +323,7 @@ class Config(distutils.command.config.config, SetupConfig):
                     'Cannot find library %r.' % library)
 
 
-classifiers = [
+CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
     'OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
@@ -317,10 +334,11 @@ classifiers = [
 ]
 
 
-extensions = [
+EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
+        extra_compile_args=['-std=c++11'],
         sources=["src/wrapper/lagrangian.pyx"] + SetupConfig.sources(),
         library_dirs=[os.path.join('build',
                                    SetupConfig.get_build_directory('lib'))]
@@ -328,19 +346,16 @@ extensions = [
 ]
 
 
-requires = ['netCDF4', 'numpy', 'matplotlib', 'basemap']
-
-
 # Create the default setup configuration
-setup = Setup(distutils.dist.Distribution())
-if not os.path.exists(setup.path):
-    setup.initialize_options()
-    setup.run()
+SETUP = Setup(distutils.dist.Distribution())
+if not os.path.exists(SETUP.path):
+    SETUP.initialize_options()
+    SETUP.run()
 
 
 distutils.core.setup(
     name="lagrangian",
-    version="2.1.0",
+    version="2.1.1",
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
@@ -350,17 +365,17 @@ distutils.core.setup(
     keywords="oceanography lagrangian analysis fsle ftle",
     # tests_require=requires,
     test_suite='test',
-    install_requires=requires,
+    install_requires=['numpy'],
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='./src'),
     package_dir={'lagrangian': 'src/'},
     scripts=[os.path.join('src/etc', item)
              for item in os.listdir('src/etc')],
-    classifiers=classifiers,
+    classifiers=CLASSIFIERS,
     cmdclass={
         'setup': Setup,
         'config': Config,
         'sdist': SDist
     },
-    ext_modules=Cython.Build.cythonize(extensions)
+    ext_modules=Cython.Build.cythonize(EXTENSIONS)
 )

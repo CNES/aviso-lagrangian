@@ -3,26 +3,25 @@
 # This file is part of lagrangian library.
 #
 # lagrangian is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
+# the terms of GNU Lesser General Public License as published by the Free Software
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
 # lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
+# You should have received a copy of GNU Lesser General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-
-import lagrangian
 import datetime
-import dateutil.parser
-import netCDF4
-import numpy
 import argparse
 import signal
 import multiprocessing
 import sys
+import dateutil.parser
+import netCDF4
+import numpy
+import lagrangian
 
 
 SYSTEM_UNITS = {
@@ -217,7 +216,7 @@ def usage():
 
     args, _ = parser.parse_known_args()
     if args.version:
-        print(lagrangian.Version())
+        print(lagrangian.version())
         sys.exit(0)
 
     parser.add_argument('--help', '-h',
@@ -240,20 +239,20 @@ def usage():
     return args
 
 
-def convert_from_sec_to_day_inv(a, fill_value):
+def convert_from_sec_to_day_inv(array, fill_value):
     """
     Converting values from second^{-1} to days^{-1}
     """
-    result = numpy.ma.masked_equal(a, fill_value)
+    result = numpy.ma.masked_equal(array, fill_value)
     result *= 86400
     return result.data
 
 
-def convert_from_sec_to_day(a, fill_value):
+def convert_from_sec_to_day(array, fill_value):
     """
     Converting values from second to days
     """
-    result = numpy.ma.masked_equal(a, fill_value)
+    result = numpy.ma.masked_equal(array, fill_value)
     result /= 86400
     return result.data
 
@@ -426,14 +425,14 @@ def calculation():
 
     if args.diagnostic:
         diag_sep = rootgrp.createVariable(
-                'separation_distance',
-                'f8',
-                ('lon', 'lat',),
-                fill_value=NC_FILL_DOUBLE)
+            'separation_distance',
+            'f8',
+            ('lon', 'lat',),
+            fill_value=NC_FILL_DOUBLE)
         diag_sep.long_name = 'effective final separation distance'
         diag_sep.units = 'degree'
         diag_sep[:] = map_of_fle.get_map_of_final_separation(
-               NC_FILL_DOUBLE)
+            NC_FILL_DOUBLE)
 
         if MODE[args.mode] == lagrangian.kFSLE:
             diag_advtime = rootgrp.createVariable(

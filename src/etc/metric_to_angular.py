@@ -3,22 +3,22 @@
 # This file is part of lagrangian library.
 #
 # lagrangian is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
+# the terms of GNU Lesser General Public License as published by the Free Software
 # Foundation, either version 3 of the License, or (at your option) any later
 # version.
 #
 # lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
+# You should have received a copy of GNU Lesser General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 import argparse
 import fnmatch
+import os
 import lagrangian
 import netCDF4
 import numpy
-import os
 
 
 def directory(path):
@@ -56,12 +56,12 @@ def usage():
     return parser.parse_args()
 
 
-def get_files(directory, pattern):
+def get_files(dirname, pattern):
     """
     Get the list of files to convert
     """
     result = []
-    for root, dirs, files in os.walk(directory):
+    for root, _dirs, files in os.walk(dirname):
         result += [os.path.join(root, item)
                    for item in files
                    if fnmatch.fnmatch(item, pattern)]
@@ -95,21 +95,21 @@ def copy(src, dst, u, v):
 
     for dim_name, dim in src.dimensions.items():
         if dim.isunlimited():
-            raise NotImplemented
+            raise NotImplementedError()
         else:
             dst.createDimension(dim_name, len(dim))
 
     for var_name in src.variables:
         old_var = src.variables[var_name]
         if hasattr(old_var, '_FillValue'):
-            FillValue = old_var._FillValue
+            fill_value = old_var._FillValue
         else:
-            FillValue = None
+            fill_value = None
 
         new_var = dst.createVariable(var_name,
                                      old_var.dtype,
                                      old_var.dimensions,
-                                     fill_value=FillValue)
+                                     fill_value=fill_value)
         atts = old_var.__dict__
 
         if '_FillValue' in atts:
@@ -134,16 +134,16 @@ def convert(x, y, u, v):
     """
     Convert U V components from metric to angular system units
     """
-    assert(u.shape == v.shape)
+    assert u.shape == v.shape
 
     nx = len(x)
     ny = len(y)
 
     if nx == u.shape[0]:
-        assert(u.shape == (nx, ny))
+        assert u.shape == (nx, ny)
         transpose = False
     else:
-        assert(u.shape == (ny, nx))
+        assert u.shape == (ny, nx)
         transpose = True
 
     # Keep longitude between -180, 180

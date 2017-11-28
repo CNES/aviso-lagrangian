@@ -1,0 +1,32 @@
+package:
+  name: lagrangian
+  version: "2.1.1"
+
+source:
+  #hg_url: https://bitbucket.org/cnes_aviso/lagrangian
+  #hg_tag: "2.1.1"
+  path: .
+
+requirements:
+  build:
+    - cython
+    - libnetcdf
+    - libboost
+    - netcdf-cxx4
+    - numpy
+    - python
+    - setuptools
+    - udunits2
+  run:
+    - libnetcdf
+    - libboost
+    - netcdf-cxx4
+    - netcdf4
+    - numpy
+    - python-dateutil
+    - udunits2
+
+test:
+  imports:
+    - lagrangian
+  

@@ -1,3 +1,16 @@
+# This file is part of lagrangian library.
+#
+# lagrangian is free software: you can redistribute it and/or modify it under
+# the terms of GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+#
+# You should have received a copy of GNU Lesser General Public License along
+# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 cimport boost.date_time.gregorian
 cimport boost.date_time.posix_time
 cimport cpython.datetime
@@ -68,7 +81,7 @@ cdef extern from "field.hpp" nogil:
     enum UnitType "lagrangian::Field::UnitType":
         kMetric "lagrangian::Field::kMetric"
         kAngular "lagrangian::Field::kAngular"
-    
+
     cdef cppclass Field "lagrangian::Field":
         Field()
         libcpp.bool Compute(double, double, double, double, double) except+
@@ -123,7 +136,7 @@ cdef extern from "reader.hpp" nogil:
         int ix1()
         int iy0()
         int iy1()
-    
+
     cdef cppclass Reader "lagrangian::Reader":
         void Open(libcpp.string.string) except+
         void Load(libcpp.string.string, libcpp.string.string) except+
@@ -168,7 +181,7 @@ cdef extern from "lagrangian/runge_kutta.hpp" nogil:
                             double,
                             double,
                             CellProperties) except+
- 
+
 
 cdef extern from "lagrangian/stencil.hpp" nogil:
     cdef cppclass Iterator "lagrangian::Iterator":
@@ -241,8 +254,7 @@ cdef extern from "lagrangian/integration.hpp" nogil:
         double get_lambda2()
         double get_theta1()
         double get_theta2()
-        
-    
+
     cdef cppclass FiniteLyapunovExponentsIntegration "lagrangian::FiniteLyapunovExponentsIntegration"(Integration):
         FiniteLyapunovExponentsIntegration(DateTime,
                                            DateTime,
@@ -320,7 +332,7 @@ cdef inline DateTime from_pydatetime(cpython.datetime.datetime datetime):
                 cpython.datetime.PyDateTime_DATE_GET_SECOND(datetime),
                 0)
         boost.date_time.posix_time.ptime ptime
-        
+
     duration += boost.date_time.posix_time.microseconds(
         cpython.datetime.PyDateTime_DATE_GET_MICROSECOND(datetime))
     ptime = boost.date_time.posix_time.ptime(date, duration)
@@ -352,7 +364,7 @@ cdef inline boost.date_time.posix_time.time_duration from_pytimedelta(
         int days
         libcpp.bool is_negative
         boost.date_time.posix_time.time_duration duration
-    
+
     days = cpython.datetime.timedelta_days(delta)
     is_negative = days < 0
     if is_negative:

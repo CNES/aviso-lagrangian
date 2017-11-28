@@ -5,22 +5,12 @@ Python API
 
 Library allows to compute Lagrangian analysis with Python.
 
+Physical quantity units
+-----------------------
 
-.. autoclass:: lagrangian.LatitudeUnit()
-    :show-inheritance:
+.. py:class:: lagrangian.LatitudeUnit()
 
-     .. py:method:: __call__(unit)
-
-        Checks if the unit can define this type of axis.
-
-        :param unit: Unit to check
-        :type unit: str
-        :return: if the unit can define this type of axis
-        :rtype: bool
-
-
-.. autoclass:: lagrangian.LongitudeUnit()
-    :show-inheritance:
+    Bases: object
 
      .. py:method:: __call__(unit)
 
@@ -31,6 +21,18 @@ Library allows to compute Lagrangian analysis with Python.
         :return: if the unit can define this type of axis
         :rtype: bool
 
+.. py:class:: lagrangian.LongitudeUnit()
+
+    Bases: object
+
+     .. py:method:: __call__(unit)
+
+        Checks if the unit can define this type of axis.
+
+        :param unit: Unit to check
+        :type unit: str
+        :return: if the unit can define this type of axis
+        :rtype: bool
 
 .. py:class:: lagrangian.AxisType
 
@@ -60,10 +62,28 @@ Library allows to compute Lagrangian analysis with Python.
 
         Y axis
 
+Spatial and temporal axes
+-------------------------
 
-.. autoclass:: lagrangian.Axis(points, axis_type, unit=None)
-    :show-inheritance:
-    :members: type, is_regular, units, start, increment, __eq__, __ne__
+.. py:class:: lagrangian.Axis(points, axis_type, unit=None)
+
+    Bases: object
+
+    A coordinate axis is a Variable that specifies one of the coordinates
+    of a Variable's values.
+
+    Mathematically it is a vector function F from index space to Sn: ::
+
+        F(i, j, k,...) -> (S1, S2, ...Sn)
+
+    where i, j, k are integers, and S is the set of reals (R).
+
+    The components of F are just its coordinate axes: ::
+
+        F = (A1, A2, ...An)
+         A1(i, j, k, ...) -> S1
+         A2(i, j, k, ...) -> S1
+         An(i, j, k, ...) -> Sn
 
     :param points: axis values
     :type points: numpy.ndarray
@@ -72,29 +92,65 @@ Library allows to compute Lagrangian analysis with Python.
     :param unit: Unit of the axis
     :type unit: str
 
-    .. automethod:: lagrangian.Axis.get_coordinate_value(index)
+    .. py:attribute:: increment
+
+        Get increment value if is_regular
+
+    .. py::attribute is_regular
+
+        The axis values are spaced regularly. Return true if:
+
+            value(i) = self.start + i * self.increment
+
+    .. py:attribute:: start
+
+        Get starting value if is_regular
+
+    .. py:attribute:: type
+
+        Get type of axis
+
+    .. py:attribute units
+
+        Get the unit string for this axis
+
+    .. py:method:: lagrangian.Axis.get_coordinate_value(index)
+
+        Get the ith coordinate value.
 
         :param index: which coordinate. Between 0 and get_num_elements()-1 inclusive
         :type index: int
         :return: coordinate value
         :rtype: float
 
-    .. automethod:: lagrangian.Axis.get_min_value()
+    .. py:method:: lagrangian.Axis.get_min_value()
+
+        Get the minimum coordinate value
 
         :return: minimum coordinate value
         :rtype: float
 
-    .. automethod:: lagrangian.Axis.get_max_value()
+    .. py:method:: lagrangian.Axis.get_max_value()
+
+        Get the maximum coordinate value
 
         :return: maximum coordinate value
         :rtype: float
 
-    .. automethod:: lagrangian.Axis.get_num_elements()
+    .. py:method:: lagrangian.Axis.get_num_elements()
+
+        Get the number of values for this axis
 
         :return: Get the number of values for this axis
         :rtype: int
 
-    .. automethod:: lagrangian.Axis.find_index(coordinate)
+    .. py:method:: lagrangian.Axis.find_index(coordinate)
+
+        Given a coordinate position, find what element contains it.
+        This mean that: ::
+
+             edge[i] <= pos < edge[i+1] (if values are ascending)
+             edge[i] > pos >= edge[i+1] (if values are descending)
 
         :param coordinate: position in this coordinate system
         :type coordinate: float
@@ -102,7 +158,10 @@ Library allows to compute Lagrangian analysis with Python.
             or -1 if it is located outside of the axis
         :rtype: int
 
-    .. automethod:: lagrangian.Axis.find_index_bounded(coordinate)
+    .. py:method:: lagrangian.Axis.find_index_bounded(coordinate)
+
+        Given a coordinate position, find what element contains it or
+        is closest to it.
 
         :param coordinate: position in this coordinate system
         :type coordinate: float
@@ -110,7 +169,9 @@ Library allows to compute Lagrangian analysis with Python.
             area
         :rtype: int
 
-    .. automethod:: lagrangian.Axis.normalize(coordinate, circle)
+    .. py:method:: lagrangian.Axis.normalize(coordinate, circle)
+
+        Standardization of longitude
 
         :param coordinate: position in this coordinate system
         :type coordinate: float
@@ -122,12 +183,20 @@ Library allows to compute Lagrangian analysis with Python.
 
         :rtype: float
 
-    .. automethod:: lagrangian.Axis.convert(unit)
+    .. py:method:: lagrangian.Axis.convert(unit)
+
+        Converts the axis data from unit `self.units` to unit. Can
+        be called only if the property `self.units` is not None
 
         :param unit: the new unit
         :type unit: str
-    
-    .. automethod:: lagrangian.Axis.find_indexes(coordinate)
+
+    .. py:method:: lagrangian.Axis.find_indexes(coordinate)
+
+        Given a coordinate position, find grids elements around it.
+        This mean that: ::
+
+            points[i0] <= coordinate < points[i1]
 
         :param coordinate: position in this coordinate system
         :type coordinate: float
@@ -135,9 +204,25 @@ Library allows to compute Lagrangian analysis with Python.
             None
         :rtype: tuple
 
+    .. py:method:: __eq__(rhs):
 
-.. autoclass:: lagrangian.DateTime(value)
-    :show-inheritance:
+        Returns self == rhs.
+
+    .. py:method:: __ne__(rhs):
+
+        Returns self != rhs.
+
+Dates and time
+--------------
+
+.. py:class:: lagrangian.DateTime(value)
+
+    Bases: object
+
+    A datetime object is a single object containing all the information from a
+    date object and a time object. Like a date object, datetime assumes the
+    current Gregorian calendar extended in both directions; like a time object,
+    datetime assumes there are exactly 3600*24 seconds in every day.
 
     :param value: Value used to build the new instance
     :type value: datetime.datetime, str
@@ -149,10 +234,19 @@ Library allows to compute Lagrangian analysis with Python.
         :return: Python object that represents the instance
         :rtype: datetime.datetime
 
+Velocity fields
+---------------
 
-.. autoclass:: lagrangian.Field(*args)
-    :show-inheritance:
-    :members: unit_type
+.. py:class:: lagrangian.Field(*args)
+
+    Bases: object
+
+    Abstract class defining a field where it is possible to calculate a
+    speed
+
+    .. py:attribute:: unit_type
+
+        Unit type used by this field.
 
     .. py:method:: get_unit()
 
@@ -161,15 +255,34 @@ Library allows to compute Lagrangian analysis with Python.
         :return: unit
         :rtype: str
 
+.. py:class:: lagrangian.PythonField(unit_type=cpp_lagrangian.kMetric)
 
-.. autoclass:: lagrangian.PythonField(*args)
-    :show-inheritance:
+    Bases: lagrangian.Field
 
+    Python base class for implementing the class a field where it is possible
+    to calculate a speed.
 
-.. autoclass:: lagrangian.Vonkarman(a=1, w=35.06, r0=0.35, tc=1, alpha=2, y0=0.3, l=2, u0=14)
-    :show-inheritance:
+    To implement this class, you must implement the method ``compute``
+    respecting the following signature: ::
 
-    .. automethod:: lagrangian.Vonkarman.compute(t, x, y)
+        def compute (double t, double x, double y):
+            return (u, v, defined)
+
+    where ``u`` and ``v`` are the velocities computed, and ``defined`` a boolean
+    indicating whether the calculated velocities are valid or not.
+
+    :param unit_type: Unit field
+    :type unit_type: lagrangian.UnitType
+
+.. py:class:: lagrangian.Vonkarman(a=1, w=35.06, r0=0.35, tc=1, alpha=2, y0=0.3, l=2, u0=14)
+
+    Bases: lagrangian.Field
+
+    Vonkarman field
+
+    .. py:method:: lagrangian.Vonkarman.compute(t, x, y)
+
+        Compute the field to the spatiotemporal position wanted
 
         :param t: Time expressed as a number of seconds elapsed since 1970.
         :type t: float
@@ -180,11 +293,18 @@ Library allows to compute Lagrangian analysis with Python.
         :return: u & v interpolated
         :rtype: tuple
 
+Numerical grids
+---------------
 
-.. autoclass:: lagrangian.CellProperties()
-    :show-inheritance:
+.. py:class:: lagrangian.CellProperties()
 
-    .. automethod:: lagrangian.CellProperties.contains(x, y)
+    Bases: object
+
+    Cell properties of the grid used for the interpolation.
+
+    .. py:method:: lagrangian.CellProperties.contains(x, y)
+
+        Test if the coordinate is in the cell.
 
         :param x: Longitude
         :type x: float
@@ -193,7 +313,9 @@ Library allows to compute Lagrangian analysis with Python.
         :return: True if the coordinate is in the cell.
         :rtype: bool
 
-    .. automethod:: lagrangian.CellProperties.update(x0, x1, y0, y1, ix0, ix1, iy0, iy1)
+    .. py:method:: lagrangian.CellProperties.update(x0, x1, y0, y1, ix0, ix1, iy0, iy1)
+
+        Update the cell properties
 
         :param x0: First longitude of the cell in degrees
         :type x0: float
@@ -212,41 +334,142 @@ Library allows to compute Lagrangian analysis with Python.
         :param iy1: Index of the last latitude in the grid
         :type iy1: int
 
-    .. autoattribute:: lagrangian.CellProperties.iy1
+    .. py:attribute:: lagrangian.CellProperties.iy1
+
+        Get the index of the last latitude in the grid
 
         :return: The index of the last latitude
         :type: int
 
-    .. autoattribute:: lagrangian.CellProperties.x0
+    .. py:attribute:: lagrangian.CellProperties.x0
+
+        Get the first longitude of the cell
 
         :return: The first longitude
         :type: float
 
-    .. autoattribute:: lagrangian.CellProperties.x1
+    .. py:attribute:: lagrangian.CellProperties.x1
+
+        Get the last longitude of the cell
 
         :return: The last longitude
         :type: float
 
-    .. autoattribute:: lagrangian.CellProperties.y0
+    .. py:attribute:: lagrangian.CellProperties.y0
+
+        Get the first latitude of the cell
 
         :return: The first latitude
         :type: float
 
-    .. autoattribute:: lagrangian.CellProperties.y1
+    .. py:attribute:: lagrangian.CellProperties.y1
+
+        Get the last latitude of the cell
 
         :return: The last latitude
         :type: float
 
+.. py:class:: lagrangian.MapProperties(nx, ny, x_min, y_min, step)
 
-.. autoclass:: lagrangian.RungeKutta(size_of_interval, field)
-    :show-inheritance:
+    Bases: object
+
+    Properties of a regular grid
+
+    :param nx: Number of longitudes
+    :type nx: int
+    :param ny: Number of latitudes
+    :type ny: int
+    :param x_min: Minimal longitude
+    :type x_min: float
+    :param y_min: Minimal latitude
+    :type y_min: float
+    :param step: Step between two consecutive longitudes and latitudes
+    :type step: float
+
+    .. py:method:: lagrangian.MapProperties.get_x_value(idx)
+
+        Get the longitude value
+
+        :param idx: Index of the longitude in the grid
+        :type idx: int
+        :return: The longitude
+        :type: float
+
+    .. py:method:: lagrangian.MapProperties.get_y_value(idx)
+
+        Get the latitude value
+
+        :param idx: Index of the latitude in the grid
+        :type idx: int
+        :return: The latitude
+        :type: float
+
+    .. py:attribute:: lagrangian.MapProperties.nx
+
+        Get the number of longitudes in the grid
+
+        :return: The number of longitudes
+        :rtype: int
+
+    .. py:attribute:: lagrangian.MapProperties.ny
+
+        Get the number of latitudes in the grid
+
+        :return: The number of latitudes
+        :rtype: int
+
+    .. py:attribute:: lagrangian.MapProperties.step
+
+        Get the step between two consecutive longitudes and latitudes
+
+        :return: The step
+        :rtype: float
+
+    .. py:attribute:: lagrangian.MapProperties.x_min
+
+        Get the minimal longitude
+
+        :return: The minimal longitude
+        :rtype: float
+
+    .. py:attribute:: lagrangian.MapProperties.y_min
+
+        Get the minimal latitude
+
+        :return: The minimal latitude
+        :rtype: float
+
+    .. py:method:: lagrangian.MapProperties.get_x_axis()
+
+        Get X axis values
+
+        :return: X axis values
+        :rtype: numpy.ndarray
+
+    .. py:method:: lagrangian.MapProperties.get_y_axis()
+
+        Get Y axis values
+
+        :return: Y axis values
+        :rtype: numpy.ndarray
+
+Runge Kutta
+-----------
+
+.. py:class:: lagrangian.RungeKutta(size_of_interval, field)
+
+    Bases: object
+
+    Fourth-order Runge-Kutta method
 
     :param size_of_interval: Number of time interval
     :type size_of_interval: float
     :param field: Field reader
     :type field: lagrangian.Field
 
-    .. automethod:: lagrangian.RungeKutta.compute(t, x, y, cell=None)
+    .. py:method:: lagrangian.RungeKutta.compute(t, x, y, cell=None)
+
+        Move a point in a field
 
         :param t: Time in number of seconds elapsed since 1970
         :type t: float
@@ -261,9 +484,140 @@ Library allows to compute Lagrangian analysis with Python.
             position
         :rtype: tuple
 
+Stencils
+--------
 
-.. autoclass:: lagrangian.Iterator(begin, end, inc)
-    :show-inheritance:
+.. py:class:: lagrangian.Position()
+
+    Bases: object
+
+    Define the position of N points Mₖ = (xₖ, yₖ): ::
+
+                Mₖ₊₁
+                |
+        Mₖ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mₖ
+                |
+                Mₖ₊ₙ
+
+    .. py:method:: lagrangian.Position.get_xi(idx)
+
+        Get the longitude of the point idx
+
+        :param idx: position
+        :type idx: int
+        :return: The longitude in degrees
+        :rtype: float
+
+    .. py:method:: lagrangian.Position.get_yi(idx)
+
+        Get the latitude of the point idx
+
+        :param idx: position
+        :type idx: int
+        :return: The latitude in degrees
+        :rtype: float
+
+    .. py:attribute:: lagrangian.Position.time
+
+        Get the time at the end of the integration
+
+        :return: The time expressed in number of seconds elapsed since 1970
+        :rtype: float
+
+    .. py:attribute:: lagrangian.Position.completed
+
+        Test if the integration is over
+
+        :return: True if the integration is over
+        :rtype: bool
+
+    .. py:method:: lagrangian.Position.set_completed()
+
+        Indicate that the integration is complete.
+
+    .. py:method:: lagrangian.Position.missing()
+
+        Set the instance to represent a missing position.
+
+    .. py:method:: lagrangian.Position.is_missing()
+
+        Test if the integration is defined.
+
+        :return: True if the integration is defined
+        :rtype: bool
+
+    .. py:method:: lagrangian.Position.max_distance()
+
+        Compute the distance max
+
+        :return: The max distance
+        :rtype: float
+
+    .. py:method:: lagrangian.Position.compute(rk, it, cell)
+
+        To move a particle with a velocity field.
+
+        :param rk: Runge-Kutta handler
+        :type rk: lagrangian.RungeKutta
+        :param it: Iterator
+        :type it: lagrangian.Iterator
+        :param cell: Cell properties of the grid used for the interpolation.
+        :type cell: lagrangian.CellProperties
+        :return: True if the particle could be moved otherwise false
+        :rtype: bool
+
+    .. py:method:: lagrangian.Position.strain_tensor()
+
+        TODO
+
+.. py:class:: lagrangian.Triplet(x, y, delta)
+
+    Bases: lagrangian.Position
+
+    Define the position of 3 points
+
+    :param x: Longitude of the initial point
+    :type x: float
+    :param y: Latitude of the initial point
+    :type y: float
+    :param delta: Initial initial separation in degrees of neighboring
+        particles
+    :type delta: float
+
+.. py:class:: lagrangian.Quintuplet(x, y, delta)
+
+    Bases: lagrangian.Position
+
+    Define the position of 5 points
+
+    :param x: Longitude of the initial point
+    :type x: float
+    :param y: Latitude of the initial point
+    :type y: float
+    :param delta: Initial initial separation in degrees of neighboring
+        particles
+    :type delta: float
+
+.. py:class:: lagrangian.Stencil
+
+    Type of stencils known
+
+    .. py:attribute:: kTriplet
+
+        Define a stencil with 3 points
+
+    .. py:attribute:: kQuintuplet
+
+        Define a stencil with 5 points
+
+Integration
+-----------
+
+.. py:class:: lagrangian.Iterator(begin, end, inc)
+
+    Bases: object
+
+    Definition of an iterator over a time period
 
     :param begin: Begin of the period expressed in number of seconds
         elapsed since 1970
@@ -281,112 +635,27 @@ Library allows to compute Lagrangian analysis with Python.
         :return: The number of seconds elapsed since 1970
         :rtype: float
 
+.. py:class:: lagrangian.AbstractIntegration(*args)
 
-.. autoclass:: lagrangian.Position()
-    :show-inheritance:
+    Handles the time integration
 
-    .. automethod:: lagrangian.Position.get_xi(idx)
+    .. py:method:: lagrangian.Integration.get_iterator()
 
-        :param idx: position
-        :type idx: int
-        :return: The longitude in degrees
-        :rtype: float
-
-    .. automethod:: lagrangian.Position.get_yi(idx)
-
-        :param idx: position
-        :type idx: int
-        :return: The latitude in degrees
-        :rtype: float
-
-    .. autoattribute:: lagrangian.Position.time
-
-        :return: The time expressed in number of seconds elapsed since 1970
-        :rtype: float
-
-    .. autoattribute:: lagrangian.Position.completed
-
-        :return: True if the integration is over
-        :rtype: bool
-
-    .. automethod:: lagrangian.Position.set_completed()
-
-    .. automethod:: lagrangian.Position.missing()
-
-    .. automethod:: lagrangian.Position.is_missing(self)
-
-        :return: True if the integration is defined
-        :rtype: bool
-
-    .. automethod:: lagrangian.Position.max_distance()
-
-        :return: The max distance
-        :rtype: float
-
-    .. automethod:: lagrangian.Position.compute(rk, it, cell)
-
-        :param rk: Runge-Kutta handler
-        :type rk: lagrangian.RungeKutta
-        :param it: Iterator
-        :type it: lagrangian.Iterator
-        :param cell: Cell properties of the grid used for the interpolation.
-        :type cell: lagrangian.CellProperties
-        :return: True if the particle could be moved otherwise false
-        :rtype: bool
-
-    .. automethod:: lagrangian.Position.strain_tensor()
-
-
-.. autoclass:: lagrangian.Triplet(x, y, delta)
-    :show-inheritance:
-
-    :param x: Longitude of the initial point
-    :type x: float
-    :param y: Latitude of the initial point
-    :type y: float
-    :param delta: Initial initial separation in degrees of neighboring
-        particles
-    :type delta: float
-
-
-.. autoclass:: lagrangian.Quintuplet(x, y, delta)
-    :show-inheritance:
-
-    :param x: Longitude of the initial point
-    :type x: float
-    :param y: Latitude of the initial point
-    :type y: float
-    :param delta: Initial initial separation in degrees of neighboring
-        particles
-    :type delta: float
-
-
-.. py:class:: lagrangian.Stencil
-
-    Type of stencils known
-
-    .. py:attribute:: kTriplet
-
-        Define a stencil with 3 points
-
-    .. py:attribute:: kQuintuplet
-
-        Define a stencil with 5 points
-
-
-.. autoclass:: lagrangian.AbstractIntegration(*args)
-
-    .. automethod:: lagrangian.Integration.get_iterator()
+        Return an iterator that describes the integration period
 
         :return: The iterator
         :rtype: :py:class:`lagrangian::Iterator`
 
-    .. automethod:: lagrangian.Integration.fetch(t)
+    .. py:method:: lagrangian.Integration.fetch(t)
+
+        Perform the tasks before a new time step (eg load grids required)
 
         :param t: t Time step in seconds
         :type t: float
 
-    .. automethod:: lagrangian.Integration.compute(it, x0, x1)
+    .. py:method:: lagrangian.Integration.compute(it, x0, x1)
+
+        Calculate the new position of the particle
 
         :param it: Iterator
         :type it: :py:class:`lagrangian.Iterator`
@@ -399,22 +668,11 @@ Library allows to compute Lagrangian analysis with Python.
             position
         :rtype: tuple
 
+.. py:class:: lagrangian.Integration(start_time, end_time, delta_t, field)
 
-.. autoclass:: lagrangian.Integration(start_time, end_time, delta_t, field)
-    :show-inheritance:
+    Bases: lagrangian.AbstractIntegration
 
-    :param start_time: Start time of the integration (number of seconds elapsed 1970)
-    :type start_time: :py:class:`lagrangian.DateTime`
-    :param end_time: End date of the integration (number of seconds elapsed 1970)
-    :type end_time: :py:class:`lagrangian.DateTime`
-    :param delta_t: Time interval, in seconds
-    :type delta_t: :py:class:`datetime.timedelta`
-    :param field: Field to use for computing the velocity of a point.
-    :type field: :py:class:`lagrangian.Field`
-
-
-.. autoclass:: lagrangian.Path(start_time, end_time, delta_t, field)
-    :show-inheritance:
+    Handles the time integration
 
     :param start_time: Start time of the integration (number of seconds elapsed 1970)
     :type start_time: :py:class:`lagrangian.DateTime`
@@ -425,6 +683,23 @@ Library allows to compute Lagrangian analysis with Python.
     :param field: Field to use for computing the velocity of a point.
     :type field: :py:class:`lagrangian.Field`
 
+.. py:class:: lagrangian.Path(start_time, end_time, delta_t, field)
+
+    Bases: lagrangian.AbstractIntegration
+
+    Handles the movement of a particle using the Runge-Kutta method.
+
+    :param start_time: Start time of the integration (number of seconds elapsed 1970)
+    :type start_time: :py:class:`lagrangian.DateTime`
+    :param end_time: End date of the integration (number of seconds elapsed 1970)
+    :type end_time: :py:class:`lagrangian.DateTime`
+    :param delta_t: Time interval, in seconds
+    :type delta_t: :py:class:`datetime.timedelta`
+    :param field: Field to use for computing the velocity of a point.
+    :type field: :py:class:`lagrangian.Field`
+
+Lyapunov Exponents
+------------------
 
 .. py:class:: lagrangian.Mode
 
@@ -438,83 +713,85 @@ Library allows to compute Lagrangian analysis with Python.
 
         Finite Time Lyapunov Exponent
 
+.. py:class:: lagrangian.FiniteLyapunovExponents()
 
-.. autoclass:: lagrangian.FiniteLyapunovExponents(start_time, end_time, delta_t, mode, min_separation, delta, field)
-    :show-inheritance:
+    Bases: object
 
-    :param start_time: Start time of the integration (number of seconds elapsed 1970)
-    :type start_time: :py:class:`lagrangian.DateTime`
-    :param end_time: End date of the integration (number of seconds elapsed 1970)
-    :type end_time: :py:class:`lagrangian.DateTime`
-    :param delta_t: Time interval, in seconds
-    :type delta_t: :py:class:`datetime.timedelta`
-    :param mode: Integration mode
-    :type mode: :py:class:`lagrangian.Mode`
-    :param min_separation: Minimal separation in degrees
-    :type min_separation: float
-    :param delta: The gap between two consecutive dots, in degrees, of the grid
-    :type delta: float
-    :param field: Field to use for computing the velocity of a point.
-    :type field: :py:class:`lagrangian.Field`
+    Storing Lyapunov coefficients calculated.
 
-    .. automethod:: lagrangian.FiniteLyapunovExponents.set_initial_point(y, y, stencil)
+    .. seealso::
 
-        :param x: Longitude in degrees
-        :type x: float
-        :param y: Latitude in degrees
-        :type y: float
-        :param stencil: The type of stencil choosen
-        :type stencil: lagrangian.Stencil
-        :return: The position of the initial point
-        :rtype: :py:class:`lagrangian.Position`
+        FiniteLyapunovExponentsIntegration
 
-    .. autoattribute:: lagrangian.FiniteLyapunovExponents.mode
+    .. py:attribute:: lagrangian.FiniteLyapunovExponents.lambda1
 
-        :return: The mode of the integration
-        :rtype: lagragian.Mode
+        Get the FLE associated to the maximum eigenvalue of the Cauchy-Green
+        strain tensor
 
-    .. automethod:: lagrangian.FiniteLyapunovExponents.compute(it, position, cell)
-
-        :param it: Iterator
-        :type it: lagrangian.Iterator
-        :param position: Position of the particle
-        :type position: lagrangian.Position
-        :param cell: Cell properties of the grid used for the interpolation
-        :type cell: lagrangian.CellProperties
-        :return: True if the integration is defined otherwise false
-        :rtype: bool
-
-    .. automethod:: lagrangian.FiniteLyapunovExponents.exponents(position)
-
-        :param position: Position of the particle
-        :type position: lagrangian.Position
-        :return: True if the exponents are defined
-        :rtype: bool
-
-    .. autoattribute:: lagrangian.FiniteLyapunovExponents.lambda1
-
-        :return: λ₁ (unit 1/day)
+        :return: λ₁ (unit 1/sec)
         :type: float
 
-    .. autoattribute:: lagrangian.FiniteLyapunovExponents.lambda2
+    .. py:attribute:: lagrangian.FiniteLyapunovExponents.lambda2
 
-        :return: λ₂ (unit 1/day)
+        Get the FLE associated to the minimum eigenvalue of the Cauchy-Green
+        strain tensor
+
+        :return: λ₂ (unit 1/sec)
         :type: float
 
-    .. autoattribute:: lagrangian.FiniteLyapunovExponents.theta1
+    .. py:attribute:: lagrangian.FiniteLyapunovExponents.theta1
+
+        Get the orientation of the eigenvector associated to the maximum
+        eigenvalue of the Cauchy-Green strain tensor
 
         :return: θ₁ (unit degrees)
         :type: float
 
-    .. autoattribute:: lagrangian.FiniteLyapunovExponents.theta2
+    .. py:attribute:: lagrangian.FiniteLyapunovExponents.theta2
+
+        Get the orientation of the eigenvector associated to the minimum
+        eigenvalue of the Cauchy-Green strain tensor
 
         :return: θ₂ (unit degrees)
         :type: float
 
+Velocity readers
+----------------
 
-.. autoclass:: lagrangian.Netcdf()
+.. py:class:: lagrangian.Netcdf()
 
-    .. py:method:: Interpolate(longitude, latitude, fill_value=0, cell=lagrangian.CellProperties.NONE)
+    Bases: object
+
+    Grid NetCDF CF reader.
+
+    The grid must contain at least one variable and two vectors defining the
+    axes of the longitudes and latitudes of the variable. For example : ::
+
+        dimensions:
+          y = 915 ;
+          x = 1080 ;
+        variables:
+           double y(y) ;
+               y:long_name = "Latitudes" ;
+               y:units = "degrees_north" ;
+           double x(x) ;
+               x:long_name = "Longitudes" ;
+               x:units = "degrees_east" ;
+           float u(x, y) ;
+               u:_FillValue = 999f ;
+               u:long_name = "U" ;
+               u:units = "cm/s" ;
+               u:date = "2012-01-01 00:00:00.000000 UTC" ;
+            float v(y, x) ;
+               v:_FillValue = 999f ;
+               v:long_name = "U" ;
+               v:units = "cm/s" ;
+               V:date = "2012-01-01 00:00:00.000000 UTC" ;
+
+    .. note:: The variable to be read must set an attribute named "date" that
+        define the date of data contained in the variable.
+
+    .. py:method:: interpolate(longitude, latitude, fill_value=0, cell=lagrangian.CellProperties.NONE)
 
         Computes the velocity of the grid point requested
 
@@ -527,7 +804,7 @@ Library allows to compute Lagrangian analysis with Python.
         :param cell: Cell properties of the grid used for the interpolation.
         :type cell: lagrangian.CellProperties
 
-    .. py:method:: Load(name, unit)
+    .. py:method:: load(name, unit)
 
         Load data into memory
 
@@ -536,16 +813,16 @@ Library allows to compute Lagrangian analysis with Python.
         :param unit: Unit of data loaded into memory.
         :type unit: str
 
-    .. py:method:: Open(filename)
+    .. py:method:: open(filename)
 
         Opens a file in read-only.
 
         :param filename: Path to the grid
         :type filename: str
 
+.. py:class:: lagrangian.PythonReader()
 
-.. autoclass:: lagrangian.PythonReader()
-
+    Python base class for implementing a velocity reader fields.
 
 .. py:class:: lagrangian.ReaderType
 
@@ -555,39 +832,84 @@ Library allows to compute Lagrangian analysis with Python.
 
         The velocity field is read from NetCDF grids.
 
+.. py:class:: lagrangian.Factory()
 
-.. autoclass:: lagrangian.Factory()
+    Reader Factory
 
-    .. automethod:: lagrangian.Factory.new_reader(reader_type)
+    .. py:staticmethod:: lagrangian.Factory.new_reader(reader_type)
 
         :param reader_type: Name of the grid who contains data
-        :type reader_type: Reader type
+        :type reader_type: ReaderType
         :return: An instance of a reader
         :rtype: lagrangian.AbstractReader
 
+.. py:class:: lagrangian.TimeSerie(configuration_file, unit_type=lagrangian.kMetric, reader_type=lagrangian.kNetCDF)
 
-.. autoclass:: lagrangian.TimeSerie(configuration_file, unit_type=lagrangian.kMetric, reader_type=lagrangian.kNetCDF)
-    :show-inheritance:
+    Bases: lagrangian.Field
+
+    Time series of velocity field
 
     :param configuration_file: The configuration file contains the list of
-        files to take into account to interpolate speeds.
+        files to take into account to interpolate speeds, the expected
+        syntax is :
+
+        .. code-block:: cfg
+
+            U = <path to the NetCDF file>
+            U = ...
+            V = <path to the NetCDF file>
+            V = ...
+            U_NAME = <name of the NetCDF variable>
+            V_NAME = <name of the NetCDF variable>
+            FILL_VALUE = <value>
+
+        Keys representing the following data:
+
+        * ``U`` defines the netCDF files containing the eastward velocities.
+        * ``V`` defines the netCDF files containing the northward velocities.
+        * ``U_NAME`` defines the NetCDF variable containing the eastward velocities.
+        * ``V_NAME`` defines the NetCDF variable containing the northward velocities.
+        * ``FILL_VALUE`` value to be taken into account when the reader encounters an
+          undefined value. This value must be ``0`` if you do not wish to generate
+          undefined values ​​when integrating or ``nan`` if the calculation must
+          generate undefined values​​.
+
+        The path to the NetCDF file must contain an absolute path, for example:
+
+        .. code-block:: cfg
+
+            U = /home/lagrangian/file.nc
+
+        The path may also contain environment variables using the shell syntax, for
+        example:
+
+        .. code-block:: cfg
+
+            U = ${DATA}/file.nc
+
     :type configuration_file: str
     :param unit_type: Unit fields.
     :type unit_type: lagrangian.UnitType
     :param reader_type: The reader used to read grids containing speeds.
     :type reader_type: lagrangian.ReaderType
 
-    .. automethod:: lagrangian.TimeSerie.start_time()
+    .. py:method:: lagrangian.TimeSerie.start_time()
+
+        Returns the date of the first grid constituting the time series.
 
         :return: the date of the first date
         :type: datetime.datetime
 
-    .. automethod:: lagrangian.TimeSerie.end_time()
+    .. py:method:: lagrangian.TimeSerie.end_time()
+
+        Returns the date of the last grid constituting the time series.
 
         :return: the date of the last date
         :type: datetime.datetime
 
-    .. automethod:: lagrangian.TimeSerie.compute(t, x, y, cell=None)
+    .. py:method:: lagrangian.TimeSerie.compute(t, x, y, cell=None)
+
+        Interpolates the velocity to the wanted spatio temporal position.
 
         :param t: Time expressed as a number of seconds elapsed since 1970.
         :type t: float
@@ -602,7 +924,10 @@ Library allows to compute Lagrangian analysis with Python.
             undefined for the asked position
         :rtype: tuple
 
-    .. automethod:: lagrangian.TimeSerie.fetch(t0, t1)
+    .. py:method:: lagrangian.TimeSerie.fetch(t0, t1)
+
+        Loads the grids used to interpolate the velocities in the
+        interval [t0, t1]
 
         :param t0: First date of the interval expressed as a number of seconds
             elapsed since 1970.
@@ -611,73 +936,14 @@ Library allows to compute Lagrangian analysis with Python.
             elapsed since 1970.
         :type t1: float
 
+Map of Lyapunov Exponents
+-------------------------
 
-.. autoclass:: lagrangian.MapProperties(nx, ny, x_min, y_min, step)
-    :show-inheritance:
+.. py:class:: lagrangian.MapOfFiniteLyapunovExponents(map_properties, fle, stencil=langrangian.kTriplet, netcdf_reader=None)
 
-    :param nx: Number of longitudes
-    :type nx: int
-    :param ny: Number of latitudes
-    :type ny: int
-    :param x_min: Minimal longitude
-    :type x_min: float
-    :param y_min: Minimal latitude
-    :type y_min: float
-    :param step: Step between two consecutive longitudes and latitudes
-    :type step: float
+    Bases: object
 
-    .. automethod:: lagrangian.MapProperties.get_x_value(idx)
-
-        :param idx: Index of the longitude in the grid
-        :type idx: int
-        :return: The longitude
-        :type: float
-
-    .. automethod:: lagrangian.MapProperties.get_y_value(idx)
-
-        :param idx: Index of the latitude in the grid
-        :type idx: int
-        :return: The latitude
-        :type: float
-
-    .. autoattribute:: lagrangian.MapProperties.nx
-
-        :return: The number of longitudes
-        :rtype: int
-
-    .. autoattribute:: lagrangian.MapProperties.ny
-
-        :return: The number of latitudes
-        :rtype: int
-
-    .. autoattribute:: lagrangian.MapProperties.step
-
-        :return: The step
-        :rtype: float
-
-    .. autoattribute:: lagrangian.MapProperties.x_min
-
-        :return: The minimal longitude
-        :rtype: float
-
-    .. autoattribute:: lagrangian.MapProperties.y_min
-
-        :return: The minimal latitude
-        :rtype: float
-
-    .. automethod:: lagrangian.MapProperties.get_x_axis()
-
-        :return: X axis values
-        :rtype: numpy.ndarray
-
-    .. automethod:: lagrangian.MapProperties.get_y_axis()
-
-        :return: Y axis values
-        :rtype: numpy.ndarray
-
-
-.. autoclass:: lagrangian.MapOfFiniteLyapunovExponents(map_properties, fle, stencil=langrangian.kTriplet, netcdf_reader=None)
-    :show-inheritance:
+    Handles a map of Finite Size or Time Lyapunov Exponents
 
     :param map_properties: Properties of the regular grid to create
     :type map_properties: lagrangian.MapProperties
@@ -693,55 +959,77 @@ Library allows to compute Lagrangian analysis with Python.
         calculation step.
     :type netcdf_reader: lagrangian.Netcdf
 
-    .. automethod:: lagrangian.MapOfFiniteLyapunovExponents.compute()
+    .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.compute()
+
+        Compute the map
 
         .. note::
 
             You can set the environment variable ``OMP_NUM_THREADS`` to enable
             parallelization of code with the number of threads defined.
 
-    .. automethod:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_lambda1(fill_value)
+    .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_lambda1(fill_value)
+
+        Get the map of the FLE associated to the maximum eigenvalues of
+        Cauchy-Green strain tensor
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map of λ₁ (unit 1/day)
+        :return: The map of λ₁ (unit 1/sec)
         :rtype: numpy.ndarray
 
-    .. automethod:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_lambda2(fill_value)
+    .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_lambda2(fill_value)
+
+        Get the map of the FLE associated to the minimum eigenvalues of
+        Cauchy-Green strain tensor
 
         :param fill_value: value used for missing cells
         :type fill_value: float
-        :return: The map of λ₂ (unit 1/day)
+        :return: The map of λ₂ (unit 1/sec)
         :rtype: numpy.ndarray
 
-    .. automethod:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_theta1(fill_value)
+    .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_theta1(fill_value)
+
+        Get the map of the orientation of the eigenvectors associated
+        to the maximum eigenvalues of Cauchy-Green strain tensor
 
         :param fill_value: value used for missing cells
         :type fill_value: float
         :return: The map of θ₁ (unit degrees)
         :rtype: numpy.ndarray
 
-    .. automethod:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_theta2(fill_value)
+    .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.get_map_of_theta2(fill_value)
+
+        Get the map of the orientation of the eigenvectors associated
+        to the minimum eigenvalues of Cauchy-Green strain tensor
 
         :param fill_value: value used for missing cells
         :type fill_value: float
         :return: The map of θ₂ (unit degrees)
         :rtype: numpy.ndarray
 
+Utility functions
+-----------------
 
-.. autofunction:: lagrangian.debug(msg)
+.. py:function:: lagrangian.debug(msg)
+
+    Display a debugging message
 
     :param msg: Message to display
     :type msg: str
 
 
-.. autofunction:: lagrangian.set_verbose(value)
+.. py:function:: lagrangian.set_verbose(value)
+
+    Enable or disable verbose mode
 
     :param value: True to enable verbose mode
     :type value: bool
 
 
-.. autofunction:: lagrangian.version()
+.. py:function:: lagrangian.version()
+
+    Return the version number
 
     :return: Version number
     :rtype: str

@@ -2,7 +2,7 @@
  This file is part of lagrangian library.
 
  lagrangian is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
+ it under the terms of GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
@@ -11,11 +11,11 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
+ You should have received a copy of GNU Lesser General Public License
  along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/thread.hpp>
+#include <thread>
 
 // ___________________________________________________________________________//
 
@@ -23,145 +23,123 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian
-{
-namespace map
-{
+namespace lagrangian {
+namespace map {
 
-void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
-        const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil)
-{
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
-    {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
-        {
-            // If the user restart initialization, it must release the
-            // allocated resources
-            Position* position = map_.GetItem(ix, iy);
-            if (position)
-                delete position;
-            
-            // Allocate and store the new stencil
-            position = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy),
-                    stencil);
-            map_.SetItem(ix, iy, position);
-            indexes_.push_back(Index(ix, iy));
-        }
+void FiniteLyapunovExponents::Initialize(
+    lagrangian::FiniteLyapunovExponentsIntegration& fle,
+    const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
+  for (auto ix = 0; ix < map_.get_nx(); ++ix) {
+    for (auto iy = 0; iy < map_.get_ny(); ++iy) {
+      // If the user restart initialization, it must release the
+      // allocated resources
+      auto position = map_.GetItem(ix, iy);
+      if (position) delete position;
+
+      // Allocate and store the new stencil
+      position =
+          fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+      map_.SetItem(ix, iy, position);
+      indexes_.push_back(Index(ix, iy));
     }
+  }
 }
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::Initialize(lagrangian::FiniteLyapunovExponentsIntegration& fle,
-        lagrangian::reader::Netcdf& reader,
-        const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil)
-{
-    CellProperties cell;
+void FiniteLyapunovExponents::Initialize(
+    lagrangian::FiniteLyapunovExponentsIntegration& fle,
+    lagrangian::reader::Netcdf& reader,
+    const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
+  CellProperties cell;
 
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
-    {
-        for (int iy = 0; iy < map_.get_ny(); ++iy)
-        {
-            // If the user restart initialization, it must release the
-            // allocated resources
-            Position* position = map_.GetItem(ix, iy);
-            if (position)
-                delete position;
+  for (auto ix = 0; ix < map_.get_nx(); ++ix) {
+    for (auto iy = 0; iy < map_.get_ny(); ++iy) {
+      // If the user restart initialization, it must release the
+      // allocated resources
+      auto position = map_.GetItem(ix, iy);
+      if (position) delete position;
 
-            // Allocate and store the new stencil
-            position = fle.SetInitialPoint(map_.GetXValue(ix),
-                    map_.GetYValue(iy),
-                    stencil);
+      // Allocate and store the new stencil
+      position =
+          fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy), stencil);
 
-            if (std::isnan(reader.Interpolate(map_.GetXValue(ix),
-                    map_.GetYValue(iy),
-                    std::numeric_limits<double>::quiet_NaN(),
-                    cell)))
-                position->set_completed();
-            else
-                indexes_.push_back(Index(ix, iy));
-            map_.SetItem(ix, iy, position);
-        }
+      if (std::isnan(reader.Interpolate(
+              map_.GetXValue(ix), map_.GetYValue(iy),
+              std::numeric_limits<double>::quiet_NaN(), cell)))
+        position->set_completed();
+      else
+        indexes_.push_back(Index(ix, iy));
+      map_.SetItem(ix, iy, position);
     }
+  }
 }
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::ComputeHt(Splitter<Index>& splitter,
-        lagrangian::FiniteLyapunovExponentsIntegration& fle,
-        Iterator& it)
-{
-    // Creating an object containing the properties of the interpolation
-    CellProperties cell;
+void FiniteLyapunovExponents::ComputeHt(
+    Splitter<Index>& splitter,
+    lagrangian::FiniteLyapunovExponentsIntegration& fle, Iterator& it) {
+  // Creating an object containing the properties of the interpolation
+  CellProperties cell;
 
-    std::list<Index>::iterator first = splitter.begin();
-    while (first != splitter.end())
-    {
-        const int ix = first->get_i();
-        const int iy = first->get_j();
+  auto first = splitter.begin();
+  while (first != splitter.end()) {
+    auto ix = first->get_i();
+    auto iy = first->get_j();
+    auto position = map_.GetItem(ix, iy);
 
-        lagrangian::Position* position = map_.GetItem(ix, iy);
-
-        if (!fle.Compute(it, position, cell))
-        {
-            position->Missing();
-        }
-        else
-        {
-            if (fle.Separation(position))
-            {
-                position->set_completed();
-            }
-        }
-        ++first;
+    if (!fle.Compute(it, position, cell)) {
+      position->Missing();
+    } else {
+      if (fle.Separation(position)) {
+        position->set_completed();
+      }
     }
+    ++first;
+  }
 }
 
 // ___________________________________________________________________________//
 
-void FiniteLyapunovExponents::Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle)
-{
-    Iterator it = fle.GetIterator();
-    boost::thread_group threads;
+void FiniteLyapunovExponents::Compute(
+    lagrangian::FiniteLyapunovExponentsIntegration& fle) {
+  auto it = fle.GetIterator();
+  std::list<std::thread> threads;
 
-    // Number of cells to process
-    double items = map_.get_nx() * map_.get_ny();
+  // Number of cells to process
+  double items = map_.get_nx() * map_.get_ny();
+  auto splitters = indexes_.Split(num_threads_);
 
-    std::list<Splitter<Index> > splitters = indexes_.Split(num_threads_);
+  while (it.GoAfter()) {
+    fle.Fetch(it());
 
-    while (it.GoAfter())
-    {
-        fle.Fetch(it());
+    auto date =
+        DateTime(DateTime::FromUnixTime(it())).ToString("%Y-%m-%d %H:%M:%S");
 
-        std::string date = DateTime(DateTime::FromUnixTime(it())).ToString(
-                "%Y-%m-%d %H:%M:%S");
+    Debug(str(boost::format("Start time step %s (%d cells)") % date %
+              indexes_.size()));
 
-        Debug(str(boost::format("Start time step %s (%d cells)")
-                % date % indexes_.size()));
-
-        for (std::list<lagrangian::Splitter<Index> >::iterator its =
-                splitters.begin(); its != splitters.end(); ++its)
-        {
-            threads.create_thread(
-                    boost::bind(
-                            &lagrangian::map::FiniteLyapunovExponents::ComputeHt,
-                            this, *its, fle, it));
-        }
-
-        threads.join_all();
-
-        // Removing cells that are completed
-        splitters = indexes_.Erase(boost::bind(
-                        &FiniteLyapunovExponents::Completed, this, _1),
-                        num_threads_);
-
-        Debug(str(boost::format("Close time step %s (%.02f%% completed)")
-                % date % ((items - indexes_.size()) / items * 100)));
-
-        ++it;
+    for (auto& item : splitters) {
+      threads.emplace_back(
+          std::thread(&lagrangian::map::FiniteLyapunovExponents::ComputeHt,
+                      this, std::ref(item), std::ref(fle), std::ref(it)));
     }
+
+    for (auto& item : threads) item.join();
+    threads.clear();
+
+    // Removing cells that are completed
+    splitters = indexes_.Erase(std::bind(&FiniteLyapunovExponents::Completed,
+                                         this, std::placeholders::_1),
+                               num_threads_);
+
+    Debug(str(boost::format("Close time step %s (%.02f%% completed)") % date %
+              ((items - indexes_.size()) / items * 100)));
+
+    ++it;
+  }
 }
 
-} // namespace map
-} // namespace lagrangian
+}  // namespace map
+}  // namespace lagrangian

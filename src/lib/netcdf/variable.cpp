@@ -2,7 +2,7 @@
     This file is part of lagrangian library.
 
     lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
+    it under the terms of GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+    You should have received a copy of GNU Lesser General Public License
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -19,116 +19,100 @@
 
 // ___________________________________________________________________________//
 
-#include "lagrangian/units.hpp"
 #include "lagrangian/netcdf/cf.hpp"
 #include "lagrangian/netcdf/variable.hpp"
+#include "lagrangian/units.hpp"
 
 // ___________________________________________________________________________//
 
-namespace lagrangian
-{
-namespace netcdf
-{
+namespace lagrangian {
+namespace netcdf {
 
-bool Variable::GetDescription(std::string& desc) const
-{
-    Attribute attribute = FindAttributeIgnoreCase("long_name");
+bool Variable::GetDescription(std::string& desc) const {
+  Attribute attribute = FindAttributeIgnoreCase("long_name");
 
+  if (attribute != Attribute::MISSING && attribute.IsString())
+    desc = attribute.get_string();
+  else {
+    attribute = FindAttributeIgnoreCase("description");
     if (attribute != Attribute::MISSING && attribute.IsString())
+      desc = attribute.get_string();
+    else {
+      attribute = FindAttributeIgnoreCase("title");
+      if (attribute != Attribute::MISSING && attribute.IsString())
         desc = attribute.get_string();
-    else
-    {
-        attribute = FindAttributeIgnoreCase("description");
+      else {
+        attribute = FindAttributeIgnoreCase("standard_name");
         if (attribute != Attribute::MISSING && attribute.IsString())
-            desc = attribute.get_string();
-        else
-        {
-            attribute = FindAttributeIgnoreCase("title");
-            if (attribute != Attribute::MISSING && attribute.IsString())
-                desc = attribute.get_string();
-            else
-            {
-                attribute = FindAttributeIgnoreCase("standard_name");
-                if (attribute != Attribute::MISSING && attribute.IsString())
-                    desc = attribute.get_string();
-            }
-        }
+          desc = attribute.get_string();
+      }
     }
+  }
 
-    return attribute != Attribute::MISSING;
+  return attribute != Attribute::MISSING;
 }
 
 // ___________________________________________________________________________//
 
-bool Variable::GetUnitsString(std::string& units) const
-{
-    Attribute attribute = FindAttributeIgnoreCase("units");
-    if (attribute != Attribute::MISSING && attribute.IsString())
-    {
-        units = attribute.get_string();
-        boost::trim(units);
-        return true;
-    }
-    return false;
+bool Variable::GetUnitsString(std::string& units) const {
+  Attribute attribute = FindAttributeIgnoreCase("units");
+  if (attribute != Attribute::MISSING && attribute.IsString()) {
+    units = attribute.get_string();
+    boost::trim(units);
+    return true;
+  }
+  return false;
 }
 
 // ___________________________________________________________________________//
 
-void Variable::Read(std::vector<double>& data) const
-{
-    data.resize(GetSize());
-    ncvar_.getVar(&data[0]);
+void Variable::Read(std::vector<double>& data) const {
+  data.resize(GetSize());
+  ncvar_.getVar(&data[0]);
 
-    // Set "missing" data to nan
-    scale_missing_.SetMissingToNan(data);
+  // Set "missing" data to nan
+  scale_missing_.SetMissingToNan(data);
 
-    // Convert data with scale and offset
-    scale_missing_.ConvertScaleOffset(data);
+  // Convert data with scale and offset
+  scale_missing_.ConvertScaleOffset(data);
 }
 
 // ___________________________________________________________________________//
 
-void Variable::Read(std::vector<double>& data, const std::string& to) const
-{
-    std::string from;
+void Variable::Read(std::vector<double>& data, const std::string& to) const {
+  std::string from;
 
-    if (!GetUnitsString(from))
-        throw std::logic_error(name_ + ":" + CF::UNITS + ": no such attribute");
+  if (!GetUnitsString(from))
+    throw std::logic_error(name_ + ":" + CF::UNITS + ": no such attribute");
 
-    Read(data);
-    Units::GetConverter(from, to).Convert(data);
+  Read(data);
+  Units::GetConverter(from, to).Convert(data);
 }
 
 // ___________________________________________________________________________//
 
-Variable::Variable(const netCDF::NcVar& ncvar) :
-        name_(ncvar.getName()), ncvar_(ncvar)
-{
-    std::map<std::string, netCDF::NcVarAtt> atts = ncvar_.getAtts();
-    std::vector<netCDF::NcDim> dims = ncvar_.getDims();
+Variable::Variable(const netCDF::NcVar& ncvar)
+    : name_(ncvar.getName()), ncvar_(ncvar) {
+  // Set globals attributes
+  for (auto& item : ncvar_.getAtts())
+    attributes_.emplace_back(Attribute(item.second));
 
-    // Set globals attributes
-    for (std::map<std::string, netCDF::NcVarAtt>::iterator it = atts.begin();
-            it != atts.end(); ++it)
-        attributes_.push_back(Attribute(it->second));
+  // populates defined variables
+  for (auto& item : ncvar_.getDims()) {
+    auto size = item.getSize();
 
-    // populates defined variables
-    for (std::vector<netCDF::NcDim>::iterator it = dims.begin();
-            it != dims.end(); ++it)
-    {
-        shape_.push_back(it->getSize());
-        dimensions_.push_back(Dimension(it->getName(),
-                it->getSize(),
-                it->isUnlimited()));
-    }
+    shape_.push_back(size);
+    dimensions_.emplace_back(
+        Dimension(item.getName(), size, item.isUnlimited()));
+  }
 
-    // Set scale, offset, missing and invalid data from attributes
-    scale_missing_ = ScaleMissing(*this);
+  // Set scale, offset, missing and invalid data from attributes
+  scale_missing_ = ScaleMissing(*this);
 }
 
 // ___________________________________________________________________________//
 
 Variable const Variable::MISSING;
 
-} // namespace netcdf
-} // namespace lagrangian
+}  // namespace netcdf
+}  // namespace lagrangian

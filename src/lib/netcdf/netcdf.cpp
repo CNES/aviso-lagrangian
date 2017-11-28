@@ -2,7 +2,7 @@
     This file is part of lagrangian library.
 
     lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
+    it under the terms of GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
@@ -11,10 +11,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+    You should have received a copy of GNU Lesser General Public License
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/format.hpp>
 #include <stdexcept>
 
 // ___________________________________________________________________________//
@@ -23,33 +24,24 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian
-{
+namespace lagrangian {
 
-void Netcdf::Open(const std::string& filename)
-{
-    ncfile_ = boost::shared_ptr<netCDF::NcFile>(new netCDF::NcFile(filename,
-            netCDF::NcFile::read));
+void Netcdf::Open(const std::string& filename) {
+  try {
+    ncfile_ = std::shared_ptr<netCDF::NcFile>(
+        new netCDF::NcFile(filename, netCDF::NcFile::read));
 
-    std::multimap<std::string, netCDF::NcDim> dims = ncfile_->getDims();
-
-    for (std::multimap<std::string, netCDF::NcDim>::iterator it = dims.begin();
-            it != dims.end(); ++it)
-    {
-        netcdf::Dimension dim(it->second.getName(),
-                it->second.getSize(),
-                it->second.isUnlimited());
-
-        dimensions_.push_back(dim);
+    for (auto& item : ncfile_->getDims()) {
+      dimensions_.emplace_back(netcdf::Dimension(item.second.getName(),
+                                                 item.second.getSize(),
+                                                 item.second.isUnlimited()));
     }
 
-    std::multimap<std::string, netCDF::NcVar> vars = ncfile_->getVars();
-
-    for (std::multimap<std::string, netCDF::NcVar>::iterator it = vars.begin();
-            it != vars.end(); ++it)
-    {
-        variables_.push_back(netcdf::Variable(it->second));
-    }
+    for (auto& item : ncfile_->getVars())
+      variables_.emplace_back(netcdf::Variable(item.second));
+  } catch (netCDF::exceptions::NcException) {
+    throw std::runtime_error(
+        boost::str(boost::format("Couldn't open `%s' for reading") % filename));
+  }
 }
-
-}
+}  // namespace lagrangian
