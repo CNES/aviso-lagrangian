@@ -1,11 +1,11 @@
 package:
   name: lagrangian
-  version: "2.1.1"
+  version: "2.2.0"
 
 source:
-  #hg_url: https://bitbucket.org/cnes_aviso/lagrangian
-  #hg_tag: "2.1.1"
-  path: .
+  hg_url: https://bitbucket.org/cnes_aviso/lagrangian
+  hg_tag: "2.2.0"
+  # path: .
 
 requirements:
   build:
@@ -29,4 +29,3 @@ requirements:
 test:
   imports:
     - lagrangian
-  
