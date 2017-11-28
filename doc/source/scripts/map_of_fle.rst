@@ -4,8 +4,9 @@ map_of_fle
 The **map_of_fle** script computes a map of FSLE or FTLE from a set of NetCDF
 grids containing velocity fields.
 
-The files required to run this example are located in the ``test/data`` at the
-root of source distribution.
+The files required to run this example are located in the
+`data.zip <https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.zip>`_
+archive.
 
 Then you must create a configuration file as follows:
 
@@ -45,7 +46,7 @@ Then you must create a configuration file as follows:
     V_NAME = Grid_0002
     FILL_VALUE = 0
 
- 
+
 The file contains several keys representing the following data:
 
 * **U** defines the netCDF files containing the eastward velocities.
@@ -69,32 +70,73 @@ example:
 .. code-block:: cfg
 
     U = ${DATA}/dt_upd_global_merged_madt_uv_20100407_20100407_20110329.nc
- 
+
 To compute a map of FSLE, in forwards mode, on selected area enter the command
 (don't forget to set ``OMP_NUM_THREADS`` to enable parallelization of code with
 the number of threads defined.
 
 .. code-block:: bash
 
-    map_of_fle list.ini fsle.nc "2010-01-01 0" "2010-03-31 0" --step=0.05 \
-        --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
-        --delta 6 --verbose
- 
+    map_of_fle.py list.ini fsle.nc "2010-01-01" --advection_time 89 --resolution=0.05 \
+        --final_separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
+        --final_separation 0.2 --verbose --time_direction forward
+
+.. image:: /images/fsle.png
+    :scale: 50 %
+    :align: center
+
 or in backwards mode:
 
 .. code-block:: bash
 
-    map_of_fle list.ini fsle_backwards.nc "2010-03-31 0" "2010-01-01 0" \
-        --step=0.05 --max_separation 0.2 --x_min 40 --x_max 60 --y_min -60 \
-        --y_max -40 --delta 6 --verbose
+    map_of_fle.py list.ini fsle_backwards.nc "2010-03-31" --advection_time 89 \
+        --resolution=0.05 --final_separation 0.2 --x_min 40 --x_max 60 \
+        --y_min -60 --y_max -40 --final_separation 0.2 --verbose \
+        --time_direction backward
 
-Type ``map_of_fle --help`` to see the available options.
+.. image:: /images/fsle_backwards.png
+    :scale: 50 %
+    :align: center
 
-If you see this error message: ::
+Type ``map_of_fle.py --help`` to see the available options.
+
+
+Troubleshooting
+---------------
+
+PYTHONPATH
+**********
+
+If you see this error message:
+
+.. code-block:: text
 
     Traceback (most recent call last):
-      File "../src/etc/map_of_fle", line 17, in <module>     import lagrangian
+      File "map_of_fle.py", line 17, in <module>     import lagrangian
     ImportError: No module named lagrangian
- 
+
 You must set the ``PYTHONPATH`` variable with the directory that contains the
 lagrangian library (lagrangian.so)
+
+UDUNITS2_XML_PATH
+*****************
+
+If you see this error message:
+
+.. code-block:: text
+
+    Traceback (most recent call last):
+    File "/home/lagrangian/anaconda3/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+        self.run()
+    File "/home/lagrangian/anaconda3/lib/python3.6/multiprocessing/process.py", line 93, in run
+        self._target(*self._args, **self._kwargs)
+    File "src/etc/map_of_fle.py", line 306, in calculation
+        SYSTEM_UNITS[args.unit])
+    File "src/wrapper/lagrangian.pyx", line 1244, in lagrangian.TimeSerie.__cinit__
+        self.wrapped = new cpp_lagrangian.TimeSerie(
+    RuntimeError: The variable UDUNITS2_XML_PATH is unset, and the installed, default unit, database couldn't be opened: No such file or directory
+
+This means that you must position variable UDUNITS2_XML_PATH to the database
+required for udunits2. For example: ::
+
+    export UDUNITS2_XML_PATH=/home/lagrangian/anaconda3/share/udunits/udunits2.xml

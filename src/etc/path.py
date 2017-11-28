@@ -18,6 +18,7 @@ import argparse
 import os
 import re
 import sys
+import dateutil.parser
 import lagrangian
 
 
@@ -50,10 +51,11 @@ def date_type(value):
     The option must be define a date
     """
     try:
-        return lagrangian.DateTime(value)()
-    except Exception:
-        raise argparse.ArgumentTypeError("'%s' could not be interpreted as a "
-                                         "date" % value)
+        value = dateutil.parser.parse(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(
+            "invalid date time %r: %s" % (value, error))
+    return value
 
 
 def usage():

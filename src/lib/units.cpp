@@ -71,6 +71,8 @@ UnitConverter Units::GetConverter(const std::string& from,
   if (from == to) {
     return {};
   } else {
+    g_system.Allocates();
+
     ut_unit* ut_from = ut_parse(g_system.get(), from.c_str(), UT_UTF8);
     HandleParseStatus(ut_from, from);
 
@@ -92,6 +94,8 @@ UnitConverter Units::GetConverter(const std::string& from,
 }
 
 bool Units::AreConvertible(const std::string& unit1, const std::string& unit2) {
+  g_system.Allocates();
+
   ut_unit* ut_unit1 = ut_parse(g_system.get(), unit1.c_str(), UT_UTF8);
   HandleParseStatus(ut_unit1, unit1);
 

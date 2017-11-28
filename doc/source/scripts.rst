@@ -7,5 +7,5 @@ Description of Python programs
    :maxdepth: 2
 
    scripts/map_of_fle
+   scripts/metric_to_angular
    scripts/path
-   scripts/mapping

@@ -1,6 +1,19 @@
 Building and installing
 =======================
 
+Pre-built binaries
+------------------
+
+The easiest route to installing Lagrangion is through conda. For all platforms
+installing this package can be done with:
+
+.. code-block:: bash
+
+    conda install -c fbriol lagrangian
+
+Building from source
+--------------------
+
 We will present how to compile the code, install and run the various scripts
 
 This software uses the Python Distribution Utilities (“Distutils”) to build
@@ -16,8 +29,6 @@ have Python and a C++ compiler installed on your system to use these programs.
 The compiling C++ requires the following development libraries:
 
     * `boost_date_time <http://www.boost.org>`_
-    * `boost_regexp <http://www.boost.org>`_
-    * `boost_thread <http://www.boost.org>`_
     * `NetCDF <http://www.unidata.ucar.edu/software/netcdf>`_
     * `NetCDF-4 C++ <http://www.unidata.ucar.edu/downloads/netcdf/netcdf-cxx/index.jsp>`_
     * `UDUNITS-2 <http://www.unidata.ucar.edu/software/udunits>`_
@@ -46,8 +57,8 @@ The configuration process allows you to set options to specify, for example,
 the paths to the various required libraries. The available options are
 displayed using the option ``python setup.py setup --help``.
 
-For example, to compile the library under Mac OS X enter the following command
-:
+For example, to compile the library under Mac OS X enter the following
+command :
 
 .. code-block:: bash
 
@@ -66,6 +77,19 @@ Building
 
 To build the library type the command ``python setup.py build`` at the root of
 the project.
+
+Testing
+#######
+
+To test your construction run the following command:
+
+.. code-block:: bash
+
+    python setup.py test
+
+.. note::
+
+    The test script will download data from bitbucket before running the tests.
 
 Install
 #######

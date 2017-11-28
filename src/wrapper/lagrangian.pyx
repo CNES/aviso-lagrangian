@@ -802,8 +802,8 @@ cdef class FiniteLyapunovExponents:
     @property
     def lambda1(self):
         """
-        Get the orientation of the eigenvectors associated to the
-        maximum eigenvalues of Cauchy-Green strain tensor
+        Get the FLE associated to the maximum eigenvalue of the Cauchy-Green
+        strain tensor
         """
         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
@@ -813,8 +813,8 @@ cdef class FiniteLyapunovExponents:
     @property
     def lambda2(self):
         """
-        Get the orientation of the eigenvectors associated to the
-        minimum eigenvalues of Cauchy-Green strain tensor
+        Get the FLE associated to the minimum eigenvalue of the Cauchy-Green
+        strain tensor
         """
         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
@@ -824,8 +824,8 @@ cdef class FiniteLyapunovExponents:
     @property
     def theta1(self):
         """
-        FLE associated to the maximum eigenvalues of Cauchy-Green
-        strain tensor
+        Get the orientation of the eigenvector associated to the maximum
+        eigenvalue of the Cauchy-Green strain tensor
         """
         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped

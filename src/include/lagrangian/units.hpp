@@ -20,7 +20,7 @@
 // ___________________________________________________________________________//
 
 #include <udunits2.h>
-#include <cstdarg>
+#include <cstring>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -71,10 +71,9 @@ class SmartUtSystem {
   ~SmartUtSystem() { ut_free_system(system_); }
 
   /**
-   * @brief Allocates resources used by uduntits2 if needed and returns the
-   * unit system used.
+   * @brief Allocates resources used by uduntits2
    */
-  inline ut_system* get() {
+  void Allocates() {
     if (system_ == nullptr) {
       ut_set_error_message_handler(&ut_ignore);
       system_ = ut_read_xml(nullptr);
@@ -96,8 +95,12 @@ class SmartUtSystem {
       else if (status != UT_SUCCESS)
         throw units::Exception("failed to initialize UDUnits2 library");
     }
-    return system_;
   }
+
+  /**
+   * @brief Returns the unit system used.
+   */
+  inline ut_system* get() const { return system_; }
 };
 
 // ___________________________________________________________________________//

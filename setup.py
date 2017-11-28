@@ -323,47 +323,6 @@ class Config(distutils.command.config.config, SetupConfig):
                     'Cannot find library %r.' % library)
 
 
-class Install(setuptools.command.install.install):
-    """
-    Install
-    """
-    def tree_copy(self, path, target, chmod=False):
-        """
-        Copying a tree structure
-        """
-        handle = open(self.record, "a") if self.record else None
-        try:
-            for root, _dirs, files in os.walk(path):
-                for item in files:
-                    src = os.path.join(root, item)
-                    dst = os.path.join(target,
-                                       os.path.relpath(src, path))
-                    directory = os.path.dirname(dst)
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                    self.copy_file(src, dst)
-                    if handle is not None:
-                        handle.write(dst + "\n")
-                    if chmod:
-                        distutils.log.info("changing mode of %s to 755", dst)
-                        os.chmod(dst, 0o755)
-        finally:
-            if handle is not None:
-                handle.close()
-
-    def run(self):
-        """
-        Running the main command
-        """
-        setuptools.command.install.install.run(self)
-        cwd = os.path.dirname(os.path.abspath(__file__))
-        self.tree_copy(
-            os.path.join(cwd, "examples"),
-            os.path.join(
-                self.install_data, "share", "lagrangien", "examples"),
-            chmod=True)
-
-
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
@@ -416,7 +375,6 @@ distutils.core.setup(
     cmdclass={
         'setup': Setup,
         'config': Config,
-        'install': Install,
         'sdist': SDist
     },
     ext_modules=Cython.Build.cythonize(EXTENSIONS)

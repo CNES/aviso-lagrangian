@@ -216,7 +216,7 @@ def usage():
 
     args, _ = parser.parse_known_args()
     if args.version:
-        print(lagrangian.Version())
+        print(lagrangian.version())
         sys.exit(0)
 
     parser.add_argument('--help', '-h',
