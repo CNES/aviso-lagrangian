@@ -28,4 +28,4 @@ COPYING for details.
 Documentation
 -------------
 
-For full documentation visit the Documentation Page.
+For full documentation visit the [Documentation Page](http://lagrangian.readthedocs.io/en/latest/index.html).
