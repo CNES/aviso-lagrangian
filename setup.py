@@ -355,7 +355,7 @@ if not os.path.exists(SETUP.path):
 
 distutils.core.setup(
     name="lagrangian",
-    version="2.2.0",
+    version=SDist.get_version().decode("utf8"),
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
