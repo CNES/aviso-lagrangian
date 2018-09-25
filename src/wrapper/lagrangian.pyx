@@ -14,7 +14,6 @@
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-cimport cpp_lagrangian
 cimport cpython
 cimport cpython.datetime
 cimport cython

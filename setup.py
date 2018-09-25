@@ -293,6 +293,7 @@ class Config(distutils.command.config.config, SetupConfig):
     """
     Configuration commands
     """
+
     def __init__(self, *args, **kwargs):
         # old class style
         distutils.command.config.config.__init__(self, *args, **kwargs)
@@ -407,5 +408,7 @@ distutils.core.setup(
         'config': Config,
         'sdist': SDist
     },
-    ext_modules=Cython.Build.cythonize(EXTENSIONS)
+    ext_modules=Cython.Build.cythonize(EXTENSIONS, include_path=[
+        os.path.join(SetupConfig.CWD, "src", "wrapper")
+    ])
 )
