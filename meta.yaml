@@ -1,8 +1,6 @@
-{% set data = load_setup_py_data() %}
-
 package:
   name: lagrangian
-  version: {{ data.get('version') }}
+  version: 2.2.0
 
 source:
   url: https://bitbucket.org/cnes_aviso/lagrangian/downloads/lagrangian-2.2.0.tar.gz
@@ -17,11 +15,12 @@ requirements:
     - netcdf4
     - netcdf-cxx4
     - numpy
-    - python
+    - python {{ python }}
     - setuptools
     - python-dateutil
     - udunits2
   run:
+    - python {{ python }}
     - libnetcdf
     - libboost
     - netcdf-cxx4
