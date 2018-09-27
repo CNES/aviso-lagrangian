@@ -71,5 +71,5 @@ void SetVerbose(const bool value) { g_configuration.set_verbose(value); }
 
 void Debug(std::string const& message) { g_configuration.Debug(message); }
 
-std::string Version() { return g_configuration.Version(); }
+std::string Version() { return lagrangian::Configuration::Version(); }
 }  // namespace lagrangian

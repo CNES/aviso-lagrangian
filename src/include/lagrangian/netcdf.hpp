@@ -55,7 +55,7 @@ class Netcdf : public netcdf::Group {
    * @brief Creates a new instance and opens an existing NetCDF file (read-
    * only)
    */
-  Netcdf(const std::string& filename) { Open(filename); }
+  explicit Netcdf(const std::string& filename) { Open(filename); }
 
   /**
    * @brief Open an existing NetCDF file (read-only)
@@ -81,7 +81,9 @@ class Netcdf : public netcdf::Group {
    */
   netcdf::Variable const& FindVariable(const std::string& name) const {
     for (auto& item : variables_) {
-      if (item.get_name() == name) return item;
+      if (item.get_name() == name) {
+        return item;
+      }
     }
     return netcdf::Variable::MISSING;
   }

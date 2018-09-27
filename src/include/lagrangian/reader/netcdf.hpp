@@ -78,8 +78,9 @@ class Netcdf : public Reader {
   netcdf::Variable FindVariable(const std::string& name) const {
     netcdf::Variable variable = netcdf_.FindVariable(name);
 
-    if (variable == netcdf::Variable::MISSING)
+    if (variable == netcdf::Variable::MISSING) {
       throw std::logic_error(name + ": no such variable");
+    }
 
     return variable;
   }
@@ -155,8 +156,7 @@ class Netcdf : public Reader {
    * point is outside the grid.
    */
   double Interpolate(
-      const double longitude, const double latitude,
-      const double fill_value = 0,
+      double longitude, double latitude, double fill_value = 0,
       CellProperties& cell = CellProperties::NONE()) const override;
 
   /**

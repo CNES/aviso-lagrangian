@@ -49,9 +49,10 @@ class Parameter {
    * @throw std::runtime_error if the setting does not exist
    */
   std::vector<std::string> const& Items(const std::string& key) const {
-    if (!Exists(key))
+    if (!Exists(key)) {
       throw std::runtime_error(
           boost::str(boost::format("parameter `%s' is not defined") % key));
+    }
 
     auto it = data_.find(key);
     return (*it).second;
@@ -86,12 +87,12 @@ class Parameter {
    * @throw std::runtime_error if the file does not exist or contains a
    * syntax error.
    */
-  Parameter(const std::string& filename) : data_() { Load(filename); }
+  explicit Parameter(const std::string& filename) { Load(filename); }
 
   /**
    * @brief Create a new instance with no data.
    */
-  Parameter() : data_() {}
+  Parameter() {}
 
   /**
    * @brief Loads the configuration file.
@@ -163,7 +164,9 @@ class Parameter {
   std::vector<std::string> Keys() const {
     std::vector<std::string> result;
 
-    for (auto& item : data_) result.push_back(item.first);
+    for (auto& item : data_) {
+      result.push_back(item.first);
+    }
 
     return result;
   }
@@ -178,7 +181,9 @@ class Parameter {
     std::vector<T> result;
 
     if (Exists(key)) {
-      for (auto& item : Items(key)) result.push_back(ParameterCast<T>(item));
+      for (auto& item : Items(key)) {
+        result.push_back(ParameterCast<T>(item));
+      }
     }
     return result;
   }
@@ -209,9 +214,11 @@ class Parameter {
    * @result The stream updated
    */
   friend std::ostream& operator<<(std::ostream& os, const Parameter& p) {
-    for (auto& key : p.Keys())
-      for (auto& value : p.Values<std::string>(key))
+    for (auto& key : p.Keys()) {
+      for (auto& value : p.Values<std::string>(key)) {
         os << key << " = " << value << std::endl;
+      }
+    }
     return os;
   }
 

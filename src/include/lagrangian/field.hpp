@@ -57,7 +57,7 @@ class Field {
    *
    * @throw std::invalid_argument if the type of unit is unknown
    */
-  Field(const Field::UnitType unit_type) : unit_type_(unit_type) {
+  explicit Field(const Field::UnitType unit_type) : unit_type_(unit_type) {
     switch (unit_type_) {
       case kMetric:
         break;
@@ -94,9 +94,9 @@ class Field {
    *
    * @return true if the value of the speed is set otherwise false.
    */
-  virtual bool Compute(const double t, const double x, const double y,
-                       double& u, double& v,
-                       CellProperties& cell = CellProperties::NONE()) const {
+  virtual bool Compute(
+      const double /*t*/, const double /*x*/, const double /*y*/, double& u,
+      double& v, CellProperties& /*cell*/ = CellProperties::NONE()) const {
     u = std::numeric_limits<double>::quiet_NaN();
     v = std::numeric_limits<double>::quiet_NaN();
     return false;

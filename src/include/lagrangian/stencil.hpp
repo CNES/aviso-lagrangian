@@ -140,8 +140,7 @@ class Position {
    * @brief Constructor with start_time setting
    *
    */
-  Position(const double start_time)
-      : x_(), y_(), time_(start_time) {}
+  explicit Position(const double start_time) : time_(start_time) {}
 
   /**
    * Move constructor
@@ -220,7 +219,9 @@ class Position {
 
     for (size_t idx = 1; idx < x_.size(); ++idx) {
       double distance = Distance(x_[0], y_[0], x_[idx], y_[idx]);
-      if (distance > result) result = distance;
+      if (distance > result) {
+        result = distance;
+      }
     }
     return result;
   }
@@ -239,8 +240,9 @@ class Position {
     std::vector<double> y(y_.size());
 
     for (size_t ix = 0; ix < x_.size(); ++ix) {
-      if (!rk.Compute(it(), x_.at(ix), y_.at(ix), x[ix], y[ix], cell))
+      if (!rk.Compute(it(), x_.at(ix), y_.at(ix), x[ix], y[ix], cell)) {
         return false;
+      }
     }
     Update(it(), x, y);
     return true;
@@ -269,7 +271,7 @@ class Triplet : public Position {
   /**
    * Default constructor
    */
-  Triplet() : Position() {}
+  Triplet() {}
 
   /**
    * @brief Construct a new object defining the position of the N points
@@ -330,7 +332,7 @@ class Quintuplet : public Position {
   /**
    * Default constructor
    */
-  Quintuplet() : Position() {}
+  Quintuplet() {}
 
   /**
    * @brief Construct a new object defining the position of the N points

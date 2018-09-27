@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <utility>
 
 // ___________________________________________________________________________//
 
@@ -64,7 +65,7 @@ class Unit {
   /**
    * @brief Constructor
    */
-  Unit() : unit_() {}
+  Unit() {}
 };
 
 // ___________________________________________________________________________//
@@ -164,17 +165,20 @@ class Axis {
     auto index =
         static_cast<int>(std::round((coordinate - start_) / increment_));
 
-    if (index < 0) return bounded ? 0 : -1;
+    if (index < 0) {
+      return bounded ? 0 : -1;
+    }
 
-    if (index >= static_cast<int>(points_.size()))
+    if (index >= static_cast<int>(points_.size())) {
       return bounded ? static_cast<int>(points_.size() - 1) : -1;
+    }
 
     return index;
   }
 
   // Perform a binary search to find of the element of the array whose value
   // is contained in the interval. Values must be contiguous.
-  int FindIndexIrregular(const double coordinate, bool bounded) const;
+  int FindIndexIrregular(double coordinate, bool bounded) const;
 
   // Computes axis's properties
   void ComputeProperties() {
@@ -196,7 +200,7 @@ class Axis {
    *
    * @param variable an existing NetCDF Variable
    */
-  Axis(const netcdf::Variable& variable);
+  explicit Axis(const netcdf::Variable& variable);
 
   /**
    * @brief Create a coordinate axis from values.
@@ -206,9 +210,8 @@ class Axis {
    * @param unit unit
    * @param type of axis
    */
-  Axis(const std::vector<double>& points, const Axis::Type type,
-       const std::string& unit = "")
-      : type_(type), points_(points), unit_(unit) {
+  Axis(std::vector<double> points, const Axis::Type type, std::string unit = "")
+      : type_(type), points_(std::move(points)), unit_(std::move(unit)) {
     ComputeProperties();
   }
 
@@ -318,9 +321,15 @@ class Axis {
     double result = coordinate;
 
     if (type_ == kLongitude) {
-      while (result >= points_[0] + circle - epsilon) result -= circle;
-      while (result < points_[0] - epsilon) result += circle;
-      if (fabs(result - coordinate) <= epsilon) result = coordinate;
+      while (result >= points_[0] + circle - epsilon) {
+        result -= circle;
+      }
+      while (result < points_[0] - epsilon) {
+        result += circle;
+      }
+      if (fabs(result - coordinate) <= epsilon) {
+        result = coordinate;
+      }
     }
     return result;
   }
@@ -334,7 +343,7 @@ class Axis {
    */
   inline bool get_units(std::string& units) const {
     units = unit_;
-    return unit_ != "";
+    return !unit_.empty();
   }
 
   /**
@@ -344,7 +353,9 @@ class Axis {
    * @param unit the new unit
    */
   void Convert(const std::string& unit) {
-    if (unit_ == "") throw std::logic_error("The unit of axis is not defined");
+    if (unit_.empty()) {
+      throw std::logic_error("The unit of axis is not defined");
+    }
 
     UnitConverter converter = Units::GetConverter(unit_, unit);
     if (!converter.IsNull()) {

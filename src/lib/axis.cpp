@@ -43,18 +43,21 @@ void Axis::NormalizeLongitude() {
       monotonic = is_ascending_ ? points_[ix - 1] < points_[ix]
                                 : points_[ix - 1] > points_[ix];
 
-      if (!monotonic) break;
+      if (!monotonic) {
+        break;
+      }
     }
 
     if (!monotonic) {
       bool cross = false;
 
       for (unsigned int ix = 1; ix < points_.size(); ++ix) {
-        if (cross)
+        if (cross) {
           points_[ix] += is_ascending_ ? 360 : -360;
-        else
+        } else {
           cross = is_ascending_ ? points_[ix - 1] > points_[ix]
                                 : points_[ix - 1] < points_[ix];
+        }
       }
     }
   }
@@ -63,14 +66,17 @@ void Axis::NormalizeLongitude() {
 // ___________________________________________________________________________//
 
 void Axis::MakeEdges() {
-  if (is_regular_) return;
+  if (is_regular_) {
+    return;
+  }
 
   const int n = points_.size();
 
   edges_.resize(n + 1);
 
-  for (int ix = 1; ix < n; ++ix)
+  for (int ix = 1; ix < n; ++ix) {
     edges_[ix] = (points_[ix - 1] + points_[ix]) / 2;
+  }
 
   edges_[0] = 2 * points_[0] - edges_[1];
   edges_[n] = 2 * points_[n - 1] - edges_[n - 1];
@@ -83,42 +89,52 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const {
   int mid = 0;
   int high = points_.size();
 
-  if (coordinate < edges_[low]) return bounded ? 0 : -1;
-  if (coordinate > edges_[high]) return bounded ? high - 1 : -1;
+  if (coordinate < edges_[low]) {
+    return bounded ? 0 : -1;
+  }
+  if (coordinate > edges_[high]) {
+    return bounded ? high - 1 : -1;
+  }
 
   if (is_ascending_) {
     while (high > low + 1) {
       mid = (low + high) >> 1;
       auto value = edges_[mid];
 
-      if (value == coordinate) return mid;
+      if (value == coordinate) {
+        return mid;
+      }
 
       value < coordinate ? low = mid : high = mid;
     }
 
     return low;
-  } else {
+  }
     while (high > low + 1) {
       mid = (low + high) >> 1;
       auto value = edges_[mid];
 
-      if (value == coordinate) return mid;
+      if (value == coordinate) {
+        return mid;
+      }
 
       value < coordinate ? high = mid : low = mid;
     }
 
     return high - 1;
-  }
 }
 
 // ___________________________________________________________________________//
 
-Axis::Axis(const netcdf::Variable& variable) : points_(), edges_() {
-  if (variable.IsCoordinateVariable() == false)
+Axis::Axis(const netcdf::Variable& variable) {
+  if (!variable.IsCoordinateVariable()) {
     throw std::invalid_argument(variable.get_name() + ": not an axis");
+  }
 
   // Store unit axis
-  if (!variable.GetUnitsString(unit_)) unit_ = "";
+  if (!variable.GetUnitsString(unit_)) {
+    unit_ = "";
+  }
 
   // Determines axis from standard_name
   auto attribute = variable.FindAttributeIgnoreCase(netcdf::CF::STANDARD_NAME);
@@ -131,11 +147,12 @@ Axis::Axis(const netcdf::Variable& variable) : points_(), edges_() {
   }
 
   // Determines axis from units
-  if (type_ == kUnknown && unit_ != "") {
-    if (g_axis_latitude_unit(unit_))
+  if (type_ == kUnknown && !unit_.empty()) {
+    if (g_axis_latitude_unit(unit_)) {
       type_ = kLatitude;
-    else if (g_axis_longitude_unit(unit_))
+    } else if (g_axis_longitude_unit(unit_)) {
       type_ = kLongitude;
+    }
   }
 
   // Determines axis from generic spatial coordinates

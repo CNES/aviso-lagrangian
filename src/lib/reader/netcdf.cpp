@@ -67,19 +67,25 @@ void Netcdf::Open(const std::string& filename) {
           break;
       }
       it = variables.erase(it);
-    } else
+    } else {
       it++;
+    }
   }
 
   if (axis_x_.get_type() == Axis::kUnknown ||
-      axis_y_.get_type() == Axis::kUnknown)
+      axis_y_.get_type() == Axis::kUnknown) {
     throw std::logic_error(
         "Unable to Find the description of spatial"
         " coordinates.");
+  }
 
   // The axes are to be defined in degrees.
-  if (axis_x_.get_type() == Axis::kLongitude) axis_x_.Convert("degrees");
-  if (axis_y_.get_type() == Axis::kLatitude) axis_y_.Convert("degrees");
+  if (axis_x_.get_type() == Axis::kLongitude) {
+    axis_x_.Convert("degrees");
+  }
+  if (axis_y_.get_type() == Axis::kLatitude) {
+    axis_y_.Convert("degrees");
+  }
 }
 
 // ___________________________________________________________________________//
@@ -87,7 +93,7 @@ void Netcdf::Open(const std::string& filename) {
 void Netcdf::Load(const std::string& name, const std::string& unit) {
   netcdf::Variable variable = FindVariable(name);
 
-  unit == "" ? variable.Read(data_) : variable.Read(data_, unit);
+  unit.empty() ? variable.Read(data_) : variable.Read(data_, unit);
 
   pGetIndex_ =
       variable.get_shape(0) == static_cast<size_t>(axis_y_.GetNumElements())
@@ -100,7 +106,9 @@ void Netcdf::Load(const std::string& name, const std::string& unit) {
 double Netcdf::Interpolate(const double longitude, const double latitude,
                            const double fill_value,
                            CellProperties& cell) const {
-  if (data_.size() == 0) throw std::logic_error("No data loaded into memory");
+  if (data_.empty()) {
+    throw std::logic_error("No data loaded into memory");
+  }
 
   double x = axis_x_.Normalize(longitude, 360);
 
@@ -109,8 +117,9 @@ double Netcdf::Interpolate(const double longitude, const double latitude,
     int iy0, iy1;
 
     if (!axis_x_.FindIndexes(x, ix0, ix1) ||
-        !axis_y_.FindIndexes(latitude, iy0, iy1))
+        !axis_y_.FindIndexes(latitude, iy0, iy1)) {
       return fill_value;
+    }
 
     cell.Update(axis_x_.GetCoordinateValue(ix0),
                 axis_x_.GetCoordinateValue(ix1),
@@ -132,10 +141,11 @@ DateTime Netcdf::GetDateTime(const std::string& name) const {
   netcdf::Variable variable = FindVariable(name);
   netcdf::Attribute attribute = variable.FindAttributeIgnoreCase("date");
 
-  if (attribute == netcdf::Attribute::MISSING)
+  if (attribute == netcdf::Attribute::MISSING) {
     throw std::logic_error(name + ":date: No such attribute");
+  }
 
-  return {std::move(attribute.get_string())};
+  return DateTime(attribute.get_string());
 }
 
 }  // namespace reader

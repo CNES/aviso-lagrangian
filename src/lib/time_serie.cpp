@@ -15,8 +15,9 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cfloat>
 #include <algorithm>
+#include <cfloat>
+#include <utility>
 
 // ___________________________________________________________________________//
 
@@ -136,19 +137,21 @@ FileList::FileList(const std::vector<std::string>& filenames,
 // ___________________________________________________________________________//
 
 TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
-                     const std::string& varname, const std::string& unit,
+                     std::string varname, std::string unit,
                      const reader::Factory::Type type)
     : first_index_(-1),
       last_index_(-1),
-      varname_(varname),
-      unit_(unit),
+      varname_(std::move(varname)),
+      unit_(std::move(unit)),
       type_(type) {
   // Instances used to read velocity fields
   try {
     readers_.emplace_back(reader::Factory::NewReader(type_));
     readers_.emplace_back(reader::Factory::NewReader(type_));
   } catch (...) {
-    for (auto& item : readers_) delete item;
+    for (auto& item : readers_) {
+      delete item;
+    }
     readers_.clear();
     throw;
   }
@@ -165,7 +168,9 @@ double TimeSerie::Interpolate(const double date, const double longitude,
   int it0, it1;
 
   // Verify that the user has loaded the grids needed for interpolation
-  if (first_index_ == -1) throw std::logic_error("No data loaded into memory");
+  if (first_index_ == -1) {
+    throw std::logic_error("No data loaded into memory");
+  }
 
   time_serie_->FindIndexes(date, it0, it1);
 
@@ -206,8 +211,9 @@ void TimeSerie::Load(const double t0, const double t1) {
     size_t previous_size = readers_.size();
     readers_.resize(required_size);
 
-    for (size_t ix = previous_size; ix < required_size; ++ix)
+    for (size_t ix = previous_size; ix < required_size; ++ix) {
       readers_[ix] = reader::Factory::NewReader(type_);
+    }
   }
 
   // Loading the needed data

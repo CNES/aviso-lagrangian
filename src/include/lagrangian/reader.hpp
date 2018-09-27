@@ -183,8 +183,7 @@ class Reader {
    * if point is outside the grid.
    */
   virtual double Interpolate(
-      const double longitude, const double latitude,
-      const double fill_value = 0,
+      double longitude, double latitude, double fill_value = 0,
       CellProperties& cell = CellProperties::NONE()) const = 0;
 
   /**

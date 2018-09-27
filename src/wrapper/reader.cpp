@@ -17,7 +17,7 @@
 #include "reader.hpp"
 
 WrappedReader::WrappedReader(PyObject* object) : object_(nullptr) {
-  if (import_lagrangian()) {
+  if (import_lagrangian() != 0) {
     throw std::runtime_error("Import error");
   }
   object_ = object;
@@ -25,13 +25,15 @@ WrappedReader::WrappedReader(PyObject* object) : object_(nullptr) {
 }
 
 WrappedReader::~WrappedReader() {
-  if (object_) Py_XDECREF(object_);
+  if (object_ != nullptr) {
+    Py_XDECREF(object_);
+  }
 }
 
 void WrappedReader::Open(const std::string& filename) {
   std::string error;
   int rc = PythonReaderOpen(object_, filename, &error);
-  if (rc) {
+  if (rc != 0) {
     throw std::runtime_error(error);
   }
 }
@@ -39,7 +41,7 @@ void WrappedReader::Open(const std::string& filename) {
 void WrappedReader::Load(const std::string& name, const std::string& unit) {
   std::string error;
   int rc = PythonReaderLoad(object_, name, unit, &error);
-  if (rc) {
+  if (rc != 0) {
     throw std::runtime_error(error);
   }
 }
@@ -51,7 +53,7 @@ double WrappedReader::Interpolate(const double longitude, const double latitude,
   double result;
   int rc = PythonFieldInterpolate(object_, longitude, latitude, fill_value,
                                   cell, &result, &error);
-  if (rc) {
+  if (rc != 0) {
     throw std::runtime_error(error);
   }
   return result;
@@ -61,7 +63,7 @@ lagrangian::DateTime WrappedReader::GetDateTime(const std::string& name) const {
   std::string error;
   lagrangian::DateTime result;
   int rc = PythonFieldGetDateTime(object_, name, &result, &error);
-  if (rc) {
+  if (rc != 0) {
     throw std::runtime_error(error);
   }
   return result;

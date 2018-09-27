@@ -66,8 +66,9 @@ class Integration {
         start_time_(start_time.ToUnixTime()),
         end_time_(end_time.ToUnixTime()),
         rk_(size_of_interval_ * (start_time_ > end_time_ ? -1 : 1), field_) {
-    if (size_of_interval_ < 0)
+    if (size_of_interval_ < 0) {
       throw std::runtime_error("Time delta must be positive");
+    }
   }
 
   /**
@@ -443,7 +444,9 @@ class FiniteLyapunovExponentsIntegration : public Integration {
     return position->MaxDistance() > min_separation_;
   }
 
-  inline bool SeparationFTLE(const Position* const) const { return false; }
+  inline bool SeparationFTLE(const Position* const /*unused*/) const {
+    return false;
+  }
 
  public:
   /**
@@ -551,8 +554,7 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the exponents are defined
    */
-  bool ComputeExponents(const Position* const position,
-                        FiniteLyapunovExponents& fle);
+  bool ComputeExponents(const Position* position, FiniteLyapunovExponents& fle);
 };
 
 }  // namespace lagrangian

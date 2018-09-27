@@ -51,9 +51,10 @@ class TimeSerie : public Field {
    * @param unit_type Unit fields.
    * @param reader_type The reader used to read grids containing speeds.
    */
-  TimeSerie(const std::string& configuration_file,
-            const Field::UnitType unit_type = kMetric,
-            const reader::Factory::Type reader_type = reader::Factory::kNetCDF);
+  explicit TimeSerie(
+      const std::string& configuration_file,
+      Field::UnitType unit_type = kMetric,
+      reader::Factory::Type reader_type = reader::Factory::kNetCDF);
 
   /**
    * @brief Default method invoked when a TimeSerie is destroyed.
@@ -89,8 +90,8 @@ class TimeSerie : public Field {
    *
    * @return true if the value of the speed is set otherwise false.
    */
-  bool Compute(const double t, const double x, const double y, double& u,
-               double& v, CellProperties& cell) const override;
+  bool Compute(double t, double x, double y, double& u, double& v,
+               CellProperties& cell) const override;
 
   /**
    * @brief Returns the date of the first grid constituting the time series.

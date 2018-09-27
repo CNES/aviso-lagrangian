@@ -50,9 +50,10 @@ class Vonkarman : public Field {
    * @param l
    * @param u0
    */
-  Vonkarman(const double a = 1, const double w = 35.06, const double r0 = 0.35,
-            const double tc = 1, const double alpha = 2, const double y0 = 0.3,
-            const double l = 2, const double u0 = 14)
+  explicit Vonkarman(const double a = 1, const double w = 35.06,
+                     const double r0 = 0.35, const double tc = 1,
+                     const double alpha = 2, const double y0 = 0.3,
+                     const double l = 2, const double u0 = 14)
       : Field(kMetric),
         a_(a),
         w_(w),
@@ -75,8 +76,7 @@ class Vonkarman : public Field {
    *
    * @return true
    */
-  bool Compute(const double t, const double x, const double y, double& u,
-               double& v,
+  bool Compute(double t, double x, double y, double& u, double& v,
                CellProperties& cell = CellProperties::NONE()) const override;
 };
 

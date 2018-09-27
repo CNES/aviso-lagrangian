@@ -48,13 +48,13 @@ class Attribute {
    *
    * @param ncatt An instance of NcAtt
    */
-  Attribute(const netCDF::NcAtt& ncatt) : name_(ncatt.getName()) {
+  explicit Attribute(const netCDF::NcAtt& ncatt) : name_(ncatt.getName()) {
     // Attribute is a string ?
     if (ncatt.getType() == netCDF::ncChar ||
-        ncatt.getType() == netCDF::ncString)
+        ncatt.getType() == netCDF::ncString) {
       ncatt.getValues(svalue_);
     // Get Attributes values as double
-    else {
+    } else {
       value_.resize(ncatt.getAttLength());
       ncatt.getValues(&value_[0]);
     }
@@ -84,7 +84,9 @@ class Attribute {
    * @see Attribute#IsString
    */
   inline std::string const& get_string() const {
-    if (!IsString()) throw std::logic_error("Attribute is numeric");
+    if (!IsString()) {
+      throw std::logic_error("Attribute is numeric");
+    }
     return svalue_;
   }
 
@@ -98,7 +100,9 @@ class Attribute {
    * @return ith value.
    */
   inline double get_value(const int index = 0) const {
-    if (IsString()) throw std::logic_error("Attribute isn't numeric");
+    if (IsString()) {
+      throw std::logic_error("Attribute isn't numeric");
+    }
     return value_[index];
   }
 

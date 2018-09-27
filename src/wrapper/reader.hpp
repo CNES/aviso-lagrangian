@@ -28,7 +28,7 @@ class WrappedReader : public lagrangian::Reader {
   PyObject* object_;
 
  public:
-  WrappedReader(PyObject* object);
+  explicit WrappedReader(PyObject* object);
 
   ~WrappedReader() override;
 
@@ -36,8 +36,7 @@ class WrappedReader : public lagrangian::Reader {
 
   void Load(const std::string& name, const std::string& unit = "") override;
 
-  double Interpolate(const double longitude, const double latitude,
-                     const double fill_value = 0,
+  double Interpolate(double longitude, double latitude, double fill_value = 0,
                      lagrangian::CellProperties& cell =
                          lagrangian::CellProperties::NONE()) const override;
 

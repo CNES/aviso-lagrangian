@@ -20,6 +20,7 @@
 // ___________________________________________________________________________//
 
 #include <string>
+#include <utility>
 
 // ___________________________________________________________________________//
 
@@ -66,9 +67,8 @@ class Dimension {
    * @param length of the dimension.
    * @param unlimited whether the length can grow.
    */
-  Dimension(const std::string& name, const int length,
-            const bool unlimited = false)
-      : name_(name), length_(length), unlimited_(unlimited) {}
+  Dimension(std::string name, const int length, const bool unlimited = false)
+      : name_(std::move(name)), length_(length), unlimited_(unlimited) {}
 
   /**
    * @brief compare two dimensions instances

@@ -47,7 +47,7 @@ class Group {
   /**
    * @brief Constructor
    */
-  Group() : dimensions_(), attributes_() {}
+  Group() {}
 
   /**
    * @brief Default method invoked when a Group is destroyed.
@@ -80,7 +80,9 @@ class Group {
    */
   inline int FindDimensionIndex(const std::string& name) const {
     for (unsigned int ix = 0; ix < dimensions_.size(); ++ix) {
-      if (dimensions_[ix].get_name() == name) return ix;
+      if (dimensions_[ix].get_name() == name) {
+        return ix;
+      }
     }
     return -1;
   }

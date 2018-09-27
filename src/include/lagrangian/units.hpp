@@ -47,7 +47,7 @@ class Exception : public std::runtime_error {
    *
    * @param msg a character string describing the error
    */
-  Exception(const std::string& msg) : std::runtime_error(msg) {}
+  explicit Exception(const std::string& msg) : std::runtime_error(msg) {}
 };
 
 // ___________________________________________________________________________//
@@ -81,19 +81,21 @@ class SmartUtSystem {
       // We search for the type of error in order to point the user to the
       // possible problem of definition for the variable UDUNITS2_XML_PATH.
       auto status = ut_get_status();
-      if (status == UT_OPEN_ENV)
+      if (status == UT_OPEN_ENV) {
         throw units::Exception(
             std::string(
                 "The file defined by UDUNITS2_XML_PATH couldn't be opened: ") +
             std::strerror(errno));
-      else if (status == UT_OPEN_DEFAULT)
+      }
+      if (status == UT_OPEN_DEFAULT) {
         throw units::Exception(
             std::string("The variable UDUNITS2_XML_PATH is unset, and the "
                         "installed, default unit, database couldn't be "
                         "opened: ") +
             std::strerror(errno));
-      else if (status != UT_SUCCESS)
+      } else if (status != UT_SUCCESS) {
         throw units::Exception("failed to initialize UDUnits2 library");
+      }
     }
   }
 
@@ -120,7 +122,7 @@ class UnitConverter {
    * @param offset the numeric offset
    * @param scale the numeric scale factor
    */
-  UnitConverter(const double offset = 0, const double scale = 1)
+  explicit UnitConverter(const double offset = 0, const double scale = 1)
       : offset_(offset), scale_(scale) {}
 
   /**
@@ -137,9 +139,13 @@ class UnitConverter {
    */
   template <class T>
   inline void Convert(std::vector<T>& values) const {
-    if (offset_ == 0 && scale_ == 1) return;
+    if (offset_ == 0 && scale_ == 1) {
+      return;
+    }
 
-    for (auto& item : values) item = item * scale_ + offset_;
+    for (auto& item : values) {
+      item = item * scale_ + offset_;
+    }
   }
 
   template <class T>

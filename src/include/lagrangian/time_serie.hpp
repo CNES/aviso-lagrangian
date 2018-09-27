@@ -49,7 +49,7 @@ class FileList {
    * @param reader Instance of an object implementing the class Reader.
    */
   FileList(const std::vector<std::string>& filenames,
-           const std::string& varname, Reader* const reader);
+           const std::string& varname, Reader* reader);
 
   /**
    * @brief Given a date expressed as a number of seconds elapsed since
@@ -66,7 +66,7 @@ class FileList {
    * time series.
    */
   inline void FindIndexes(const double date, int& i0, int& i1) {
-    if (axis_.FindIndexes(date, i0, i1) == false) {
+    if (!axis_.FindIndexes(date, i0, i1)) {
       throw std::out_of_range("date out of range");
     }
   }
@@ -127,7 +127,7 @@ class TimeSerie {
   std::map<std::string, int> files_;
 
   // Load new files in memory if necessary.
-  void Load(int ix0, const int ix1);
+  void Load(int ix0, int ix1);
 
  public:
   /**
@@ -139,7 +139,7 @@ class TimeSerie {
    * @param t1 Date of the last measurement to compute in number of
    *  seconds elapsed since 1/1/1970)
    */
-  void Load(const double t0, const double t1);
+  void Load(double t0, double t1);
 
   /**
    * @brief Create a new instance of TimeSerie.
@@ -153,15 +153,17 @@ class TimeSerie {
    * @param type Instance of an object implementing the class Reader. By
    * default the class uses the reader of NetCDF grids.
    */
-  TimeSerie(const std::vector<std::string>& filenames,
-            const std::string& varname, const std::string& unit = "",
-            const reader::Factory::Type type = reader::Factory::kNetCDF);
+  TimeSerie(const std::vector<std::string>& filenames, std::string varname,
+            std::string unit = "",
+            reader::Factory::Type type = reader::Factory::kNetCDF);
 
   /**
    * @brief Default method invoked when a TimeSerie is destroyed.
    */
   ~TimeSerie() {
-    for (auto& item : readers_) delete item;
+    for (auto& item : readers_) {
+      delete item;
+    }
     delete time_serie_;
   }
 
@@ -178,9 +180,8 @@ class TimeSerie {
    *
    * @return the interpolated value
    */
-  double Interpolate(const double date, const double longitude,
-                     const double latitude, const double fill_value,
-                     CellProperties& cell);
+  double Interpolate(double date, double longitude, double latitude,
+                     double fill_value, CellProperties& cell);
 
   /**
    * @brief Returns the first date of the time series.

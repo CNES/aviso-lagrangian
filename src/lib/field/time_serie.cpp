@@ -47,7 +47,7 @@ bool TimeSerie::Compute(const double t, const double x, const double y,
   u = u_->Interpolate(t, x, y, fill_value_, cell);
   v = v_->Interpolate(t, x, y, fill_value_, cell);
 
-  return std::isnan(u) || std::isnan(v) ? false : true;
+  return !(std::isnan(u) || std::isnan(v));
 }
 
 }  // namespace field
