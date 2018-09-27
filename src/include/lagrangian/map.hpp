@@ -20,6 +20,7 @@
 // ___________________________________________________________________________//
 
 #include <cstdlib>
+#include <thread>
 
 // ___________________________________________________________________________//
 
@@ -244,7 +245,7 @@ class FiniteLyapunovExponents {
    */
   FiniteLyapunovExponents(const int nx, const int ny, const double x_min,
                           const double y_min, const double step)
-      : num_threads_(1),
+      : num_threads_(std::thread::hardware_concurrency()),
         map_(nx, ny, x_min, y_min, step)
 
   {
