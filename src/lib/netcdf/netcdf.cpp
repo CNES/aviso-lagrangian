@@ -27,6 +27,10 @@
 namespace lagrangian {
 
 void Netcdf::Open(const std::string& filename) {
+  if (filename.empty()) {
+    throw std::system_error(ENOENT, std::system_category(), filename);
+  }
+
   try {
     ncfile_ = std::shared_ptr<netCDF::NcFile>(
         new netCDF::NcFile(filename, netCDF::NcFile::read));
