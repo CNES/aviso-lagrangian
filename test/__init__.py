@@ -100,6 +100,7 @@ class DownloadData(object):
         Download data from bitbucket
         """
         url = "https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.zip"
+        print("downloading https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.zip")
         response = urllib.urlopen(url)
 
         while True:
