@@ -13,6 +13,7 @@
 #
 # You should have received a copy of GNU Lesser General Public License along with
 # lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+import os
 import datetime
 import argparse
 import signal
@@ -195,6 +196,12 @@ def usage():
                                   'effective final separation distance, in '
                                   'FTLE mode.',
                              action='store_true')
+    integration.add_argument('--threads', type=int,
+                             default=None,
+                             help='number of threads to use for the '
+                                  'computation. If 0 all CPUs are used. If 1 '
+                                  'is given, no parallel computing code is '
+                                  'used at all.')
 
     data = parser.add_argument_group('reader arguments',
                                      'Set options of the NetCDF reader.')
@@ -283,6 +290,9 @@ def calculation():
     """
     # Initializes arguments from command line
     args = usage()
+
+    if args.threads is not None:
+        os.environ["OMP_NUM_THREADS"] = str(args.threads)
 
     # Set debug
     lagrangian.set_verbose(args.verbose)

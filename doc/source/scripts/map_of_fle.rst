@@ -71,14 +71,13 @@ example:
 
     U = ${DATA}/dt_upd_global_merged_madt_uv_20100407_20100407_20110329.nc
 
-To compute a map of FSLE, in forwards mode, on selected area enter the command
-(don't forget to set ``OMP_NUM_THREADS`` to enable parallelization of code with
-the number of threads defined.
+To compute a map of FSLE, in forwards mode, on selected area enter the
+following command:
 
 .. code-block:: bash
 
     map_of_fle.py list.ini fsle.nc "2010-01-01" --advection_time 89 --resolution=0.05 \
-        --final_separation 0.2 --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
+        --x_min 40 --x_max 60 --y_min -60 --y_max -40 \
         --final_separation 0.2 --verbose --time_direction forward
 
 .. image:: /images/fsle.png
@@ -90,7 +89,7 @@ or in backwards mode:
 .. code-block:: bash
 
     map_of_fle.py list.ini fsle_backwards.nc "2010-03-31" --advection_time 89 \
-        --resolution=0.05 --final_separation 0.2 --x_min 40 --x_max 60 \
+        --resolution=0.05 --x_min 40 --x_max 60 \
         --y_min -60 --y_max -40 --final_separation 0.2 --verbose \
         --time_direction backward
 
