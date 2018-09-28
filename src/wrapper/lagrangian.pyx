@@ -144,6 +144,9 @@ cdef class Axis:
         """
         Get the ith coordinate value.
         """
+        if index < 0 or index >= self.wrapped.GetNumElements():
+            raise IndexError(index)
+
         return self.wrapped.GetCoordinateValue(index)
 
     def get_min_value(self):

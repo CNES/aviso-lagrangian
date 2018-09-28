@@ -177,8 +177,8 @@ double TimeSerie::Interpolate(const double date, const double longitude,
   const double t0 = time_serie_->GetDate(it0);
   const double t1 = time_serie_->GetDate(it1);
 
-  it0 = it0 - first_index_;
-  it1 = it1 - first_index_;
+  it0 -= first_index_;
+  it1 -= first_index_;
 
   const double dx = 1 / (t1 - t0);
 

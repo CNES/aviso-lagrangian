@@ -86,18 +86,18 @@ class Netcdf : public Reader {
   }
 
   // Get the index of the cell of a grid [Y, X]
-  inline size_t GetIndexXY(const double ix, const double iy) const {
+  inline size_t GetIndexXY(const double ix, const double iy) const noexcept {
     return ix * axis_y_.GetNumElements() + iy;
   }
 
   // Get the index of the cell of a grid [X, Y]
-  inline size_t GetIndexYX(const double ix, const double iy) const {
+  inline size_t GetIndexYX(const double ix, const double iy) const noexcept {
     return iy * axis_x_.GetNumElements() + ix;
   }
 
   // Get the value of the cell [ix, iy] of the grid
   inline double GetValue(const int ix, const int iy,
-                         const double fill_value = 0) const {
+                         const double fill_value = 0) const noexcept {
     double result = data_[(this->*pGetIndex_)(ix, iy)];
     return std::isnan(result) ? fill_value : result;
   }

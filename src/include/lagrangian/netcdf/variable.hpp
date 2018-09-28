@@ -80,7 +80,6 @@ class Variable : public Group {
    */
   inline long GetSize() const {
     long result = 1;
-    std::vector<size_t>::const_iterator it;
 
     for (auto& item : shape_) {
       result *= item;

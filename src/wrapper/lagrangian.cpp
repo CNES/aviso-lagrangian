@@ -15,28 +15,28 @@
         ],
         "language": "c++",
         "library_dirs": [
-            "build/lib.macosx-10.7-x86_64-3.7"
+            "build/lib.linux-x86_64-3.7"
         ],
         "name": "lagrangian",
         "sources": [
             "src/wrapper/lagrangian.pyx",
             "src/lib/units.cpp",
-            "src/lib/axis.cpp",
-            "src/lib/parameter.cpp",
-            "src/lib/trace.cpp",
-            "src/lib/integration.cpp",
-            "src/lib/map.cpp",
             "src/lib/datetime.cpp",
+            "src/lib/axis.cpp",
+            "src/lib/trace.cpp",
             "src/lib/time_serie.cpp",
+            "src/lib/integration.cpp",
+            "src/lib/parameter.cpp",
+            "src/lib/map.cpp",
+            "src/lib/netcdf/variable.cpp",
+            "src/lib/netcdf/scale_missing.cpp",
+            "src/lib/netcdf/netcdf.cpp",
+            "src/lib/netcdf/group.cpp",
+            "src/lib/netcdf/cf.cpp",
+            "src/lib/netcdf/attribute.cpp",
             "src/lib/reader/netcdf.cpp",
             "src/lib/field/vonkarman.cpp",
             "src/lib/field/time_serie.cpp",
-            "src/lib/netcdf/cf.cpp",
-            "src/lib/netcdf/scale_missing.cpp",
-            "src/lib/netcdf/attribute.cpp",
-            "src/lib/netcdf/variable.cpp",
-            "src/lib/netcdf/netcdf.cpp",
-            "src/lib/netcdf/group.cpp",
             "src/wrapper/field.cpp",
             "src/wrapper/reader.cpp"
         ]
@@ -1225,7 +1225,7 @@ enum __pyx_t_10lagrangian_AxisType {
   __pyx_e_10lagrangian_kY = lagrangian::Axis::kY
 };
 
-/* "lagrangian.pyx":336
+/* "lagrangian.pyx":339
  * 
  * 
  * cpdef enum UnitType:             # <<<<<<<<<<<<<<
@@ -1234,7 +1234,7 @@ enum __pyx_t_10lagrangian_AxisType {
  */
 enum __pyx_t_10lagrangian_UnitType {
 
-  /* "lagrangian.pyx":338
+  /* "lagrangian.pyx":341
  * cpdef enum UnitType:
  *     kMetric = cpp_lagrangian.kMetric
  *     kAngular = cpp_lagrangian.kAngular             # <<<<<<<<<<<<<<
@@ -1245,7 +1245,7 @@ enum __pyx_t_10lagrangian_UnitType {
   __pyx_e_10lagrangian_kAngular = lagrangian::Field::kAngular
 };
 
-/* "lagrangian.pyx":775
+/* "lagrangian.pyx":778
  * 
  * 
  * cpdef enum Mode:             # <<<<<<<<<<<<<<
@@ -1254,7 +1254,7 @@ enum __pyx_t_10lagrangian_UnitType {
  */
 enum __pyx_t_10lagrangian_Mode {
 
-  /* "lagrangian.pyx":777
+  /* "lagrangian.pyx":780
  * cpdef enum Mode:
  *     kFSLE = cpp_lagrangian.kFSLE
  *     kFTLE = cpp_lagrangian.kFTLE             # <<<<<<<<<<<<<<
@@ -1265,7 +1265,7 @@ enum __pyx_t_10lagrangian_Mode {
   __pyx_e_10lagrangian_kFTLE = lagrangian::FiniteLyapunovExponentsIntegration::kFTLE
 };
 
-/* "lagrangian.pyx":780
+/* "lagrangian.pyx":783
  * 
  * 
  * cpdef enum Stencil:             # <<<<<<<<<<<<<<
@@ -1274,7 +1274,7 @@ enum __pyx_t_10lagrangian_Mode {
  */
 enum __pyx_t_10lagrangian_Stencil {
 
-  /* "lagrangian.pyx":782
+  /* "lagrangian.pyx":785
  * cpdef enum Stencil:
  *     kTriplet = cpp_lagrangian.kTriplet
  *     kQuintuplet = cpp_lagrangian.kQuintuplet             # <<<<<<<<<<<<<<
@@ -1285,7 +1285,7 @@ enum __pyx_t_10lagrangian_Stencil {
   __pyx_e_10lagrangian_kQuintuplet = lagrangian::FiniteLyapunovExponentsIntegration::kQuintuplet
 };
 
-/* "lagrangian.pyx":1216
+/* "lagrangian.pyx":1219
  * 
  * 
  * cpdef enum ReaderType:             # <<<<<<<<<<<<<<
@@ -1294,7 +1294,7 @@ enum __pyx_t_10lagrangian_Stencil {
  */
 enum __pyx_t_10lagrangian_ReaderType {
 
-  /* "lagrangian.pyx":1217
+  /* "lagrangian.pyx":1220
  * 
  * cpdef enum ReaderType:
  *     kNetCDF = cpp_lagrangian.kNetCDF             # <<<<<<<<<<<<<<
@@ -1354,7 +1354,7 @@ struct __pyx_obj_10lagrangian_Axis {
 };
 
 
-/* "lagrangian.pyx":263
+/* "lagrangian.pyx":266
  * 
  * 
  * cdef class DateTime:             # <<<<<<<<<<<<<<
@@ -1367,7 +1367,7 @@ struct __pyx_obj_10lagrangian_DateTime {
 };
 
 
-/* "lagrangian.pyx":341
+/* "lagrangian.pyx":344
  * 
  * 
  * cdef class Field:             # <<<<<<<<<<<<<<
@@ -1380,7 +1380,7 @@ struct __pyx_obj_10lagrangian_Field {
 };
 
 
-/* "lagrangian.pyx":370
+/* "lagrangian.pyx":373
  * 
  * 
  * cdef class PythonField(Field):             # <<<<<<<<<<<<<<
@@ -1392,7 +1392,7 @@ struct __pyx_obj_10lagrangian_PythonField {
 };
 
 
-/* "lagrangian.pyx":395
+/* "lagrangian.pyx":398
  * 
  * 
  * cdef class Vonkarman(Field):             # <<<<<<<<<<<<<<
@@ -1404,7 +1404,7 @@ struct __pyx_obj_10lagrangian_Vonkarman {
 };
 
 
-/* "lagrangian.pyx":423
+/* "lagrangian.pyx":426
  * 
  * 
  * cdef class CellProperties:             # <<<<<<<<<<<<<<
@@ -1417,7 +1417,7 @@ struct __pyx_obj_10lagrangian_CellProperties {
 };
 
 
-/* "lagrangian.pyx":512
+/* "lagrangian.pyx":515
  * 
  * 
  * cdef class RungeKutta:             # <<<<<<<<<<<<<<
@@ -1431,7 +1431,7 @@ struct __pyx_obj_10lagrangian_RungeKutta {
 };
 
 
-/* "lagrangian.pyx":552
+/* "lagrangian.pyx":555
  * 
  * 
  * cdef class Iterator:             # <<<<<<<<<<<<<<
@@ -1445,7 +1445,7 @@ struct __pyx_obj_10lagrangian_Iterator {
 };
 
 
-/* "lagrangian.pyx":576
+/* "lagrangian.pyx":579
  * 
  * 
  * cdef class Position:             # <<<<<<<<<<<<<<
@@ -1459,7 +1459,7 @@ struct __pyx_obj_10lagrangian_Position {
 };
 
 
-/* "lagrangian.pyx":672
+/* "lagrangian.pyx":675
  * 
  * 
  * cdef class Triplet(Position):             # <<<<<<<<<<<<<<
@@ -1471,7 +1471,7 @@ struct __pyx_obj_10lagrangian_Triplet {
 };
 
 
-/* "lagrangian.pyx":680
+/* "lagrangian.pyx":683
  * 
  * 
  * cdef class Quintuplet(Position):             # <<<<<<<<<<<<<<
@@ -1483,7 +1483,7 @@ struct __pyx_obj_10lagrangian_Quintuplet {
 };
 
 
-/* "lagrangian.pyx":688
+/* "lagrangian.pyx":691
  * 
  * 
  * cdef class AbstractIntegration:             # <<<<<<<<<<<<<<
@@ -1498,7 +1498,7 @@ struct __pyx_obj_10lagrangian_AbstractIntegration {
 };
 
 
-/* "lagrangian.pyx":741
+/* "lagrangian.pyx":744
  * 
  * 
  * cdef class Integration(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1510,7 +1510,7 @@ struct __pyx_obj_10lagrangian_Integration {
 };
 
 
-/* "lagrangian.pyx":758
+/* "lagrangian.pyx":761
  * 
  * 
  * cdef class Path(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1522,7 +1522,7 @@ struct __pyx_obj_10lagrangian_Path {
 };
 
 
-/* "lagrangian.pyx":785
+/* "lagrangian.pyx":788
  * 
  * 
  * cdef class FiniteLyapunovExponents:             # <<<<<<<<<<<<<<
@@ -1535,7 +1535,7 @@ struct __pyx_obj_10lagrangian_FiniteLyapunovExponents {
 };
 
 
-/* "lagrangian.pyx":866
+/* "lagrangian.pyx":869
  * 
  * 
  * cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1547,7 +1547,7 @@ struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration {
 };
 
 
-/* "lagrangian.pyx":1099
+/* "lagrangian.pyx":1102
  * 
  * @cython.internal
  * cdef class AbstractReader:             # <<<<<<<<<<<<<<
@@ -1560,7 +1560,7 @@ struct __pyx_obj_10lagrangian_AbstractReader {
 };
 
 
-/* "lagrangian.pyx":1109
+/* "lagrangian.pyx":1112
  * 
  * @cython.internal
  * cdef class Reader(AbstractReader):             # <<<<<<<<<<<<<<
@@ -1572,7 +1572,7 @@ struct __pyx_obj_10lagrangian_Reader {
 };
 
 
-/* "lagrangian.pyx":1164
+/* "lagrangian.pyx":1167
  * 
  * 
  * cdef class Netcdf(Reader):             # <<<<<<<<<<<<<<
@@ -1584,7 +1584,7 @@ struct __pyx_obj_10lagrangian_Netcdf {
 };
 
 
-/* "lagrangian.pyx":1200
+/* "lagrangian.pyx":1203
  * 
  * 
  * cdef class PythonReader(AbstractReader):             # <<<<<<<<<<<<<<
@@ -1596,7 +1596,7 @@ struct __pyx_obj_10lagrangian_PythonReader {
 };
 
 
-/* "lagrangian.pyx":1220
+/* "lagrangian.pyx":1223
  * 
  * 
  * cdef class Factory:             # <<<<<<<<<<<<<<
@@ -1608,7 +1608,7 @@ struct __pyx_obj_10lagrangian_Factory {
 };
 
 
-/* "lagrangian.pyx":1234
+/* "lagrangian.pyx":1237
  * 
  * 
  * cdef class TimeSerie(Field):             # <<<<<<<<<<<<<<
@@ -1620,7 +1620,7 @@ struct __pyx_obj_10lagrangian_TimeSerie {
 };
 
 
-/* "lagrangian.pyx":1297
+/* "lagrangian.pyx":1300
  * 
  * 
  * cdef class MapProperties:             # <<<<<<<<<<<<<<
@@ -1633,7 +1633,7 @@ struct __pyx_obj_10lagrangian_MapProperties {
 };
 
 
-/* "lagrangian.pyx":1405
+/* "lagrangian.pyx":1408
  * 
  * 
  * cdef class MapOfFiniteLyapunovExponents:             # <<<<<<<<<<<<<<
@@ -1648,7 +1648,7 @@ struct __pyx_obj_10lagrangian_MapOfFiniteLyapunovExponents {
 };
 
 
-/* "lagrangian.pyx":565
+/* "lagrangian.pyx":568
  *         return Iterator(0, 0, 1)
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -1675,7 +1675,7 @@ struct __pyx_obj___Pyx_EnumMeta {
 
 
 
-/* "lagrangian.pyx":552
+/* "lagrangian.pyx":555
  * 
  * 
  * cdef class Iterator:             # <<<<<<<<<<<<<<
@@ -1689,7 +1689,7 @@ struct __pyx_vtabstruct_10lagrangian_Iterator {
 static struct __pyx_vtabstruct_10lagrangian_Iterator *__pyx_vtabptr_10lagrangian_Iterator;
 
 
-/* "lagrangian.pyx":576
+/* "lagrangian.pyx":579
  * 
  * 
  * cdef class Position:             # <<<<<<<<<<<<<<
@@ -1703,7 +1703,7 @@ struct __pyx_vtabstruct_10lagrangian_Position {
 static struct __pyx_vtabstruct_10lagrangian_Position *__pyx_vtabptr_10lagrangian_Position;
 
 
-/* "lagrangian.pyx":672
+/* "lagrangian.pyx":675
  * 
  * 
  * cdef class Triplet(Position):             # <<<<<<<<<<<<<<
@@ -1717,7 +1717,7 @@ struct __pyx_vtabstruct_10lagrangian_Triplet {
 static struct __pyx_vtabstruct_10lagrangian_Triplet *__pyx_vtabptr_10lagrangian_Triplet;
 
 
-/* "lagrangian.pyx":680
+/* "lagrangian.pyx":683
  * 
  * 
  * cdef class Quintuplet(Position):             # <<<<<<<<<<<<<<
@@ -1731,7 +1731,7 @@ struct __pyx_vtabstruct_10lagrangian_Quintuplet {
 static struct __pyx_vtabstruct_10lagrangian_Quintuplet *__pyx_vtabptr_10lagrangian_Quintuplet;
 
 
-/* "lagrangian.pyx":688
+/* "lagrangian.pyx":691
  * 
  * 
  * cdef class AbstractIntegration:             # <<<<<<<<<<<<<<
@@ -1745,7 +1745,7 @@ struct __pyx_vtabstruct_10lagrangian_AbstractIntegration {
 static struct __pyx_vtabstruct_10lagrangian_AbstractIntegration *__pyx_vtabptr_10lagrangian_AbstractIntegration;
 
 
-/* "lagrangian.pyx":741
+/* "lagrangian.pyx":744
  * 
  * 
  * cdef class Integration(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1759,7 +1759,7 @@ struct __pyx_vtabstruct_10lagrangian_Integration {
 static struct __pyx_vtabstruct_10lagrangian_Integration *__pyx_vtabptr_10lagrangian_Integration;
 
 
-/* "lagrangian.pyx":758
+/* "lagrangian.pyx":761
  * 
  * 
  * cdef class Path(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1773,7 +1773,7 @@ struct __pyx_vtabstruct_10lagrangian_Path {
 static struct __pyx_vtabstruct_10lagrangian_Path *__pyx_vtabptr_10lagrangian_Path;
 
 
-/* "lagrangian.pyx":866
+/* "lagrangian.pyx":869
  * 
  * 
  * cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):             # <<<<<<<<<<<<<<
@@ -1787,7 +1787,7 @@ struct __pyx_vtabstruct_10lagrangian_FiniteLyapunovExponentsIntegration {
 static struct __pyx_vtabstruct_10lagrangian_FiniteLyapunovExponentsIntegration *__pyx_vtabptr_10lagrangian_FiniteLyapunovExponentsIntegration;
 
 
-/* "lagrangian.pyx":1405
+/* "lagrangian.pyx":1408
  * 
  * 
  * cdef class MapOfFiniteLyapunovExponents:             # <<<<<<<<<<<<<<
@@ -1980,15 +1980,6 @@ static Py_ssize_t __Pyx_minusones[] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 static Py_ssize_t __Pyx_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 #define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
-/* ExtTypeTest.proto */
-static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
-
-/* GetAttr.proto */
-static CYTHON_INLINE PyObject *__Pyx_GetAttr(PyObject *, PyObject *);
-
-/* HasAttr.proto */
-static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
-
 /* PyCFunctionFastCall.proto */
 #if CYTHON_FAST_PYCCALL
 static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
@@ -2014,6 +2005,15 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject
 
 /* PyObjectCallOneArg.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
+/* ExtTypeTest.proto */
+static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
+
+/* GetAttr.proto */
+static CYTHON_INLINE PyObject *__Pyx_GetAttr(PyObject *, PyObject *);
+
+/* HasAttr.proto */
+static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
 
 /* RaiseTooManyValuesToUnpack.proto */
 static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected);
@@ -2792,6 +2792,7 @@ int __pyx_module_is_main_lagrangian = 0;
 static PyObject *__pyx_builtin_staticmethod;
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_range;
+static PyObject *__pyx_builtin_IndexError;
 static PyObject *__pyx_builtin_NotImplemented;
 static PyObject *__pyx_builtin_NotImplementedError;
 static PyObject *__pyx_builtin_RuntimeError;
@@ -2919,6 +2920,7 @@ static const char __pyx_k_metaclass[] = "__metaclass__";
 static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_unit_type[] = "unit_type";
+static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ReaderType[] = "ReaderType";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_coordinate[] = "coordinate";
@@ -2986,6 +2988,7 @@ static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xd4;
+static PyObject *__pyx_n_s_IndexError;
 static PyObject *__pyx_n_s_IntEnum;
 static PyObject *__pyx_n_s_Iterator___iter;
 static PyObject *__pyx_n_s_Mode;
@@ -4473,28 +4476,74 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_5get_coordinate_value(PyObject *__p
 static PyObject *__pyx_pf_10lagrangian_4Axis_4get_coordinate_value(struct __pyx_obj_10lagrangian_Axis *__pyx_v_self, int __pyx_v_index) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  double __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
+  int __pyx_t_1;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  double __pyx_t_5;
   __Pyx_RefNannySetupContext("get_coordinate_value", 0);
 
   /* "lagrangian.pyx":147
  *         Get the ith coordinate value.
  *         """
+ *         if index < 0 or index >= self.wrapped.GetNumElements():             # <<<<<<<<<<<<<<
+ *             raise IndexError(index)
+ * 
+ */
+  __pyx_t_2 = ((__pyx_v_index < 0) != 0);
+  if (!__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L4_bool_binop_done;
+  }
+  __pyx_t_2 = ((__pyx_v_index >= __pyx_v_self->wrapped->GetNumElements()) != 0);
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L4_bool_binop_done:;
+  if (unlikely(__pyx_t_1)) {
+
+    /* "lagrangian.pyx":148
+ *         """
+ *         if index < 0 or index >= self.wrapped.GetNumElements():
+ *             raise IndexError(index)             # <<<<<<<<<<<<<<
+ * 
+ *         return self.wrapped.GetCoordinateValue(index)
+ */
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_index); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 148, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_IndexError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 148, __pyx_L1_error)
+
+    /* "lagrangian.pyx":147
+ *         Get the ith coordinate value.
+ *         """
+ *         if index < 0 or index >= self.wrapped.GetNumElements():             # <<<<<<<<<<<<<<
+ *             raise IndexError(index)
+ * 
+ */
+  }
+
+  /* "lagrangian.pyx":150
+ *             raise IndexError(index)
+ * 
  *         return self.wrapped.GetCoordinateValue(index)             # <<<<<<<<<<<<<<
  * 
  *     def get_min_value(self):
  */
   __Pyx_XDECREF(__pyx_r);
   try {
-    __pyx_t_1 = __pyx_v_self->wrapped->GetCoordinateValue(__pyx_v_index);
+    __pyx_t_5 = __pyx_v_self->wrapped->GetCoordinateValue(__pyx_v_index);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 147, __pyx_L1_error)
+    __PYX_ERR(0, 150, __pyx_L1_error)
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 150, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
   goto __pyx_L0;
 
   /* "lagrangian.pyx":143
@@ -4507,7 +4556,8 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_4get_coordinate_value(struct __pyx_
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_AddTraceback("lagrangian.Axis.get_coordinate_value", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -4516,7 +4566,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_4get_coordinate_value(struct __pyx_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":149
+/* "lagrangian.pyx":152
  *         return self.wrapped.GetCoordinateValue(index)
  * 
  *     def get_min_value(self):             # <<<<<<<<<<<<<<
@@ -4544,7 +4594,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_6get_min_value(struct __pyx_obj_10l
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_min_value", 0);
 
-  /* "lagrangian.pyx":153
+  /* "lagrangian.pyx":156
  *         Get the minimum coordinate value
  *         """
  *         return self.wrapped.GetMinValue()             # <<<<<<<<<<<<<<
@@ -4552,13 +4602,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_6get_min_value(struct __pyx_obj_10l
  *     def get_max_value(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetMinValue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetMinValue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":149
+  /* "lagrangian.pyx":152
  *         return self.wrapped.GetCoordinateValue(index)
  * 
  *     def get_min_value(self):             # <<<<<<<<<<<<<<
@@ -4577,7 +4627,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_6get_min_value(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":155
+/* "lagrangian.pyx":158
  *         return self.wrapped.GetMinValue()
  * 
  *     def get_max_value(self):             # <<<<<<<<<<<<<<
@@ -4605,7 +4655,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_8get_max_value(struct __pyx_obj_10l
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_max_value", 0);
 
-  /* "lagrangian.pyx":159
+  /* "lagrangian.pyx":162
  *         Get the maximum coordinate value
  *         """
  *         return self.wrapped.GetMaxValue()             # <<<<<<<<<<<<<<
@@ -4613,13 +4663,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_8get_max_value(struct __pyx_obj_10l
  *     def get_num_elements(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetMaxValue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetMaxValue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":155
+  /* "lagrangian.pyx":158
  *         return self.wrapped.GetMinValue()
  * 
  *     def get_max_value(self):             # <<<<<<<<<<<<<<
@@ -4638,7 +4688,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_8get_max_value(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":161
+/* "lagrangian.pyx":164
  *         return self.wrapped.GetMaxValue()
  * 
  *     def get_num_elements(self):             # <<<<<<<<<<<<<<
@@ -4666,7 +4716,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10get_num_elements(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_num_elements", 0);
 
-  /* "lagrangian.pyx":165
+  /* "lagrangian.pyx":168
  *         Get the number of values for this axis
  *         """
  *         return self.wrapped.GetNumElements()             # <<<<<<<<<<<<<<
@@ -4674,13 +4724,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10get_num_elements(struct __pyx_obj
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_FromSize_t(__pyx_v_self->wrapped->GetNumElements()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_FromSize_t(__pyx_v_self->wrapped->GetNumElements()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":161
+  /* "lagrangian.pyx":164
  *         return self.wrapped.GetMaxValue()
  * 
  *     def get_num_elements(self):             # <<<<<<<<<<<<<<
@@ -4699,7 +4749,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10get_num_elements(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":168
+/* "lagrangian.pyx":171
  * 
  *     @property
  *     def is_regular(self):             # <<<<<<<<<<<<<<
@@ -4726,7 +4776,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10is_regular___get__(struct __pyx_o
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":174
+  /* "lagrangian.pyx":177
  *             value(i) = self.start + i * self.increment
  *         """
  *         return self.wrapped.is_regular()             # <<<<<<<<<<<<<<
@@ -4734,13 +4784,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10is_regular___get__(struct __pyx_o
  *     def find_index(self, double coordinate):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->is_regular()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->is_regular()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":168
+  /* "lagrangian.pyx":171
  * 
  *     @property
  *     def is_regular(self):             # <<<<<<<<<<<<<<
@@ -4759,7 +4809,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_10is_regular___get__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":176
+/* "lagrangian.pyx":179
  *         return self.wrapped.is_regular()
  * 
  *     def find_index(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -4776,7 +4826,7 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_13find_index(PyObject *__pyx_v_self
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_index (wrapper)", 0);
   assert(__pyx_arg_coordinate); {
-    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L3_error)
+    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 179, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -4797,7 +4847,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_12find_index(struct __pyx_obj_10lag
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("find_index", 0);
 
-  /* "lagrangian.pyx":184
+  /* "lagrangian.pyx":187
  *              edge[i] > pos >= edge[i+1] (if values are descending)
  *         """
  *         return self.wrapped.FindIndex(coordinate)             # <<<<<<<<<<<<<<
@@ -4805,13 +4855,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_12find_index(struct __pyx_obj_10lag
  *     def find_index_bounded(self, double coordinate):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->FindIndex(__pyx_v_coordinate)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 184, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->FindIndex(__pyx_v_coordinate)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":176
+  /* "lagrangian.pyx":179
  *         return self.wrapped.is_regular()
  * 
  *     def find_index(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -4830,7 +4880,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_12find_index(struct __pyx_obj_10lag
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":186
+/* "lagrangian.pyx":189
  *         return self.wrapped.FindIndex(coordinate)
  * 
  *     def find_index_bounded(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -4847,7 +4897,7 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_15find_index_bounded(PyObject *__py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_index_bounded (wrapper)", 0);
   assert(__pyx_arg_coordinate); {
-    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 186, __pyx_L3_error)
+    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 189, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -4868,7 +4918,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_14find_index_bounded(struct __pyx_o
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("find_index_bounded", 0);
 
-  /* "lagrangian.pyx":191
+  /* "lagrangian.pyx":194
  *         is closest to it.
  *         """
  *         return self.wrapped.FindIndexBounded(coordinate)             # <<<<<<<<<<<<<<
@@ -4876,13 +4926,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_14find_index_bounded(struct __pyx_o
  *     def normalize(self, double coordinate, double circle):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->FindIndexBounded(__pyx_v_coordinate)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->FindIndexBounded(__pyx_v_coordinate)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":186
+  /* "lagrangian.pyx":189
  *         return self.wrapped.FindIndex(coordinate)
  * 
  *     def find_index_bounded(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -4901,7 +4951,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_14find_index_bounded(struct __pyx_o
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":193
+/* "lagrangian.pyx":196
  *         return self.wrapped.FindIndexBounded(coordinate)
  * 
  *     def normalize(self, double coordinate, double circle):             # <<<<<<<<<<<<<<
@@ -4941,11 +4991,11 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_17normalize(PyObject *__pyx_v_self,
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_circle)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("normalize", 1, 2, 2, 1); __PYX_ERR(0, 193, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("normalize", 1, 2, 2, 1); __PYX_ERR(0, 196, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "normalize") < 0)) __PYX_ERR(0, 193, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "normalize") < 0)) __PYX_ERR(0, 196, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -4953,12 +5003,12 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_17normalize(PyObject *__pyx_v_self,
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 193, __pyx_L3_error)
-    __pyx_v_circle = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_circle == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 193, __pyx_L3_error)
+    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 196, __pyx_L3_error)
+    __pyx_v_circle = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_circle == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 196, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("normalize", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 193, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("normalize", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 196, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Axis.normalize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4977,7 +5027,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_16normalize(struct __pyx_obj_10lagr
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("normalize", 0);
 
-  /* "lagrangian.pyx":197
+  /* "lagrangian.pyx":200
  *         Standardization of longitude
  *         """
  *         return self.wrapped.Normalize(coordinate, circle)             # <<<<<<<<<<<<<<
@@ -4985,13 +5035,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_16normalize(struct __pyx_obj_10lagr
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->Normalize(__pyx_v_coordinate, __pyx_v_circle)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->Normalize(__pyx_v_coordinate, __pyx_v_circle)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":193
+  /* "lagrangian.pyx":196
  *         return self.wrapped.FindIndexBounded(coordinate)
  * 
  *     def normalize(self, double coordinate, double circle):             # <<<<<<<<<<<<<<
@@ -5010,7 +5060,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_16normalize(struct __pyx_obj_10lagr
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":200
+/* "lagrangian.pyx":203
  * 
  *     @property
  *     def units(self):             # <<<<<<<<<<<<<<
@@ -5040,7 +5090,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5units___get__(struct __pyx_obj_10l
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":207
+  /* "lagrangian.pyx":210
  *             libcpp.string.string cpp_units
  *             libcpp.bool result
  *         result = self.wrapped.get_units(cpp_units)             # <<<<<<<<<<<<<<
@@ -5049,7 +5099,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5units___get__(struct __pyx_obj_10l
  */
   __pyx_v_result = __pyx_v_self->wrapped->get_units(__pyx_v_cpp_units);
 
-  /* "lagrangian.pyx":208
+  /* "lagrangian.pyx":211
  *             libcpp.bool result
  *         result = self.wrapped.get_units(cpp_units)
  *         return cpp_units if result else None             # <<<<<<<<<<<<<<
@@ -5058,7 +5108,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5units___get__(struct __pyx_obj_10l
  */
   __Pyx_XDECREF(__pyx_r);
   if ((__pyx_v_result != 0)) {
-    __pyx_t_2 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cpp_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 208, __pyx_L1_error)
+    __pyx_t_2 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cpp_units); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __pyx_t_2;
     __pyx_t_2 = 0;
@@ -5070,7 +5120,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5units___get__(struct __pyx_obj_10l
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":200
+  /* "lagrangian.pyx":203
  * 
  *     @property
  *     def units(self):             # <<<<<<<<<<<<<<
@@ -5090,7 +5140,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5units___get__(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":210
+/* "lagrangian.pyx":213
  *         return cpp_units if result else None
  * 
  *     def convert(self, str unit not None):             # <<<<<<<<<<<<<<
@@ -5105,7 +5155,7 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_19convert(PyObject *__pyx_v_self, P
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("convert (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_unit), (&PyString_Type), 0, "unit", 1))) __PYX_ERR(0, 210, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_unit), (&PyString_Type), 0, "unit", 1))) __PYX_ERR(0, 213, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_4Axis_18convert(((struct __pyx_obj_10lagrangian_Axis *)__pyx_v_self), ((PyObject*)__pyx_v_unit));
 
   /* function exit code */
@@ -5125,20 +5175,20 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_18convert(struct __pyx_obj_10lagran
   std::string __pyx_t_2;
   __Pyx_RefNannySetupContext("convert", 0);
 
-  /* "lagrangian.pyx":217
+  /* "lagrangian.pyx":220
  *         cdef libcpp.string.string cpp_unit
  * 
  *         cpp_unit = unit.encode('utf8')             # <<<<<<<<<<<<<<
  *         self.wrapped.Convert(cpp_unit)
  * 
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_unit, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 217, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_unit, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 217, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_cpp_unit = __pyx_t_2;
 
-  /* "lagrangian.pyx":218
+  /* "lagrangian.pyx":221
  * 
  *         cpp_unit = unit.encode('utf8')
  *         self.wrapped.Convert(cpp_unit)             # <<<<<<<<<<<<<<
@@ -5149,10 +5199,10 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_18convert(struct __pyx_obj_10lagran
     __pyx_v_self->wrapped->Convert(__pyx_v_cpp_unit);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 218, __pyx_L1_error)
+    __PYX_ERR(0, 221, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":210
+  /* "lagrangian.pyx":213
  *         return cpp_units if result else None
  * 
  *     def convert(self, str unit not None):             # <<<<<<<<<<<<<<
@@ -5173,7 +5223,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_18convert(struct __pyx_obj_10lagran
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":220
+/* "lagrangian.pyx":223
  *         self.wrapped.Convert(cpp_unit)
  * 
  *     def find_indexes(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -5190,7 +5240,7 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_21find_indexes(PyObject *__pyx_v_se
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_indexes (wrapper)", 0);
   assert(__pyx_arg_coordinate); {
-    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 220, __pyx_L3_error)
+    __pyx_v_coordinate = __pyx_PyFloat_AsDouble(__pyx_arg_coordinate); if (unlikely((__pyx_v_coordinate == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 223, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -5216,7 +5266,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("find_indexes", 0);
 
-  /* "lagrangian.pyx":230
+  /* "lagrangian.pyx":233
  * 
  *         # Disable compiler complaints
  *         i0 = i1 = -1             # <<<<<<<<<<<<<<
@@ -5226,7 +5276,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
   __pyx_v_i0 = -1;
   __pyx_v_i1 = -1;
 
-  /* "lagrangian.pyx":231
+  /* "lagrangian.pyx":234
  *         # Disable compiler complaints
  *         i0 = i1 = -1
  *         if self.wrapped.FindIndexes(coordinate, i0, i1):             # <<<<<<<<<<<<<<
@@ -5236,7 +5286,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
   __pyx_t_1 = (__pyx_v_self->wrapped->FindIndexes(__pyx_v_coordinate, __pyx_v_i0, __pyx_v_i1) != 0);
   if (__pyx_t_1) {
 
-    /* "lagrangian.pyx":232
+    /* "lagrangian.pyx":235
  *         i0 = i1 = -1
  *         if self.wrapped.FindIndexes(coordinate, i0, i1):
  *             return i0, i1             # <<<<<<<<<<<<<<
@@ -5244,11 +5294,11 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_i0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 232, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_i1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 232, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
@@ -5260,7 +5310,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
     __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":231
+    /* "lagrangian.pyx":234
  *         # Disable compiler complaints
  *         i0 = i1 = -1
  *         if self.wrapped.FindIndexes(coordinate, i0, i1):             # <<<<<<<<<<<<<<
@@ -5269,7 +5319,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
  */
   }
 
-  /* "lagrangian.pyx":233
+  /* "lagrangian.pyx":236
  *         if self.wrapped.FindIndexes(coordinate, i0, i1):
  *             return i0, i1
  *         return None             # <<<<<<<<<<<<<<
@@ -5280,7 +5330,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":220
+  /* "lagrangian.pyx":223
  *         self.wrapped.Convert(cpp_unit)
  * 
  *     def find_indexes(self, double coordinate):             # <<<<<<<<<<<<<<
@@ -5301,7 +5351,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_20find_indexes(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":236
+/* "lagrangian.pyx":239
  * 
  *     @property
  *     def start(self):             # <<<<<<<<<<<<<<
@@ -5328,7 +5378,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5start___get__(struct __pyx_obj_10l
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":240
+  /* "lagrangian.pyx":243
  *         Get starting value if is_regular
  *         """
  *         return self.wrapped.get_start()             # <<<<<<<<<<<<<<
@@ -5336,13 +5386,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5start___get__(struct __pyx_obj_10l
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 243, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":236
+  /* "lagrangian.pyx":239
  * 
  *     @property
  *     def start(self):             # <<<<<<<<<<<<<<
@@ -5361,7 +5411,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_5start___get__(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":243
+/* "lagrangian.pyx":246
  * 
  *     @property
  *     def increment(self):             # <<<<<<<<<<<<<<
@@ -5388,7 +5438,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_9increment___get__(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":247
+  /* "lagrangian.pyx":250
  *         Get increment value if is_regular
  *         """
  *         return self.wrapped.get_increment()             # <<<<<<<<<<<<<<
@@ -5396,13 +5446,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_9increment___get__(struct __pyx_obj
  *     def __richcmp__(Axis this, Axis other, int operator):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_increment()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_increment()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":243
+  /* "lagrangian.pyx":246
  * 
  *     @property
  *     def increment(self):             # <<<<<<<<<<<<<<
@@ -5421,7 +5471,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_9increment___get__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":249
+/* "lagrangian.pyx":252
  *         return self.wrapped.get_increment()
  * 
  *     def __richcmp__(Axis this, Axis other, int operator):             # <<<<<<<<<<<<<<
@@ -5435,7 +5485,7 @@ static PyObject *__pyx_pw_10lagrangian_4Axis_23__richcmp__(PyObject *__pyx_v_thi
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__richcmp__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10lagrangian_Axis, 1, "other", 0))) __PYX_ERR(0, 249, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10lagrangian_Axis, 1, "other", 0))) __PYX_ERR(0, 252, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_4Axis_22__richcmp__(((struct __pyx_obj_10lagrangian_Axis *)__pyx_v_this), ((struct __pyx_obj_10lagrangian_Axis *)__pyx_v_other), ((int)__pyx_v_operator));
 
   /* function exit code */
@@ -5456,7 +5506,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__richcmp__", 0);
 
-  /* "lagrangian.pyx":252
+  /* "lagrangian.pyx":255
  *         cdef libcpp.bool result
  * 
  *         if other is None:             # <<<<<<<<<<<<<<
@@ -5467,7 +5517,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "lagrangian.pyx":253
+    /* "lagrangian.pyx":256
  * 
  *         if other is None:
  *             return False             # <<<<<<<<<<<<<<
@@ -5479,7 +5529,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
     __pyx_r = Py_False;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":252
+    /* "lagrangian.pyx":255
  *         cdef libcpp.bool result
  * 
  *         if other is None:             # <<<<<<<<<<<<<<
@@ -5488,7 +5538,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  */
   }
 
-  /* "lagrangian.pyx":254
+  /* "lagrangian.pyx":257
  *         if other is None:
  *             return False
  *         result = cpp_lagrangian.AxisCompare(this.wrapped[0],             # <<<<<<<<<<<<<<
@@ -5497,7 +5547,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  */
   __pyx_v_result = operator!=((__pyx_v_this->wrapped[0]), (__pyx_v_other->wrapped[0]));
 
-  /* "lagrangian.pyx":256
+  /* "lagrangian.pyx":259
  *         result = cpp_lagrangian.AxisCompare(this.wrapped[0],
  *                                             other.wrapped[0])
  *         if operator == 2:             # <<<<<<<<<<<<<<
@@ -5507,7 +5557,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
   switch (__pyx_v_operator) {
     case 2:
 
-    /* "lagrangian.pyx":257
+    /* "lagrangian.pyx":260
  *                                             other.wrapped[0])
  *         if operator == 2:
  *             return not result             # <<<<<<<<<<<<<<
@@ -5515,13 +5565,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  *             return result
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyBool_FromLong((!(__pyx_v_result != 0))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyBool_FromLong((!(__pyx_v_result != 0))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 260, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":256
+    /* "lagrangian.pyx":259
  *         result = cpp_lagrangian.AxisCompare(this.wrapped[0],
  *                                             other.wrapped[0])
  *         if operator == 2:             # <<<<<<<<<<<<<<
@@ -5530,7 +5580,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  */
     break;
 
-    /* "lagrangian.pyx":258
+    /* "lagrangian.pyx":261
  *         if operator == 2:
  *             return not result
  *         elif operator == 3:             # <<<<<<<<<<<<<<
@@ -5539,7 +5589,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  */
     case 3:
 
-    /* "lagrangian.pyx":259
+    /* "lagrangian.pyx":262
  *             return not result
  *         elif operator == 3:
  *             return result             # <<<<<<<<<<<<<<
@@ -5547,13 +5597,13 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
  * 
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_v_result); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 259, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_v_result); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_r = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":258
+    /* "lagrangian.pyx":261
  *         if operator == 2:
  *             return not result
  *         elif operator == 3:             # <<<<<<<<<<<<<<
@@ -5564,7 +5614,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
     default: break;
   }
 
-  /* "lagrangian.pyx":260
+  /* "lagrangian.pyx":263
  *         elif operator == 3:
  *             return result
  *         return NotImplemented             # <<<<<<<<<<<<<<
@@ -5576,7 +5626,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_22__richcmp__(struct __pyx_obj_10la
   __pyx_r = __pyx_builtin_NotImplemented;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":249
+  /* "lagrangian.pyx":252
  *         return self.wrapped.get_increment()
  * 
  *     def __richcmp__(Axis this, Axis other, int operator):             # <<<<<<<<<<<<<<
@@ -5702,7 +5752,7 @@ static PyObject *__pyx_pf_10lagrangian_4Axis_26__setstate_cython__(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":272
+/* "lagrangian.pyx":275
  *     cdef cpp_lagrangian.DateTime* wrapped
  * 
  *     def __cinit__(self, object argument=None):             # <<<<<<<<<<<<<<
@@ -5739,7 +5789,7 @@ static int __pyx_pw_10lagrangian_8DateTime_1__cinit__(PyObject *__pyx_v_self, Py
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 272, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 275, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5753,7 +5803,7 @@ static int __pyx_pw_10lagrangian_8DateTime_1__cinit__(PyObject *__pyx_v_self, Py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 272, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 275, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.DateTime.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -5779,7 +5829,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   lagrangian::DateTime __pyx_t_7;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":275
+  /* "lagrangian.pyx":278
  *         cdef libcpp.string.string cpp_string
  * 
  *         self.wrapped = new cpp_lagrangian.DateTime()             # <<<<<<<<<<<<<<
@@ -5789,7 +5839,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   __pyx_t_1 = new lagrangian::DateTime(); 
   __pyx_v_self->wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":277
+  /* "lagrangian.pyx":280
  *         self.wrapped = new cpp_lagrangian.DateTime()
  * 
  *         if argument is None:             # <<<<<<<<<<<<<<
@@ -5800,7 +5850,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "lagrangian.pyx":278
+    /* "lagrangian.pyx":281
  * 
  *         if argument is None:
  *             return             # <<<<<<<<<<<<<<
@@ -5810,7 +5860,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
     __pyx_r = 0;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":277
+    /* "lagrangian.pyx":280
  *         self.wrapped = new cpp_lagrangian.DateTime()
  * 
  *         if argument is None:             # <<<<<<<<<<<<<<
@@ -5819,7 +5869,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
  */
   }
 
-  /* "lagrangian.pyx":280
+  /* "lagrangian.pyx":283
  *             return
  * 
  *         if isinstance(argument, cpython.datetime.datetime):             # <<<<<<<<<<<<<<
@@ -5830,17 +5880,17 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "lagrangian.pyx":281
+    /* "lagrangian.pyx":284
  * 
  *         if isinstance(argument, cpython.datetime.datetime):
  *             self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)             # <<<<<<<<<<<<<<
  *         elif isinstance(argument, str):
  *             cpp_string = argument.encode('utf8')
  */
-    if (!(likely(((__pyx_v_argument) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_argument, __pyx_ptype_7cpython_8datetime_datetime))))) __PYX_ERR(0, 281, __pyx_L1_error)
+    if (!(likely(((__pyx_v_argument) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_argument, __pyx_ptype_7cpython_8datetime_datetime))))) __PYX_ERR(0, 284, __pyx_L1_error)
     (__pyx_v_self->wrapped[0]) = __pyx_f_14cpp_lagrangian_from_pydatetime(((PyDateTime_DateTime *)__pyx_v_argument));
 
-    /* "lagrangian.pyx":280
+    /* "lagrangian.pyx":283
  *             return
  * 
  *         if isinstance(argument, cpython.datetime.datetime):             # <<<<<<<<<<<<<<
@@ -5850,7 +5900,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
     goto __pyx_L4;
   }
 
-  /* "lagrangian.pyx":282
+  /* "lagrangian.pyx":285
  *         if isinstance(argument, cpython.datetime.datetime):
  *             self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)
  *         elif isinstance(argument, str):             # <<<<<<<<<<<<<<
@@ -5861,23 +5911,23 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (likely(__pyx_t_3)) {
 
-    /* "lagrangian.pyx":283
+    /* "lagrangian.pyx":286
  *             self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)
  *         elif isinstance(argument, str):
  *             cpp_string = argument.encode('utf8')             # <<<<<<<<<<<<<<
  *             self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)
  *         else:
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_argument, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 283, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_argument, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 283, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_6 = __pyx_convert_string_from_py_std__in_string(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L1_error)
+    __pyx_t_6 = __pyx_convert_string_from_py_std__in_string(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 286, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_cpp_string = __pyx_t_6;
 
-    /* "lagrangian.pyx":284
+    /* "lagrangian.pyx":287
  *         elif isinstance(argument, str):
  *             cpp_string = argument.encode('utf8')
  *             self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)             # <<<<<<<<<<<<<<
@@ -5888,11 +5938,11 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
       __pyx_t_7 = lagrangian::DateTime(__pyx_v_cpp_string);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 284, __pyx_L1_error)
+      __PYX_ERR(0, 287, __pyx_L1_error)
     }
     (__pyx_v_self->wrapped[0]) = __pyx_t_7;
 
-    /* "lagrangian.pyx":282
+    /* "lagrangian.pyx":285
  *         if isinstance(argument, cpython.datetime.datetime):
  *             self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)
  *         elif isinstance(argument, str):             # <<<<<<<<<<<<<<
@@ -5902,7 +5952,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
     goto __pyx_L4;
   }
 
-  /* "lagrangian.pyx":286
+  /* "lagrangian.pyx":289
  *             self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)
  *         else:
  *             raise TypeError("a string or a datetime object is required")             # <<<<<<<<<<<<<<
@@ -5910,15 +5960,15 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
  *     def __dealloc__(self):
  */
   /*else*/ {
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 289, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __PYX_ERR(0, 286, __pyx_L1_error)
+    __PYX_ERR(0, 289, __pyx_L1_error)
   }
   __pyx_L4:;
 
-  /* "lagrangian.pyx":272
+  /* "lagrangian.pyx":275
  *     cdef cpp_lagrangian.DateTime* wrapped
  * 
  *     def __cinit__(self, object argument=None):             # <<<<<<<<<<<<<<
@@ -5939,7 +5989,7 @@ static int __pyx_pf_10lagrangian_8DateTime___cinit__(struct __pyx_obj_10lagrangi
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":288
+/* "lagrangian.pyx":291
  *             raise TypeError("a string or a datetime object is required")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -5962,7 +6012,7 @@ static void __pyx_pf_10lagrangian_8DateTime_2__dealloc__(struct __pyx_obj_10lagr
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":289
+  /* "lagrangian.pyx":292
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -5971,7 +6021,7 @@ static void __pyx_pf_10lagrangian_8DateTime_2__dealloc__(struct __pyx_obj_10lagr
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":288
+  /* "lagrangian.pyx":291
  *             raise TypeError("a string or a datetime object is required")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -5983,7 +6033,7 @@ static void __pyx_pf_10lagrangian_8DateTime_2__dealloc__(struct __pyx_obj_10lagr
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":291
+/* "lagrangian.pyx":294
  *         del self.wrapped
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -6012,7 +6062,7 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_4__str__(struct __pyx_obj_10lag
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "lagrangian.pyx":292
+  /* "lagrangian.pyx":295
  * 
  *     def __str__(self):
  *         return self.wrapped.ToString("%Y-%m-%dT%M:%M:%s")             # <<<<<<<<<<<<<<
@@ -6020,20 +6070,20 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_4__str__(struct __pyx_obj_10lag
  *     def __call__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_Y_m_dT_M_M_s); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_Y_m_dT_M_M_s); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 295, __pyx_L1_error)
   try {
     __pyx_t_2 = __pyx_v_self->wrapped->ToString(__pyx_t_1);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 292, __pyx_L1_error)
+    __PYX_ERR(0, 295, __pyx_L1_error)
   }
-  __pyx_t_3 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+  __pyx_t_3 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":291
+  /* "lagrangian.pyx":294
  *         del self.wrapped
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -6052,7 +6102,7 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_4__str__(struct __pyx_obj_10lag
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":294
+/* "lagrangian.pyx":297
  *         return self.wrapped.ToString("%Y-%m-%dT%M:%M:%s")
  * 
  *     def __call__(self):             # <<<<<<<<<<<<<<
@@ -6082,7 +6132,7 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_6__call__(struct __pyx_obj_10la
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__call__", 0);
 
-  /* "lagrangian.pyx":295
+  /* "lagrangian.pyx":298
  * 
  *     def __call__(self):
  *         return cpp_lagrangian.to_pydatetime(self.wrapped[0])             # <<<<<<<<<<<<<<
@@ -6090,13 +6140,13 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_6__call__(struct __pyx_obj_10la
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime((__pyx_v_self->wrapped[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime((__pyx_v_self->wrapped[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 298, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":294
+  /* "lagrangian.pyx":297
  *         return self.wrapped.ToString("%Y-%m-%dT%M:%M:%s")
  * 
  *     def __call__(self):             # <<<<<<<<<<<<<<
@@ -6222,7 +6272,7 @@ static PyObject *__pyx_pf_10lagrangian_8DateTime_10__setstate_cython__(CYTHON_UN
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":300
+/* "lagrangian.pyx":303
  * # Utility function to check the implementation of a pure virtual method in
  * # the Python code
  * cdef get_python_function(object self, str method):             # <<<<<<<<<<<<<<
@@ -6239,42 +6289,42 @@ static PyObject *__pyx_f_10lagrangian_get_python_function(PyObject *__pyx_v_self
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("get_python_function", 0);
 
-  /* "lagrangian.pyx":301
+  /* "lagrangian.pyx":304
  * # the Python code
  * cdef get_python_function(object self, str method):
  *     if not hasattr(self, method):             # <<<<<<<<<<<<<<
  *         raise NotImplementedError(
  *             "unimplemented pure virtual method '%s'" % method)
  */
-  __pyx_t_1 = __Pyx_HasAttr(__pyx_v_self, __pyx_v_method); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_HasAttr(__pyx_v_self, __pyx_v_method); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 304, __pyx_L1_error)
   __pyx_t_2 = ((!(__pyx_t_1 != 0)) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "lagrangian.pyx":303
+    /* "lagrangian.pyx":306
  *     if not hasattr(self, method):
  *         raise NotImplementedError(
  *             "unimplemented pure virtual method '%s'" % method)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_unimplemented_pure_virtual_metho, __pyx_v_method); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_unimplemented_pure_virtual_metho, __pyx_v_method); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
 
-    /* "lagrangian.pyx":302
+    /* "lagrangian.pyx":305
  * cdef get_python_function(object self, str method):
  *     if not hasattr(self, method):
  *         raise NotImplementedError(             # <<<<<<<<<<<<<<
  *             "unimplemented pure virtual method '%s'" % method)
  * 
  */
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 302, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 302, __pyx_L1_error)
+    __PYX_ERR(0, 305, __pyx_L1_error)
 
-    /* "lagrangian.pyx":301
+    /* "lagrangian.pyx":304
  * # the Python code
  * cdef get_python_function(object self, str method):
  *     if not hasattr(self, method):             # <<<<<<<<<<<<<<
@@ -6283,7 +6333,7 @@ static PyObject *__pyx_f_10lagrangian_get_python_function(PyObject *__pyx_v_self
  */
   }
 
-  /* "lagrangian.pyx":300
+  /* "lagrangian.pyx":303
  * # Utility function to check the implementation of a pure virtual method in
  * # the Python code
  * cdef get_python_function(object self, str method):             # <<<<<<<<<<<<<<
@@ -6305,7 +6355,7 @@ static PyObject *__pyx_f_10lagrangian_get_python_function(PyObject *__pyx_v_self
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":313
+/* "lagrangian.pyx":316
  * #       double& v,
  * #       lagrangian::CellProperties& cell=lagrangian::CellProperties::NONE())
  * cdef public api int PythonFieldCompute(object self,             # <<<<<<<<<<<<<<
@@ -6341,7 +6391,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
   PyObject *__pyx_t_19 = NULL;
   __Pyx_RefNannySetupContext("PythonFieldCompute", 0);
 
-  /* "lagrangian.pyx":322
+  /* "lagrangian.pyx":325
  *                                        libcpp.string.string* error):
  *     cdef:
  *         int rc = 0             # <<<<<<<<<<<<<<
@@ -6350,7 +6400,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
  */
   __pyx_v_rc = 0;
 
-  /* "lagrangian.pyx":323
+  /* "lagrangian.pyx":326
  *     cdef:
  *         int rc = 0
  *         str function_name = "compute"             # <<<<<<<<<<<<<<
@@ -6360,7 +6410,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
   __Pyx_INCREF(__pyx_n_s_compute);
   __pyx_v_function_name = __pyx_n_s_compute;
 
-  /* "lagrangian.pyx":324
+  /* "lagrangian.pyx":327
  *         int rc = 0
  *         str function_name = "compute"
  *     try:             # <<<<<<<<<<<<<<
@@ -6377,30 +6427,30 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
       __Pyx_XGOTREF(__pyx_t_3);
       /*try:*/ {
 
-        /* "lagrangian.pyx":325
+        /* "lagrangian.pyx":328
  *         str function_name = "compute"
  *     try:
  *         function = getattr(self, function_name);             # <<<<<<<<<<<<<<
  *         u[0], v[0], result[0] = function(t, x, y)
  *         error[0] = ""
  */
-        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_v_function_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_v_function_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 328, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_function = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":326
+        /* "lagrangian.pyx":329
  *     try:
  *         function = getattr(self, function_name);
  *         u[0], v[0], result[0] = function(t, x, y)             # <<<<<<<<<<<<<<
  *         error[0] = ""
  *     except Exception as err:
  */
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_t); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_t); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_6 = PyFloat_FromDouble(__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_6 = PyFloat_FromDouble(__pyx_v_x); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_y); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_y); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_INCREF(__pyx_v_function);
         __pyx_t_8 = __pyx_v_function; __pyx_t_9 = NULL;
@@ -6418,7 +6468,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_8)) {
           PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7};
-          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -6429,7 +6479,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
           PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7};
-          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -6438,7 +6488,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
         } else
         #endif
         {
-          __pyx_t_11 = PyTuple_New(3+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_11 = PyTuple_New(3+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_11);
           if (__pyx_t_9) {
             __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -6452,7 +6502,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
           __pyx_t_5 = 0;
           __pyx_t_6 = 0;
           __pyx_t_7 = 0;
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         }
@@ -6463,7 +6513,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
           if (unlikely(size != 3)) {
             if (size > 3) __Pyx_RaiseTooManyValuesError(3);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 326, __pyx_L6_error)
+            __PYX_ERR(0, 329, __pyx_L6_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -6479,17 +6529,17 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
           __Pyx_INCREF(__pyx_t_11);
           __Pyx_INCREF(__pyx_t_7);
           #else
-          __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_11 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_11 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_11);
-          __pyx_t_7 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_7 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_6 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 326, __pyx_L6_error)
+          __pyx_t_6 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 329, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __pyx_t_12 = Py_TYPE(__pyx_t_6)->tp_iternext;
@@ -6499,7 +6549,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
           __Pyx_GOTREF(__pyx_t_11);
           index = 2; __pyx_t_7 = __pyx_t_12(__pyx_t_6); if (unlikely(!__pyx_t_7)) goto __pyx_L12_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_7);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_6), 3) < 0) __PYX_ERR(0, 326, __pyx_L6_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_6), 3) < 0) __PYX_ERR(0, 329, __pyx_L6_error)
           __pyx_t_12 = NULL;
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
           goto __pyx_L13_unpacking_done;
@@ -6507,30 +6557,30 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
           __pyx_t_12 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 326, __pyx_L6_error)
+          __PYX_ERR(0, 329, __pyx_L6_error)
           __pyx_L13_unpacking_done:;
         }
-        __pyx_t_13 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_13 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_13 = __pyx_PyFloat_AsDouble(__pyx_t_8); if (unlikely((__pyx_t_13 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_14 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_14 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_14 = __pyx_PyFloat_AsDouble(__pyx_t_11); if (unlikely((__pyx_t_14 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __pyx_t_15 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely((__pyx_t_15 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 326, __pyx_L6_error)
+        __pyx_t_15 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely((__pyx_t_15 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 329, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         (__pyx_v_u[0]) = __pyx_t_13;
         (__pyx_v_v[0]) = __pyx_t_14;
         (__pyx_v_result[0]) = __pyx_t_15;
 
-        /* "lagrangian.pyx":327
+        /* "lagrangian.pyx":330
  *         function = getattr(self, function_name);
  *         u[0], v[0], result[0] = function(t, x, y)
  *         error[0] = ""             # <<<<<<<<<<<<<<
  *     except Exception as err:
  *         rc = 1
  */
-        __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 327, __pyx_L6_error)
+        __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 330, __pyx_L6_error)
         (__pyx_v_error[0]) = __pyx_t_16;
 
-        /* "lagrangian.pyx":324
+        /* "lagrangian.pyx":327
  *         int rc = 0
  *         str function_name = "compute"
  *     try:             # <<<<<<<<<<<<<<
@@ -6551,7 +6601,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "lagrangian.pyx":328
+      /* "lagrangian.pyx":331
  *         u[0], v[0], result[0] = function(t, x, y)
  *         error[0] = ""
  *     except Exception as err:             # <<<<<<<<<<<<<<
@@ -6561,14 +6611,14 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
       __pyx_t_10 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
       if (__pyx_t_10) {
         __Pyx_AddTraceback("lagrangian.PythonFieldCompute", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_7, &__pyx_t_11) < 0) __PYX_ERR(0, 328, __pyx_L8_except_error)
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_7, &__pyx_t_11) < 0) __PYX_ERR(0, 331, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_INCREF(__pyx_t_7);
         __pyx_v_err = __pyx_t_7;
 
-        /* "lagrangian.pyx":329
+        /* "lagrangian.pyx":332
  *         error[0] = ""
  *     except Exception as err:
  *         rc = 1             # <<<<<<<<<<<<<<
@@ -6577,14 +6627,14 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
  */
         __pyx_v_rc = 1;
 
-        /* "lagrangian.pyx":330
+        /* "lagrangian.pyx":333
  *     except Exception as err:
  *         rc = 1
  *         err = "%r %s" % (self, err)             # <<<<<<<<<<<<<<
  *         error[0] = err.encode('UTF-8')
  *     finally:
  */
-        __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 330, __pyx_L8_except_error)
+        __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 333, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_INCREF(__pyx_v_self);
         __Pyx_GIVEREF(__pyx_v_self);
@@ -6592,25 +6642,25 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
         __Pyx_INCREF(__pyx_v_err);
         __Pyx_GIVEREF(__pyx_v_err);
         PyTuple_SET_ITEM(__pyx_t_8, 1, __pyx_v_err);
-        __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 330, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 333, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF_SET(__pyx_v_err, __pyx_t_6);
         __pyx_t_6 = 0;
 
-        /* "lagrangian.pyx":331
+        /* "lagrangian.pyx":334
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 331, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 334, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 331, __pyx_L8_except_error)
+        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 334, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 331, __pyx_L8_except_error)
+        __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 334, __pyx_L8_except_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         (__pyx_v_error[0]) = __pyx_t_16;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -6621,7 +6671,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
       goto __pyx_L8_except_error;
       __pyx_L8_except_error:;
 
-      /* "lagrangian.pyx":324
+      /* "lagrangian.pyx":327
  *         int rc = 0
  *         str function_name = "compute"
  *     try:             # <<<<<<<<<<<<<<
@@ -6642,7 +6692,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
     }
   }
 
-  /* "lagrangian.pyx":333
+  /* "lagrangian.pyx":336
  *         error[0] = err.encode('UTF-8')
  *     finally:
  *         return rc             # <<<<<<<<<<<<<<
@@ -6693,7 +6743,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
     }
   }
 
-  /* "lagrangian.pyx":313
+  /* "lagrangian.pyx":316
  * #       double& v,
  * #       lagrangian::CellProperties& cell=lagrangian::CellProperties::NONE())
  * cdef public api int PythonFieldCompute(object self,             # <<<<<<<<<<<<<<
@@ -6710,7 +6760,7 @@ int PythonFieldCompute(PyObject *__pyx_v_self, double __pyx_v_t, double __pyx_v_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":348
+/* "lagrangian.pyx":351
  *     cdef cpp_lagrangian.Field* wrapped
  * 
  *     def __cinit__(self, *args):             # <<<<<<<<<<<<<<
@@ -6744,7 +6794,7 @@ static int __pyx_pf_10lagrangian_5Field___cinit__(struct __pyx_obj_10lagrangian_
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":349
+  /* "lagrangian.pyx":352
  * 
  *     def __cinit__(self, *args):
  *         if type(self) is Field:             # <<<<<<<<<<<<<<
@@ -6755,20 +6805,20 @@ static int __pyx_pf_10lagrangian_5Field___cinit__(struct __pyx_obj_10lagrangian_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "lagrangian.pyx":350
+    /* "lagrangian.pyx":353
  *     def __cinit__(self, *args):
  *         if type(self) is Field:
  *             raise RuntimeError("cannot instantiate abstract class")             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 353, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 350, __pyx_L1_error)
+    __PYX_ERR(0, 353, __pyx_L1_error)
 
-    /* "lagrangian.pyx":349
+    /* "lagrangian.pyx":352
  * 
  *     def __cinit__(self, *args):
  *         if type(self) is Field:             # <<<<<<<<<<<<<<
@@ -6777,7 +6827,7 @@ static int __pyx_pf_10lagrangian_5Field___cinit__(struct __pyx_obj_10lagrangian_
  */
   }
 
-  /* "lagrangian.pyx":348
+  /* "lagrangian.pyx":351
  *     cdef cpp_lagrangian.Field* wrapped
  * 
  *     def __cinit__(self, *args):             # <<<<<<<<<<<<<<
@@ -6797,7 +6847,7 @@ static int __pyx_pf_10lagrangian_5Field___cinit__(struct __pyx_obj_10lagrangian_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":352
+/* "lagrangian.pyx":355
  *             raise RuntimeError("cannot instantiate abstract class")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -6820,7 +6870,7 @@ static void __pyx_pf_10lagrangian_5Field_2__dealloc__(struct __pyx_obj_10lagrang
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":353
+  /* "lagrangian.pyx":356
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -6829,7 +6879,7 @@ static void __pyx_pf_10lagrangian_5Field_2__dealloc__(struct __pyx_obj_10lagrang
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":352
+  /* "lagrangian.pyx":355
  *             raise RuntimeError("cannot instantiate abstract class")
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -6841,7 +6891,7 @@ static void __pyx_pf_10lagrangian_5Field_2__dealloc__(struct __pyx_obj_10lagrang
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":356
+/* "lagrangian.pyx":359
  * 
  *     @property
  *     def unit_type(self):             # <<<<<<<<<<<<<<
@@ -6868,7 +6918,7 @@ static PyObject *__pyx_pf_10lagrangian_5Field_9unit_type___get__(struct __pyx_ob
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":360
+  /* "lagrangian.pyx":363
  *         Unit type used by this field.
  *         """
  *         return self.wrapped.get_unit_type()             # <<<<<<<<<<<<<<
@@ -6876,13 +6926,13 @@ static PyObject *__pyx_pf_10lagrangian_5Field_9unit_type___get__(struct __pyx_ob
  *     def get_unit(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_enum__lagrangian_3a__3a_Field_3a__3a_UnitType(__pyx_v_self->wrapped->get_unit_type()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 360, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_enum__lagrangian_3a__3a_Field_3a__3a_UnitType(__pyx_v_self->wrapped->get_unit_type()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 363, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":356
+  /* "lagrangian.pyx":359
  * 
  *     @property
  *     def unit_type(self):             # <<<<<<<<<<<<<<
@@ -6901,7 +6951,7 @@ static PyObject *__pyx_pf_10lagrangian_5Field_9unit_type___get__(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":362
+/* "lagrangian.pyx":365
  *         return self.wrapped.get_unit_type()
  * 
  *     def get_unit(self):             # <<<<<<<<<<<<<<
@@ -6931,7 +6981,7 @@ static PyObject *__pyx_pf_10lagrangian_5Field_4get_unit(struct __pyx_obj_10lagra
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_unit", 0);
 
-  /* "lagrangian.pyx":366
+  /* "lagrangian.pyx":369
  *         Unit used by this field.
  *         """
  *         cdef libcpp.string.string cpp_unit = self.wrapped.GetUnit()             # <<<<<<<<<<<<<<
@@ -6942,11 +6992,11 @@ static PyObject *__pyx_pf_10lagrangian_5Field_4get_unit(struct __pyx_obj_10lagra
     __pyx_t_1 = __pyx_v_self->wrapped->GetUnit();
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 366, __pyx_L1_error)
+    __PYX_ERR(0, 369, __pyx_L1_error)
   }
   __pyx_v_cpp_unit = __pyx_t_1;
 
-  /* "lagrangian.pyx":367
+  /* "lagrangian.pyx":370
  *         """
  *         cdef libcpp.string.string cpp_unit = self.wrapped.GetUnit()
  *         return cpp_unit             # <<<<<<<<<<<<<<
@@ -6954,13 +7004,13 @@ static PyObject *__pyx_pf_10lagrangian_5Field_4get_unit(struct __pyx_obj_10lagra
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cpp_unit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 367, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cpp_unit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":362
+  /* "lagrangian.pyx":365
  *         return self.wrapped.get_unit_type()
  * 
  *     def get_unit(self):             # <<<<<<<<<<<<<<
@@ -7086,7 +7136,7 @@ static PyObject *__pyx_pf_10lagrangian_5Field_8__setstate_cython__(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":384
+/* "lagrangian.pyx":387
  *     indicating whether the calculated velocities are valid or not.
  *     """
  *     def __cinit__(self, UnitType unit_type=cpp_lagrangian.kMetric):             # <<<<<<<<<<<<<<
@@ -7122,7 +7172,7 @@ static int __pyx_pw_10lagrangian_11PythonField_1__cinit__(PyObject *__pyx_v_self
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 384, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 387, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -7133,14 +7183,14 @@ static int __pyx_pw_10lagrangian_11PythonField_1__cinit__(PyObject *__pyx_v_self
       }
     }
     if (values[0]) {
-      __pyx_v_unit_type = ((enum __pyx_t_10lagrangian_UnitType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_UnitType(values[0])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 384, __pyx_L3_error)
+      __pyx_v_unit_type = ((enum __pyx_t_10lagrangian_UnitType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_UnitType(values[0])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 387, __pyx_L3_error)
     } else {
       __pyx_v_unit_type = __pyx_k__18;
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 384, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 387, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.PythonField.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7161,31 +7211,31 @@ static int __pyx_pf_10lagrangian_11PythonField___cinit__(struct __pyx_obj_10lagr
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":387
+  /* "lagrangian.pyx":390
  * 
  *         # Compute must be implemented in a derived class
  *         if not hasattr(self, "compute"):             # <<<<<<<<<<<<<<
  *             raise NotImplementedError(
  *                 "unimplemented pure virtual method 'compute'")
  */
-  __pyx_t_1 = __Pyx_HasAttr(((PyObject *)__pyx_v_self), __pyx_n_s_compute); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 387, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_HasAttr(((PyObject *)__pyx_v_self), __pyx_n_s_compute); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 390, __pyx_L1_error)
   __pyx_t_2 = ((!(__pyx_t_1 != 0)) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "lagrangian.pyx":388
+    /* "lagrangian.pyx":391
  *         # Compute must be implemented in a derived class
  *         if not hasattr(self, "compute"):
  *             raise NotImplementedError(             # <<<<<<<<<<<<<<
  *                 "unimplemented pure virtual method 'compute'")
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 388, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__19, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 391, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 388, __pyx_L1_error)
+    __PYX_ERR(0, 391, __pyx_L1_error)
 
-    /* "lagrangian.pyx":387
+    /* "lagrangian.pyx":390
  * 
  *         # Compute must be implemented in a derived class
  *         if not hasattr(self, "compute"):             # <<<<<<<<<<<<<<
@@ -7194,7 +7244,7 @@ static int __pyx_pf_10lagrangian_11PythonField___cinit__(struct __pyx_obj_10lagr
  */
   }
 
-  /* "lagrangian.pyx":391
+  /* "lagrangian.pyx":394
  *                 "unimplemented pure virtual method 'compute'")
  * 
  *         self.wrapped = new cpp_lagrangian.WrappedField(             # <<<<<<<<<<<<<<
@@ -7203,7 +7253,7 @@ static int __pyx_pf_10lagrangian_11PythonField___cinit__(struct __pyx_obj_10lagr
  */
   __pyx_v_self->__pyx_base.wrapped = new WrappedField(((PyObject *)__pyx_v_self), ((enum lagrangian::Field::UnitType)__pyx_v_unit_type));
 
-  /* "lagrangian.pyx":384
+  /* "lagrangian.pyx":387
  *     indicating whether the calculated velocities are valid or not.
  *     """
  *     def __cinit__(self, UnitType unit_type=cpp_lagrangian.kMetric):             # <<<<<<<<<<<<<<
@@ -7330,7 +7380,7 @@ static PyObject *__pyx_pf_10lagrangian_11PythonField_4__setstate_cython__(CYTHON
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":399
+/* "lagrangian.pyx":402
  *     Vonkarman field
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -7429,7 +7479,7 @@ static int __pyx_pw_10lagrangian_9Vonkarman_1__cinit__(PyObject *__pyx_v_self, P
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 399, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 402, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -7454,49 +7504,49 @@ static int __pyx_pw_10lagrangian_9Vonkarman_1__cinit__(PyObject *__pyx_v_self, P
       }
     }
     if (values[0]) {
-      __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 400, __pyx_L3_error)
+      __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 403, __pyx_L3_error)
     } else {
       __pyx_v_a = ((double)1.0);
     }
     if (values[1]) {
-      __pyx_v_w = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_w == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 401, __pyx_L3_error)
+      __pyx_v_w = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_w == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 404, __pyx_L3_error)
     } else {
       __pyx_v_w = ((double)35.06);
     }
     if (values[2]) {
-      __pyx_v_r0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_r0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 402, __pyx_L3_error)
+      __pyx_v_r0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_r0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 405, __pyx_L3_error)
     } else {
       __pyx_v_r0 = ((double)0.35);
     }
     if (values[3]) {
-      __pyx_v_tc = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_tc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 403, __pyx_L3_error)
+      __pyx_v_tc = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_tc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 406, __pyx_L3_error)
     } else {
       __pyx_v_tc = ((double)1.0);
     }
     if (values[4]) {
-      __pyx_v_alpha = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_alpha == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 404, __pyx_L3_error)
+      __pyx_v_alpha = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_alpha == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 407, __pyx_L3_error)
     } else {
       __pyx_v_alpha = ((double)2.0);
     }
     if (values[5]) {
-      __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 405, __pyx_L3_error)
+      __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L3_error)
     } else {
       __pyx_v_y0 = ((double)0.3);
     }
     if (values[6]) {
-      __pyx_v_l = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_l == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 406, __pyx_L3_error)
+      __pyx_v_l = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_l == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 409, __pyx_L3_error)
     } else {
       __pyx_v_l = ((double)2.0);
     }
     if (values[7]) {
-      __pyx_v_u0 = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_u0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 407, __pyx_L3_error)
+      __pyx_v_u0 = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_u0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 410, __pyx_L3_error)
     } else {
       __pyx_v_u0 = ((double)14.0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 399, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 402, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Vonkarman.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7514,7 +7564,7 @@ static int __pyx_pf_10lagrangian_9Vonkarman___cinit__(struct __pyx_obj_10lagrang
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":408
+  /* "lagrangian.pyx":411
  *                   double l = 2,
  *                   double u0 = 14):
  *         self.wrapped = new cpp_lagrangian.Vonkarman(             # <<<<<<<<<<<<<<
@@ -7523,7 +7573,7 @@ static int __pyx_pf_10lagrangian_9Vonkarman___cinit__(struct __pyx_obj_10lagrang
  */
   __pyx_v_self->__pyx_base.wrapped = new lagrangian::field::Vonkarman(__pyx_v_a, __pyx_v_w, __pyx_v_r0, __pyx_v_tc, __pyx_v_alpha, __pyx_v_y0, __pyx_v_l, __pyx_v_u0);
 
-  /* "lagrangian.pyx":399
+  /* "lagrangian.pyx":402
  *     Vonkarman field
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -7537,7 +7587,7 @@ static int __pyx_pf_10lagrangian_9Vonkarman___cinit__(struct __pyx_obj_10lagrang
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":411
+/* "lagrangian.pyx":414
  *             a, w, r0, tc, alpha, y0, l, u0)
  * 
  *     def compute(self, double t, double x, double y):             # <<<<<<<<<<<<<<
@@ -7580,17 +7630,17 @@ static PyObject *__pyx_pw_10lagrangian_9Vonkarman_3compute(PyObject *__pyx_v_sel
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 411, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 414, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 411, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 414, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 411, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 414, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -7599,13 +7649,13 @@ static PyObject *__pyx_pw_10lagrangian_9Vonkarman_3compute(PyObject *__pyx_v_sel
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L3_error)
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L3_error)
+    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 414, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 414, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 414, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 411, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 414, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Vonkarman.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7629,7 +7679,7 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_2compute(struct __pyx_obj_10la
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":418
+  /* "lagrangian.pyx":421
  * 
  *         # Disable compiler complaints
  *         u = v = numeric_limits[double].quiet_NaN()             # <<<<<<<<<<<<<<
@@ -7640,7 +7690,7 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_2compute(struct __pyx_obj_10la
   __pyx_v_u = __pyx_t_1;
   __pyx_v_v = __pyx_t_1;
 
-  /* "lagrangian.pyx":419
+  /* "lagrangian.pyx":422
  *         # Disable compiler complaints
  *         u = v = numeric_limits[double].quiet_NaN()
  *         self.wrapped.Compute(t, x, y, u, v)             # <<<<<<<<<<<<<<
@@ -7651,10 +7701,10 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_2compute(struct __pyx_obj_10la
     __pyx_v_self->__pyx_base.wrapped->Compute(__pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_u, __pyx_v_v);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 419, __pyx_L1_error)
+    __PYX_ERR(0, 422, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":420
+  /* "lagrangian.pyx":423
  *         u = v = numeric_limits[double].quiet_NaN()
  *         self.wrapped.Compute(t, x, y, u, v)
  *         return (u, v)             # <<<<<<<<<<<<<<
@@ -7662,11 +7712,11 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_2compute(struct __pyx_obj_10la
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_u); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_u); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_v); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_v); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
@@ -7678,7 +7728,7 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_2compute(struct __pyx_obj_10la
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":411
+  /* "lagrangian.pyx":414
  *             a, w, r0, tc, alpha, y0, l, u0)
  * 
  *     def compute(self, double t, double x, double y):             # <<<<<<<<<<<<<<
@@ -7806,7 +7856,7 @@ static PyObject *__pyx_pf_10lagrangian_9Vonkarman_6__setstate_cython__(CYTHON_UN
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":429
+/* "lagrangian.pyx":432
  *     cdef cpp_lagrangian.CellProperties* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -7835,7 +7885,7 @@ static int __pyx_pf_10lagrangian_14CellProperties___cinit__(struct __pyx_obj_10l
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":430
+  /* "lagrangian.pyx":433
  * 
  *     def __cinit__(self):
  *         self.wrapped = new cpp_lagrangian.CellProperties()             # <<<<<<<<<<<<<<
@@ -7844,7 +7894,7 @@ static int __pyx_pf_10lagrangian_14CellProperties___cinit__(struct __pyx_obj_10l
  */
   __pyx_v_self->wrapped = new lagrangian::CellProperties();
 
-  /* "lagrangian.pyx":429
+  /* "lagrangian.pyx":432
  *     cdef cpp_lagrangian.CellProperties* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -7858,7 +7908,7 @@ static int __pyx_pf_10lagrangian_14CellProperties___cinit__(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":432
+/* "lagrangian.pyx":435
  *         self.wrapped = new cpp_lagrangian.CellProperties()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -7881,7 +7931,7 @@ static void __pyx_pf_10lagrangian_14CellProperties_2__dealloc__(struct __pyx_obj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":433
+  /* "lagrangian.pyx":436
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -7890,7 +7940,7 @@ static void __pyx_pf_10lagrangian_14CellProperties_2__dealloc__(struct __pyx_obj
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":432
+  /* "lagrangian.pyx":435
  *         self.wrapped = new cpp_lagrangian.CellProperties()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -7902,7 +7952,7 @@ static void __pyx_pf_10lagrangian_14CellProperties_2__dealloc__(struct __pyx_obj
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":435
+/* "lagrangian.pyx":438
  *         del self.wrapped
  * 
  *     def contains(self, double x, double y):             # <<<<<<<<<<<<<<
@@ -7942,11 +7992,11 @@ static PyObject *__pyx_pw_10lagrangian_14CellProperties_5contains(PyObject *__py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("contains", 1, 2, 2, 1); __PYX_ERR(0, 435, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("contains", 1, 2, 2, 1); __PYX_ERR(0, 438, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "contains") < 0)) __PYX_ERR(0, 435, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "contains") < 0)) __PYX_ERR(0, 438, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -7954,12 +8004,12 @@ static PyObject *__pyx_pw_10lagrangian_14CellProperties_5contains(PyObject *__py
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 435, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 435, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 438, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 438, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("contains", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 435, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("contains", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 438, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.CellProperties.contains", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7978,7 +8028,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_4contains(struct __pyx_o
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("contains", 0);
 
-  /* "lagrangian.pyx":439
+  /* "lagrangian.pyx":442
  *         Test if the coordinate is in the cell.
  *         """
  *         return self.wrapped.Contains(x, y)             # <<<<<<<<<<<<<<
@@ -7986,13 +8036,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_4contains(struct __pyx_o
  *     def update(self,
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->Contains(__pyx_v_x, __pyx_v_y)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 439, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->Contains(__pyx_v_x, __pyx_v_y)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":435
+  /* "lagrangian.pyx":438
  *         del self.wrapped
  * 
  *     def contains(self, double x, double y):             # <<<<<<<<<<<<<<
@@ -8011,7 +8061,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_4contains(struct __pyx_o
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":441
+/* "lagrangian.pyx":444
  *         return self.wrapped.Contains(x, y)
  * 
  *     def update(self,             # <<<<<<<<<<<<<<
@@ -8069,47 +8119,47 @@ static PyObject *__pyx_pw_10lagrangian_14CellProperties_7update(PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 1); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 1); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 2); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 2); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 3); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 3); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ix0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 4); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 4); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ix1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 5); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 5); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_iy0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 6); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 6); __PYX_ERR(0, 444, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_iy1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 7); __PYX_ERR(0, 441, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, 7); __PYX_ERR(0, 444, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update") < 0)) __PYX_ERR(0, 441, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update") < 0)) __PYX_ERR(0, 444, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -8123,18 +8173,18 @@ static PyObject *__pyx_pw_10lagrangian_14CellProperties_7update(PyObject *__pyx_
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
     }
-    __pyx_v_x0 = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 442, __pyx_L3_error)
-    __pyx_v_x1 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 443, __pyx_L3_error)
-    __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 444, __pyx_L3_error)
-    __pyx_v_y1 = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_y1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 445, __pyx_L3_error)
-    __pyx_v_ix0 = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ix0 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 446, __pyx_L3_error)
-    __pyx_v_ix1 = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_ix1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 447, __pyx_L3_error)
-    __pyx_v_iy0 = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_iy0 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 448, __pyx_L3_error)
-    __pyx_v_iy1 = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_iy1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 449, __pyx_L3_error)
+    __pyx_v_x0 = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 445, __pyx_L3_error)
+    __pyx_v_x1 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 446, __pyx_L3_error)
+    __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 447, __pyx_L3_error)
+    __pyx_v_y1 = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_y1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 448, __pyx_L3_error)
+    __pyx_v_ix0 = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ix0 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 449, __pyx_L3_error)
+    __pyx_v_ix1 = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_ix1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 450, __pyx_L3_error)
+    __pyx_v_iy0 = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_iy0 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 451, __pyx_L3_error)
+    __pyx_v_iy1 = __Pyx_PyInt_As_int(values[7]); if (unlikely((__pyx_v_iy1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 452, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 441, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("update", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 444, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.CellProperties.update", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8152,7 +8202,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_6update(struct __pyx_obj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("update", 0);
 
-  /* "lagrangian.pyx":453
+  /* "lagrangian.pyx":456
  *         Update the cell properties
  *         """
  *         self.wrapped.Update(x0, x1, y0, y1, ix0, ix1, iy0, iy1)             # <<<<<<<<<<<<<<
@@ -8161,7 +8211,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_6update(struct __pyx_obj
  */
   __pyx_v_self->wrapped->Update(__pyx_v_x0, __pyx_v_x1, __pyx_v_y0, __pyx_v_y1, __pyx_v_ix0, __pyx_v_ix1, __pyx_v_iy0, __pyx_v_iy1);
 
-  /* "lagrangian.pyx":441
+  /* "lagrangian.pyx":444
  *         return self.wrapped.Contains(x, y)
  * 
  *     def update(self,             # <<<<<<<<<<<<<<
@@ -8176,7 +8226,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_6update(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":456
+/* "lagrangian.pyx":459
  * 
  *     @property
  *     def x0(self):             # <<<<<<<<<<<<<<
@@ -8203,7 +8253,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x0___get__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":460
+  /* "lagrangian.pyx":463
  *         Get the first longitude of the cell
  *         """
  *         return self.wrapped.x0()             # <<<<<<<<<<<<<<
@@ -8211,13 +8261,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x0___get__(struct __pyx
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->x0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 460, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->x0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 463, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":456
+  /* "lagrangian.pyx":459
  * 
  *     @property
  *     def x0(self):             # <<<<<<<<<<<<<<
@@ -8236,7 +8286,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x0___get__(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":463
+/* "lagrangian.pyx":466
  * 
  *     @property
  *     def x1(self):             # <<<<<<<<<<<<<<
@@ -8263,7 +8313,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x1___get__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":467
+  /* "lagrangian.pyx":470
  *         Get the last longitude of the cell
  *         """
  *         return self.wrapped.x1()             # <<<<<<<<<<<<<<
@@ -8271,13 +8321,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x1___get__(struct __pyx
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->x1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->x1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 470, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":463
+  /* "lagrangian.pyx":466
  * 
  *     @property
  *     def x1(self):             # <<<<<<<<<<<<<<
@@ -8296,7 +8346,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2x1___get__(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":470
+/* "lagrangian.pyx":473
  * 
  *     @property
  *     def y0(self):             # <<<<<<<<<<<<<<
@@ -8323,7 +8373,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y0___get__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":474
+  /* "lagrangian.pyx":477
  *         Get the first latitude of the cell
  *         """
  *         return self.wrapped.y0()             # <<<<<<<<<<<<<<
@@ -8331,13 +8381,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y0___get__(struct __pyx
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->y0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 474, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->y0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":470
+  /* "lagrangian.pyx":473
  * 
  *     @property
  *     def y0(self):             # <<<<<<<<<<<<<<
@@ -8356,7 +8406,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y0___get__(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":477
+/* "lagrangian.pyx":480
  * 
  *     @property
  *     def y1(self):             # <<<<<<<<<<<<<<
@@ -8383,7 +8433,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y1___get__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":481
+  /* "lagrangian.pyx":484
  *         Get the last latitude of the cell
  *         """
  *         return self.wrapped.y1()             # <<<<<<<<<<<<<<
@@ -8391,13 +8441,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y1___get__(struct __pyx
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->y1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 481, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->y1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":477
+  /* "lagrangian.pyx":480
  * 
  *     @property
  *     def y1(self):             # <<<<<<<<<<<<<<
@@ -8416,7 +8466,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_2y1___get__(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":484
+/* "lagrangian.pyx":487
  * 
  *     @property
  *     def ix0(self):             # <<<<<<<<<<<<<<
@@ -8443,7 +8493,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix0___get__(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":488
+  /* "lagrangian.pyx":491
  *         Get the index of the first longitude in the grid
  *         """
  *         return self.wrapped.ix0()             # <<<<<<<<<<<<<<
@@ -8451,13 +8501,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix0___get__(struct __py
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->ix0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->ix0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 491, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":484
+  /* "lagrangian.pyx":487
  * 
  *     @property
  *     def ix0(self):             # <<<<<<<<<<<<<<
@@ -8476,7 +8526,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix0___get__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":491
+/* "lagrangian.pyx":494
  * 
  *     @property
  *     def ix1(self):             # <<<<<<<<<<<<<<
@@ -8503,7 +8553,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix1___get__(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":495
+  /* "lagrangian.pyx":498
  *         Get the index of the last longitude in the grid
  *         """
  *         return self.wrapped.ix1()             # <<<<<<<<<<<<<<
@@ -8511,13 +8561,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix1___get__(struct __py
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->ix1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 495, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->ix1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 498, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":491
+  /* "lagrangian.pyx":494
  * 
  *     @property
  *     def ix1(self):             # <<<<<<<<<<<<<<
@@ -8536,7 +8586,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3ix1___get__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":498
+/* "lagrangian.pyx":501
  * 
  *     @property
  *     def iy0(self):             # <<<<<<<<<<<<<<
@@ -8563,7 +8613,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3iy0___get__(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":502
+  /* "lagrangian.pyx":505
  *         Get the index of the first latitude in the grid
  *         """
  *         return self.wrapped.iy0()             # <<<<<<<<<<<<<<
@@ -8571,13 +8621,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3iy0___get__(struct __py
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->iy0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 502, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->iy0()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":498
+  /* "lagrangian.pyx":501
  * 
  *     @property
  *     def iy0(self):             # <<<<<<<<<<<<<<
@@ -8596,7 +8646,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3iy0___get__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":505
+/* "lagrangian.pyx":508
  * 
  *     @property
  *     def iy1(self):             # <<<<<<<<<<<<<<
@@ -8623,7 +8673,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3iy1___get__(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":509
+  /* "lagrangian.pyx":512
  *         Get the index of the last latitude in the grid
  *         """
  *         return self.wrapped.iy1()             # <<<<<<<<<<<<<<
@@ -8631,13 +8681,13 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_3iy1___get__(struct __py
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->iy1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 509, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->iy1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 512, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":505
+  /* "lagrangian.pyx":508
  * 
  *     @property
  *     def iy1(self):             # <<<<<<<<<<<<<<
@@ -8763,7 +8813,7 @@ static PyObject *__pyx_pf_10lagrangian_14CellProperties_10__setstate_cython__(CY
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":519
+/* "lagrangian.pyx":522
  *     cdef Field field
  * 
  *     def __cinit__(self, double size_of_interval, Field field):             # <<<<<<<<<<<<<<
@@ -8802,11 +8852,11 @@ static int __pyx_pw_10lagrangian_10RungeKutta_1__cinit__(PyObject *__pyx_v_self,
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_field)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 519, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(0, 522, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 519, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 522, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -8814,18 +8864,18 @@ static int __pyx_pw_10lagrangian_10RungeKutta_1__cinit__(PyObject *__pyx_v_self,
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_size_of_interval = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_size_of_interval == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 519, __pyx_L3_error)
+    __pyx_v_size_of_interval = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_size_of_interval == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 522, __pyx_L3_error)
     __pyx_v_field = ((struct __pyx_obj_10lagrangian_Field *)values[1]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 519, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 522, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.RungeKutta.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 519, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 522, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_10RungeKutta___cinit__(((struct __pyx_obj_10lagrangian_RungeKutta *)__pyx_v_self), __pyx_v_size_of_interval, __pyx_v_field);
 
   /* function exit code */
@@ -8842,7 +8892,7 @@ static int __pyx_pf_10lagrangian_10RungeKutta___cinit__(struct __pyx_obj_10lagra
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":520
+  /* "lagrangian.pyx":523
  * 
  *     def __cinit__(self, double size_of_interval, Field field):
  *         self.wrapped = new cpp_lagrangian.RungeKutta(size_of_interval,             # <<<<<<<<<<<<<<
@@ -8851,7 +8901,7 @@ static int __pyx_pf_10lagrangian_10RungeKutta___cinit__(struct __pyx_obj_10lagra
  */
   __pyx_v_self->wrapped = new lagrangian::RungeKutta(__pyx_v_size_of_interval, __pyx_v_field->wrapped);
 
-  /* "lagrangian.pyx":525
+  /* "lagrangian.pyx":528
  *         # Stores the Python object "Field " in the instance members, to be
  *         # sure that the C ++ object will not be destroyed before being used
  *         self.field = field             # <<<<<<<<<<<<<<
@@ -8864,7 +8914,7 @@ static int __pyx_pf_10lagrangian_10RungeKutta___cinit__(struct __pyx_obj_10lagra
   __Pyx_DECREF(((PyObject *)__pyx_v_self->field));
   __pyx_v_self->field = __pyx_v_field;
 
-  /* "lagrangian.pyx":519
+  /* "lagrangian.pyx":522
  *     cdef Field field
  * 
  *     def __cinit__(self, double size_of_interval, Field field):             # <<<<<<<<<<<<<<
@@ -8878,7 +8928,7 @@ static int __pyx_pf_10lagrangian_10RungeKutta___cinit__(struct __pyx_obj_10lagra
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":527
+/* "lagrangian.pyx":530
  *         self.field = field
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -8901,7 +8951,7 @@ static void __pyx_pf_10lagrangian_10RungeKutta_2__dealloc__(struct __pyx_obj_10l
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":528
+  /* "lagrangian.pyx":531
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -8910,7 +8960,7 @@ static void __pyx_pf_10lagrangian_10RungeKutta_2__dealloc__(struct __pyx_obj_10l
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":527
+  /* "lagrangian.pyx":530
  *         self.field = field
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -8922,7 +8972,7 @@ static void __pyx_pf_10lagrangian_10RungeKutta_2__dealloc__(struct __pyx_obj_10l
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":530
+/* "lagrangian.pyx":533
  *         del self.wrapped
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -8945,7 +8995,7 @@ static PyObject *__pyx_pw_10lagrangian_10RungeKutta_5compute(PyObject *__pyx_v_s
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_t,&__pyx_n_s_x,&__pyx_n_s_y,&__pyx_n_s_cell,0};
     PyObject* values[4] = {0,0,0,0};
 
-    /* "lagrangian.pyx":534
+    /* "lagrangian.pyx":537
  *                 double x,
  *                 double y,
  *                 CellProperties cell=None):             # <<<<<<<<<<<<<<
@@ -8977,13 +9027,13 @@ static PyObject *__pyx_pw_10lagrangian_10RungeKutta_5compute(PyObject *__pyx_v_s
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 1); __PYX_ERR(0, 530, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 1); __PYX_ERR(0, 533, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 2); __PYX_ERR(0, 530, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 2); __PYX_ERR(0, 533, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -8993,7 +9043,7 @@ static PyObject *__pyx_pw_10lagrangian_10RungeKutta_5compute(PyObject *__pyx_v_s
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 530, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 533, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -9006,23 +9056,23 @@ static PyObject *__pyx_pw_10lagrangian_10RungeKutta_5compute(PyObject *__pyx_v_s
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 531, __pyx_L3_error)
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 532, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 533, __pyx_L3_error)
+    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 534, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 535, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 536, __pyx_L3_error)
     __pyx_v_cell = ((struct __pyx_obj_10lagrangian_CellProperties *)values[3]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 530, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 533, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.RungeKutta.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 534, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 537, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_10RungeKutta_4compute(((struct __pyx_obj_10lagrangian_RungeKutta *)__pyx_v_self), __pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_cell);
 
-  /* "lagrangian.pyx":530
+  /* "lagrangian.pyx":533
  *         del self.wrapped
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -9055,7 +9105,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":543
+  /* "lagrangian.pyx":546
  * 
  *         # Disable compiler complaints
  *         xi = yi = numeric_limits[double].quiet_NaN()             # <<<<<<<<<<<<<<
@@ -9066,7 +9116,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
   __pyx_v_xi = __pyx_t_1;
   __pyx_v_yi = __pyx_t_1;
 
-  /* "lagrangian.pyx":545
+  /* "lagrangian.pyx":548
  *         xi = yi = numeric_limits[double].quiet_NaN()
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -9077,7 +9127,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "lagrangian.pyx":546
+    /* "lagrangian.pyx":549
  * 
  *         if cell is None:
  *             defined = self.wrapped.Compute(t, x, y, xi, yi)             # <<<<<<<<<<<<<<
@@ -9088,11 +9138,11 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
       __pyx_t_4 = __pyx_v_self->wrapped->Compute(__pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_xi, __pyx_v_yi);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 546, __pyx_L1_error)
+      __PYX_ERR(0, 549, __pyx_L1_error)
     }
     __pyx_v_defined = __pyx_t_4;
 
-    /* "lagrangian.pyx":545
+    /* "lagrangian.pyx":548
  *         xi = yi = numeric_limits[double].quiet_NaN()
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -9102,7 +9152,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
     goto __pyx_L3;
   }
 
-  /* "lagrangian.pyx":548
+  /* "lagrangian.pyx":551
  *             defined = self.wrapped.Compute(t, x, y, xi, yi)
  *         else:
  *             defined = self.wrapped.Compute(t, x, y, xi, yi, cell.wrapped[0])             # <<<<<<<<<<<<<<
@@ -9114,13 +9164,13 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
       __pyx_t_4 = __pyx_v_self->wrapped->Compute(__pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_xi, __pyx_v_yi, (__pyx_v_cell->wrapped[0]));
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 548, __pyx_L1_error)
+      __PYX_ERR(0, 551, __pyx_L1_error)
     }
     __pyx_v_defined = __pyx_t_4;
   }
   __pyx_L3:;
 
-  /* "lagrangian.pyx":549
+  /* "lagrangian.pyx":552
  *         else:
  *             defined = self.wrapped.Compute(t, x, y, xi, yi, cell.wrapped[0])
  *         return (xi, yi) if defined else None             # <<<<<<<<<<<<<<
@@ -9129,11 +9179,11 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
  */
   __Pyx_XDECREF(__pyx_r);
   if ((__pyx_v_defined != 0)) {
-    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_xi); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 549, __pyx_L1_error)
+    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_xi); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 552, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_yi); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 549, __pyx_L1_error)
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_yi); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 552, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 549, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 552, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_GIVEREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6);
@@ -9151,7 +9201,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_4compute(struct __pyx_obj_10
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":530
+  /* "lagrangian.pyx":533
  *         del self.wrapped
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -9280,7 +9330,7 @@ static PyObject *__pyx_pf_10lagrangian_10RungeKutta_8__setstate_cython__(CYTHON_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":558
+/* "lagrangian.pyx":561
  *     cdef cpp_lagrangian.Iterator* wrapped
  * 
  *     def __cinit__(self, double begin, double end, double inc):             # <<<<<<<<<<<<<<
@@ -9322,17 +9372,17 @@ static int __pyx_pw_10lagrangian_8Iterator_1__cinit__(PyObject *__pyx_v_self, Py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_end)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 1); __PYX_ERR(0, 558, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 1); __PYX_ERR(0, 561, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_inc)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 2); __PYX_ERR(0, 558, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, 2); __PYX_ERR(0, 561, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 558, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 561, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -9341,13 +9391,13 @@ static int __pyx_pw_10lagrangian_8Iterator_1__cinit__(PyObject *__pyx_v_self, Py
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_begin = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_begin == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 558, __pyx_L3_error)
-    __pyx_v_end = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_end == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 558, __pyx_L3_error)
-    __pyx_v_inc = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_inc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 558, __pyx_L3_error)
+    __pyx_v_begin = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_begin == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 561, __pyx_L3_error)
+    __pyx_v_end = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_end == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 561, __pyx_L3_error)
+    __pyx_v_inc = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_inc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 561, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 558, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 561, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Iterator.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -9365,7 +9415,7 @@ static int __pyx_pf_10lagrangian_8Iterator___cinit__(struct __pyx_obj_10lagrangi
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":559
+  /* "lagrangian.pyx":562
  * 
  *     def __cinit__(self, double begin, double end, double inc):
  *         self.wrapped = new cpp_lagrangian.Iterator(begin, end, inc)             # <<<<<<<<<<<<<<
@@ -9374,7 +9424,7 @@ static int __pyx_pf_10lagrangian_8Iterator___cinit__(struct __pyx_obj_10lagrangi
  */
   __pyx_v_self->wrapped = new lagrangian::Iterator(__pyx_v_begin, __pyx_v_end, __pyx_v_inc);
 
-  /* "lagrangian.pyx":558
+  /* "lagrangian.pyx":561
  *     cdef cpp_lagrangian.Iterator* wrapped
  * 
  *     def __cinit__(self, double begin, double end, double inc):             # <<<<<<<<<<<<<<
@@ -9388,7 +9438,7 @@ static int __pyx_pf_10lagrangian_8Iterator___cinit__(struct __pyx_obj_10lagrangi
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":562
+/* "lagrangian.pyx":565
  * 
  *     @staticmethod
  *     cdef Iterator Null():             # <<<<<<<<<<<<<<
@@ -9402,7 +9452,7 @@ static struct __pyx_obj_10lagrangian_Iterator *__pyx_f_10lagrangian_8Iterator_Nu
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("Null", 0);
 
-  /* "lagrangian.pyx":563
+  /* "lagrangian.pyx":566
  *     @staticmethod
  *     cdef Iterator Null():
  *         return Iterator(0, 0, 1)             # <<<<<<<<<<<<<<
@@ -9410,13 +9460,13 @@ static struct __pyx_obj_10lagrangian_Iterator *__pyx_f_10lagrangian_8Iterator_Nu
  *     def __iter__(self):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_10lagrangian_Iterator), __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 563, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_10lagrangian_Iterator), __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 566, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_10lagrangian_Iterator *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":562
+  /* "lagrangian.pyx":565
  * 
  *     @staticmethod
  *     cdef Iterator Null():             # <<<<<<<<<<<<<<
@@ -9436,7 +9486,7 @@ static struct __pyx_obj_10lagrangian_Iterator *__pyx_f_10lagrangian_8Iterator_Nu
 }
 static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "lagrangian.pyx":565
+/* "lagrangian.pyx":568
  *         return Iterator(0, 0, 1)
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -9466,7 +9516,7 @@ static PyObject *__pyx_pf_10lagrangian_8Iterator_2__iter__(struct __pyx_obj_10la
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_10lagrangian___pyx_scope_struct____iter__ *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 565, __pyx_L1_error)
+    __PYX_ERR(0, 568, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -9474,7 +9524,7 @@ static PyObject *__pyx_pf_10lagrangian_8Iterator_2__iter__(struct __pyx_obj_10la
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_10lagrangian_8Iterator_4generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_iter, __pyx_n_s_Iterator___iter, __pyx_n_s_lagrangian); if (unlikely(!gen)) __PYX_ERR(0, 565, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_10lagrangian_8Iterator_4generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_iter, __pyx_n_s_Iterator___iter, __pyx_n_s_lagrangian); if (unlikely(!gen)) __PYX_ERR(0, 568, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -9506,9 +9556,9 @@ static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObjec
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 565, __pyx_L1_error)
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 568, __pyx_L1_error)
 
-  /* "lagrangian.pyx":568
+  /* "lagrangian.pyx":571
  *         cdef double ix
  * 
  *         while self.wrapped.GoAfter():             # <<<<<<<<<<<<<<
@@ -9519,14 +9569,14 @@ static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObjec
     __pyx_t_1 = (__pyx_cur_scope->__pyx_v_self->wrapped->GoAfter() != 0);
     if (!__pyx_t_1) break;
 
-    /* "lagrangian.pyx":569
+    /* "lagrangian.pyx":572
  * 
  *         while self.wrapped.GoAfter():
  *             yield self.wrapped.call()             # <<<<<<<<<<<<<<
  *             cython.operator.preincrement(self.wrapped[0])
  * 
  */
-    __pyx_t_2 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_self->wrapped->operator()()); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 569, __pyx_L1_error)
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_self->wrapped->operator()()); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 572, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_r = __pyx_t_2;
     __pyx_t_2 = 0;
@@ -9537,9 +9587,9 @@ static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObjec
     __pyx_generator->resume_label = 1;
     return __pyx_r;
     __pyx_L6_resume_from_yield:;
-    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 569, __pyx_L1_error)
+    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 572, __pyx_L1_error)
 
-    /* "lagrangian.pyx":570
+    /* "lagrangian.pyx":573
  *         while self.wrapped.GoAfter():
  *             yield self.wrapped.call()
  *             cython.operator.preincrement(self.wrapped[0])             # <<<<<<<<<<<<<<
@@ -9550,7 +9600,7 @@ static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObjec
   }
   CYTHON_MAYBE_UNUSED_VAR(__pyx_cur_scope);
 
-  /* "lagrangian.pyx":565
+  /* "lagrangian.pyx":568
  *         return Iterator(0, 0, 1)
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -9573,7 +9623,7 @@ static PyObject *__pyx_gb_10lagrangian_8Iterator_4generator(__pyx_CoroutineObjec
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":572
+/* "lagrangian.pyx":575
  *             cython.operator.preincrement(self.wrapped[0])
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -9596,7 +9646,7 @@ static void __pyx_pf_10lagrangian_8Iterator_5__dealloc__(struct __pyx_obj_10lagr
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":573
+  /* "lagrangian.pyx":576
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -9605,7 +9655,7 @@ static void __pyx_pf_10lagrangian_8Iterator_5__dealloc__(struct __pyx_obj_10lagr
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":572
+  /* "lagrangian.pyx":575
  *             cython.operator.preincrement(self.wrapped[0])
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -9724,7 +9774,7 @@ static PyObject *__pyx_pf_10lagrangian_8Iterator_9__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":588
+/* "lagrangian.pyx":591
  *     cdef cpp_lagrangian.Position* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -9755,7 +9805,7 @@ static int __pyx_pf_10lagrangian_8Position___cinit__(struct __pyx_obj_10lagrangi
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":589
+  /* "lagrangian.pyx":592
  * 
  *     def __cinit__(self):
  *         if type(self) is Position:             # <<<<<<<<<<<<<<
@@ -9766,7 +9816,7 @@ static int __pyx_pf_10lagrangian_8Position___cinit__(struct __pyx_obj_10lagrangi
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "lagrangian.pyx":590
+    /* "lagrangian.pyx":593
  *     def __cinit__(self):
  *         if type(self) is Position:
  *             self.wrapped = new cpp_lagrangian.Position()             # <<<<<<<<<<<<<<
@@ -9775,7 +9825,7 @@ static int __pyx_pf_10lagrangian_8Position___cinit__(struct __pyx_obj_10lagrangi
  */
     __pyx_v_self->wrapped = new lagrangian::Position();
 
-    /* "lagrangian.pyx":589
+    /* "lagrangian.pyx":592
  * 
  *     def __cinit__(self):
  *         if type(self) is Position:             # <<<<<<<<<<<<<<
@@ -9784,7 +9834,7 @@ static int __pyx_pf_10lagrangian_8Position___cinit__(struct __pyx_obj_10lagrangi
  */
   }
 
-  /* "lagrangian.pyx":588
+  /* "lagrangian.pyx":591
  *     cdef cpp_lagrangian.Position* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -9798,7 +9848,7 @@ static int __pyx_pf_10lagrangian_8Position___cinit__(struct __pyx_obj_10lagrangi
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":592
+/* "lagrangian.pyx":595
  *             self.wrapped = new cpp_lagrangian.Position()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -9821,7 +9871,7 @@ static void __pyx_pf_10lagrangian_8Position_2__dealloc__(struct __pyx_obj_10lagr
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":593
+  /* "lagrangian.pyx":596
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -9830,7 +9880,7 @@ static void __pyx_pf_10lagrangian_8Position_2__dealloc__(struct __pyx_obj_10lagr
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":592
+  /* "lagrangian.pyx":595
  *             self.wrapped = new cpp_lagrangian.Position()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -9842,7 +9892,7 @@ static void __pyx_pf_10lagrangian_8Position_2__dealloc__(struct __pyx_obj_10lagr
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":595
+/* "lagrangian.pyx":598
  *         del self.wrapped
  * 
  *     cdef void assign(self, cpp_lagrangian.Position* position):             # <<<<<<<<<<<<<<
@@ -9854,7 +9904,7 @@ static void __pyx_f_10lagrangian_8Position_assign(struct __pyx_obj_10lagrangian_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("assign", 0);
 
-  /* "lagrangian.pyx":596
+  /* "lagrangian.pyx":599
  * 
  *     cdef void assign(self, cpp_lagrangian.Position* position):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -9863,7 +9913,7 @@ static void __pyx_f_10lagrangian_8Position_assign(struct __pyx_obj_10lagrangian_
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":597
+  /* "lagrangian.pyx":600
  *     cdef void assign(self, cpp_lagrangian.Position* position):
  *         del self.wrapped
  *         self.wrapped = position             # <<<<<<<<<<<<<<
@@ -9872,7 +9922,7 @@ static void __pyx_f_10lagrangian_8Position_assign(struct __pyx_obj_10lagrangian_
  */
   __pyx_v_self->wrapped = __pyx_v_position;
 
-  /* "lagrangian.pyx":595
+  /* "lagrangian.pyx":598
  *         del self.wrapped
  * 
  *     cdef void assign(self, cpp_lagrangian.Position* position):             # <<<<<<<<<<<<<<
@@ -9884,7 +9934,7 @@ static void __pyx_f_10lagrangian_8Position_assign(struct __pyx_obj_10lagrangian_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":599
+/* "lagrangian.pyx":602
  *         self.wrapped = position
  * 
  *     def get_xi(self, int idx):             # <<<<<<<<<<<<<<
@@ -9901,7 +9951,7 @@ static PyObject *__pyx_pw_10lagrangian_8Position_5get_xi(PyObject *__pyx_v_self,
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_xi (wrapper)", 0);
   assert(__pyx_arg_idx); {
-    __pyx_v_idx = __Pyx_PyInt_As_int(__pyx_arg_idx); if (unlikely((__pyx_v_idx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 599, __pyx_L3_error)
+    __pyx_v_idx = __Pyx_PyInt_As_int(__pyx_arg_idx); if (unlikely((__pyx_v_idx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 602, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -9923,7 +9973,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4get_xi(struct __pyx_obj_10lagr
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_xi", 0);
 
-  /* "lagrangian.pyx":603
+  /* "lagrangian.pyx":606
  *         Get the longitude of the point idx
  *         """
  *         return self.wrapped.get_xi(idx)             # <<<<<<<<<<<<<<
@@ -9935,15 +9985,15 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4get_xi(struct __pyx_obj_10lagr
     __pyx_t_1 = __pyx_v_self->wrapped->get_xi(__pyx_v_idx);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 603, __pyx_L1_error)
+    __PYX_ERR(0, 606, __pyx_L1_error)
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 603, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 606, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":599
+  /* "lagrangian.pyx":602
  *         self.wrapped = position
  * 
  *     def get_xi(self, int idx):             # <<<<<<<<<<<<<<
@@ -9962,7 +10012,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4get_xi(struct __pyx_obj_10lagr
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":605
+/* "lagrangian.pyx":608
  *         return self.wrapped.get_xi(idx)
  * 
  *     def get_yi(self, int idx):             # <<<<<<<<<<<<<<
@@ -9979,7 +10029,7 @@ static PyObject *__pyx_pw_10lagrangian_8Position_7get_yi(PyObject *__pyx_v_self,
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_yi (wrapper)", 0);
   assert(__pyx_arg_idx); {
-    __pyx_v_idx = __Pyx_PyInt_As_int(__pyx_arg_idx); if (unlikely((__pyx_v_idx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 605, __pyx_L3_error)
+    __pyx_v_idx = __Pyx_PyInt_As_int(__pyx_arg_idx); if (unlikely((__pyx_v_idx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 608, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -10001,7 +10051,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_6get_yi(struct __pyx_obj_10lagr
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_yi", 0);
 
-  /* "lagrangian.pyx":609
+  /* "lagrangian.pyx":612
  *         Get the latitude of the point idx
  *         """
  *         return self.wrapped.get_yi(idx)             # <<<<<<<<<<<<<<
@@ -10013,15 +10063,15 @@ static PyObject *__pyx_pf_10lagrangian_8Position_6get_yi(struct __pyx_obj_10lagr
     __pyx_t_1 = __pyx_v_self->wrapped->get_yi(__pyx_v_idx);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 609, __pyx_L1_error)
+    __PYX_ERR(0, 612, __pyx_L1_error)
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 609, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 612, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":605
+  /* "lagrangian.pyx":608
  *         return self.wrapped.get_xi(idx)
  * 
  *     def get_yi(self, int idx):             # <<<<<<<<<<<<<<
@@ -10040,7 +10090,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_6get_yi(struct __pyx_obj_10lagr
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":612
+/* "lagrangian.pyx":615
  * 
  *     @property
  *     def time(self):             # <<<<<<<<<<<<<<
@@ -10067,7 +10117,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4time___get__(struct __pyx_obj_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":616
+  /* "lagrangian.pyx":619
  *         Get the time at the end of the integration
  *         """
  *         return self.wrapped.get_time()             # <<<<<<<<<<<<<<
@@ -10075,13 +10125,13 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4time___get__(struct __pyx_obj_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_time()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 616, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_time()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 619, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":612
+  /* "lagrangian.pyx":615
  * 
  *     @property
  *     def time(self):             # <<<<<<<<<<<<<<
@@ -10100,7 +10150,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_4time___get__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":619
+/* "lagrangian.pyx":622
  * 
  *     @property
  *     def completed(self):             # <<<<<<<<<<<<<<
@@ -10127,7 +10177,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_9completed___get__(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":623
+  /* "lagrangian.pyx":626
  *         Test if the integration is over
  *         """
  *         return self.wrapped.get_completed()             # <<<<<<<<<<<<<<
@@ -10135,13 +10185,13 @@ static PyObject *__pyx_pf_10lagrangian_8Position_9completed___get__(struct __pyx
  *     def set_completed(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->get_completed()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 623, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->get_completed()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":619
+  /* "lagrangian.pyx":622
  * 
  *     @property
  *     def completed(self):             # <<<<<<<<<<<<<<
@@ -10160,7 +10210,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_9completed___get__(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":625
+/* "lagrangian.pyx":628
  *         return self.wrapped.get_completed()
  * 
  *     def set_completed(self):             # <<<<<<<<<<<<<<
@@ -10187,7 +10237,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_8set_completed(struct __pyx_obj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_completed", 0);
 
-  /* "lagrangian.pyx":629
+  /* "lagrangian.pyx":632
  *         Indicate that the integration is complete.
  *         """
  *         self.wrapped.set_completed()             # <<<<<<<<<<<<<<
@@ -10196,7 +10246,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_8set_completed(struct __pyx_obj
  */
   __pyx_v_self->wrapped->set_completed();
 
-  /* "lagrangian.pyx":625
+  /* "lagrangian.pyx":628
  *         return self.wrapped.get_completed()
  * 
  *     def set_completed(self):             # <<<<<<<<<<<<<<
@@ -10211,7 +10261,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_8set_completed(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":631
+/* "lagrangian.pyx":634
  *         self.wrapped.set_completed()
  * 
  *     def missing(self):             # <<<<<<<<<<<<<<
@@ -10238,7 +10288,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_10missing(struct __pyx_obj_10la
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("missing", 0);
 
-  /* "lagrangian.pyx":635
+  /* "lagrangian.pyx":638
  *         Set the instance to represent a missing position.
  *         """
  *         self.wrapped.Missing()             # <<<<<<<<<<<<<<
@@ -10247,7 +10297,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_10missing(struct __pyx_obj_10la
  */
   __pyx_v_self->wrapped->Missing();
 
-  /* "lagrangian.pyx":631
+  /* "lagrangian.pyx":634
  *         self.wrapped.set_completed()
  * 
  *     def missing(self):             # <<<<<<<<<<<<<<
@@ -10262,7 +10312,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_10missing(struct __pyx_obj_10la
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":637
+/* "lagrangian.pyx":640
  *         self.wrapped.Missing()
  * 
  *     def is_missing(self):             # <<<<<<<<<<<<<<
@@ -10290,7 +10340,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_12is_missing(struct __pyx_obj_1
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("is_missing", 0);
 
-  /* "lagrangian.pyx":641
+  /* "lagrangian.pyx":644
  *         Test if the integration is defined.
  *         """
  *         return self.wrapped.IsMissing()             # <<<<<<<<<<<<<<
@@ -10298,13 +10348,13 @@ static PyObject *__pyx_pf_10lagrangian_8Position_12is_missing(struct __pyx_obj_1
  *     def max_distance(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->IsMissing()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 641, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->IsMissing()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 644, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":637
+  /* "lagrangian.pyx":640
  *         self.wrapped.Missing()
  * 
  *     def is_missing(self):             # <<<<<<<<<<<<<<
@@ -10323,7 +10373,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_12is_missing(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":643
+/* "lagrangian.pyx":646
  *         return self.wrapped.IsMissing()
  * 
  *     def max_distance(self):             # <<<<<<<<<<<<<<
@@ -10351,7 +10401,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_14max_distance(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("max_distance", 0);
 
-  /* "lagrangian.pyx":647
+  /* "lagrangian.pyx":650
  *         Compute the distance max
  *         """
  *         return self.wrapped.MaxDistance()             # <<<<<<<<<<<<<<
@@ -10359,13 +10409,13 @@ static PyObject *__pyx_pf_10lagrangian_8Position_14max_distance(struct __pyx_obj
  *     def compute(self,
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->MaxDistance()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 647, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->MaxDistance()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 650, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":643
+  /* "lagrangian.pyx":646
  *         return self.wrapped.IsMissing()
  * 
  *     def max_distance(self):             # <<<<<<<<<<<<<<
@@ -10384,7 +10434,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_14max_distance(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":649
+/* "lagrangian.pyx":652
  *         return self.wrapped.MaxDistance()
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -10427,17 +10477,17 @@ static PyObject *__pyx_pw_10lagrangian_8Position_17compute(PyObject *__pyx_v_sel
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_it)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 649, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 652, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cell)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 649, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 652, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 649, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 652, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -10452,15 +10502,15 @@ static PyObject *__pyx_pw_10lagrangian_8Position_17compute(PyObject *__pyx_v_sel
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 649, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 652, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Position.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_rk), __pyx_ptype_10lagrangian_RungeKutta, 0, "rk", 0))) __PYX_ERR(0, 650, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 0, "it", 0))) __PYX_ERR(0, 651, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 0, "cell", 0))) __PYX_ERR(0, 652, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_rk), __pyx_ptype_10lagrangian_RungeKutta, 0, "rk", 0))) __PYX_ERR(0, 653, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 0, "it", 0))) __PYX_ERR(0, 654, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 0, "cell", 0))) __PYX_ERR(0, 655, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_8Position_16compute(((struct __pyx_obj_10lagrangian_Position *)__pyx_v_self), __pyx_v_rk, __pyx_v_it, __pyx_v_cell);
 
   /* function exit code */
@@ -10478,7 +10528,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_16compute(struct __pyx_obj_10la
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":656
+  /* "lagrangian.pyx":659
  *         To move a particle with a velocity field.
  *         """
  *         return self.wrapped.Compute(rk.wrapped[0],             # <<<<<<<<<<<<<<
@@ -10487,20 +10537,20 @@ static PyObject *__pyx_pf_10lagrangian_8Position_16compute(struct __pyx_obj_10la
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":658
+  /* "lagrangian.pyx":661
  *         return self.wrapped.Compute(rk.wrapped[0],
  *                                     it.wrapped[0],
  *                                     cell.wrapped[0])             # <<<<<<<<<<<<<<
  * 
  *     def strain_tensor(self):
  */
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->Compute((__pyx_v_rk->wrapped[0]), (__pyx_v_it->wrapped[0]), (__pyx_v_cell->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 656, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->wrapped->Compute((__pyx_v_rk->wrapped[0]), (__pyx_v_it->wrapped[0]), (__pyx_v_cell->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 659, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":649
+  /* "lagrangian.pyx":652
  *         return self.wrapped.MaxDistance()
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -10519,7 +10569,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_16compute(struct __pyx_obj_10la
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":660
+/* "lagrangian.pyx":663
  *                                     cell.wrapped[0])
  * 
  *     def strain_tensor(self):             # <<<<<<<<<<<<<<
@@ -10556,7 +10606,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_18strain_tensor(struct __pyx_ob
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("strain_tensor", 0);
 
-  /* "lagrangian.pyx":667
+  /* "lagrangian.pyx":670
  * 
  *         # Disable compiler complaints
  *         a00 = a01 = a10 = a11 = numeric_limits[double].quiet_NaN()             # <<<<<<<<<<<<<<
@@ -10569,7 +10619,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_18strain_tensor(struct __pyx_ob
   __pyx_v_a10 = __pyx_t_1;
   __pyx_v_a11 = __pyx_t_1;
 
-  /* "lagrangian.pyx":668
+  /* "lagrangian.pyx":671
  *         # Disable compiler complaints
  *         a00 = a01 = a10 = a11 = numeric_limits[double].quiet_NaN()
  *         self.wrapped.StrainTensor(a00, a01, a10, a11)             # <<<<<<<<<<<<<<
@@ -10578,7 +10628,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_18strain_tensor(struct __pyx_ob
  */
   __pyx_v_self->wrapped->StrainTensor(__pyx_v_a00, __pyx_v_a01, __pyx_v_a10, __pyx_v_a11);
 
-  /* "lagrangian.pyx":669
+  /* "lagrangian.pyx":672
  *         a00 = a01 = a10 = a11 = numeric_limits[double].quiet_NaN()
  *         self.wrapped.StrainTensor(a00, a01, a10, a11)
  *         return (a00, a01, a10, a11)             # <<<<<<<<<<<<<<
@@ -10586,15 +10636,15 @@ static PyObject *__pyx_pf_10lagrangian_8Position_18strain_tensor(struct __pyx_ob
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_a00); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_a00); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 672, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_a01); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_a01); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 672, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_a10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_a10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 672, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_a11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_a11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 672, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 672, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2);
@@ -10612,7 +10662,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_18strain_tensor(struct __pyx_ob
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":660
+  /* "lagrangian.pyx":663
  *                                     cell.wrapped[0])
  * 
  *     def strain_tensor(self):             # <<<<<<<<<<<<<<
@@ -10742,7 +10792,7 @@ static PyObject *__pyx_pf_10lagrangian_8Position_22__setstate_cython__(CYTHON_UN
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":676
+/* "lagrangian.pyx":679
  *     Define the position of 3 points
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):             # <<<<<<<<<<<<<<
@@ -10787,13 +10837,13 @@ static int __pyx_pw_10lagrangian_7Triplet_1__cinit__(PyObject *__pyx_v_self, PyO
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 1); __PYX_ERR(0, 676, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 1); __PYX_ERR(0, 679, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 2); __PYX_ERR(0, 676, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 2); __PYX_ERR(0, 679, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -10803,7 +10853,7 @@ static int __pyx_pw_10lagrangian_7Triplet_1__cinit__(PyObject *__pyx_v_self, PyO
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 676, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 679, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10816,18 +10866,18 @@ static int __pyx_pw_10lagrangian_7Triplet_1__cinit__(PyObject *__pyx_v_self, PyO
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 676, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 676, __pyx_L3_error)
-    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 676, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 679, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 679, __pyx_L3_error)
+    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 679, __pyx_L3_error)
     if (values[3]) {
-      __pyx_v_start = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_start == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 676, __pyx_L3_error)
+      __pyx_v_start = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_start == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 679, __pyx_L3_error)
     } else {
       __pyx_v_start = ((double)0.0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 676, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 679, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Triplet.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -10845,7 +10895,7 @@ static int __pyx_pf_10lagrangian_7Triplet___cinit__(struct __pyx_obj_10lagrangia
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":677
+  /* "lagrangian.pyx":680
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):
  *         self.wrapped = new cpp_lagrangian.Triplet(x, y, delta, start)             # <<<<<<<<<<<<<<
@@ -10854,7 +10904,7 @@ static int __pyx_pf_10lagrangian_7Triplet___cinit__(struct __pyx_obj_10lagrangia
  */
   __pyx_v_self->__pyx_base.wrapped = new lagrangian::Triplet(__pyx_v_x, __pyx_v_y, __pyx_v_delta, __pyx_v_start);
 
-  /* "lagrangian.pyx":676
+  /* "lagrangian.pyx":679
  *     Define the position of 3 points
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):             # <<<<<<<<<<<<<<
@@ -10975,7 +11025,7 @@ static PyObject *__pyx_pf_10lagrangian_7Triplet_4__setstate_cython__(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":684
+/* "lagrangian.pyx":687
  *     Define the position of 5 points
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):             # <<<<<<<<<<<<<<
@@ -11020,13 +11070,13 @@ static int __pyx_pw_10lagrangian_10Quintuplet_1__cinit__(PyObject *__pyx_v_self,
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 1); __PYX_ERR(0, 684, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 1); __PYX_ERR(0, 687, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 2); __PYX_ERR(0, 684, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, 2); __PYX_ERR(0, 687, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -11036,7 +11086,7 @@ static int __pyx_pw_10lagrangian_10Quintuplet_1__cinit__(PyObject *__pyx_v_self,
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 684, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 687, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -11049,18 +11099,18 @@ static int __pyx_pw_10lagrangian_10Quintuplet_1__cinit__(PyObject *__pyx_v_self,
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 684, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 684, __pyx_L3_error)
-    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 684, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 687, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 687, __pyx_L3_error)
+    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 687, __pyx_L3_error)
     if (values[3]) {
-      __pyx_v_start = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_start == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 684, __pyx_L3_error)
+      __pyx_v_start = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_start == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 687, __pyx_L3_error)
     } else {
       __pyx_v_start = ((double)0.0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 684, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 687, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Quintuplet.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -11078,7 +11128,7 @@ static int __pyx_pf_10lagrangian_10Quintuplet___cinit__(struct __pyx_obj_10lagra
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":685
+  /* "lagrangian.pyx":688
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):
  *         self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta, start)             # <<<<<<<<<<<<<<
@@ -11087,7 +11137,7 @@ static int __pyx_pf_10lagrangian_10Quintuplet___cinit__(struct __pyx_obj_10lagra
  */
   __pyx_v_self->__pyx_base.wrapped = new lagrangian::Quintuplet(__pyx_v_x, __pyx_v_y, __pyx_v_delta, __pyx_v_start);
 
-  /* "lagrangian.pyx":684
+  /* "lagrangian.pyx":687
  *     Define the position of 5 points
  *     """
  *     def __cinit__(self, double x, double y, double delta, double start=0):             # <<<<<<<<<<<<<<
@@ -11208,7 +11258,7 @@ static PyObject *__pyx_pf_10lagrangian_10Quintuplet_4__setstate_cython__(CYTHON_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":695
+/* "lagrangian.pyx":698
  *     cdef Field field
  * 
  *     def __cinit__(self, *args):             # <<<<<<<<<<<<<<
@@ -11242,7 +11292,7 @@ static int __pyx_pf_10lagrangian_19AbstractIntegration___cinit__(struct __pyx_ob
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":696
+  /* "lagrangian.pyx":699
  * 
  *     def __cinit__(self, *args):
  *         if type(self) is AbstractIntegration:             # <<<<<<<<<<<<<<
@@ -11253,20 +11303,20 @@ static int __pyx_pf_10lagrangian_19AbstractIntegration___cinit__(struct __pyx_ob
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "lagrangian.pyx":697
+    /* "lagrangian.pyx":700
  *     def __cinit__(self, *args):
  *         if type(self) is AbstractIntegration:
  *             raise RuntimeError("cannot instantiate abstract class")             # <<<<<<<<<<<<<<
  * 
  *     # Stores the Python object "Field " in the instance members, to be
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 697, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 700, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 697, __pyx_L1_error)
+    __PYX_ERR(0, 700, __pyx_L1_error)
 
-    /* "lagrangian.pyx":696
+    /* "lagrangian.pyx":699
  * 
  *     def __cinit__(self, *args):
  *         if type(self) is AbstractIntegration:             # <<<<<<<<<<<<<<
@@ -11275,7 +11325,7 @@ static int __pyx_pf_10lagrangian_19AbstractIntegration___cinit__(struct __pyx_ob
  */
   }
 
-  /* "lagrangian.pyx":695
+  /* "lagrangian.pyx":698
  *     cdef Field field
  * 
  *     def __cinit__(self, *args):             # <<<<<<<<<<<<<<
@@ -11295,7 +11345,7 @@ static int __pyx_pf_10lagrangian_19AbstractIntegration___cinit__(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":701
+/* "lagrangian.pyx":704
  *     # Stores the Python object "Field " in the instance members, to be
  *     # sure that the C ++ object will not be destroyed before being used
  *     cdef void set_field(self, Field field):             # <<<<<<<<<<<<<<
@@ -11307,7 +11357,7 @@ static void __pyx_f_10lagrangian_19AbstractIntegration_set_field(struct __pyx_ob
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_field", 0);
 
-  /* "lagrangian.pyx":702
+  /* "lagrangian.pyx":705
  *     # sure that the C ++ object will not be destroyed before being used
  *     cdef void set_field(self, Field field):
  *         self.field = field             # <<<<<<<<<<<<<<
@@ -11320,7 +11370,7 @@ static void __pyx_f_10lagrangian_19AbstractIntegration_set_field(struct __pyx_ob
   __Pyx_DECREF(((PyObject *)__pyx_v_self->field));
   __pyx_v_self->field = __pyx_v_field;
 
-  /* "lagrangian.pyx":701
+  /* "lagrangian.pyx":704
  *     # Stores the Python object "Field " in the instance members, to be
  *     # sure that the C ++ object will not be destroyed before being used
  *     cdef void set_field(self, Field field):             # <<<<<<<<<<<<<<
@@ -11332,7 +11382,7 @@ static void __pyx_f_10lagrangian_19AbstractIntegration_set_field(struct __pyx_ob
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":704
+/* "lagrangian.pyx":707
  *         self.field = field
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -11355,7 +11405,7 @@ static void __pyx_pf_10lagrangian_19AbstractIntegration_2__dealloc__(struct __py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":705
+  /* "lagrangian.pyx":708
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -11364,7 +11414,7 @@ static void __pyx_pf_10lagrangian_19AbstractIntegration_2__dealloc__(struct __py
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":704
+  /* "lagrangian.pyx":707
  *         self.field = field
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -11376,7 +11426,7 @@ static void __pyx_pf_10lagrangian_19AbstractIntegration_2__dealloc__(struct __py
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":707
+/* "lagrangian.pyx":710
  *         del self.wrapped
  * 
  *     def get_iterator(self):             # <<<<<<<<<<<<<<
@@ -11405,19 +11455,19 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_4get_iterator(struc
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_iterator", 0);
 
-  /* "lagrangian.pyx":714
+  /* "lagrangian.pyx":717
  *             Iterator result
  * 
  *         result = Iterator.Null()             # <<<<<<<<<<<<<<
  *         result.wrapped[0] = self.wrapped.GetIterator()
  * 
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_10lagrangian_8Iterator_Null()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 714, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_10lagrangian_8Iterator_Null()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 717, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_result = ((struct __pyx_obj_10lagrangian_Iterator *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":715
+  /* "lagrangian.pyx":718
  * 
  *         result = Iterator.Null()
  *         result.wrapped[0] = self.wrapped.GetIterator()             # <<<<<<<<<<<<<<
@@ -11426,7 +11476,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_4get_iterator(struc
  */
   (__pyx_v_result->wrapped[0]) = __pyx_v_self->wrapped->GetIterator();
 
-  /* "lagrangian.pyx":717
+  /* "lagrangian.pyx":720
  *         result.wrapped[0] = self.wrapped.GetIterator()
  * 
  *         return result             # <<<<<<<<<<<<<<
@@ -11438,7 +11488,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_4get_iterator(struc
   __pyx_r = ((PyObject *)__pyx_v_result);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":707
+  /* "lagrangian.pyx":710
  *         del self.wrapped
  * 
  *     def get_iterator(self):             # <<<<<<<<<<<<<<
@@ -11458,7 +11508,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_4get_iterator(struc
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":719
+/* "lagrangian.pyx":722
  *         return result
  * 
  *     def fetch(self, double t):             # <<<<<<<<<<<<<<
@@ -11475,7 +11525,7 @@ static PyObject *__pyx_pw_10lagrangian_19AbstractIntegration_7fetch(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("fetch (wrapper)", 0);
   assert(__pyx_arg_t); {
-    __pyx_v_t = __pyx_PyFloat_AsDouble(__pyx_arg_t); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 719, __pyx_L3_error)
+    __pyx_v_t = __pyx_PyFloat_AsDouble(__pyx_arg_t); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 722, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -11495,7 +11545,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_6fetch(struct __pyx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("fetch", 0);
 
-  /* "lagrangian.pyx":723
+  /* "lagrangian.pyx":726
  *         Perform the tasks before a new time step (eg load grids required)
  *         """
  *         self.wrapped.Fetch(t)             # <<<<<<<<<<<<<<
@@ -11504,7 +11554,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_6fetch(struct __pyx
  */
   __pyx_v_self->wrapped->Fetch(__pyx_v_t);
 
-  /* "lagrangian.pyx":719
+  /* "lagrangian.pyx":722
  *         return result
  * 
  *     def fetch(self, double t):             # <<<<<<<<<<<<<<
@@ -11519,7 +11569,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_6fetch(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":725
+/* "lagrangian.pyx":728
  *         self.wrapped.Fetch(t)
  * 
  *     def compute(self, Iterator it , double x0, double y0):             # <<<<<<<<<<<<<<
@@ -11562,17 +11612,17 @@ static PyObject *__pyx_pw_10lagrangian_19AbstractIntegration_9compute(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 725, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 728, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 725, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 728, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 725, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 728, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -11582,18 +11632,18 @@ static PyObject *__pyx_pw_10lagrangian_19AbstractIntegration_9compute(PyObject *
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_it = ((struct __pyx_obj_10lagrangian_Iterator *)values[0]);
-    __pyx_v_x0 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 725, __pyx_L3_error)
-    __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 725, __pyx_L3_error)
+    __pyx_v_x0 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 728, __pyx_L3_error)
+    __pyx_v_y0 = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 728, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 725, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 728, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.AbstractIntegration.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 1, "it", 0))) __PYX_ERR(0, 725, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 1, "it", 0))) __PYX_ERR(0, 728, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_19AbstractIntegration_8compute(((struct __pyx_obj_10lagrangian_AbstractIntegration *)__pyx_v_self), __pyx_v_it, __pyx_v_x0, __pyx_v_y0);
 
   /* function exit code */
@@ -11619,7 +11669,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_8compute(struct __p
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":734
+  /* "lagrangian.pyx":737
  * 
  *         # Disable compiler complaints
  *         x1 = y1 = numeric_limits[double].quiet_NaN()             # <<<<<<<<<<<<<<
@@ -11630,7 +11680,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_8compute(struct __p
   __pyx_v_x1 = __pyx_t_1;
   __pyx_v_y1 = __pyx_t_1;
 
-  /* "lagrangian.pyx":736
+  /* "lagrangian.pyx":739
  *         x1 = y1 = numeric_limits[double].quiet_NaN()
  * 
  *         defined = self.wrapped.Compute(it.wrapped[0], x0, y0, x1, y1)             # <<<<<<<<<<<<<<
@@ -11641,11 +11691,11 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_8compute(struct __p
     __pyx_t_2 = __pyx_v_self->wrapped->Compute((__pyx_v_it->wrapped[0]), __pyx_v_x0, __pyx_v_y0, __pyx_v_x1, __pyx_v_y1);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 736, __pyx_L1_error)
+    __PYX_ERR(0, 739, __pyx_L1_error)
   }
   __pyx_v_defined = __pyx_t_2;
 
-  /* "lagrangian.pyx":737
+  /* "lagrangian.pyx":740
  * 
  *         defined = self.wrapped.Compute(it.wrapped[0], x0, y0, x1, y1)
  *         return (x1, y1) if defined else None             # <<<<<<<<<<<<<<
@@ -11654,11 +11704,11 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_8compute(struct __p
  */
   __Pyx_XDECREF(__pyx_r);
   if ((__pyx_v_defined != 0)) {
-    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_x1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 737, __pyx_L1_error)
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_x1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 740, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_y1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 737, __pyx_L1_error)
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_y1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 740, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 737, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 740, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
@@ -11676,7 +11726,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_8compute(struct __p
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":725
+  /* "lagrangian.pyx":728
  *         self.wrapped.Fetch(t)
  * 
  *     def compute(self, Iterator it , double x0, double y0):             # <<<<<<<<<<<<<<
@@ -11805,7 +11855,7 @@ static PyObject *__pyx_pf_10lagrangian_19AbstractIntegration_12__setstate_cython
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":745
+/* "lagrangian.pyx":748
  *     Handles the time integration
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -11850,23 +11900,23 @@ static int __pyx_pw_10lagrangian_11Integration_1__cinit__(PyObject *__pyx_v_self
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_end_time)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 745, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 748, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta_t)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 745, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 748, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_field)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 745, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 748, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 745, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 748, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -11883,16 +11933,16 @@ static int __pyx_pw_10lagrangian_11Integration_1__cinit__(PyObject *__pyx_v_self
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 745, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 748, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Integration.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 746, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 747, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 748, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 749, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 749, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 750, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 751, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 752, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_11Integration___cinit__(((struct __pyx_obj_10lagrangian_Integration *)__pyx_v_self), __pyx_v_start_time, __pyx_v_end_time, __pyx_v_delta_t, __pyx_v_field);
 
   /* function exit code */
@@ -11910,7 +11960,7 @@ static int __pyx_pf_10lagrangian_11Integration___cinit__(struct __pyx_obj_10lagr
   lagrangian::Integration *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":750
+  /* "lagrangian.pyx":753
  *                   cpython.datetime.timedelta delta_t,
  *                   Field field):
  *         self.set_field(field)             # <<<<<<<<<<<<<<
@@ -11919,7 +11969,7 @@ static int __pyx_pf_10lagrangian_11Integration___cinit__(struct __pyx_obj_10lagr
  */
   ((struct __pyx_vtabstruct_10lagrangian_Integration *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.set_field(((struct __pyx_obj_10lagrangian_AbstractIntegration *)__pyx_v_self), __pyx_v_field);
 
-  /* "lagrangian.pyx":751
+  /* "lagrangian.pyx":754
  *                   Field field):
  *         self.set_field(field)
  *         self.wrapped = new cpp_lagrangian.Integration(             # <<<<<<<<<<<<<<
@@ -11930,11 +11980,11 @@ static int __pyx_pf_10lagrangian_11Integration___cinit__(struct __pyx_obj_10lagr
     __pyx_t_1 = new lagrangian::Integration(__pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_start_time), __pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_end_time), __pyx_f_14cpp_lagrangian_from_pytimedelta(__pyx_v_delta_t), __pyx_v_field->wrapped);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 751, __pyx_L1_error)
+    __PYX_ERR(0, 754, __pyx_L1_error)
   }
   __pyx_v_self->__pyx_base.wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":745
+  /* "lagrangian.pyx":748
  *     Handles the time integration
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -12060,7 +12110,7 @@ static PyObject *__pyx_pf_10lagrangian_11Integration_4__setstate_cython__(CYTHON
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":762
+/* "lagrangian.pyx":765
  *     Handles the movement of a particle using the Runge-Kutta method.
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -12105,23 +12155,23 @@ static int __pyx_pw_10lagrangian_4Path_1__cinit__(PyObject *__pyx_v_self, PyObje
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_end_time)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 762, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 1); __PYX_ERR(0, 765, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta_t)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 762, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 2); __PYX_ERR(0, 765, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_field)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 762, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, 3); __PYX_ERR(0, 765, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 762, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 765, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -12138,16 +12188,16 @@ static int __pyx_pw_10lagrangian_4Path_1__cinit__(PyObject *__pyx_v_self, PyObje
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 762, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 765, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Path.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 763, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 764, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 765, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 766, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 766, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 767, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 768, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 769, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_4Path___cinit__(((struct __pyx_obj_10lagrangian_Path *)__pyx_v_self), __pyx_v_start_time, __pyx_v_end_time, __pyx_v_delta_t, __pyx_v_field);
 
   /* function exit code */
@@ -12165,7 +12215,7 @@ static int __pyx_pf_10lagrangian_4Path___cinit__(struct __pyx_obj_10lagrangian_P
   lagrangian::Path *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":767
+  /* "lagrangian.pyx":770
  *                   cpython.datetime.timedelta delta_t,
  *                   Field field):
  *         self.set_field(field)             # <<<<<<<<<<<<<<
@@ -12174,7 +12224,7 @@ static int __pyx_pf_10lagrangian_4Path___cinit__(struct __pyx_obj_10lagrangian_P
  */
   ((struct __pyx_vtabstruct_10lagrangian_Path *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.set_field(((struct __pyx_obj_10lagrangian_AbstractIntegration *)__pyx_v_self), __pyx_v_field);
 
-  /* "lagrangian.pyx":768
+  /* "lagrangian.pyx":771
  *                   Field field):
  *         self.set_field(field)
  *         self.wrapped = new cpp_lagrangian.Path(             # <<<<<<<<<<<<<<
@@ -12185,11 +12235,11 @@ static int __pyx_pf_10lagrangian_4Path___cinit__(struct __pyx_obj_10lagrangian_P
     __pyx_t_1 = new lagrangian::Path(__pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_start_time), __pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_end_time), __pyx_f_14cpp_lagrangian_from_pytimedelta(__pyx_v_delta_t), __pyx_v_field->wrapped);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 768, __pyx_L1_error)
+    __PYX_ERR(0, 771, __pyx_L1_error)
   }
   __pyx_v_self->__pyx_base.wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":762
+  /* "lagrangian.pyx":765
  *     Handles the movement of a particle using the Runge-Kutta method.
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -12315,7 +12365,7 @@ static PyObject *__pyx_pf_10lagrangian_4Path_4__setstate_cython__(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":795
+/* "lagrangian.pyx":798
  *     cdef cpp_lagrangian.FiniteLyapunovExponents* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -12344,7 +12394,7 @@ static int __pyx_pf_10lagrangian_23FiniteLyapunovExponents___cinit__(struct __py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":796
+  /* "lagrangian.pyx":799
  * 
  *     def __cinit__(self):
  *         self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents()             # <<<<<<<<<<<<<<
@@ -12353,7 +12403,7 @@ static int __pyx_pf_10lagrangian_23FiniteLyapunovExponents___cinit__(struct __py
  */
   __pyx_v_self->wrapped = new lagrangian::FiniteLyapunovExponents();
 
-  /* "lagrangian.pyx":795
+  /* "lagrangian.pyx":798
  *     cdef cpp_lagrangian.FiniteLyapunovExponents* wrapped
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -12367,7 +12417,7 @@ static int __pyx_pf_10lagrangian_23FiniteLyapunovExponents___cinit__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":798
+/* "lagrangian.pyx":801
  *         self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -12390,7 +12440,7 @@ static void __pyx_pf_10lagrangian_23FiniteLyapunovExponents_2__dealloc__(struct 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":799
+  /* "lagrangian.pyx":802
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -12399,7 +12449,7 @@ static void __pyx_pf_10lagrangian_23FiniteLyapunovExponents_2__dealloc__(struct 
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":798
+  /* "lagrangian.pyx":801
  *         self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -12411,7 +12461,7 @@ static void __pyx_pf_10lagrangian_23FiniteLyapunovExponents_2__dealloc__(struct 
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":802
+/* "lagrangian.pyx":805
  * 
  *     @property
  *     def lambda1(self):             # <<<<<<<<<<<<<<
@@ -12439,7 +12489,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda1___get_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":808
+  /* "lagrangian.pyx":811
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12448,7 +12498,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda1___get_
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":810
+  /* "lagrangian.pyx":813
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_lambda1()             # <<<<<<<<<<<<<<
@@ -12456,13 +12506,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda1___get_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_lambda1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 810, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_lambda1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 813, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":802
+  /* "lagrangian.pyx":805
  * 
  *     @property
  *     def lambda1(self):             # <<<<<<<<<<<<<<
@@ -12481,7 +12531,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda1___get_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":813
+/* "lagrangian.pyx":816
  * 
  *     @property
  *     def lambda2(self):             # <<<<<<<<<<<<<<
@@ -12509,7 +12559,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda2___get_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":819
+  /* "lagrangian.pyx":822
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12518,7 +12568,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda2___get_
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":821
+  /* "lagrangian.pyx":824
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_lambda2()             # <<<<<<<<<<<<<<
@@ -12526,13 +12576,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda2___get_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_lambda2()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 821, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_lambda2()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 824, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":813
+  /* "lagrangian.pyx":816
  * 
  *     @property
  *     def lambda2(self):             # <<<<<<<<<<<<<<
@@ -12551,7 +12601,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7lambda2___get_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":824
+/* "lagrangian.pyx":827
  * 
  *     @property
  *     def theta1(self):             # <<<<<<<<<<<<<<
@@ -12579,7 +12629,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta1___get__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":830
+  /* "lagrangian.pyx":833
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12588,7 +12638,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta1___get__
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":832
+  /* "lagrangian.pyx":835
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_theta1()             # <<<<<<<<<<<<<<
@@ -12596,13 +12646,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta1___get__
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_theta1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 832, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_theta1()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 835, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":824
+  /* "lagrangian.pyx":827
  * 
  *     @property
  *     def theta1(self):             # <<<<<<<<<<<<<<
@@ -12621,7 +12671,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta1___get__
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":835
+/* "lagrangian.pyx":838
  * 
  *     @property
  *     def theta2(self):             # <<<<<<<<<<<<<<
@@ -12649,7 +12699,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta2___get__
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":841
+  /* "lagrangian.pyx":844
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12658,7 +12708,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta2___get__
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":843
+  /* "lagrangian.pyx":846
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_theta2()             # <<<<<<<<<<<<<<
@@ -12666,13 +12716,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta2___get__
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_theta2()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 843, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_theta2()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 846, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":835
+  /* "lagrangian.pyx":838
  * 
  *     @property
  *     def theta2(self):             # <<<<<<<<<<<<<<
@@ -12691,7 +12741,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6theta2___get__
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":846
+/* "lagrangian.pyx":849
  * 
  *     @property
  *     def delta_t(self):             # <<<<<<<<<<<<<<
@@ -12719,7 +12769,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7delta_t___get_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":851
+  /* "lagrangian.pyx":854
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12728,7 +12778,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7delta_t___get_
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":853
+  /* "lagrangian.pyx":856
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_delta_t()             # <<<<<<<<<<<<<<
@@ -12736,13 +12786,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7delta_t___get_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_delta_t()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 853, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_delta_t()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 856, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":846
+  /* "lagrangian.pyx":849
  * 
  *     @property
  *     def delta_t(self):             # <<<<<<<<<<<<<<
@@ -12761,7 +12811,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_7delta_t___get_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":856
+/* "lagrangian.pyx":859
  * 
  *     @property
  *     def final_separation(self):             # <<<<<<<<<<<<<<
@@ -12789,7 +12839,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_16final_separat
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":861
+  /* "lagrangian.pyx":864
  *         """
  *         cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped             # <<<<<<<<<<<<<<
@@ -12798,7 +12848,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_16final_separat
  */
   __pyx_v_fle = ((lagrangian::FiniteLyapunovExponents *)__pyx_v_self->wrapped);
 
-  /* "lagrangian.pyx":863
+  /* "lagrangian.pyx":866
  *             <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
  * 
  *         return fle.get_final_separation()             # <<<<<<<<<<<<<<
@@ -12806,13 +12856,13 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_16final_separat
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_final_separation()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 863, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fle->get_final_separation()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 866, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":856
+  /* "lagrangian.pyx":859
  * 
  *     @property
  *     def final_separation(self):             # <<<<<<<<<<<<<<
@@ -12938,7 +12988,7 @@ static PyObject *__pyx_pf_10lagrangian_23FiniteLyapunovExponents_6__setstate_cyt
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":915
+/* "lagrangian.pyx":918
  *         2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -12992,41 +13042,41 @@ static int __pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_1__cinit__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_end_time)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 1); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 1); __PYX_ERR(0, 918, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta_t)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 2); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 2); __PYX_ERR(0, 918, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_mode)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 3); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 3); __PYX_ERR(0, 918, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_min_separation)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 4); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 4); __PYX_ERR(0, 918, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_delta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 5); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 5); __PYX_ERR(0, 918, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_field)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 6); __PYX_ERR(0, 915, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, 6); __PYX_ERR(0, 918, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 915, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 918, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 7) {
       goto __pyx_L5_argtuple_error;
@@ -13042,23 +13092,23 @@ static int __pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_1__cinit__
     __pyx_v_start_time = ((PyDateTime_DateTime *)values[0]);
     __pyx_v_end_time = ((PyDateTime_DateTime *)values[1]);
     __pyx_v_delta_t = ((PyDateTime_Delta *)values[2]);
-    __pyx_v_mode = ((enum __pyx_t_10lagrangian_Mode)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Mode(values[3])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 919, __pyx_L3_error)
-    __pyx_v_min_separation = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_min_separation == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 920, __pyx_L3_error)
-    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 921, __pyx_L3_error)
+    __pyx_v_mode = ((enum __pyx_t_10lagrangian_Mode)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Mode(values[3])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 922, __pyx_L3_error)
+    __pyx_v_min_separation = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_min_separation == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 923, __pyx_L3_error)
+    __pyx_v_delta = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_delta == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 924, __pyx_L3_error)
     __pyx_v_field = ((struct __pyx_obj_10lagrangian_Field *)values[6]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 915, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 918, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.FiniteLyapunovExponentsIntegration.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 916, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 917, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 918, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 922, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "start_time", 0))) __PYX_ERR(0, 919, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_end_time), __pyx_ptype_7cpython_8datetime_datetime, 1, "end_time", 0))) __PYX_ERR(0, 920, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_delta_t), __pyx_ptype_7cpython_8datetime_timedelta, 1, "delta_t", 0))) __PYX_ERR(0, 921, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_field), __pyx_ptype_10lagrangian_Field, 1, "field", 0))) __PYX_ERR(0, 925, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration___cinit__(((struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration *)__pyx_v_self), __pyx_v_start_time, __pyx_v_end_time, __pyx_v_delta_t, __pyx_v_mode, __pyx_v_min_separation, __pyx_v_delta, __pyx_v_field);
 
   /* function exit code */
@@ -13076,7 +13126,7 @@ static int __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration___cinit__(
   lagrangian::FiniteLyapunovExponentsIntegration *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":923
+  /* "lagrangian.pyx":926
  *                   double delta,
  *                   Field field):
  *         self.set_field(field)             # <<<<<<<<<<<<<<
@@ -13085,7 +13135,7 @@ static int __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration___cinit__(
  */
   ((struct __pyx_vtabstruct_10lagrangian_FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.__pyx_vtab)->__pyx_base.set_field(((struct __pyx_obj_10lagrangian_AbstractIntegration *)__pyx_v_self), __pyx_v_field);
 
-  /* "lagrangian.pyx":924
+  /* "lagrangian.pyx":927
  *                   Field field):
  *         self.set_field(field)
  *         self.wrapped = new cpp_lagrangian.FiniteLyapunovExponentsIntegration(             # <<<<<<<<<<<<<<
@@ -13096,11 +13146,11 @@ static int __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration___cinit__(
     __pyx_t_1 = new lagrangian::FiniteLyapunovExponentsIntegration(__pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_start_time), __pyx_f_14cpp_lagrangian_from_pydatetime(__pyx_v_end_time), __pyx_f_14cpp_lagrangian_from_pytimedelta(__pyx_v_delta_t), ((enum lagrangian::FiniteLyapunovExponentsIntegration::Mode)__pyx_v_mode), __pyx_v_min_separation, __pyx_v_delta, __pyx_v_field->wrapped);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 924, __pyx_L1_error)
+    __PYX_ERR(0, 927, __pyx_L1_error)
   }
   __pyx_v_self->__pyx_base.wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":915
+  /* "lagrangian.pyx":918
  *         2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -13119,7 +13169,7 @@ static int __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration___cinit__(
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":933
+/* "lagrangian.pyx":936
  *             field.wrapped)
  * 
  *     def set_initial_point(self,             # <<<<<<<<<<<<<<
@@ -13162,17 +13212,17 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_3set
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, 1); __PYX_ERR(0, 933, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, 1); __PYX_ERR(0, 936, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_stencil)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, 2); __PYX_ERR(0, 933, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, 2); __PYX_ERR(0, 936, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_initial_point") < 0)) __PYX_ERR(0, 933, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_initial_point") < 0)) __PYX_ERR(0, 936, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -13181,13 +13231,13 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_3set
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 934, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 935, __pyx_L3_error)
-    __pyx_v_stencil = ((enum __pyx_t_10lagrangian_Stencil)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Stencil(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 936, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 937, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 938, __pyx_L3_error)
+    __pyx_v_stencil = ((enum __pyx_t_10lagrangian_Stencil)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Stencil(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 939, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 933, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_initial_point", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 936, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.FiniteLyapunovExponentsIntegration.set_initial_point", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -13210,7 +13260,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("set_initial_point", 0);
 
-  /* "lagrangian.pyx":946
+  /* "lagrangian.pyx":949
  * 
  *         fle_integration = \
  *             <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped             # <<<<<<<<<<<<<<
@@ -13219,7 +13269,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
  */
   __pyx_v_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":947
+  /* "lagrangian.pyx":950
  *         fle_integration = \
  *             <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
  *         cpp_position = fle_integration.SetInitialPoint(x, y, stencil)             # <<<<<<<<<<<<<<
@@ -13230,23 +13280,23 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
     __pyx_t_1 = __pyx_v_fle_integration->SetInitialPoint(__pyx_v_x, __pyx_v_y, ((enum lagrangian::FiniteLyapunovExponentsIntegration::Stencil)__pyx_v_stencil));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 947, __pyx_L1_error)
+    __PYX_ERR(0, 950, __pyx_L1_error)
   }
   __pyx_v_cpp_position = __pyx_t_1;
 
-  /* "lagrangian.pyx":949
+  /* "lagrangian.pyx":952
  *         cpp_position = fle_integration.SetInitialPoint(x, y, stencil)
  * 
  *         result = Position()             # <<<<<<<<<<<<<<
  *         result.assign(cpp_position)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_Position)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 949, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_Position)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 952, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_result = ((struct __pyx_obj_10lagrangian_Position *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "lagrangian.pyx":950
+  /* "lagrangian.pyx":953
  * 
  *         result = Position()
  *         result.assign(cpp_position)             # <<<<<<<<<<<<<<
@@ -13255,7 +13305,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
  */
   ((struct __pyx_vtabstruct_10lagrangian_Position *)__pyx_v_result->__pyx_vtab)->assign(__pyx_v_result, __pyx_v_cpp_position);
 
-  /* "lagrangian.pyx":952
+  /* "lagrangian.pyx":955
  *         result.assign(cpp_position)
  * 
  *         return result             # <<<<<<<<<<<<<<
@@ -13267,7 +13317,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
   __pyx_r = ((PyObject *)__pyx_v_result);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":933
+  /* "lagrangian.pyx":936
  *             field.wrapped)
  * 
  *     def set_initial_point(self,             # <<<<<<<<<<<<<<
@@ -13287,7 +13337,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_2set
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":954
+/* "lagrangian.pyx":957
  *         return result
  * 
  *     def separation(self, Position position):             # <<<<<<<<<<<<<<
@@ -13302,7 +13352,7 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_5sep
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("separation (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 954, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 957, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4separation(((struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration *)__pyx_v_self), ((struct __pyx_obj_10lagrangian_Position *)__pyx_v_position));
 
   /* function exit code */
@@ -13321,7 +13371,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4sep
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("separation", 0);
 
-  /* "lagrangian.pyx":960
+  /* "lagrangian.pyx":963
  *         cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *             fle_integration = \
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped             # <<<<<<<<<<<<<<
@@ -13330,7 +13380,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4sep
  */
   __pyx_v_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":962
+  /* "lagrangian.pyx":965
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
  * 
  *         return fle_integration.Separation(position.wrapped)             # <<<<<<<<<<<<<<
@@ -13338,13 +13388,13 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4sep
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->Separation(__pyx_v_position->wrapped)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 962, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->Separation(__pyx_v_position->wrapped)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 965, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":954
+  /* "lagrangian.pyx":957
  *         return result
  * 
  *     def separation(self, Position position):             # <<<<<<<<<<<<<<
@@ -13363,7 +13413,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4sep
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":965
+/* "lagrangian.pyx":968
  * 
  *     @property
  *     def mode(self):             # <<<<<<<<<<<<<<
@@ -13391,7 +13441,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4mod
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":971
+  /* "lagrangian.pyx":974
  *         cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *             fle_integration = \
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped             # <<<<<<<<<<<<<<
@@ -13400,7 +13450,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4mod
  */
   __pyx_v_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":973
+  /* "lagrangian.pyx":976
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
  * 
  *         return fle_integration.get_mode()             # <<<<<<<<<<<<<<
@@ -13408,13 +13458,13 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4mod
  *     def compute(self, Iterator it, Position position, CellProperties cell):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_enum__lagrangian_3a__3a_FiniteLyapunovExponentsIntegration_3a__3a_Mode(__pyx_v_fle_integration->get_mode()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 973, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_enum__lagrangian_3a__3a_FiniteLyapunovExponentsIntegration_3a__3a_Mode(__pyx_v_fle_integration->get_mode()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 976, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":965
+  /* "lagrangian.pyx":968
  * 
  *     @property
  *     def mode(self):             # <<<<<<<<<<<<<<
@@ -13433,7 +13483,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_4mod
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":975
+/* "lagrangian.pyx":978
  *         return fle_integration.get_mode()
  * 
  *     def compute(self, Iterator it, Position position, CellProperties cell):             # <<<<<<<<<<<<<<
@@ -13476,17 +13526,17 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_7com
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_position)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 975, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 1); __PYX_ERR(0, 978, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cell)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 975, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, 2); __PYX_ERR(0, 978, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 975, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 978, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -13501,15 +13551,15 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_7com
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 975, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 978, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.FiniteLyapunovExponentsIntegration.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 1, "it", 0))) __PYX_ERR(0, 975, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 975, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 975, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_it), __pyx_ptype_10lagrangian_Iterator, 1, "it", 0))) __PYX_ERR(0, 978, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 978, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 978, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_6compute(((struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration *)__pyx_v_self), __pyx_v_it, __pyx_v_position, __pyx_v_cell);
 
   /* function exit code */
@@ -13528,7 +13578,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_6com
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":981
+  /* "lagrangian.pyx":984
  *         cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *             fle_integration = \
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped             # <<<<<<<<<<<<<<
@@ -13537,7 +13587,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_6com
  */
   __pyx_v_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":983
+  /* "lagrangian.pyx":986
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
  * 
  *         return fle_integration.Compute(it.wrapped[0],             # <<<<<<<<<<<<<<
@@ -13546,20 +13596,20 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_6com
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":985
+  /* "lagrangian.pyx":988
  *         return fle_integration.Compute(it.wrapped[0],
  *                                        position.wrapped,
  *                                        cell.wrapped[0])             # <<<<<<<<<<<<<<
  * 
  *     def exponents(self, Position position, FiniteLyapunovExponents fle):
  */
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->Compute((__pyx_v_it->wrapped[0]), __pyx_v_position->wrapped, (__pyx_v_cell->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 983, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->Compute((__pyx_v_it->wrapped[0]), __pyx_v_position->wrapped, (__pyx_v_cell->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 986, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":975
+  /* "lagrangian.pyx":978
  *         return fle_integration.get_mode()
  * 
  *     def compute(self, Iterator it, Position position, CellProperties cell):             # <<<<<<<<<<<<<<
@@ -13578,7 +13628,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_6com
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":987
+/* "lagrangian.pyx":990
  *                                        cell.wrapped[0])
  * 
  *     def exponents(self, Position position, FiniteLyapunovExponents fle):             # <<<<<<<<<<<<<<
@@ -13618,11 +13668,11 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_9exp
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_fle)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("exponents", 1, 2, 2, 1); __PYX_ERR(0, 987, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("exponents", 1, 2, 2, 1); __PYX_ERR(0, 990, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "exponents") < 0)) __PYX_ERR(0, 987, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "exponents") < 0)) __PYX_ERR(0, 990, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -13635,14 +13685,14 @@ static PyObject *__pyx_pw_10lagrangian_34FiniteLyapunovExponentsIntegration_9exp
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("exponents", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 987, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("exponents", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 990, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.FiniteLyapunovExponentsIntegration.exponents", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 987, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fle), __pyx_ptype_10lagrangian_FiniteLyapunovExponents, 1, "fle", 0))) __PYX_ERR(0, 987, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_position), __pyx_ptype_10lagrangian_Position, 1, "position", 0))) __PYX_ERR(0, 990, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fle), __pyx_ptype_10lagrangian_FiniteLyapunovExponents, 1, "fle", 0))) __PYX_ERR(0, 990, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_8exponents(((struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration *)__pyx_v_self), __pyx_v_position, __pyx_v_fle);
 
   /* function exit code */
@@ -13661,7 +13711,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_8exp
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("exponents", 0);
 
-  /* "lagrangian.pyx":994
+  /* "lagrangian.pyx":997
  *         cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *             fle_integration = \
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped             # <<<<<<<<<<<<<<
@@ -13670,7 +13720,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_8exp
  */
   __pyx_v_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":996
+  /* "lagrangian.pyx":999
  *                 <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
  * 
  *         return fle_integration.ComputeExponents(position.wrapped,             # <<<<<<<<<<<<<<
@@ -13679,20 +13729,20 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_8exp
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":997
+  /* "lagrangian.pyx":1000
  * 
  *         return fle_integration.ComputeExponents(position.wrapped,
  *                                                 fle.wrapped[0])             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->ComputeExponents(__pyx_v_position->wrapped, (__pyx_v_fle->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 996, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_fle_integration->ComputeExponents(__pyx_v_position->wrapped, (__pyx_v_fle->wrapped[0]))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 999, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":987
+  /* "lagrangian.pyx":990
  *                                        cell.wrapped[0])
  * 
  *     def exponents(self, Position position, FiniteLyapunovExponents fle):             # <<<<<<<<<<<<<<
@@ -13818,7 +13868,7 @@ static PyObject *__pyx_pf_10lagrangian_34FiniteLyapunovExponentsIntegration_12__
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1002
+/* "lagrangian.pyx":1005
  * # Call, from C++, a Python function that implement the pure virtual method
  * # void lagrangian::Reader::Open(const std::string& filename)
  * cdef public api int PythonReaderOpen(object self,             # <<<<<<<<<<<<<<
@@ -13848,7 +13898,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("PythonReaderOpen", 0);
 
-  /* "lagrangian.pyx":1006
+  /* "lagrangian.pyx":1009
  *                                      libcpp.string.string* error):
  *     cdef:
  *         int rc = 0             # <<<<<<<<<<<<<<
@@ -13857,7 +13907,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
  */
   __pyx_v_rc = 0;
 
-  /* "lagrangian.pyx":1008
+  /* "lagrangian.pyx":1011
  *         int rc = 0
  *         str py_filename
  *     try:             # <<<<<<<<<<<<<<
@@ -13874,31 +13924,31 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
       __Pyx_XGOTREF(__pyx_t_3);
       /*try:*/ {
 
-        /* "lagrangian.pyx":1009
+        /* "lagrangian.pyx":1012
  *         str py_filename
  *     try:
  *         py_filename = filename             # <<<<<<<<<<<<<<
  *         function = getattr(self, "open");
  *         function(py_filename)
  */
-        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1009, __pyx_L6_error)
+        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1012, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_py_filename = ((PyObject*)__pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1010
+        /* "lagrangian.pyx":1013
  *     try:
  *         py_filename = filename
  *         function = getattr(self, "open");             # <<<<<<<<<<<<<<
  *         function(py_filename)
  *         error[0] = ""
  */
-        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_open); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1010, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_open); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1013, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_function = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1011
+        /* "lagrangian.pyx":1014
  *         py_filename = filename
  *         function = getattr(self, "open");
  *         function(py_filename)             # <<<<<<<<<<<<<<
@@ -13917,13 +13967,13 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
           }
         }
         if (!__pyx_t_6) {
-          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_py_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1011, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_py_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1014, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_4);
         } else {
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_5)) {
             PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_v_py_filename};
-            __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1011, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1014, __pyx_L6_error)
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_GOTREF(__pyx_t_4);
           } else
@@ -13931,19 +13981,19 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
             PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_v_py_filename};
-            __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1011, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1014, __pyx_L6_error)
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_GOTREF(__pyx_t_4);
           } else
           #endif
           {
-            __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1011, __pyx_L6_error)
+            __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1014, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_7);
             __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
             __Pyx_INCREF(__pyx_v_py_filename);
             __Pyx_GIVEREF(__pyx_v_py_filename);
             PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_v_py_filename);
-            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1011, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1014, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           }
@@ -13951,17 +14001,17 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1012
+        /* "lagrangian.pyx":1015
  *         function = getattr(self, "open");
  *         function(py_filename)
  *         error[0] = ""             # <<<<<<<<<<<<<<
  *     except Exception as err:
  *         rc = 1
  */
-        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1012, __pyx_L6_error)
+        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1015, __pyx_L6_error)
         (__pyx_v_error[0]) = __pyx_t_8;
 
-        /* "lagrangian.pyx":1008
+        /* "lagrangian.pyx":1011
  *         int rc = 0
  *         str py_filename
  *     try:             # <<<<<<<<<<<<<<
@@ -13979,7 +14029,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "lagrangian.pyx":1013
+      /* "lagrangian.pyx":1016
  *         function(py_filename)
  *         error[0] = ""
  *     except Exception as err:             # <<<<<<<<<<<<<<
@@ -13989,14 +14039,14 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
       __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
       if (__pyx_t_9) {
         __Pyx_AddTraceback("lagrangian.PythonReaderOpen", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_7) < 0) __PYX_ERR(0, 1013, __pyx_L8_except_error)
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_7) < 0) __PYX_ERR(0, 1016, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_INCREF(__pyx_t_5);
         __pyx_v_err = __pyx_t_5;
 
-        /* "lagrangian.pyx":1014
+        /* "lagrangian.pyx":1017
  *         error[0] = ""
  *     except Exception as err:
  *         rc = 1             # <<<<<<<<<<<<<<
@@ -14005,14 +14055,14 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
  */
         __pyx_v_rc = 1;
 
-        /* "lagrangian.pyx":1015
+        /* "lagrangian.pyx":1018
  *     except Exception as err:
  *         rc = 1
  *         err = "%r %s" % (self, err)             # <<<<<<<<<<<<<<
  *         error[0] = err.encode('UTF-8')
  *     finally:
  */
-        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1015, __pyx_L8_except_error)
+        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1018, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_INCREF(__pyx_v_self);
         __Pyx_GIVEREF(__pyx_v_self);
@@ -14020,25 +14070,25 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
         __Pyx_INCREF(__pyx_v_err);
         __Pyx_GIVEREF(__pyx_v_err);
         PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_err);
-        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1015, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1018, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF_SET(__pyx_v_err, __pyx_t_10);
         __pyx_t_10 = 0;
 
-        /* "lagrangian.pyx":1016
+        /* "lagrangian.pyx":1019
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1016, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1019, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1016, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1019, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1016, __pyx_L8_except_error)
+        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1019, __pyx_L8_except_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         (__pyx_v_error[0]) = __pyx_t_8;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -14049,7 +14099,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
       goto __pyx_L8_except_error;
       __pyx_L8_except_error:;
 
-      /* "lagrangian.pyx":1008
+      /* "lagrangian.pyx":1011
  *         int rc = 0
  *         str py_filename
  *     try:             # <<<<<<<<<<<<<<
@@ -14070,7 +14120,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
     }
   }
 
-  /* "lagrangian.pyx":1018
+  /* "lagrangian.pyx":1021
  *         error[0] = err.encode('UTF-8')
  *     finally:
  *         return rc             # <<<<<<<<<<<<<<
@@ -14119,7 +14169,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
     }
   }
 
-  /* "lagrangian.pyx":1002
+  /* "lagrangian.pyx":1005
  * # Call, from C++, a Python function that implement the pure virtual method
  * # void lagrangian::Reader::Open(const std::string& filename)
  * cdef public api int PythonReaderOpen(object self,             # <<<<<<<<<<<<<<
@@ -14136,7 +14186,7 @@ int PythonReaderOpen(PyObject *__pyx_v_self, std::string __pyx_v_filename, std::
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1024
+/* "lagrangian.pyx":1027
  * # void lagrangian::Reader::Load(const std::string& name,
  * #       const std::string& unit)
  * cdef public api int PythonReaderLoad(object self,             # <<<<<<<<<<<<<<
@@ -14167,7 +14217,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("PythonReaderLoad", 0);
 
-  /* "lagrangian.pyx":1029
+  /* "lagrangian.pyx":1032
  *                                      libcpp.string.string* error):
  *     cdef:
  *         int rc = 0             # <<<<<<<<<<<<<<
@@ -14176,7 +14226,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
  */
   __pyx_v_rc = 0;
 
-  /* "lagrangian.pyx":1032
+  /* "lagrangian.pyx":1035
  *         str py_name
  *         str py_unit
  *     try:             # <<<<<<<<<<<<<<
@@ -14193,43 +14243,43 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
       __Pyx_XGOTREF(__pyx_t_3);
       /*try:*/ {
 
-        /* "lagrangian.pyx":1033
+        /* "lagrangian.pyx":1036
  *         str py_unit
  *     try:
  *         py_name = name             # <<<<<<<<<<<<<<
  *         py_unit = unit
  *         function = getattr(self, "load");
  */
-        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1033, __pyx_L6_error)
+        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1036, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_py_name = ((PyObject*)__pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1034
+        /* "lagrangian.pyx":1037
  *     try:
  *         py_name = name
  *         py_unit = unit             # <<<<<<<<<<<<<<
  *         function = getattr(self, "load");
  *         function(py_name, py_unit)
  */
-        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1034, __pyx_L6_error)
+        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_unit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1037, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_py_unit = ((PyObject*)__pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1035
+        /* "lagrangian.pyx":1038
  *         py_name = name
  *         py_unit = unit
  *         function = getattr(self, "load");             # <<<<<<<<<<<<<<
  *         function(py_name, py_unit)
  *         error[0] = ""
  */
-        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_load); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1035, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_load); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1038, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_function = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1036
+        /* "lagrangian.pyx":1039
  *         py_unit = unit
  *         function = getattr(self, "load");
  *         function(py_name, py_unit)             # <<<<<<<<<<<<<<
@@ -14252,7 +14302,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_5)) {
           PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_py_name, __pyx_v_py_unit};
-          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1036, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1039, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_GOTREF(__pyx_t_4);
         } else
@@ -14260,13 +14310,13 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
           PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_py_name, __pyx_v_py_unit};
-          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1036, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1039, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
           __Pyx_GOTREF(__pyx_t_4);
         } else
         #endif
         {
-          __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1036, __pyx_L6_error)
+          __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1039, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_8);
           if (__pyx_t_6) {
             __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -14277,24 +14327,24 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
           __Pyx_INCREF(__pyx_v_py_unit);
           __Pyx_GIVEREF(__pyx_v_py_unit);
           PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_v_py_unit);
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1036, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1039, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         }
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1037
+        /* "lagrangian.pyx":1040
  *         function = getattr(self, "load");
  *         function(py_name, py_unit)
  *         error[0] = ""             # <<<<<<<<<<<<<<
  *     except Exception as err:
  *         rc = 1
  */
-        __pyx_t_9 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1037, __pyx_L6_error)
+        __pyx_t_9 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1040, __pyx_L6_error)
         (__pyx_v_error[0]) = __pyx_t_9;
 
-        /* "lagrangian.pyx":1032
+        /* "lagrangian.pyx":1035
  *         str py_name
  *         str py_unit
  *     try:             # <<<<<<<<<<<<<<
@@ -14312,7 +14362,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "lagrangian.pyx":1038
+      /* "lagrangian.pyx":1041
  *         function(py_name, py_unit)
  *         error[0] = ""
  *     except Exception as err:             # <<<<<<<<<<<<<<
@@ -14322,14 +14372,14 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
       __pyx_t_7 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
       if (__pyx_t_7) {
         __Pyx_AddTraceback("lagrangian.PythonReaderLoad", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_8) < 0) __PYX_ERR(0, 1038, __pyx_L8_except_error)
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_8) < 0) __PYX_ERR(0, 1041, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_INCREF(__pyx_t_5);
         __pyx_v_err = __pyx_t_5;
 
-        /* "lagrangian.pyx":1039
+        /* "lagrangian.pyx":1042
  *         error[0] = ""
  *     except Exception as err:
  *         rc = 1             # <<<<<<<<<<<<<<
@@ -14338,14 +14388,14 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
  */
         __pyx_v_rc = 1;
 
-        /* "lagrangian.pyx":1040
+        /* "lagrangian.pyx":1043
  *     except Exception as err:
  *         rc = 1
  *         err = "%r %s" % (self, err)             # <<<<<<<<<<<<<<
  *         error[0] = err.encode('UTF-8')
  *     finally:
  */
-        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1040, __pyx_L8_except_error)
+        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1043, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_INCREF(__pyx_v_self);
         __Pyx_GIVEREF(__pyx_v_self);
@@ -14353,25 +14403,25 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
         __Pyx_INCREF(__pyx_v_err);
         __Pyx_GIVEREF(__pyx_v_err);
         PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_err);
-        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1040, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1043, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF_SET(__pyx_v_err, __pyx_t_10);
         __pyx_t_10 = 0;
 
-        /* "lagrangian.pyx":1041
+        /* "lagrangian.pyx":1044
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1041, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1044, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1041, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1044, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_9 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1041, __pyx_L8_except_error)
+        __pyx_t_9 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1044, __pyx_L8_except_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         (__pyx_v_error[0]) = __pyx_t_9;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -14382,7 +14432,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
       goto __pyx_L8_except_error;
       __pyx_L8_except_error:;
 
-      /* "lagrangian.pyx":1032
+      /* "lagrangian.pyx":1035
  *         str py_name
  *         str py_unit
  *     try:             # <<<<<<<<<<<<<<
@@ -14403,7 +14453,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
     }
   }
 
-  /* "lagrangian.pyx":1043
+  /* "lagrangian.pyx":1046
  *         error[0] = err.encode('UTF-8')
  *     finally:
  *         return rc             # <<<<<<<<<<<<<<
@@ -14452,7 +14502,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
     }
   }
 
-  /* "lagrangian.pyx":1024
+  /* "lagrangian.pyx":1027
  * # void lagrangian::Reader::Load(const std::string& name,
  * #       const std::string& unit)
  * cdef public api int PythonReaderLoad(object self,             # <<<<<<<<<<<<<<
@@ -14470,7 +14520,7 @@ int PythonReaderLoad(PyObject *__pyx_v_self, std::string __pyx_v_name, std::stri
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1051
+/* "lagrangian.pyx":1054
  * #       const double fill_value=0,
  * #       CellProperties& cell=CellProperties::NONE())
  * cdef public api int PythonFieldInterpolate(object self,             # <<<<<<<<<<<<<<
@@ -14503,7 +14553,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
   PyObject *__pyx_t_16 = NULL;
   __Pyx_RefNannySetupContext("PythonFieldInterpolate", 0);
 
-  /* "lagrangian.pyx":1059
+  /* "lagrangian.pyx":1062
  *                                            libcpp.string.string* error):
  *     cdef:
  *         int rc = 0             # <<<<<<<<<<<<<<
@@ -14512,7 +14562,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
  */
   __pyx_v_rc = 0;
 
-  /* "lagrangian.pyx":1061
+  /* "lagrangian.pyx":1064
  *         int rc = 0
  *         CellProperties py_cell
  *     try:             # <<<<<<<<<<<<<<
@@ -14529,19 +14579,19 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
       __Pyx_XGOTREF(__pyx_t_3);
       /*try:*/ {
 
-        /* "lagrangian.pyx":1062
+        /* "lagrangian.pyx":1065
  *         CellProperties py_cell
  *     try:
  *         py_cell = CellProperties()             # <<<<<<<<<<<<<<
  *         py_cell.wrapped[0] = cell
  *         function = getattr(self, "interpolate");
  */
-        __pyx_t_4 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_CellProperties)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1062, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_CellProperties)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1065, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_py_cell = ((struct __pyx_obj_10lagrangian_CellProperties *)__pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1063
+        /* "lagrangian.pyx":1066
  *     try:
  *         py_cell = CellProperties()
  *         py_cell.wrapped[0] = cell             # <<<<<<<<<<<<<<
@@ -14550,30 +14600,30 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
  */
         (__pyx_v_py_cell->wrapped[0]) = __pyx_v_cell;
 
-        /* "lagrangian.pyx":1064
+        /* "lagrangian.pyx":1067
  *         py_cell = CellProperties()
  *         py_cell.wrapped[0] = cell
  *         function = getattr(self, "interpolate");             # <<<<<<<<<<<<<<
  *         result[0] = function(longitude, latitude, fill_value, py_cell)
  *         error[0] = ""
  */
-        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_interpolate); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1064, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_interpolate); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1067, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_function = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1065
+        /* "lagrangian.pyx":1068
  *         py_cell.wrapped[0] = cell
  *         function = getattr(self, "interpolate");
  *         result[0] = function(longitude, latitude, fill_value, py_cell)             # <<<<<<<<<<<<<<
  *         error[0] = ""
  *     except Exception as err:
  */
-        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_longitude); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1065, __pyx_L6_error)
+        __pyx_t_5 = PyFloat_FromDouble(__pyx_v_longitude); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1068, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_6 = PyFloat_FromDouble(__pyx_v_latitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1065, __pyx_L6_error)
+        __pyx_t_6 = PyFloat_FromDouble(__pyx_v_latitude); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1068, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_fill_value); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1065, __pyx_L6_error)
+        __pyx_t_7 = PyFloat_FromDouble(__pyx_v_fill_value); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1068, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_INCREF(__pyx_v_function);
         __pyx_t_8 = __pyx_v_function; __pyx_t_9 = NULL;
@@ -14591,7 +14641,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_8)) {
           PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, ((PyObject *)__pyx_v_py_cell)};
-          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1065, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -14602,7 +14652,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
           PyObject *__pyx_temp[5] = {__pyx_t_9, __pyx_t_5, __pyx_t_6, __pyx_t_7, ((PyObject *)__pyx_v_py_cell)};
-          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1065, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_10, 4+__pyx_t_10); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L6_error)
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -14611,7 +14661,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
         } else
         #endif
         {
-          __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1065, __pyx_L6_error)
+          __pyx_t_11 = PyTuple_New(4+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1068, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_11);
           if (__pyx_t_9) {
             __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -14628,26 +14678,26 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
           __pyx_t_5 = 0;
           __pyx_t_6 = 0;
           __pyx_t_7 = 0;
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1065, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         }
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_12 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_12 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1065, __pyx_L6_error)
+        __pyx_t_12 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_12 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1068, __pyx_L6_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         (__pyx_v_result[0]) = __pyx_t_12;
 
-        /* "lagrangian.pyx":1066
+        /* "lagrangian.pyx":1069
  *         function = getattr(self, "interpolate");
  *         result[0] = function(longitude, latitude, fill_value, py_cell)
  *         error[0] = ""             # <<<<<<<<<<<<<<
  *     except Exception as err:
  *         rc = 1
  */
-        __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1066, __pyx_L6_error)
+        __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1069, __pyx_L6_error)
         (__pyx_v_error[0]) = __pyx_t_13;
 
-        /* "lagrangian.pyx":1061
+        /* "lagrangian.pyx":1064
  *         int rc = 0
  *         CellProperties py_cell
  *     try:             # <<<<<<<<<<<<<<
@@ -14668,7 +14718,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "lagrangian.pyx":1067
+      /* "lagrangian.pyx":1070
  *         result[0] = function(longitude, latitude, fill_value, py_cell)
  *         error[0] = ""
  *     except Exception as err:             # <<<<<<<<<<<<<<
@@ -14678,14 +14728,14 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
       __pyx_t_10 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
       if (__pyx_t_10) {
         __Pyx_AddTraceback("lagrangian.PythonFieldInterpolate", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_8, &__pyx_t_11) < 0) __PYX_ERR(0, 1067, __pyx_L8_except_error)
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_8, &__pyx_t_11) < 0) __PYX_ERR(0, 1070, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_INCREF(__pyx_t_8);
         __pyx_v_err = __pyx_t_8;
 
-        /* "lagrangian.pyx":1068
+        /* "lagrangian.pyx":1071
  *         error[0] = ""
  *     except Exception as err:
  *         rc = 1             # <<<<<<<<<<<<<<
@@ -14694,14 +14744,14 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
  */
         __pyx_v_rc = 1;
 
-        /* "lagrangian.pyx":1069
+        /* "lagrangian.pyx":1072
  *     except Exception as err:
  *         rc = 1
  *         err = "%r %s" % (self, err)             # <<<<<<<<<<<<<<
  *         error[0] = err.encode('UTF-8')
  *     finally:
  */
-        __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1069, __pyx_L8_except_error)
+        __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1072, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_INCREF(__pyx_v_self);
         __Pyx_GIVEREF(__pyx_v_self);
@@ -14709,25 +14759,25 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
         __Pyx_INCREF(__pyx_v_err);
         __Pyx_GIVEREF(__pyx_v_err);
         PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_v_err);
-        __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1069, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1072, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF_SET(__pyx_v_err, __pyx_t_6);
         __pyx_t_6 = 0;
 
-        /* "lagrangian.pyx":1070
+        /* "lagrangian.pyx":1073
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1070, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1073, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__50, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1070, __pyx_L8_except_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__50, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1073, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-        __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_t_7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1070, __pyx_L8_except_error)
+        __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_t_7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1073, __pyx_L8_except_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         (__pyx_v_error[0]) = __pyx_t_13;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -14738,7 +14788,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
       goto __pyx_L8_except_error;
       __pyx_L8_except_error:;
 
-      /* "lagrangian.pyx":1061
+      /* "lagrangian.pyx":1064
  *         int rc = 0
  *         CellProperties py_cell
  *     try:             # <<<<<<<<<<<<<<
@@ -14759,7 +14809,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
     }
   }
 
-  /* "lagrangian.pyx":1072
+  /* "lagrangian.pyx":1075
  *         error[0] = err.encode('UTF-8')
  *     finally:
  *         return rc             # <<<<<<<<<<<<<<
@@ -14810,7 +14860,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
     }
   }
 
-  /* "lagrangian.pyx":1051
+  /* "lagrangian.pyx":1054
  * #       const double fill_value=0,
  * #       CellProperties& cell=CellProperties::NONE())
  * cdef public api int PythonFieldInterpolate(object self,             # <<<<<<<<<<<<<<
@@ -14827,7 +14877,7 @@ int PythonFieldInterpolate(PyObject *__pyx_v_self, double __pyx_v_longitude, dou
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1076
+/* "lagrangian.pyx":1079
  * # Call, from C++, a Python function that implement the pure virtual method
  * # DateTime lagrangian::Reader::GetDateTime(const std::string& name)
  * cdef public api int PythonFieldGetDateTime(object self,             # <<<<<<<<<<<<<<
@@ -14858,7 +14908,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("PythonFieldGetDateTime", 0);
 
-  /* "lagrangian.pyx":1081
+  /* "lagrangian.pyx":1084
  *                                            libcpp.string.string* error):
  *     cdef:
  *         int rc = 0             # <<<<<<<<<<<<<<
@@ -14867,7 +14917,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
  */
   __pyx_v_rc = 0;
 
-  /* "lagrangian.pyx":1084
+  /* "lagrangian.pyx":1087
  *         str py_name
  *         object py_result
  *     try:             # <<<<<<<<<<<<<<
@@ -14884,31 +14934,31 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
       __Pyx_XGOTREF(__pyx_t_3);
       /*try:*/ {
 
-        /* "lagrangian.pyx":1085
+        /* "lagrangian.pyx":1088
  *         object py_result
  *     try:
  *         py_name = name             # <<<<<<<<<<<<<<
  *         function = getattr(self, "get_datetime");
  *         py_result = function(py_name)
  */
-        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1085, __pyx_L6_error)
+        __pyx_t_4 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1088, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_py_name = ((PyObject*)__pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1086
+        /* "lagrangian.pyx":1089
  *     try:
  *         py_name = name
  *         function = getattr(self, "get_datetime");             # <<<<<<<<<<<<<<
  *         py_result = function(py_name)
  *         result[0] = cpp_lagrangian.from_pydatetime(py_result)
  */
-        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_get_datetime); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1086, __pyx_L6_error)
+        __pyx_t_4 = __Pyx_GetAttr(__pyx_v_self, __pyx_n_s_get_datetime); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1089, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_4);
         __pyx_v_function = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1087
+        /* "lagrangian.pyx":1090
  *         py_name = name
  *         function = getattr(self, "get_datetime");
  *         py_result = function(py_name)             # <<<<<<<<<<<<<<
@@ -14927,13 +14977,13 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
           }
         }
         if (!__pyx_t_6) {
-          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_py_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1087, __pyx_L6_error)
+          __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_py_name); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1090, __pyx_L6_error)
           __Pyx_GOTREF(__pyx_t_4);
         } else {
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_5)) {
             PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_v_py_name};
-            __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1087, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1090, __pyx_L6_error)
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_GOTREF(__pyx_t_4);
           } else
@@ -14941,19 +14991,19 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
             PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_v_py_name};
-            __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1087, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1090, __pyx_L6_error)
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_GOTREF(__pyx_t_4);
           } else
           #endif
           {
-            __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1087, __pyx_L6_error)
+            __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1090, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_7);
             __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
             __Pyx_INCREF(__pyx_v_py_name);
             __Pyx_GIVEREF(__pyx_v_py_name);
             PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_v_py_name);
-            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1087, __pyx_L6_error)
+            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1090, __pyx_L6_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           }
@@ -14962,27 +15012,27 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
         __pyx_v_py_result = __pyx_t_4;
         __pyx_t_4 = 0;
 
-        /* "lagrangian.pyx":1088
+        /* "lagrangian.pyx":1091
  *         function = getattr(self, "get_datetime");
  *         py_result = function(py_name)
  *         result[0] = cpp_lagrangian.from_pydatetime(py_result)             # <<<<<<<<<<<<<<
  *         error[0] = ""
  *     except Exception as err:
  */
-        if (!(likely(((__pyx_v_py_result) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_py_result, __pyx_ptype_7cpython_8datetime_datetime))))) __PYX_ERR(0, 1088, __pyx_L6_error)
+        if (!(likely(((__pyx_v_py_result) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_py_result, __pyx_ptype_7cpython_8datetime_datetime))))) __PYX_ERR(0, 1091, __pyx_L6_error)
         (__pyx_v_result[0]) = __pyx_f_14cpp_lagrangian_from_pydatetime(((PyDateTime_DateTime *)__pyx_v_py_result));
 
-        /* "lagrangian.pyx":1089
+        /* "lagrangian.pyx":1092
  *         py_result = function(py_name)
  *         result[0] = cpp_lagrangian.from_pydatetime(py_result)
  *         error[0] = ""             # <<<<<<<<<<<<<<
  *     except Exception as err:
  *         rc = 1
  */
-        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1089, __pyx_L6_error)
+        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b__7); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1092, __pyx_L6_error)
         (__pyx_v_error[0]) = __pyx_t_8;
 
-        /* "lagrangian.pyx":1084
+        /* "lagrangian.pyx":1087
  *         str py_name
  *         object py_result
  *     try:             # <<<<<<<<<<<<<<
@@ -15000,7 +15050,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "lagrangian.pyx":1090
+      /* "lagrangian.pyx":1093
  *         result[0] = cpp_lagrangian.from_pydatetime(py_result)
  *         error[0] = ""
  *     except Exception as err:             # <<<<<<<<<<<<<<
@@ -15010,14 +15060,14 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
       __pyx_t_9 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
       if (__pyx_t_9) {
         __Pyx_AddTraceback("lagrangian.PythonFieldGetDateTime", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_7) < 0) __PYX_ERR(0, 1090, __pyx_L8_except_error)
+        if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_7) < 0) __PYX_ERR(0, 1093, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_INCREF(__pyx_t_5);
         __pyx_v_err = __pyx_t_5;
 
-        /* "lagrangian.pyx":1091
+        /* "lagrangian.pyx":1094
  *         error[0] = ""
  *     except Exception as err:
  *         rc = 1             # <<<<<<<<<<<<<<
@@ -15026,14 +15076,14 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
  */
         __pyx_v_rc = 1;
 
-        /* "lagrangian.pyx":1092
+        /* "lagrangian.pyx":1095
  *     except Exception as err:
  *         rc = 1
  *         err = "%r %s" % (self, err)             # <<<<<<<<<<<<<<
  *         error[0] = err.encode('UTF-8')
  *     finally:
  */
-        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1092, __pyx_L8_except_error)
+        __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1095, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_INCREF(__pyx_v_self);
         __Pyx_GIVEREF(__pyx_v_self);
@@ -15041,25 +15091,25 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
         __Pyx_INCREF(__pyx_v_err);
         __Pyx_GIVEREF(__pyx_v_err);
         PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_err);
-        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1092, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyString_Format(__pyx_kp_s_r_s, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1095, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_DECREF_SET(__pyx_v_err, __pyx_t_10);
         __pyx_t_10 = 0;
 
-        /* "lagrangian.pyx":1093
+        /* "lagrangian.pyx":1096
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1093, __pyx_L8_except_error)
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_v_err, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1096, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__51, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1093, __pyx_L8_except_error)
+        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_tuple__51, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1096, __pyx_L8_except_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1093, __pyx_L8_except_error)
+        __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1096, __pyx_L8_except_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         (__pyx_v_error[0]) = __pyx_t_8;
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -15070,7 +15120,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
       goto __pyx_L8_except_error;
       __pyx_L8_except_error:;
 
-      /* "lagrangian.pyx":1084
+      /* "lagrangian.pyx":1087
  *         str py_name
  *         object py_result
  *     try:             # <<<<<<<<<<<<<<
@@ -15091,7 +15141,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
     }
   }
 
-  /* "lagrangian.pyx":1095
+  /* "lagrangian.pyx":1098
  *         error[0] = err.encode('UTF-8')
  *     finally:
  *         return rc             # <<<<<<<<<<<<<<
@@ -15140,7 +15190,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
     }
   }
 
-  /* "lagrangian.pyx":1076
+  /* "lagrangian.pyx":1079
  * # Call, from C++, a Python function that implement the pure virtual method
  * # DateTime lagrangian::Reader::GetDateTime(const std::string& name)
  * cdef public api int PythonFieldGetDateTime(object self,             # <<<<<<<<<<<<<<
@@ -15158,7 +15208,7 @@ int PythonFieldGetDateTime(PyObject *__pyx_v_self, std::string __pyx_v_name, lag
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1105
+/* "lagrangian.pyx":1108
  *     cdef cpp_lagrangian.Reader* wrapped
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -15181,7 +15231,7 @@ static void __pyx_pf_10lagrangian_14AbstractReader___dealloc__(struct __pyx_obj_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":1106
+  /* "lagrangian.pyx":1109
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -15190,7 +15240,7 @@ static void __pyx_pf_10lagrangian_14AbstractReader___dealloc__(struct __pyx_obj_
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":1105
+  /* "lagrangian.pyx":1108
  *     cdef cpp_lagrangian.Reader* wrapped
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -15309,7 +15359,7 @@ static PyObject *__pyx_pf_10lagrangian_14AbstractReader_4__setstate_cython__(CYT
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1113
+/* "lagrangian.pyx":1116
  *     TODO
  *     """
  *     def open(self, str filename not None):             # <<<<<<<<<<<<<<
@@ -15324,7 +15374,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_1open(PyObject *__pyx_v_self, PyO
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("open (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyString_Type), 0, "filename", 1))) __PYX_ERR(0, 1113, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyString_Type), 0, "filename", 1))) __PYX_ERR(0, 1116, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_6Reader_open(((struct __pyx_obj_10lagrangian_Reader *)__pyx_v_self), ((PyObject*)__pyx_v_filename));
 
   /* function exit code */
@@ -15344,20 +15394,20 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_open(struct __pyx_obj_10lagrangia
   std::string __pyx_t_2;
   __Pyx_RefNannySetupContext("open", 0);
 
-  /* "lagrangian.pyx":1117
+  /* "lagrangian.pyx":1120
  *         Opens a file in read-only.
  *         """
  *         cdef libcpp.string.string cpp_string = filename.encode('utf8')             # <<<<<<<<<<<<<<
  *         self.wrapped.Open(cpp_string)
  * 
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_filename, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1117, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_filename, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1120, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1117, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1120, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_cpp_string = __pyx_t_2;
 
-  /* "lagrangian.pyx":1118
+  /* "lagrangian.pyx":1121
  *         """
  *         cdef libcpp.string.string cpp_string = filename.encode('utf8')
  *         self.wrapped.Open(cpp_string)             # <<<<<<<<<<<<<<
@@ -15368,10 +15418,10 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_open(struct __pyx_obj_10lagrangia
     __pyx_v_self->__pyx_base.wrapped->Open(__pyx_v_cpp_string);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1118, __pyx_L1_error)
+    __PYX_ERR(0, 1121, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1113
+  /* "lagrangian.pyx":1116
  *     TODO
  *     """
  *     def open(self, str filename not None):             # <<<<<<<<<<<<<<
@@ -15392,7 +15442,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_open(struct __pyx_obj_10lagrangia
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1120
+/* "lagrangian.pyx":1123
  *         self.wrapped.Open(cpp_string)
  * 
  *     def load(self, str name not None, str unit=None):             # <<<<<<<<<<<<<<
@@ -15437,7 +15487,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_3load(PyObject *__pyx_v_self, PyO
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "load") < 0)) __PYX_ERR(0, 1120, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "load") < 0)) __PYX_ERR(0, 1123, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -15453,14 +15503,14 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_3load(PyObject *__pyx_v_self, PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("load", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1120, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("load", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1123, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Reader.load", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyString_Type), 0, "name", 1))) __PYX_ERR(0, 1120, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_unit), (&PyString_Type), 1, "unit", 1))) __PYX_ERR(0, 1120, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyString_Type), 0, "name", 1))) __PYX_ERR(0, 1123, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_unit), (&PyString_Type), 1, "unit", 1))) __PYX_ERR(0, 1123, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_6Reader_2load(((struct __pyx_obj_10lagrangian_Reader *)__pyx_v_self), __pyx_v_name, __pyx_v_unit);
 
   /* function exit code */
@@ -15484,20 +15534,20 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
   __Pyx_RefNannySetupContext("load", 0);
   __Pyx_INCREF(__pyx_v_unit);
 
-  /* "lagrangian.pyx":1125
+  /* "lagrangian.pyx":1128
  *         """
  *         cdef:
  *             libcpp.string.string cpp_name = name.encode('utf8')             # <<<<<<<<<<<<<<
  *             libcpp.string.string cpp_unit
  *         if unit is None:
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_name, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1125, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_name, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1128, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1125, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1128, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_cpp_name = __pyx_t_2;
 
-  /* "lagrangian.pyx":1127
+  /* "lagrangian.pyx":1130
  *             libcpp.string.string cpp_name = name.encode('utf8')
  *             libcpp.string.string cpp_unit
  *         if unit is None:             # <<<<<<<<<<<<<<
@@ -15508,7 +15558,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
   __pyx_t_4 = (__pyx_t_3 != 0);
   if (__pyx_t_4) {
 
-    /* "lagrangian.pyx":1128
+    /* "lagrangian.pyx":1131
  *             libcpp.string.string cpp_unit
  *         if unit is None:
  *             unit = ""             # <<<<<<<<<<<<<<
@@ -15518,7 +15568,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
     __Pyx_INCREF(__pyx_kp_s__7);
     __Pyx_DECREF_SET(__pyx_v_unit, __pyx_kp_s__7);
 
-    /* "lagrangian.pyx":1127
+    /* "lagrangian.pyx":1130
  *             libcpp.string.string cpp_name = name.encode('utf8')
  *             libcpp.string.string cpp_unit
  *         if unit is None:             # <<<<<<<<<<<<<<
@@ -15527,20 +15577,20 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
  */
   }
 
-  /* "lagrangian.pyx":1129
+  /* "lagrangian.pyx":1132
  *         if unit is None:
  *             unit = ""
  *         cpp_unit = unit.encode('utf8')             # <<<<<<<<<<<<<<
  *         self.wrapped.Load(cpp_name, cpp_unit)
  * 
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_unit, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1129, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_unit, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1132, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1129, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1132, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_cpp_unit = __pyx_t_2;
 
-  /* "lagrangian.pyx":1130
+  /* "lagrangian.pyx":1133
  *             unit = ""
  *         cpp_unit = unit.encode('utf8')
  *         self.wrapped.Load(cpp_name, cpp_unit)             # <<<<<<<<<<<<<<
@@ -15551,10 +15601,10 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
     __pyx_v_self->__pyx_base.wrapped->Load(__pyx_v_cpp_name, __pyx_v_cpp_unit);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1130, __pyx_L1_error)
+    __PYX_ERR(0, 1133, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1120
+  /* "lagrangian.pyx":1123
  *         self.wrapped.Open(cpp_string)
  * 
  *     def load(self, str name not None, str unit=None):             # <<<<<<<<<<<<<<
@@ -15576,7 +15626,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_2load(struct __pyx_obj_10lagrangi
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1132
+/* "lagrangian.pyx":1135
  *         self.wrapped.Load(cpp_name, cpp_unit)
  * 
  *     def interpolate(self,             # <<<<<<<<<<<<<<
@@ -15599,7 +15649,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_5interpolate(PyObject *__pyx_v_se
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_longitude,&__pyx_n_s_latitude,&__pyx_n_s_fill_value,&__pyx_n_s_cell,0};
     PyObject* values[4] = {0,0,0,0};
 
-    /* "lagrangian.pyx":1136
+    /* "lagrangian.pyx":1139
  *                     double latitude,
  *                     double fill_value=0,
  *                     CellProperties cell=None):             # <<<<<<<<<<<<<<
@@ -15631,7 +15681,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_5interpolate(PyObject *__pyx_v_se
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_latitude)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("interpolate", 0, 2, 4, 1); __PYX_ERR(0, 1132, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("interpolate", 0, 2, 4, 1); __PYX_ERR(0, 1135, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -15647,7 +15697,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_5interpolate(PyObject *__pyx_v_se
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "interpolate") < 0)) __PYX_ERR(0, 1132, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "interpolate") < 0)) __PYX_ERR(0, 1135, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -15661,10 +15711,10 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_5interpolate(PyObject *__pyx_v_se
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_longitude = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_longitude == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1133, __pyx_L3_error)
-    __pyx_v_latitude = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_latitude == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1134, __pyx_L3_error)
+    __pyx_v_longitude = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_longitude == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1136, __pyx_L3_error)
+    __pyx_v_latitude = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_latitude == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1137, __pyx_L3_error)
     if (values[2]) {
-      __pyx_v_fill_value = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_fill_value == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1135, __pyx_L3_error)
+      __pyx_v_fill_value = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_fill_value == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1138, __pyx_L3_error)
     } else {
       __pyx_v_fill_value = ((double)0.0);
     }
@@ -15672,16 +15722,16 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_5interpolate(PyObject *__pyx_v_se
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("interpolate", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1132, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("interpolate", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1135, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Reader.interpolate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 1136, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 1139, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_6Reader_4interpolate(((struct __pyx_obj_10lagrangian_Reader *)__pyx_v_self), __pyx_v_longitude, __pyx_v_latitude, __pyx_v_fill_value, __pyx_v_cell);
 
-  /* "lagrangian.pyx":1132
+  /* "lagrangian.pyx":1135
  *         self.wrapped.Load(cpp_name, cpp_unit)
  * 
  *     def interpolate(self,             # <<<<<<<<<<<<<<
@@ -15707,7 +15757,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("interpolate", 0);
 
-  /* "lagrangian.pyx":1143
+  /* "lagrangian.pyx":1146
  *             cpp_lagrangian.CellProperties cpp_cell
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -15718,7 +15768,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "lagrangian.pyx":1144
+    /* "lagrangian.pyx":1147
  * 
  *         if cell is None:
  *             return self.wrapped.Interpolate(             # <<<<<<<<<<<<<<
@@ -15727,7 +15777,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
  */
     __Pyx_XDECREF(__pyx_r);
 
-    /* "lagrangian.pyx":1147
+    /* "lagrangian.pyx":1150
  *                 longitude,
  *                 latitude,
  *                 fill_value)             # <<<<<<<<<<<<<<
@@ -15738,23 +15788,23 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
       __pyx_t_3 = __pyx_v_self->__pyx_base.wrapped->Interpolate(__pyx_v_longitude, __pyx_v_latitude, __pyx_v_fill_value);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 1144, __pyx_L1_error)
+      __PYX_ERR(0, 1147, __pyx_L1_error)
     }
 
-    /* "lagrangian.pyx":1144
+    /* "lagrangian.pyx":1147
  * 
  *         if cell is None:
  *             return self.wrapped.Interpolate(             # <<<<<<<<<<<<<<
  *                 longitude,
  *                 latitude,
  */
-    __pyx_t_4 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1144, __pyx_L1_error)
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1147, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_r = __pyx_t_4;
     __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "lagrangian.pyx":1143
+    /* "lagrangian.pyx":1146
  *             cpp_lagrangian.CellProperties cpp_cell
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -15763,7 +15813,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
  */
   }
 
-  /* "lagrangian.pyx":1148
+  /* "lagrangian.pyx":1151
  *                 latitude,
  *                 fill_value)
  *         return self.wrapped.Interpolate(             # <<<<<<<<<<<<<<
@@ -15772,7 +15822,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1152
+  /* "lagrangian.pyx":1155
  *             latitude,
  *             fill_value,
  *             cell.wrapped[0])             # <<<<<<<<<<<<<<
@@ -15783,23 +15833,23 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
     __pyx_t_3 = __pyx_v_self->__pyx_base.wrapped->Interpolate(__pyx_v_longitude, __pyx_v_latitude, __pyx_v_fill_value, (__pyx_v_cell->wrapped[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1148, __pyx_L1_error)
+    __PYX_ERR(0, 1151, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1148
+  /* "lagrangian.pyx":1151
  *                 latitude,
  *                 fill_value)
  *         return self.wrapped.Interpolate(             # <<<<<<<<<<<<<<
  *             longitude,
  *             latitude,
  */
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1148, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1132
+  /* "lagrangian.pyx":1135
  *         self.wrapped.Load(cpp_name, cpp_unit)
  * 
  *     def interpolate(self,             # <<<<<<<<<<<<<<
@@ -15818,7 +15868,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_4interpolate(struct __pyx_obj_10l
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1154
+/* "lagrangian.pyx":1157
  *             cell.wrapped[0])
  * 
  *     def get_datetime(self, str name not None):             # <<<<<<<<<<<<<<
@@ -15833,7 +15883,7 @@ static PyObject *__pyx_pw_10lagrangian_6Reader_7get_datetime(PyObject *__pyx_v_s
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_datetime (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyString_Type), 0, "name", 1))) __PYX_ERR(0, 1154, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyString_Type), 0, "name", 1))) __PYX_ERR(0, 1157, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_6Reader_6get_datetime(((struct __pyx_obj_10lagrangian_Reader *)__pyx_v_self), ((PyObject*)__pyx_v_name));
 
   /* function exit code */
@@ -15854,20 +15904,20 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_6get_datetime(struct __pyx_obj_10
   lagrangian::DateTime __pyx_t_3;
   __Pyx_RefNannySetupContext("get_datetime", 0);
 
-  /* "lagrangian.pyx":1158
+  /* "lagrangian.pyx":1161
  *         Returns the date of the grid.
  *         """
  *         cdef libcpp.string.string cpp_string = name.encode('utf8')             # <<<<<<<<<<<<<<
  * 
  *         return cpp_lagrangian.to_pydatetime(
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_name, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1158, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_name, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1158, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1161, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_cpp_string = __pyx_t_2;
 
-  /* "lagrangian.pyx":1160
+  /* "lagrangian.pyx":1163
  *         cdef libcpp.string.string cpp_string = name.encode('utf8')
  * 
  *         return cpp_lagrangian.to_pydatetime(             # <<<<<<<<<<<<<<
@@ -15876,7 +15926,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_6get_datetime(struct __pyx_obj_10
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1161
+  /* "lagrangian.pyx":1164
  * 
  *         return cpp_lagrangian.to_pydatetime(
  *             self.wrapped.GetDateTime(cpp_string))             # <<<<<<<<<<<<<<
@@ -15887,23 +15937,23 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_6get_datetime(struct __pyx_obj_10
     __pyx_t_3 = __pyx_v_self->__pyx_base.wrapped->GetDateTime(__pyx_v_cpp_string);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1161, __pyx_L1_error)
+    __PYX_ERR(0, 1164, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1160
+  /* "lagrangian.pyx":1163
  *         cdef libcpp.string.string cpp_string = name.encode('utf8')
  * 
  *         return cpp_lagrangian.to_pydatetime(             # <<<<<<<<<<<<<<
  *             self.wrapped.GetDateTime(cpp_string))
  * 
  */
-  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1160, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1154
+  /* "lagrangian.pyx":1157
  *             cell.wrapped[0])
  * 
  *     def get_datetime(self, str name not None):             # <<<<<<<<<<<<<<
@@ -16029,7 +16079,7 @@ static PyObject *__pyx_pf_10lagrangian_6Reader_10__setstate_cython__(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1196
+/* "lagrangian.pyx":1199
  * 
  *     """
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -16059,7 +16109,7 @@ static int __pyx_pf_10lagrangian_6Netcdf___cinit__(struct __pyx_obj_10lagrangian
   lagrangian::reader::Netcdf *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":1197
+  /* "lagrangian.pyx":1200
  *     """
  *     def __cinit__(self):
  *         self.wrapped = new cpp_lagrangian.NetcdfReader()             # <<<<<<<<<<<<<<
@@ -16070,11 +16120,11 @@ static int __pyx_pf_10lagrangian_6Netcdf___cinit__(struct __pyx_obj_10lagrangian
     __pyx_t_1 = new lagrangian::reader::Netcdf();
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1197, __pyx_L1_error)
+    __PYX_ERR(0, 1200, __pyx_L1_error)
   }
   __pyx_v_self->__pyx_base.__pyx_base.wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":1196
+  /* "lagrangian.pyx":1199
  * 
  *     """
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -16200,7 +16250,7 @@ static PyObject *__pyx_pf_10lagrangian_6Netcdf_4__setstate_cython__(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1204
+/* "lagrangian.pyx":1207
  *     Python base class for implementing a velocity reader fields.
  *     """
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -16236,7 +16286,7 @@ static int __pyx_pf_10lagrangian_12PythonReader___cinit__(struct __pyx_obj_10lag
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":1206
+  /* "lagrangian.pyx":1209
  *     def __cinit__(self):
  * 
  *         self.wrapped = new cpp_lagrangian.WrappedReader(             # <<<<<<<<<<<<<<
@@ -16245,7 +16295,7 @@ static int __pyx_pf_10lagrangian_12PythonReader___cinit__(struct __pyx_obj_10lag
  */
   __pyx_v_self->__pyx_base.wrapped = new WrappedReader(((PyObject *)__pyx_v_self));
 
-  /* "lagrangian.pyx":1210
+  /* "lagrangian.pyx":1213
  * 
  *         # pure virtual methods must be implemented in a derived class
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:             # <<<<<<<<<<<<<<
@@ -16256,50 +16306,50 @@ static int __pyx_pf_10lagrangian_12PythonReader___cinit__(struct __pyx_obj_10lag
   for (;;) {
     if (__pyx_t_2 >= 4) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_3); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 1210, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_3); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 1213, __pyx_L1_error)
     #else
-    __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1210, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1213, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_method, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "lagrangian.pyx":1211
+    /* "lagrangian.pyx":1214
  *         # pure virtual methods must be implemented in a derived class
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:
  *             if not hasattr(self, method):             # <<<<<<<<<<<<<<
  *                 raise NotImplementedError(
  *                     "unimplemented pure virtual method '%s'" % method)
  */
-    __pyx_t_4 = __Pyx_HasAttr(((PyObject *)__pyx_v_self), __pyx_v_method); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 1211, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_HasAttr(((PyObject *)__pyx_v_self), __pyx_v_method); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 1214, __pyx_L1_error)
     __pyx_t_5 = ((!(__pyx_t_4 != 0)) != 0);
     if (unlikely(__pyx_t_5)) {
 
-      /* "lagrangian.pyx":1213
+      /* "lagrangian.pyx":1216
  *             if not hasattr(self, method):
  *                 raise NotImplementedError(
  *                     "unimplemented pure virtual method '%s'" % method)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_unimplemented_pure_virtual_metho, __pyx_v_method); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1213, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_unimplemented_pure_virtual_metho, __pyx_v_method); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
 
-      /* "lagrangian.pyx":1212
+      /* "lagrangian.pyx":1215
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:
  *             if not hasattr(self, method):
  *                 raise NotImplementedError(             # <<<<<<<<<<<<<<
  *                     "unimplemented pure virtual method '%s'" % method)
  * 
  */
-      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1212, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_builtin_NotImplementedError, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1215, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __PYX_ERR(0, 1212, __pyx_L1_error)
+      __PYX_ERR(0, 1215, __pyx_L1_error)
 
-      /* "lagrangian.pyx":1211
+      /* "lagrangian.pyx":1214
  *         # pure virtual methods must be implemented in a derived class
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:
  *             if not hasattr(self, method):             # <<<<<<<<<<<<<<
@@ -16308,7 +16358,7 @@ static int __pyx_pf_10lagrangian_12PythonReader___cinit__(struct __pyx_obj_10lag
  */
     }
 
-    /* "lagrangian.pyx":1210
+    /* "lagrangian.pyx":1213
  * 
  *         # pure virtual methods must be implemented in a derived class
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:             # <<<<<<<<<<<<<<
@@ -16318,7 +16368,7 @@ static int __pyx_pf_10lagrangian_12PythonReader___cinit__(struct __pyx_obj_10lag
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1204
+  /* "lagrangian.pyx":1207
  *     Python base class for implementing a velocity reader fields.
  *     """
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -16448,7 +16498,7 @@ static PyObject *__pyx_pf_10lagrangian_12PythonReader_4__setstate_cython__(CYTHO
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1225
+/* "lagrangian.pyx":1228
  *     """
  *     @staticmethod
  *     def new_reader(ReaderType reader_type):             # <<<<<<<<<<<<<<
@@ -16484,18 +16534,18 @@ static PyObject *__pyx_pw_10lagrangian_7Factory_1new_reader(CYTHON_UNUSED PyObje
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_reader") < 0)) __PYX_ERR(0, 1225, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_reader") < 0)) __PYX_ERR(0, 1228, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
     }
-    __pyx_v_reader_type = ((enum __pyx_t_10lagrangian_ReaderType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_ReaderType(values[0])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1225, __pyx_L3_error)
+    __pyx_v_reader_type = ((enum __pyx_t_10lagrangian_ReaderType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_ReaderType(values[0])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1228, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("new_reader", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1225, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("new_reader", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1228, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.Factory.new_reader", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -16515,19 +16565,19 @@ static PyObject *__pyx_pf_10lagrangian_7Factory_new_reader(enum __pyx_t_10lagran
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("new_reader", 0);
 
-  /* "lagrangian.pyx":1229
+  /* "lagrangian.pyx":1232
  *         Get an instance of a given reader
  *         """
  *         cdef Reader result = Reader()             # <<<<<<<<<<<<<<
  *         result.wrapped = cpp_lagrangian.NewReader(reader_type)
  *         return result
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_Reader)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1229, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lagrangian_Reader)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_result = ((struct __pyx_obj_10lagrangian_Reader *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1230
+  /* "lagrangian.pyx":1233
  *         """
  *         cdef Reader result = Reader()
  *         result.wrapped = cpp_lagrangian.NewReader(reader_type)             # <<<<<<<<<<<<<<
@@ -16536,7 +16586,7 @@ static PyObject *__pyx_pf_10lagrangian_7Factory_new_reader(enum __pyx_t_10lagran
  */
   __pyx_v_result->__pyx_base.wrapped = lagrangian::reader::Factory::NewReader(((enum lagrangian::reader::Factory::Type)__pyx_v_reader_type));
 
-  /* "lagrangian.pyx":1231
+  /* "lagrangian.pyx":1234
  *         cdef Reader result = Reader()
  *         result.wrapped = cpp_lagrangian.NewReader(reader_type)
  *         return result             # <<<<<<<<<<<<<<
@@ -16548,7 +16598,7 @@ static PyObject *__pyx_pf_10lagrangian_7Factory_new_reader(enum __pyx_t_10lagran
   __pyx_r = ((PyObject *)__pyx_v_result);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1225
+  /* "lagrangian.pyx":1228
  *     """
  *     @staticmethod
  *     def new_reader(ReaderType reader_type):             # <<<<<<<<<<<<<<
@@ -16849,7 +16899,7 @@ static PyObject *__pyx_pf_10lagrangian_7Factory_4__setstate_cython__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1238
+/* "lagrangian.pyx":1241
  *     Time series of velocity field
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -16901,7 +16951,7 @@ static int __pyx_pw_10lagrangian_9TimeSerie_1__cinit__(PyObject *__pyx_v_self, P
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1238, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1241, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -16916,25 +16966,25 @@ static int __pyx_pw_10lagrangian_9TimeSerie_1__cinit__(PyObject *__pyx_v_self, P
     }
     __pyx_v_ini = ((PyObject*)values[0]);
     if (values[1]) {
-      __pyx_v_unit_type = ((enum __pyx_t_10lagrangian_UnitType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_UnitType(values[1])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1240, __pyx_L3_error)
+      __pyx_v_unit_type = ((enum __pyx_t_10lagrangian_UnitType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_UnitType(values[1])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1243, __pyx_L3_error)
     } else {
       __pyx_v_unit_type = __pyx_k__61;
     }
     if (values[2]) {
-      __pyx_v_reader_type = ((enum __pyx_t_10lagrangian_ReaderType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_ReaderType(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1241, __pyx_L3_error)
+      __pyx_v_reader_type = ((enum __pyx_t_10lagrangian_ReaderType)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_ReaderType(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1244, __pyx_L3_error)
     } else {
       __pyx_v_reader_type = __pyx_k__62;
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1238, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1241, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.TimeSerie.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ini), (&PyString_Type), 0, "ini", 1))) __PYX_ERR(0, 1239, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ini), (&PyString_Type), 0, "ini", 1))) __PYX_ERR(0, 1242, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_9TimeSerie___cinit__(((struct __pyx_obj_10lagrangian_TimeSerie *)__pyx_v_self), __pyx_v_ini, __pyx_v_unit_type, __pyx_v_reader_type);
 
   /* function exit code */
@@ -16955,28 +17005,28 @@ static int __pyx_pf_10lagrangian_9TimeSerie___cinit__(struct __pyx_obj_10lagrang
   lagrangian::field::TimeSerie *__pyx_t_3;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":1242
+  /* "lagrangian.pyx":1245
  *                   UnitType unit_type=kMetric,
  *                   ReaderType reader_type=kNetCDF):
  *         cdef cpp_ini = ini.encode('utf8')             # <<<<<<<<<<<<<<
  *         self.wrapped = new cpp_lagrangian.TimeSerie(
  *             cpp_ini, unit_type, reader_type)
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_ini, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1242, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_ini, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_cpp_ini = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1244
+  /* "lagrangian.pyx":1247
  *         cdef cpp_ini = ini.encode('utf8')
  *         self.wrapped = new cpp_lagrangian.TimeSerie(
  *             cpp_ini, unit_type, reader_type)             # <<<<<<<<<<<<<<
  * 
  *     def fetch(self, double t0, double t1):
  */
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_v_cpp_ini); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1244, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_v_cpp_ini); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1247, __pyx_L1_error)
 
-  /* "lagrangian.pyx":1243
+  /* "lagrangian.pyx":1246
  *                   ReaderType reader_type=kNetCDF):
  *         cdef cpp_ini = ini.encode('utf8')
  *         self.wrapped = new cpp_lagrangian.TimeSerie(             # <<<<<<<<<<<<<<
@@ -16987,11 +17037,11 @@ static int __pyx_pf_10lagrangian_9TimeSerie___cinit__(struct __pyx_obj_10lagrang
     __pyx_t_3 = new lagrangian::field::TimeSerie(__pyx_t_2, ((enum lagrangian::Field::UnitType)__pyx_v_unit_type), ((enum lagrangian::reader::Factory::Type)__pyx_v_reader_type));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1243, __pyx_L1_error)
+    __PYX_ERR(0, 1246, __pyx_L1_error)
   }
   __pyx_v_self->__pyx_base.wrapped = __pyx_t_3;
 
-  /* "lagrangian.pyx":1238
+  /* "lagrangian.pyx":1241
  *     Time series of velocity field
  *     """
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -17012,7 +17062,7 @@ static int __pyx_pf_10lagrangian_9TimeSerie___cinit__(struct __pyx_obj_10lagrang
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1246
+/* "lagrangian.pyx":1249
  *             cpp_ini, unit_type, reader_type)
  * 
  *     def fetch(self, double t0, double t1):             # <<<<<<<<<<<<<<
@@ -17052,11 +17102,11 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_3fetch(PyObject *__pyx_v_self,
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_t1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fetch", 1, 2, 2, 1); __PYX_ERR(0, 1246, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("fetch", 1, 2, 2, 1); __PYX_ERR(0, 1249, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fetch") < 0)) __PYX_ERR(0, 1246, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fetch") < 0)) __PYX_ERR(0, 1249, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17064,12 +17114,12 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_3fetch(PyObject *__pyx_v_self,
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_t0 = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1246, __pyx_L3_error)
-    __pyx_v_t1 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_t1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1246, __pyx_L3_error)
+    __pyx_v_t0 = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t0 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1249, __pyx_L3_error)
+    __pyx_v_t1 = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_t1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1249, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("fetch", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1246, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("fetch", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1249, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.TimeSerie.fetch", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -17088,7 +17138,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_2fetch(struct __pyx_obj_10lagr
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("fetch", 0);
 
-  /* "lagrangian.pyx":1253
+  /* "lagrangian.pyx":1256
  *         cdef cpp_lagrangian.TimeSerie* ts
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped             # <<<<<<<<<<<<<<
@@ -17097,7 +17147,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_2fetch(struct __pyx_obj_10lagr
  */
   __pyx_v_ts = ((lagrangian::field::TimeSerie *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1254
+  /* "lagrangian.pyx":1257
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped
  *         ts.Fetch(t0, t1)             # <<<<<<<<<<<<<<
@@ -17108,10 +17158,10 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_2fetch(struct __pyx_obj_10lagr
     __pyx_v_ts->Fetch(__pyx_v_t0, __pyx_v_t1);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1254, __pyx_L1_error)
+    __PYX_ERR(0, 1257, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1246
+  /* "lagrangian.pyx":1249
  *             cpp_ini, unit_type, reader_type)
  * 
  *     def fetch(self, double t0, double t1):             # <<<<<<<<<<<<<<
@@ -17131,7 +17181,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_2fetch(struct __pyx_obj_10lagr
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1256
+/* "lagrangian.pyx":1259
  *         ts.Fetch(t0, t1)
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -17154,7 +17204,7 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_5compute(PyObject *__pyx_v_sel
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_t,&__pyx_n_s_x,&__pyx_n_s_y,&__pyx_n_s_cell,0};
     PyObject* values[4] = {0,0,0,0};
 
-    /* "lagrangian.pyx":1260
+    /* "lagrangian.pyx":1263
  *                 double x,
  *                 double y,
  *                 CellProperties cell=None):             # <<<<<<<<<<<<<<
@@ -17186,13 +17236,13 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_5compute(PyObject *__pyx_v_sel
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 1); __PYX_ERR(0, 1256, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 1); __PYX_ERR(0, 1259, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 2); __PYX_ERR(0, 1256, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, 2); __PYX_ERR(0, 1259, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -17202,7 +17252,7 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_5compute(PyObject *__pyx_v_sel
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 1256, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "compute") < 0)) __PYX_ERR(0, 1259, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -17215,23 +17265,23 @@ static PyObject *__pyx_pw_10lagrangian_9TimeSerie_5compute(PyObject *__pyx_v_sel
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1257, __pyx_L3_error)
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1258, __pyx_L3_error)
-    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1259, __pyx_L3_error)
+    __pyx_v_t = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_t == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1260, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1261, __pyx_L3_error)
+    __pyx_v_y = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1262, __pyx_L3_error)
     __pyx_v_cell = ((struct __pyx_obj_10lagrangian_CellProperties *)values[3]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1256, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("compute", 0, 3, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1259, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.TimeSerie.compute", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 1260, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cell), __pyx_ptype_10lagrangian_CellProperties, 1, "cell", 0))) __PYX_ERR(0, 1263, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_9TimeSerie_4compute(((struct __pyx_obj_10lagrangian_TimeSerie *)__pyx_v_self), __pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_cell);
 
-  /* "lagrangian.pyx":1256
+  /* "lagrangian.pyx":1259
  *         ts.Fetch(t0, t1)
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -17264,7 +17314,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":1269
+  /* "lagrangian.pyx":1272
  * 
  *         # Disable compiler complaints
  *         u = v = numeric_limits[double].quiet_NaN()             # <<<<<<<<<<<<<<
@@ -17275,7 +17325,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
   __pyx_v_u = __pyx_t_1;
   __pyx_v_v = __pyx_t_1;
 
-  /* "lagrangian.pyx":1271
+  /* "lagrangian.pyx":1274
  *         u = v = numeric_limits[double].quiet_NaN()
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -17286,7 +17336,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "lagrangian.pyx":1272
+    /* "lagrangian.pyx":1275
  * 
  *         if cell is None:
  *             defined = self.wrapped.Compute(t, x, y, u, v)             # <<<<<<<<<<<<<<
@@ -17297,11 +17347,11 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
       __pyx_t_4 = __pyx_v_self->__pyx_base.wrapped->Compute(__pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_u, __pyx_v_v);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 1272, __pyx_L1_error)
+      __PYX_ERR(0, 1275, __pyx_L1_error)
     }
     __pyx_v_defined = __pyx_t_4;
 
-    /* "lagrangian.pyx":1271
+    /* "lagrangian.pyx":1274
  *         u = v = numeric_limits[double].quiet_NaN()
  * 
  *         if cell is None:             # <<<<<<<<<<<<<<
@@ -17311,7 +17361,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
     goto __pyx_L3;
   }
 
-  /* "lagrangian.pyx":1274
+  /* "lagrangian.pyx":1277
  *             defined = self.wrapped.Compute(t, x, y, u, v)
  *         else:
  *             defined = self.wrapped.Compute(t, x, y, u, v, cell.wrapped[0])             # <<<<<<<<<<<<<<
@@ -17323,13 +17373,13 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
       __pyx_t_4 = __pyx_v_self->__pyx_base.wrapped->Compute(__pyx_v_t, __pyx_v_x, __pyx_v_y, __pyx_v_u, __pyx_v_v, (__pyx_v_cell->wrapped[0]));
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 1274, __pyx_L1_error)
+      __PYX_ERR(0, 1277, __pyx_L1_error)
     }
     __pyx_v_defined = __pyx_t_4;
   }
   __pyx_L3:;
 
-  /* "lagrangian.pyx":1276
+  /* "lagrangian.pyx":1279
  *             defined = self.wrapped.Compute(t, x, y, u, v, cell.wrapped[0])
  * 
  *         return (u, v) if defined else None             # <<<<<<<<<<<<<<
@@ -17338,11 +17388,11 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
  */
   __Pyx_XDECREF(__pyx_r);
   if ((__pyx_v_defined != 0)) {
-    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_u); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1276, __pyx_L1_error)
+    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_u); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1279, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_v); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1276, __pyx_L1_error)
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_v_v); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1279, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1276, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1279, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_GIVEREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6);
@@ -17360,7 +17410,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1256
+  /* "lagrangian.pyx":1259
  *         ts.Fetch(t0, t1)
  * 
  *     def compute(self,             # <<<<<<<<<<<<<<
@@ -17382,7 +17432,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_4compute(struct __pyx_obj_10la
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1278
+/* "lagrangian.pyx":1281
  *         return (u, v) if defined else None
  * 
  *     def start_time(self):             # <<<<<<<<<<<<<<
@@ -17411,7 +17461,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_6start_time(struct __pyx_obj_1
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("start_time", 0);
 
-  /* "lagrangian.pyx":1284
+  /* "lagrangian.pyx":1287
  *         cdef cpp_lagrangian.TimeSerie* ts
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped             # <<<<<<<<<<<<<<
@@ -17420,7 +17470,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_6start_time(struct __pyx_obj_1
  */
   __pyx_v_ts = ((lagrangian::field::TimeSerie *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1285
+  /* "lagrangian.pyx":1288
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped
  *         return cpp_lagrangian.to_pydatetime(ts.StartTime())             # <<<<<<<<<<<<<<
@@ -17428,13 +17478,13 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_6start_time(struct __pyx_obj_1
  *     def end_time(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_v_ts->StartTime()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1285, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_v_ts->StartTime()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1278
+  /* "lagrangian.pyx":1281
  *         return (u, v) if defined else None
  * 
  *     def start_time(self):             # <<<<<<<<<<<<<<
@@ -17453,7 +17503,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_6start_time(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1287
+/* "lagrangian.pyx":1290
  *         return cpp_lagrangian.to_pydatetime(ts.StartTime())
  * 
  *     def end_time(self):             # <<<<<<<<<<<<<<
@@ -17482,7 +17532,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_8end_time(struct __pyx_obj_10l
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("end_time", 0);
 
-  /* "lagrangian.pyx":1293
+  /* "lagrangian.pyx":1296
  *         cdef cpp_lagrangian.TimeSerie* ts
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped             # <<<<<<<<<<<<<<
@@ -17491,7 +17541,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_8end_time(struct __pyx_obj_10l
  */
   __pyx_v_ts = ((lagrangian::field::TimeSerie *)__pyx_v_self->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1294
+  /* "lagrangian.pyx":1297
  * 
  *         ts = <cpp_lagrangian.TimeSerie*> self.wrapped
  *         return cpp_lagrangian.to_pydatetime(ts.EndTime())             # <<<<<<<<<<<<<<
@@ -17499,13 +17549,13 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_8end_time(struct __pyx_obj_10l
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_v_ts->EndTime()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1294, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14cpp_lagrangian_to_pydatetime(__pyx_v_ts->EndTime()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1287
+  /* "lagrangian.pyx":1290
  *         return cpp_lagrangian.to_pydatetime(ts.StartTime())
  * 
  *     def end_time(self):             # <<<<<<<<<<<<<<
@@ -17631,7 +17681,7 @@ static PyObject *__pyx_pf_10lagrangian_9TimeSerie_12__setstate_cython__(CYTHON_U
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1303
+/* "lagrangian.pyx":1306
  *     cdef cpp_lagrangian.MapProperties* wrapped
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -17679,29 +17729,29 @@ static int __pyx_pw_10lagrangian_13MapProperties_1__cinit__(PyObject *__pyx_v_se
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ny)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 1); __PYX_ERR(0, 1303, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 1); __PYX_ERR(0, 1306, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x_min)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 2); __PYX_ERR(0, 1303, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 2); __PYX_ERR(0, 1306, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y_min)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 3); __PYX_ERR(0, 1303, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 3); __PYX_ERR(0, 1306, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_step)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 4); __PYX_ERR(0, 1303, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, 4); __PYX_ERR(0, 1306, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1303, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1306, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -17712,15 +17762,15 @@ static int __pyx_pw_10lagrangian_13MapProperties_1__cinit__(PyObject *__pyx_v_se
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
     }
-    __pyx_v_nx = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1304, __pyx_L3_error)
-    __pyx_v_ny = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1305, __pyx_L3_error)
-    __pyx_v_x_min = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_x_min == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1306, __pyx_L3_error)
-    __pyx_v_y_min = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_y_min == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1307, __pyx_L3_error)
-    __pyx_v_step = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_step == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1308, __pyx_L3_error)
+    __pyx_v_nx = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_nx == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1307, __pyx_L3_error)
+    __pyx_v_ny = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ny == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1308, __pyx_L3_error)
+    __pyx_v_x_min = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_x_min == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1309, __pyx_L3_error)
+    __pyx_v_y_min = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_y_min == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1310, __pyx_L3_error)
+    __pyx_v_step = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_step == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1311, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1303, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1306, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.MapProperties.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -17738,7 +17788,7 @@ static int __pyx_pf_10lagrangian_13MapProperties___cinit__(struct __pyx_obj_10la
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":1309
+  /* "lagrangian.pyx":1312
  *                   double y_min,
  *                   double step):
  *         self.wrapped = new cpp_lagrangian.MapProperties(             # <<<<<<<<<<<<<<
@@ -17747,7 +17797,7 @@ static int __pyx_pf_10lagrangian_13MapProperties___cinit__(struct __pyx_obj_10la
  */
   __pyx_v_self->wrapped = new lagrangian::MapProperties(__pyx_v_nx, __pyx_v_ny, __pyx_v_x_min, __pyx_v_y_min, __pyx_v_step);
 
-  /* "lagrangian.pyx":1303
+  /* "lagrangian.pyx":1306
  *     cdef cpp_lagrangian.MapProperties* wrapped
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -17761,7 +17811,7 @@ static int __pyx_pf_10lagrangian_13MapProperties___cinit__(struct __pyx_obj_10la
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1312
+/* "lagrangian.pyx":1315
  *             nx, ny, x_min, y_min, step)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -17784,7 +17834,7 @@ static void __pyx_pf_10lagrangian_13MapProperties_2__dealloc__(struct __pyx_obj_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":1313
+  /* "lagrangian.pyx":1316
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -17793,7 +17843,7 @@ static void __pyx_pf_10lagrangian_13MapProperties_2__dealloc__(struct __pyx_obj_
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":1312
+  /* "lagrangian.pyx":1315
  *             nx, ny, x_min, y_min, step)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -17805,7 +17855,7 @@ static void __pyx_pf_10lagrangian_13MapProperties_2__dealloc__(struct __pyx_obj_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":1315
+/* "lagrangian.pyx":1318
  *         del self.wrapped
  * 
  *     def get_x_value(self, int ix):             # <<<<<<<<<<<<<<
@@ -17822,7 +17872,7 @@ static PyObject *__pyx_pw_10lagrangian_13MapProperties_5get_x_value(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_x_value (wrapper)", 0);
   assert(__pyx_arg_ix); {
-    __pyx_v_ix = __Pyx_PyInt_As_int(__pyx_arg_ix); if (unlikely((__pyx_v_ix == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1315, __pyx_L3_error)
+    __pyx_v_ix = __Pyx_PyInt_As_int(__pyx_arg_ix); if (unlikely((__pyx_v_ix == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1318, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17843,7 +17893,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4get_x_value(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_x_value", 0);
 
-  /* "lagrangian.pyx":1319
+  /* "lagrangian.pyx":1322
  *         Get the longitude value
  *         """
  *         return self.wrapped.GetXValue(ix)             # <<<<<<<<<<<<<<
@@ -17851,13 +17901,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4get_x_value(struct __pyx
  *     def get_y_value(self, int ix):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetXValue(__pyx_v_ix)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1319, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetXValue(__pyx_v_ix)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1315
+  /* "lagrangian.pyx":1318
  *         del self.wrapped
  * 
  *     def get_x_value(self, int ix):             # <<<<<<<<<<<<<<
@@ -17876,7 +17926,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4get_x_value(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1321
+/* "lagrangian.pyx":1324
  *         return self.wrapped.GetXValue(ix)
  * 
  *     def get_y_value(self, int ix):             # <<<<<<<<<<<<<<
@@ -17893,7 +17943,7 @@ static PyObject *__pyx_pw_10lagrangian_13MapProperties_7get_y_value(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_y_value (wrapper)", 0);
   assert(__pyx_arg_ix); {
-    __pyx_v_ix = __Pyx_PyInt_As_int(__pyx_arg_ix); if (unlikely((__pyx_v_ix == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1321, __pyx_L3_error)
+    __pyx_v_ix = __Pyx_PyInt_As_int(__pyx_arg_ix); if (unlikely((__pyx_v_ix == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1324, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17914,7 +17964,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_6get_y_value(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_y_value", 0);
 
-  /* "lagrangian.pyx":1325
+  /* "lagrangian.pyx":1328
  *         Get the latitude value
  *         """
  *         return self.wrapped.GetYValue(ix)             # <<<<<<<<<<<<<<
@@ -17922,13 +17972,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_6get_y_value(struct __pyx
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetYValue(__pyx_v_ix)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1325, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->GetYValue(__pyx_v_ix)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1328, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1321
+  /* "lagrangian.pyx":1324
  *         return self.wrapped.GetXValue(ix)
  * 
  *     def get_y_value(self, int ix):             # <<<<<<<<<<<<<<
@@ -17947,7 +17997,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_6get_y_value(struct __pyx
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1328
+/* "lagrangian.pyx":1331
  * 
  *     @property
  *     def nx(self):             # <<<<<<<<<<<<<<
@@ -17974,7 +18024,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2nx___get__(struct __pyx_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":1332
+  /* "lagrangian.pyx":1335
  *         Get the number of longitudes in the grid
  *         """
  *         return self.wrapped.get_nx()             # <<<<<<<<<<<<<<
@@ -17982,13 +18032,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2nx___get__(struct __pyx_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->get_nx()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1332, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->get_nx()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1335, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1328
+  /* "lagrangian.pyx":1331
  * 
  *     @property
  *     def nx(self):             # <<<<<<<<<<<<<<
@@ -18007,7 +18057,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2nx___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1335
+/* "lagrangian.pyx":1338
  * 
  *     @property
  *     def ny(self):             # <<<<<<<<<<<<<<
@@ -18034,7 +18084,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2ny___get__(struct __pyx_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":1339
+  /* "lagrangian.pyx":1342
  *         Get the number of latitudes in the grid
  *         """
  *         return self.wrapped.get_ny()             # <<<<<<<<<<<<<<
@@ -18042,13 +18092,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2ny___get__(struct __pyx_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->get_ny()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1339, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->wrapped->get_ny()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1342, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1335
+  /* "lagrangian.pyx":1338
  * 
  *     @property
  *     def ny(self):             # <<<<<<<<<<<<<<
@@ -18067,7 +18117,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_2ny___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1342
+/* "lagrangian.pyx":1345
  * 
  *     @property
  *     def step(self):             # <<<<<<<<<<<<<<
@@ -18094,7 +18144,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4step___get__(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":1346
+  /* "lagrangian.pyx":1349
  *         Get the step between two consecutive longitudes and latitudes
  *         """
  *         return self.wrapped.get_step()             # <<<<<<<<<<<<<<
@@ -18102,13 +18152,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4step___get__(struct __py
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_step()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1346, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_step()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1349, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1342
+  /* "lagrangian.pyx":1345
  * 
  *     @property
  *     def step(self):             # <<<<<<<<<<<<<<
@@ -18127,7 +18177,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_4step___get__(struct __py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1349
+/* "lagrangian.pyx":1352
  * 
  *     @property
  *     def x_min(self):             # <<<<<<<<<<<<<<
@@ -18154,7 +18204,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5x_min___get__(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":1353
+  /* "lagrangian.pyx":1356
  *         Get the minimal longitude
  *         """
  *         return self.wrapped.get_x_min()             # <<<<<<<<<<<<<<
@@ -18162,13 +18212,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5x_min___get__(struct __p
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_x_min()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1353, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_x_min()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1356, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1349
+  /* "lagrangian.pyx":1352
  * 
  *     @property
  *     def x_min(self):             # <<<<<<<<<<<<<<
@@ -18187,7 +18237,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5x_min___get__(struct __p
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1356
+/* "lagrangian.pyx":1359
  * 
  *     @property
  *     def y_min(self):             # <<<<<<<<<<<<<<
@@ -18214,7 +18264,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5y_min___get__(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "lagrangian.pyx":1360
+  /* "lagrangian.pyx":1363
  *         Get the minimal latitude
  *         """
  *         return self.wrapped.get_y_min()             # <<<<<<<<<<<<<<
@@ -18222,13 +18272,13 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5y_min___get__(struct __p
  *     @cython.boundscheck(False)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_y_min()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1360, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->wrapped->get_y_min()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1363, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1356
+  /* "lagrangian.pyx":1359
  * 
  *     @property
  *     def y_min(self):             # <<<<<<<<<<<<<<
@@ -18247,7 +18297,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_5y_min___get__(struct __p
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1363
+/* "lagrangian.pyx":1366
  * 
  *     @cython.boundscheck(False)
  *     def get_x_axis(self):             # <<<<<<<<<<<<<<
@@ -18282,7 +18332,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("get_x_axis", 0);
 
-  /* "lagrangian.pyx":1373
+  /* "lagrangian.pyx":1376
  *             int ix, iy
  * 
  *         dims[0] = self.wrapped.get_nx()             # <<<<<<<<<<<<<<
@@ -18291,20 +18341,20 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
  */
   (__pyx_v_dims[0]) = __pyx_v_self->wrapped->get_nx();
 
-  /* "lagrangian.pyx":1374
+  /* "lagrangian.pyx":1377
  * 
  *         dims[0] = self.wrapped.get_nx()
  *         result = numpy.PyArray_EMPTY(1,             # <<<<<<<<<<<<<<
  *                                      dims,
  *                                      numpy.NPY_DOUBLE,
  */
-  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1374, __pyx_L1_error)
+  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1377, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1374, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1377, __pyx_L1_error)
   __pyx_v_result = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1378
+  /* "lagrangian.pyx":1381
  *                                      numpy.NPY_DOUBLE,
  *                                      0)
  *         ptr = <double*>numpy.PyArray_DATA(result)             # <<<<<<<<<<<<<<
@@ -18313,7 +18363,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
  */
   __pyx_v_ptr = ((double *)PyArray_DATA(__pyx_v_result));
 
-  /* "lagrangian.pyx":1379
+  /* "lagrangian.pyx":1382
  *                                      0)
  *         ptr = <double*>numpy.PyArray_DATA(result)
  *         for ix in range(self.wrapped.get_nx()):             # <<<<<<<<<<<<<<
@@ -18325,7 +18375,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_ix = __pyx_t_4;
 
-    /* "lagrangian.pyx":1380
+    /* "lagrangian.pyx":1383
  *         ptr = <double*>numpy.PyArray_DATA(result)
  *         for ix in range(self.wrapped.get_nx()):
  *             ptr[ix] = self.wrapped.GetXValue(ix);             # <<<<<<<<<<<<<<
@@ -18335,7 +18385,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
     (__pyx_v_ptr[__pyx_v_ix]) = __pyx_v_self->wrapped->GetXValue(__pyx_v_ix);
   }
 
-  /* "lagrangian.pyx":1381
+  /* "lagrangian.pyx":1384
  *         for ix in range(self.wrapped.get_nx()):
  *             ptr[ix] = self.wrapped.GetXValue(ix);
  *         return result             # <<<<<<<<<<<<<<
@@ -18347,7 +18397,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_result);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1363
+  /* "lagrangian.pyx":1366
  * 
  *     @cython.boundscheck(False)
  *     def get_x_axis(self):             # <<<<<<<<<<<<<<
@@ -18367,7 +18417,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_8get_x_axis(struct __pyx_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1384
+/* "lagrangian.pyx":1387
  * 
  *     @cython.boundscheck(False)
  *     def get_y_axis(self):             # <<<<<<<<<<<<<<
@@ -18402,7 +18452,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("get_y_axis", 0);
 
-  /* "lagrangian.pyx":1394
+  /* "lagrangian.pyx":1397
  *             int ix, iy
  * 
  *         dims[0] = self.wrapped.get_ny()             # <<<<<<<<<<<<<<
@@ -18411,20 +18461,20 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
  */
   (__pyx_v_dims[0]) = __pyx_v_self->wrapped->get_ny();
 
-  /* "lagrangian.pyx":1395
+  /* "lagrangian.pyx":1398
  * 
  *         dims[0] = self.wrapped.get_ny()
  *         result = numpy.PyArray_EMPTY(1,             # <<<<<<<<<<<<<<
  *                                      dims,
  *                                      numpy.NPY_DOUBLE,
  */
-  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1395, __pyx_L1_error)
+  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1398, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1395, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1398, __pyx_L1_error)
   __pyx_v_result = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1399
+  /* "lagrangian.pyx":1402
  *                                      numpy.NPY_DOUBLE,
  *                                      0)
  *         data = <double*>numpy.PyArray_DATA(result)             # <<<<<<<<<<<<<<
@@ -18433,7 +18483,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
  */
   __pyx_v_data = ((double *)PyArray_DATA(__pyx_v_result));
 
-  /* "lagrangian.pyx":1400
+  /* "lagrangian.pyx":1403
  *                                      0)
  *         data = <double*>numpy.PyArray_DATA(result)
  *         for ix in range(self.wrapped.get_ny()):             # <<<<<<<<<<<<<<
@@ -18445,7 +18495,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_ix = __pyx_t_4;
 
-    /* "lagrangian.pyx":1401
+    /* "lagrangian.pyx":1404
  *         data = <double*>numpy.PyArray_DATA(result)
  *         for ix in range(self.wrapped.get_ny()):
  *             data[ix] = self.wrapped.GetYValue(ix);             # <<<<<<<<<<<<<<
@@ -18455,7 +18505,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
     (__pyx_v_data[__pyx_v_ix]) = __pyx_v_self->wrapped->GetYValue(__pyx_v_ix);
   }
 
-  /* "lagrangian.pyx":1402
+  /* "lagrangian.pyx":1405
  *         for ix in range(self.wrapped.get_ny()):
  *             data[ix] = self.wrapped.GetYValue(ix);
  *         return result             # <<<<<<<<<<<<<<
@@ -18467,7 +18517,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_10get_y_axis(struct __pyx
   __pyx_r = ((PyObject *)__pyx_v_result);
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1384
+  /* "lagrangian.pyx":1387
  * 
  *     @cython.boundscheck(False)
  *     def get_y_axis(self):             # <<<<<<<<<<<<<<
@@ -18594,7 +18644,7 @@ static PyObject *__pyx_pf_10lagrangian_13MapProperties_14__setstate_cython__(CYT
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1413
+/* "lagrangian.pyx":1416
  *         FiniteLyapunovExponentsIntegration fle_integration
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -18616,7 +18666,7 @@ static int __pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_1__cinit__(PyObj
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_map_properties,&__pyx_n_s_fle_integration,&__pyx_n_s_stencil,&__pyx_n_s_netcdf_reader,0};
     PyObject* values[4] = {0,0,0,0};
 
-    /* "lagrangian.pyx":1417
+    /* "lagrangian.pyx":1420
  *                   FiniteLyapunovExponentsIntegration fle_integration,
  *                   Stencil stencil=kTriplet,
  *                   Netcdf netcdf_reader=None):             # <<<<<<<<<<<<<<
@@ -18648,7 +18698,7 @@ static int __pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_1__cinit__(PyObj
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_fle_integration)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 2, 4, 1); __PYX_ERR(0, 1413, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 2, 4, 1); __PYX_ERR(0, 1416, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18664,7 +18714,7 @@ static int __pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_1__cinit__(PyObj
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1413, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 1416, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -18681,7 +18731,7 @@ static int __pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_1__cinit__(PyObj
     __pyx_v_map_properties = ((struct __pyx_obj_10lagrangian_MapProperties *)values[0]);
     __pyx_v_fle_integration = ((struct __pyx_obj_10lagrangian_FiniteLyapunovExponentsIntegration *)values[1]);
     if (values[2]) {
-      __pyx_v_stencil = ((enum __pyx_t_10lagrangian_Stencil)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Stencil(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1416, __pyx_L3_error)
+      __pyx_v_stencil = ((enum __pyx_t_10lagrangian_Stencil)__Pyx_PyInt_As_enum____pyx_t_10lagrangian_Stencil(values[2])); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1419, __pyx_L3_error)
     } else {
       __pyx_v_stencil = __pyx_k__67;
     }
@@ -18689,18 +18739,18 @@ static int __pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_1__cinit__(PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1413, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1416, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("lagrangian.MapOfFiniteLyapunovExponents.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_map_properties), __pyx_ptype_10lagrangian_MapProperties, 1, "map_properties", 0))) __PYX_ERR(0, 1414, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fle_integration), __pyx_ptype_10lagrangian_FiniteLyapunovExponentsIntegration, 1, "fle_integration", 0))) __PYX_ERR(0, 1415, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_netcdf_reader), __pyx_ptype_10lagrangian_Netcdf, 1, "netcdf_reader", 0))) __PYX_ERR(0, 1417, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_map_properties), __pyx_ptype_10lagrangian_MapProperties, 1, "map_properties", 0))) __PYX_ERR(0, 1417, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fle_integration), __pyx_ptype_10lagrangian_FiniteLyapunovExponentsIntegration, 1, "fle_integration", 0))) __PYX_ERR(0, 1418, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_netcdf_reader), __pyx_ptype_10lagrangian_Netcdf, 1, "netcdf_reader", 0))) __PYX_ERR(0, 1420, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(((struct __pyx_obj_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self), __pyx_v_map_properties, __pyx_v_fle_integration, __pyx_v_stencil, __pyx_v_netcdf_reader);
 
-  /* "lagrangian.pyx":1413
+  /* "lagrangian.pyx":1416
  *         FiniteLyapunovExponentsIntegration fle_integration
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -18727,7 +18777,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
   int __pyx_t_3;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "lagrangian.pyx":1423
+  /* "lagrangian.pyx":1426
  *             cpp_lagrangian.NetcdfReader* cpp_reader
  * 
  *         self.wrapped = new cpp_lagrangian.MapOfFiniteLyapunovExponents(             # <<<<<<<<<<<<<<
@@ -18738,11 +18788,11 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
     __pyx_t_1 = new lagrangian::MapOfFiniteLyapunovExponents(__pyx_v_map_properties->wrapped->get_nx(), __pyx_v_map_properties->wrapped->get_ny(), __pyx_v_map_properties->wrapped->get_x_min(), __pyx_v_map_properties->wrapped->get_y_min(), __pyx_v_map_properties->wrapped->get_step());
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1423, __pyx_L1_error)
+    __PYX_ERR(0, 1426, __pyx_L1_error)
   }
   __pyx_v_self->wrapped = __pyx_t_1;
 
-  /* "lagrangian.pyx":1429
+  /* "lagrangian.pyx":1432
  *             map_properties.wrapped.get_y_min(),
  *             map_properties.wrapped.get_step())
  *         self.fle_integration = fle_integration             # <<<<<<<<<<<<<<
@@ -18755,7 +18805,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
   __Pyx_DECREF(((PyObject *)__pyx_v_self->fle_integration));
   __pyx_v_self->fle_integration = __pyx_v_fle_integration;
 
-  /* "lagrangian.pyx":1432
+  /* "lagrangian.pyx":1435
  * 
  *         cpp_fle_integration = \
  *             <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -18764,7 +18814,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1434
+  /* "lagrangian.pyx":1437
  *             <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
  *                 self.fle_integration.wrapped
  *         cpp_reader = <cpp_lagrangian.NetcdfReader*> netcdf_reader.wrapped             # <<<<<<<<<<<<<<
@@ -18773,7 +18823,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
  */
   __pyx_v_cpp_reader = ((lagrangian::reader::Netcdf *)__pyx_v_netcdf_reader->__pyx_base.__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1436
+  /* "lagrangian.pyx":1439
  *         cpp_reader = <cpp_lagrangian.NetcdfReader*> netcdf_reader.wrapped
  * 
  *         if netcdf_reader is not None:             # <<<<<<<<<<<<<<
@@ -18784,7 +18834,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "lagrangian.pyx":1437
+    /* "lagrangian.pyx":1440
  * 
  *         if netcdf_reader is not None:
  *             self.wrapped.Initialize(cpp_fle_integration[0],             # <<<<<<<<<<<<<<
@@ -18795,10 +18845,10 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
       __pyx_v_self->wrapped->Initialize((__pyx_v_cpp_fle_integration[0]), (__pyx_v_cpp_reader[0]), ((enum lagrangian::FiniteLyapunovExponentsIntegration::Stencil)__pyx_v_stencil));
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 1437, __pyx_L1_error)
+      __PYX_ERR(0, 1440, __pyx_L1_error)
     }
 
-    /* "lagrangian.pyx":1436
+    /* "lagrangian.pyx":1439
  *         cpp_reader = <cpp_lagrangian.NetcdfReader*> netcdf_reader.wrapped
  * 
  *         if netcdf_reader is not None:             # <<<<<<<<<<<<<<
@@ -18808,7 +18858,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
     goto __pyx_L3;
   }
 
-  /* "lagrangian.pyx":1441
+  /* "lagrangian.pyx":1444
  *                                     stencil)
  *         else:
  *             self.wrapped.Initialize(cpp_fle_integration[0],             # <<<<<<<<<<<<<<
@@ -18817,7 +18867,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
  */
   /*else*/ {
 
-    /* "lagrangian.pyx":1442
+    /* "lagrangian.pyx":1445
  *         else:
  *             self.wrapped.Initialize(cpp_fle_integration[0],
  *                                     stencil)             # <<<<<<<<<<<<<<
@@ -18828,12 +18878,12 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
       __pyx_v_self->wrapped->Initialize((__pyx_v_cpp_fle_integration[0]), ((enum lagrangian::FiniteLyapunovExponentsIntegration::Stencil)__pyx_v_stencil));
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 1441, __pyx_L1_error)
+      __PYX_ERR(0, 1444, __pyx_L1_error)
     }
   }
   __pyx_L3:;
 
-  /* "lagrangian.pyx":1413
+  /* "lagrangian.pyx":1416
  *         FiniteLyapunovExponentsIntegration fle_integration
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -18852,7 +18902,7 @@ static int __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents___cinit__(struct
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1444
+/* "lagrangian.pyx":1447
  *                                     stencil)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -18875,7 +18925,7 @@ static void __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_2__dealloc__(st
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "lagrangian.pyx":1445
+  /* "lagrangian.pyx":1448
  * 
  *     def __dealloc__(self):
  *         del self.wrapped             # <<<<<<<<<<<<<<
@@ -18884,7 +18934,7 @@ static void __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_2__dealloc__(st
  */
   delete __pyx_v_self->wrapped;
 
-  /* "lagrangian.pyx":1444
+  /* "lagrangian.pyx":1447
  *                                     stencil)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -18896,7 +18946,7 @@ static void __pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_2__dealloc__(st
   __Pyx_RefNannyFinishContext();
 }
 
-/* "lagrangian.pyx":1447
+/* "lagrangian.pyx":1450
  *         del self.wrapped
  * 
  *     def compute(self):             # <<<<<<<<<<<<<<
@@ -18924,7 +18974,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_4compute(s
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("compute", 0);
 
-  /* "lagrangian.pyx":1456
+  /* "lagrangian.pyx":1459
  * 
  *         cpp_fle_integration \
  *             = <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -18933,7 +18983,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_4compute(s
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1458
+  /* "lagrangian.pyx":1461
  *             = <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
  *                 self.fle_integration.wrapped
  *         self.wrapped.Compute(cpp_fle_integration[0])             # <<<<<<<<<<<<<<
@@ -18944,10 +18994,10 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_4compute(s
     __pyx_v_self->wrapped->Compute((__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1458, __pyx_L1_error)
+    __PYX_ERR(0, 1461, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1447
+  /* "lagrangian.pyx":1450
  *         del self.wrapped
  * 
  *     def compute(self):             # <<<<<<<<<<<<<<
@@ -18967,7 +19017,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_4compute(s
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1461
+/* "lagrangian.pyx":1464
  * 
  *     @cython.boundscheck(False)
  *     cdef numpy.ndarray get_map(self, double fill_value, cpp_lagrangian.Map[double]* map_of):             # <<<<<<<<<<<<<<
@@ -19002,7 +19052,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
   PyArrayObject *__pyx_t_16 = NULL;
   __Pyx_RefNannySetupContext("get_map", 0);
 
-  /* "lagrangian.pyx":1470
+  /* "lagrangian.pyx":1473
  *             int ix, iy
  * 
  *         try:             # <<<<<<<<<<<<<<
@@ -19011,7 +19061,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
   /*try:*/ {
 
-    /* "lagrangian.pyx":1471
+    /* "lagrangian.pyx":1474
  * 
  *         try:
  *             dims[0] = map_of.get_nx()             # <<<<<<<<<<<<<<
@@ -19020,7 +19070,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
     (__pyx_v_dims[0]) = __pyx_v_map_of->get_nx();
 
-    /* "lagrangian.pyx":1472
+    /* "lagrangian.pyx":1475
  *         try:
  *             dims[0] = map_of.get_nx()
  *             dims[1] = map_of.get_ny()             # <<<<<<<<<<<<<<
@@ -19029,20 +19079,20 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
     (__pyx_v_dims[1]) = __pyx_v_map_of->get_ny();
 
-    /* "lagrangian.pyx":1474
+    /* "lagrangian.pyx":1477
  *             dims[1] = map_of.get_ny()
  * 
  *             result = numpy.PyArray_EMPTY(2,             # <<<<<<<<<<<<<<
  *                                          dims,
  *                                          numpy.NPY_DOUBLE,
  */
-    __pyx_t_1 = PyArray_EMPTY(2, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1474, __pyx_L4_error)
+    __pyx_t_1 = PyArray_EMPTY(2, __pyx_v_dims, NPY_DOUBLE, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1477, __pyx_L4_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1474, __pyx_L4_error)
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 1477, __pyx_L4_error)
     __pyx_v_result = ((PyArrayObject *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "lagrangian.pyx":1478
+    /* "lagrangian.pyx":1481
  *                                          numpy.NPY_DOUBLE,
  *                                          0)
  *             data = <double*>numpy.PyArray_DATA(result)             # <<<<<<<<<<<<<<
@@ -19051,7 +19101,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
     __pyx_v_data = ((double *)PyArray_DATA(__pyx_v_result));
 
-    /* "lagrangian.pyx":1480
+    /* "lagrangian.pyx":1483
  *             data = <double*>numpy.PyArray_DATA(result)
  * 
  *             for ix in range(dims[0]):             # <<<<<<<<<<<<<<
@@ -19063,7 +19113,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
     for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
       __pyx_v_ix = __pyx_t_4;
 
-      /* "lagrangian.pyx":1481
+      /* "lagrangian.pyx":1484
  * 
  *             for ix in range(dims[0]):
  *                 for iy in range(dims[1]):             # <<<<<<<<<<<<<<
@@ -19075,7 +19125,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
         __pyx_v_iy = __pyx_t_7;
 
-        /* "lagrangian.pyx":1482
+        /* "lagrangian.pyx":1485
  *             for ix in range(dims[0]):
  *                 for iy in range(dims[1]):
  *                     value = map_of.GetItem(ix, iy)             # <<<<<<<<<<<<<<
@@ -19084,7 +19134,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
         __pyx_v_value = __pyx_v_map_of->GetItem(__pyx_v_ix, __pyx_v_iy);
 
-        /* "lagrangian.pyx":1484
+        /* "lagrangian.pyx":1487
  *                     value = map_of.GetItem(ix, iy)
  *                     data[ix * map_of.get_ny() + iy] = value \
  *                         if not isnan(value) else fill_value             # <<<<<<<<<<<<<<
@@ -19093,7 +19143,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
  */
         if (((!(std::isnan(__pyx_v_value) != 0)) != 0)) {
 
-          /* "lagrangian.pyx":1483
+          /* "lagrangian.pyx":1486
  *                 for iy in range(dims[1]):
  *                     value = map_of.GetItem(ix, iy)
  *                     data[ix * map_of.get_ny() + iy] = value \             # <<<<<<<<<<<<<<
@@ -19103,7 +19153,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
           __pyx_t_8 = __pyx_v_value;
         } else {
 
-          /* "lagrangian.pyx":1484
+          /* "lagrangian.pyx":1487
  *                     value = map_of.GetItem(ix, iy)
  *                     data[ix * map_of.get_ny() + iy] = value \
  *                         if not isnan(value) else fill_value             # <<<<<<<<<<<<<<
@@ -19113,7 +19163,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
           __pyx_t_8 = __pyx_v_fill_value;
         }
 
-        /* "lagrangian.pyx":1483
+        /* "lagrangian.pyx":1486
  *                 for iy in range(dims[1]):
  *                     value = map_of.GetItem(ix, iy)
  *                     data[ix * map_of.get_ny() + iy] = value \             # <<<<<<<<<<<<<<
@@ -19124,7 +19174,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
       }
     }
 
-    /* "lagrangian.pyx":1486
+    /* "lagrangian.pyx":1489
  *                         if not isnan(value) else fill_value
  * 
  *             return result             # <<<<<<<<<<<<<<
@@ -19137,7 +19187,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
     goto __pyx_L3_return;
   }
 
-  /* "lagrangian.pyx":1488
+  /* "lagrangian.pyx":1491
  *             return result
  *         finally:
  *             del map_of             # <<<<<<<<<<<<<<
@@ -19187,7 +19237,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
     }
   }
 
-  /* "lagrangian.pyx":1461
+  /* "lagrangian.pyx":1464
  * 
  *     @cython.boundscheck(False)
  *     cdef numpy.ndarray get_map(self, double fill_value, cpp_lagrangian.Map[double]* map_of):             # <<<<<<<<<<<<<<
@@ -19207,7 +19257,7 @@ static PyArrayObject *__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_ma
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1490
+/* "lagrangian.pyx":1493
  *             del map_of
  * 
  *     def get_map_of_lambda1(self, double nan):             # <<<<<<<<<<<<<<
@@ -19224,7 +19274,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_7get_map_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_lambda1 (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1490, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1493, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19247,7 +19297,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_6get_map_o
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_lambda1", 0);
 
-  /* "lagrangian.pyx":1498
+  /* "lagrangian.pyx":1501
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19256,7 +19306,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_6get_map_o
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1501
+  /* "lagrangian.pyx":1504
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19265,7 +19315,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_6get_map_o
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1502
+  /* "lagrangian.pyx":1505
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19276,23 +19326,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_6get_map_o
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfLambda1(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1502, __pyx_L1_error)
+    __PYX_ERR(0, 1505, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1501
+  /* "lagrangian.pyx":1504
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1501, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1504, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1490
+  /* "lagrangian.pyx":1493
  *             del map_of
  * 
  *     def get_map_of_lambda1(self, double nan):             # <<<<<<<<<<<<<<
@@ -19311,7 +19361,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_6get_map_o
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1504
+/* "lagrangian.pyx":1507
  *             nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_lambda2(self, double nan):             # <<<<<<<<<<<<<<
@@ -19328,7 +19378,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_9get_map_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_lambda2 (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1504, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1507, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19351,7 +19401,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_8get_map_o
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_lambda2", 0);
 
-  /* "lagrangian.pyx":1512
+  /* "lagrangian.pyx":1515
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19360,7 +19410,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_8get_map_o
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1515
+  /* "lagrangian.pyx":1518
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19369,7 +19419,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_8get_map_o
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1516
+  /* "lagrangian.pyx":1519
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19380,23 +19430,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_8get_map_o
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfLambda2(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1516, __pyx_L1_error)
+    __PYX_ERR(0, 1519, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1515
+  /* "lagrangian.pyx":1518
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1515, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1518, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1504
+  /* "lagrangian.pyx":1507
  *             nan, self.wrapped.GetMapOfLambda1(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_lambda2(self, double nan):             # <<<<<<<<<<<<<<
@@ -19415,7 +19465,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_8get_map_o
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1518
+/* "lagrangian.pyx":1521
  *             nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_theta1(self, double nan):             # <<<<<<<<<<<<<<
@@ -19432,7 +19482,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_11get_map_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_theta1 (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1518, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1521, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19455,7 +19505,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_10get_map_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_theta1", 0);
 
-  /* "lagrangian.pyx":1526
+  /* "lagrangian.pyx":1529
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19464,7 +19514,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_10get_map_
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1529
+  /* "lagrangian.pyx":1532
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19473,7 +19523,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_10get_map_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1530
+  /* "lagrangian.pyx":1533
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19484,23 +19534,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_10get_map_
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfTheta1(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1530, __pyx_L1_error)
+    __PYX_ERR(0, 1533, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1529
+  /* "lagrangian.pyx":1532
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1529, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1532, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1518
+  /* "lagrangian.pyx":1521
  *             nan, self.wrapped.GetMapOfLambda2(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_theta1(self, double nan):             # <<<<<<<<<<<<<<
@@ -19519,7 +19569,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_10get_map_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1532
+/* "lagrangian.pyx":1535
  *             nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_theta2(self, double nan):             # <<<<<<<<<<<<<<
@@ -19536,7 +19586,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_13get_map_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_theta2 (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1532, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1535, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19559,7 +19609,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_12get_map_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_theta2", 0);
 
-  /* "lagrangian.pyx":1540
+  /* "lagrangian.pyx":1543
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19568,7 +19618,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_12get_map_
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1543
+  /* "lagrangian.pyx":1546
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19577,7 +19627,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_12get_map_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1544
+  /* "lagrangian.pyx":1547
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19588,23 +19638,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_12get_map_
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfTheta2(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1544, __pyx_L1_error)
+    __PYX_ERR(0, 1547, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1543
+  /* "lagrangian.pyx":1546
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1543, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1546, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1532
+  /* "lagrangian.pyx":1535
  *             nan, self.wrapped.GetMapOfTheta1(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_theta2(self, double nan):             # <<<<<<<<<<<<<<
@@ -19623,7 +19673,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_12get_map_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1546
+/* "lagrangian.pyx":1549
  *             nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_delta_t(self, double nan):             # <<<<<<<<<<<<<<
@@ -19640,7 +19690,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_15get_map_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_delta_t (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1546, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1549, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19663,7 +19713,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_14get_map_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_delta_t", 0);
 
-  /* "lagrangian.pyx":1554
+  /* "lagrangian.pyx":1557
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19672,7 +19722,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_14get_map_
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1557
+  /* "lagrangian.pyx":1560
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19681,7 +19731,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_14get_map_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1558
+  /* "lagrangian.pyx":1561
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19692,23 +19742,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_14get_map_
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfDeltaT(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1558, __pyx_L1_error)
+    __PYX_ERR(0, 1561, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1557
+  /* "lagrangian.pyx":1560
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1557, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1560, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1546
+  /* "lagrangian.pyx":1549
  *             nan, self.wrapped.GetMapOfTheta2(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_delta_t(self, double nan):             # <<<<<<<<<<<<<<
@@ -19727,7 +19777,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_14get_map_
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1560
+/* "lagrangian.pyx":1563
  *             nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_final_separation(self, double nan):             # <<<<<<<<<<<<<<
@@ -19744,7 +19794,7 @@ static PyObject *__pyx_pw_10lagrangian_28MapOfFiniteLyapunovExponents_17get_map_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_map_of_final_separation (wrapper)", 0);
   assert(__pyx_arg_nan); {
-    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1560, __pyx_L3_error)
+    __pyx_v_nan = __pyx_PyFloat_AsDouble(__pyx_arg_nan); if (unlikely((__pyx_v_nan == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 1563, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19767,7 +19817,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_16get_map_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_map_of_final_separation", 0);
 
-  /* "lagrangian.pyx":1567
+  /* "lagrangian.pyx":1570
  *             cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
  *                 cpp_fle_integration = \
  *                     <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \             # <<<<<<<<<<<<<<
@@ -19776,7 +19826,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_16get_map_
  */
   __pyx_v_cpp_fle_integration = ((lagrangian::FiniteLyapunovExponentsIntegration *)__pyx_v_self->fle_integration->__pyx_base.wrapped);
 
-  /* "lagrangian.pyx":1570
+  /* "lagrangian.pyx":1573
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
@@ -19785,7 +19835,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_16get_map_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "lagrangian.pyx":1571
+  /* "lagrangian.pyx":1574
  * 
  *         return self.get_map(
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))             # <<<<<<<<<<<<<<
@@ -19796,23 +19846,23 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_16get_map_
     __pyx_t_1 = __pyx_v_self->wrapped->GetMapOfFinalSeparation(__pyx_v_nan, (__pyx_v_cpp_fle_integration[0]));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 1571, __pyx_L1_error)
+    __PYX_ERR(0, 1574, __pyx_L1_error)
   }
 
-  /* "lagrangian.pyx":1570
+  /* "lagrangian.pyx":1573
  *                         self.fle_integration.wrapped
  * 
  *         return self.get_map(             # <<<<<<<<<<<<<<
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
  * 
  */
-  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1570, __pyx_L1_error)
+  __pyx_t_2 = ((PyObject *)((struct __pyx_vtabstruct_10lagrangian_MapOfFiniteLyapunovExponents *)__pyx_v_self->__pyx_vtab)->get_map(__pyx_v_self, __pyx_v_nan, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1573, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1560
+  /* "lagrangian.pyx":1563
  *             nan, self.wrapped.GetMapOfDeltaT(nan, cpp_fle_integration[0]))
  * 
  *     def get_map_of_final_separation(self, double nan):             # <<<<<<<<<<<<<<
@@ -19938,7 +19988,7 @@ static PyObject *__pyx_pf_10lagrangian_28MapOfFiniteLyapunovExponents_20__setsta
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1573
+/* "lagrangian.pyx":1576
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
  * 
  * def debug(str msg not None):             # <<<<<<<<<<<<<<
@@ -19954,7 +20004,7 @@ static PyObject *__pyx_pw_10lagrangian_1debug(PyObject *__pyx_self, PyObject *__
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("debug (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_msg), (&PyString_Type), 0, "msg", 1))) __PYX_ERR(0, 1573, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_msg), (&PyString_Type), 0, "msg", 1))) __PYX_ERR(0, 1576, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_debug(__pyx_self, ((PyObject*)__pyx_v_msg));
 
   /* function exit code */
@@ -19974,29 +20024,29 @@ static PyObject *__pyx_pf_10lagrangian_debug(CYTHON_UNUSED PyObject *__pyx_self,
   std::string __pyx_t_2;
   __Pyx_RefNannySetupContext("debug", 0);
 
-  /* "lagrangian.pyx":1577
+  /* "lagrangian.pyx":1580
  *     Display a debugging message
  *     """
  *     cdef cpp_string = msg.encode('utf8')             # <<<<<<<<<<<<<<
  * 
  *     cpp_lagrangian.Debug(cpp_string)
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_msg, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1577, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_msg, __pyx_n_s_utf8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1580, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_cpp_string = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "lagrangian.pyx":1579
+  /* "lagrangian.pyx":1582
  *     cdef cpp_string = msg.encode('utf8')
  * 
  *     cpp_lagrangian.Debug(cpp_string)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_v_cpp_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1579, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_v_cpp_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1582, __pyx_L1_error)
   lagrangian::Debug(__pyx_t_2);
 
-  /* "lagrangian.pyx":1573
+  /* "lagrangian.pyx":1576
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
  * 
  * def debug(str msg not None):             # <<<<<<<<<<<<<<
@@ -20018,7 +20068,7 @@ static PyObject *__pyx_pf_10lagrangian_debug(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1582
+/* "lagrangian.pyx":1585
  * 
  * 
  * def set_verbose(cpython.bool value):             # <<<<<<<<<<<<<<
@@ -20034,7 +20084,7 @@ static PyObject *__pyx_pw_10lagrangian_3set_verbose(PyObject *__pyx_self, PyObje
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_verbose (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_value), __pyx_ptype_7cpython_4bool_bool, 1, "value", 0))) __PYX_ERR(0, 1582, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_value), __pyx_ptype_7cpython_4bool_bool, 1, "value", 0))) __PYX_ERR(0, 1585, __pyx_L1_error)
   __pyx_r = __pyx_pf_10lagrangian_2set_verbose(__pyx_self, ((PyBoolObject *)__pyx_v_value));
 
   /* function exit code */
@@ -20052,17 +20102,17 @@ static PyObject *__pyx_pf_10lagrangian_2set_verbose(CYTHON_UNUSED PyObject *__py
   bool __pyx_t_1;
   __Pyx_RefNannySetupContext("set_verbose", 0);
 
-  /* "lagrangian.pyx":1586
+  /* "lagrangian.pyx":1589
  *     Enable or disable verbose mode
  *     """
  *     cpp_lagrangian.SetVerbose(value)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_value)); if (unlikely((__pyx_t_1 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 1586, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(((PyObject *)__pyx_v_value)); if (unlikely((__pyx_t_1 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 1589, __pyx_L1_error)
   lagrangian::SetVerbose(__pyx_t_1);
 
-  /* "lagrangian.pyx":1582
+  /* "lagrangian.pyx":1585
  * 
  * 
  * def set_verbose(cpython.bool value):             # <<<<<<<<<<<<<<
@@ -20082,7 +20132,7 @@ static PyObject *__pyx_pf_10lagrangian_2set_verbose(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "lagrangian.pyx":1589
+/* "lagrangian.pyx":1592
  * 
  * 
  * def version():             # <<<<<<<<<<<<<<
@@ -20111,20 +20161,20 @@ static PyObject *__pyx_pf_10lagrangian_4version(CYTHON_UNUSED PyObject *__pyx_se
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("version", 0);
 
-  /* "lagrangian.pyx":1593
+  /* "lagrangian.pyx":1596
  *     Return the version number
  *     """
  *     return cpp_lagrangian.Version()             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_PyUnicode_string_to_py_std__in_string(lagrangian::Version()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1593, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_PyUnicode_string_to_py_std__in_string(lagrangian::Version()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1596, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "lagrangian.pyx":1589
+  /* "lagrangian.pyx":1592
  * 
  * 
  * def version():             # <<<<<<<<<<<<<<
@@ -29224,6 +29274,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0xd4, __pyx_k_Incompatible_checksums_s_vs_0xd4, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xd4), 0, 0, 1, 0},
+  {&__pyx_n_s_IndexError, __pyx_k_IndexError, sizeof(__pyx_k_IndexError), 0, 0, 1, 1},
   {&__pyx_n_s_IntEnum, __pyx_k_IntEnum, sizeof(__pyx_k_IntEnum), 0, 0, 1, 1},
   {&__pyx_n_s_Iterator___iter, __pyx_k_Iterator___iter, sizeof(__pyx_k_Iterator___iter), 0, 0, 1, 1},
   {&__pyx_n_s_Mode, __pyx_k_Mode, sizeof(__pyx_k_Mode), 0, 0, 1, 1},
@@ -29403,12 +29454,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 1224, __pyx_L1_error)
+  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 1227, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 126, __pyx_L1_error)
-  __pyx_builtin_NotImplemented = __Pyx_GetBuiltinName(__pyx_n_s_NotImplemented); if (!__pyx_builtin_NotImplemented) __PYX_ERR(0, 260, __pyx_L1_error)
-  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 302, __pyx_L1_error)
-  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 350, __pyx_L1_error)
+  __pyx_builtin_IndexError = __Pyx_GetBuiltinName(__pyx_n_s_IndexError); if (!__pyx_builtin_IndexError) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_builtin_NotImplemented = __Pyx_GetBuiltinName(__pyx_n_s_NotImplemented); if (!__pyx_builtin_NotImplemented) __PYX_ERR(0, 263, __pyx_L1_error)
+  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 305, __pyx_L1_error)
+  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 353, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(4, 229, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(4, 1000, __pyx_L1_error)
   return 0;
@@ -29496,25 +29548,25 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "lagrangian.pyx":283
+  /* "lagrangian.pyx":286
  *             self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)
  *         elif isinstance(argument, str):
  *             cpp_string = argument.encode('utf8')             # <<<<<<<<<<<<<<
  *             self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)
  *         else:
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_n_s_utf8); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_n_s_utf8); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "lagrangian.pyx":286
+  /* "lagrangian.pyx":289
  *             self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)
  *         else:
  *             raise TypeError("a string or a datetime object is required")             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_a_string_or_a_datetime_object_is); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 286, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_a_string_or_a_datetime_object_is); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 289, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
@@ -29537,25 +29589,25 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "lagrangian.pyx":331
+  /* "lagrangian.pyx":334
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 334, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
 
-  /* "lagrangian.pyx":350
+  /* "lagrangian.pyx":353
  *     def __cinit__(self, *args):
  *         if type(self) is Field:
  *             raise RuntimeError("cannot instantiate abstract class")             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_cannot_instantiate_abstract_clas); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 350, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_cannot_instantiate_abstract_clas); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 353, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
 
@@ -29578,14 +29630,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
 
-  /* "lagrangian.pyx":388
+  /* "lagrangian.pyx":391
  *         # Compute must be implemented in a derived class
  *         if not hasattr(self, "compute"):
  *             raise NotImplementedError(             # <<<<<<<<<<<<<<
  *                 "unimplemented pure virtual method 'compute'")
  * 
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_unimplemented_pure_virtual_metho_2); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 388, __pyx_L1_error)
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_kp_s_unimplemented_pure_virtual_metho_2); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 391, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
 
@@ -29665,14 +29717,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__27);
   __Pyx_GIVEREF(__pyx_tuple__27);
 
-  /* "lagrangian.pyx":563
+  /* "lagrangian.pyx":566
  *     @staticmethod
  *     cdef Iterator Null():
  *         return Iterator(0, 0, 1)             # <<<<<<<<<<<<<<
  * 
  *     def __iter__(self):
  */
-  __pyx_tuple__28 = PyTuple_Pack(3, __pyx_int_0, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 563, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(3, __pyx_int_0, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 566, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
 
@@ -29752,14 +29804,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__36);
   __Pyx_GIVEREF(__pyx_tuple__36);
 
-  /* "lagrangian.pyx":697
+  /* "lagrangian.pyx":700
  *     def __cinit__(self, *args):
  *         if type(self) is AbstractIntegration:
  *             raise RuntimeError("cannot instantiate abstract class")             # <<<<<<<<<<<<<<
  * 
  *     # Stores the Python object "Field " in the instance members, to be
  */
-  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_cannot_instantiate_abstract_clas); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 697, __pyx_L1_error)
+  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_cannot_instantiate_abstract_clas); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 700, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__37);
   __Pyx_GIVEREF(__pyx_tuple__37);
 
@@ -29858,47 +29910,47 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__47);
   __Pyx_GIVEREF(__pyx_tuple__47);
 
-  /* "lagrangian.pyx":1016
+  /* "lagrangian.pyx":1019
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(0, 1016, __pyx_L1_error)
+  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(0, 1019, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__48);
   __Pyx_GIVEREF(__pyx_tuple__48);
 
-  /* "lagrangian.pyx":1041
+  /* "lagrangian.pyx":1044
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 1041, __pyx_L1_error)
+  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(0, 1044, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__49);
   __Pyx_GIVEREF(__pyx_tuple__49);
 
-  /* "lagrangian.pyx":1070
+  /* "lagrangian.pyx":1073
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-  __pyx_tuple__50 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(0, 1070, __pyx_L1_error)
+  __pyx_tuple__50 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(0, 1073, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__50);
   __Pyx_GIVEREF(__pyx_tuple__50);
 
-  /* "lagrangian.pyx":1093
+  /* "lagrangian.pyx":1096
  *         rc = 1
  *         err = "%r %s" % (self, err)
  *         error[0] = err.encode('UTF-8')             # <<<<<<<<<<<<<<
  *     finally:
  *         return rc
  */
-  __pyx_tuple__51 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 1093, __pyx_L1_error)
+  __pyx_tuple__51 = PyTuple_Pack(1, __pyx_kp_s_UTF_8); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 1096, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__51);
   __Pyx_GIVEREF(__pyx_tuple__51);
 
@@ -29959,14 +30011,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__57);
   __Pyx_GIVEREF(__pyx_tuple__57);
 
-  /* "lagrangian.pyx":1210
+  /* "lagrangian.pyx":1213
  * 
  *         # pure virtual methods must be implemented in a derived class
  *         for method in ['open', 'load', 'interpolate', 'get_datetime']:             # <<<<<<<<<<<<<<
  *             if not hasattr(self, method):
  *                 raise NotImplementedError(
  */
-  __pyx_tuple__58 = PyTuple_Pack(4, __pyx_n_s_open, __pyx_n_s_load, __pyx_n_s_interpolate, __pyx_n_s_get_datetime); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 1210, __pyx_L1_error)
+  __pyx_tuple__58 = PyTuple_Pack(4, __pyx_n_s_open, __pyx_n_s_load, __pyx_n_s_interpolate, __pyx_n_s_get_datetime); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 1213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__58);
   __Pyx_GIVEREF(__pyx_tuple__58);
 
@@ -30143,50 +30195,50 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__78);
   __Pyx_GIVEREF(__pyx_tuple__78);
 
-  /* "lagrangian.pyx":1225
+  /* "lagrangian.pyx":1228
  *     """
  *     @staticmethod
  *     def new_reader(ReaderType reader_type):             # <<<<<<<<<<<<<<
  *         """
  *         Get an instance of a given reader
  */
-  __pyx_tuple__79 = PyTuple_Pack(2, __pyx_n_s_reader_type, __pyx_n_s_result); if (unlikely(!__pyx_tuple__79)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_tuple__79 = PyTuple_Pack(2, __pyx_n_s_reader_type, __pyx_n_s_result); if (unlikely(!__pyx_tuple__79)) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__79);
   __Pyx_GIVEREF(__pyx_tuple__79);
-  __pyx_codeobj__80 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__79, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_new_reader, 1225, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__80)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_codeobj__80 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__79, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_new_reader, 1228, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__80)) __PYX_ERR(0, 1228, __pyx_L1_error)
 
-  /* "lagrangian.pyx":1573
+  /* "lagrangian.pyx":1576
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
  * 
  * def debug(str msg not None):             # <<<<<<<<<<<<<<
  *     """
  *     Display a debugging message
  */
-  __pyx_tuple__81 = PyTuple_Pack(2, __pyx_n_s_msg, __pyx_n_s_cpp_string); if (unlikely(!__pyx_tuple__81)) __PYX_ERR(0, 1573, __pyx_L1_error)
+  __pyx_tuple__81 = PyTuple_Pack(2, __pyx_n_s_msg, __pyx_n_s_cpp_string); if (unlikely(!__pyx_tuple__81)) __PYX_ERR(0, 1576, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__81);
   __Pyx_GIVEREF(__pyx_tuple__81);
-  __pyx_codeobj__82 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__81, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_debug, 1573, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__82)) __PYX_ERR(0, 1573, __pyx_L1_error)
+  __pyx_codeobj__82 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__81, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_debug, 1576, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__82)) __PYX_ERR(0, 1576, __pyx_L1_error)
 
-  /* "lagrangian.pyx":1582
+  /* "lagrangian.pyx":1585
  * 
  * 
  * def set_verbose(cpython.bool value):             # <<<<<<<<<<<<<<
  *     """
  *     Enable or disable verbose mode
  */
-  __pyx_tuple__83 = PyTuple_Pack(1, __pyx_n_s_value); if (unlikely(!__pyx_tuple__83)) __PYX_ERR(0, 1582, __pyx_L1_error)
+  __pyx_tuple__83 = PyTuple_Pack(1, __pyx_n_s_value); if (unlikely(!__pyx_tuple__83)) __PYX_ERR(0, 1585, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__83);
   __Pyx_GIVEREF(__pyx_tuple__83);
-  __pyx_codeobj__84 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__83, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_set_verbose, 1582, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__84)) __PYX_ERR(0, 1582, __pyx_L1_error)
+  __pyx_codeobj__84 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__83, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_set_verbose, 1585, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__84)) __PYX_ERR(0, 1585, __pyx_L1_error)
 
-  /* "lagrangian.pyx":1589
+  /* "lagrangian.pyx":1592
  * 
  * 
  * def version():             # <<<<<<<<<<<<<<
  *     """
  *     Return the version number
  */
-  __pyx_codeobj__85 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_version, 1589, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__85)) __PYX_ERR(0, 1589, __pyx_L1_error)
+  __pyx_codeobj__85 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_src_wrapper_lagrangian_pyx, __pyx_n_s_version, 1592, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__85)) __PYX_ERR(0, 1592, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Factory(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -30354,227 +30406,227 @@ static int __Pyx_modinit_type_init_code(void) {
   if (PyObject_SetAttrString(__pyx_m, "Axis", (PyObject *)&__pyx_type_10lagrangian_Axis) < 0) __PYX_ERR(0, 87, __pyx_L1_error)
   if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Axis) < 0) __PYX_ERR(0, 87, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Axis = &__pyx_type_10lagrangian_Axis;
-  if (PyType_Ready(&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
   __pyx_type_10lagrangian_DateTime.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_DateTime.tp_dictoffset && __pyx_type_10lagrangian_DateTime.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_DateTime.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "DateTime", (PyObject *)&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "DateTime", (PyObject *)&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_DateTime) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
   __pyx_ptype_10lagrangian_DateTime = &__pyx_type_10lagrangian_DateTime;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 341, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 344, __pyx_L1_error)
   __pyx_type_10lagrangian_Field.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Field.tp_dictoffset && __pyx_type_10lagrangian_Field.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Field.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "Field", (PyObject *)&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 341, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 341, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Field", (PyObject *)&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 344, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Field) < 0) __PYX_ERR(0, 344, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Field = &__pyx_type_10lagrangian_Field;
   __pyx_type_10lagrangian_PythonField.tp_base = __pyx_ptype_10lagrangian_Field;
-  if (PyType_Ready(&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 370, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 373, __pyx_L1_error)
   __pyx_type_10lagrangian_PythonField.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_PythonField.tp_dictoffset && __pyx_type_10lagrangian_PythonField.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_PythonField.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "PythonField", (PyObject *)&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 370, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 370, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PythonField", (PyObject *)&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 373, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_PythonField) < 0) __PYX_ERR(0, 373, __pyx_L1_error)
   __pyx_ptype_10lagrangian_PythonField = &__pyx_type_10lagrangian_PythonField;
   __pyx_type_10lagrangian_Vonkarman.tp_base = __pyx_ptype_10lagrangian_Field;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 395, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 398, __pyx_L1_error)
   __pyx_type_10lagrangian_Vonkarman.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Vonkarman.tp_dictoffset && __pyx_type_10lagrangian_Vonkarman.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Vonkarman.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "Vonkarman", (PyObject *)&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 395, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 395, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Vonkarman", (PyObject *)&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 398, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Vonkarman) < 0) __PYX_ERR(0, 398, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Vonkarman = &__pyx_type_10lagrangian_Vonkarman;
-  if (PyType_Ready(&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 423, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 426, __pyx_L1_error)
   __pyx_type_10lagrangian_CellProperties.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_CellProperties.tp_dictoffset && __pyx_type_10lagrangian_CellProperties.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_CellProperties.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "CellProperties", (PyObject *)&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 423, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 423, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "CellProperties", (PyObject *)&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 426, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_CellProperties) < 0) __PYX_ERR(0, 426, __pyx_L1_error)
   __pyx_ptype_10lagrangian_CellProperties = &__pyx_type_10lagrangian_CellProperties;
-  if (PyType_Ready(&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 512, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 515, __pyx_L1_error)
   __pyx_type_10lagrangian_RungeKutta.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_RungeKutta.tp_dictoffset && __pyx_type_10lagrangian_RungeKutta.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_RungeKutta.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "RungeKutta", (PyObject *)&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 512, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 512, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "RungeKutta", (PyObject *)&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 515, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_RungeKutta) < 0) __PYX_ERR(0, 515, __pyx_L1_error)
   __pyx_ptype_10lagrangian_RungeKutta = &__pyx_type_10lagrangian_RungeKutta;
   __pyx_vtabptr_10lagrangian_Iterator = &__pyx_vtable_10lagrangian_Iterator;
   __pyx_vtable_10lagrangian_Iterator.Null = (struct __pyx_obj_10lagrangian_Iterator *(*)(void))__pyx_f_10lagrangian_8Iterator_Null;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 552, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 555, __pyx_L1_error)
   __pyx_type_10lagrangian_Iterator.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Iterator.tp_dictoffset && __pyx_type_10lagrangian_Iterator.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Iterator.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Iterator.tp_dict, __pyx_vtabptr_10lagrangian_Iterator) < 0) __PYX_ERR(0, 552, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Iterator", (PyObject *)&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 552, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 552, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Iterator.tp_dict, __pyx_vtabptr_10lagrangian_Iterator) < 0) __PYX_ERR(0, 555, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Iterator", (PyObject *)&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 555, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Iterator) < 0) __PYX_ERR(0, 555, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Iterator = &__pyx_type_10lagrangian_Iterator;
   __pyx_vtabptr_10lagrangian_Position = &__pyx_vtable_10lagrangian_Position;
   __pyx_vtable_10lagrangian_Position.assign = (void (*)(struct __pyx_obj_10lagrangian_Position *, lagrangian::Position *))__pyx_f_10lagrangian_8Position_assign;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 576, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 579, __pyx_L1_error)
   __pyx_type_10lagrangian_Position.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Position.tp_dictoffset && __pyx_type_10lagrangian_Position.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Position.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Position.tp_dict, __pyx_vtabptr_10lagrangian_Position) < 0) __PYX_ERR(0, 576, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Position", (PyObject *)&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 576, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 576, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Position.tp_dict, __pyx_vtabptr_10lagrangian_Position) < 0) __PYX_ERR(0, 579, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Position", (PyObject *)&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 579, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Position) < 0) __PYX_ERR(0, 579, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Position = &__pyx_type_10lagrangian_Position;
   __pyx_vtabptr_10lagrangian_Triplet = &__pyx_vtable_10lagrangian_Triplet;
   __pyx_vtable_10lagrangian_Triplet.__pyx_base = *__pyx_vtabptr_10lagrangian_Position;
   __pyx_type_10lagrangian_Triplet.tp_base = __pyx_ptype_10lagrangian_Position;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 672, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 675, __pyx_L1_error)
   __pyx_type_10lagrangian_Triplet.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Triplet.tp_dictoffset && __pyx_type_10lagrangian_Triplet.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Triplet.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Triplet.tp_dict, __pyx_vtabptr_10lagrangian_Triplet) < 0) __PYX_ERR(0, 672, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Triplet", (PyObject *)&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 672, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 672, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Triplet.tp_dict, __pyx_vtabptr_10lagrangian_Triplet) < 0) __PYX_ERR(0, 675, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Triplet", (PyObject *)&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 675, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Triplet) < 0) __PYX_ERR(0, 675, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Triplet = &__pyx_type_10lagrangian_Triplet;
   __pyx_vtabptr_10lagrangian_Quintuplet = &__pyx_vtable_10lagrangian_Quintuplet;
   __pyx_vtable_10lagrangian_Quintuplet.__pyx_base = *__pyx_vtabptr_10lagrangian_Position;
   __pyx_type_10lagrangian_Quintuplet.tp_base = __pyx_ptype_10lagrangian_Position;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 683, __pyx_L1_error)
   __pyx_type_10lagrangian_Quintuplet.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Quintuplet.tp_dictoffset && __pyx_type_10lagrangian_Quintuplet.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Quintuplet.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Quintuplet.tp_dict, __pyx_vtabptr_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Quintuplet", (PyObject *)&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Quintuplet.tp_dict, __pyx_vtabptr_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 683, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Quintuplet", (PyObject *)&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 683, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Quintuplet) < 0) __PYX_ERR(0, 683, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Quintuplet = &__pyx_type_10lagrangian_Quintuplet;
   __pyx_vtabptr_10lagrangian_AbstractIntegration = &__pyx_vtable_10lagrangian_AbstractIntegration;
   __pyx_vtable_10lagrangian_AbstractIntegration.set_field = (void (*)(struct __pyx_obj_10lagrangian_AbstractIntegration *, struct __pyx_obj_10lagrangian_Field *))__pyx_f_10lagrangian_19AbstractIntegration_set_field;
-  if (PyType_Ready(&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 688, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 691, __pyx_L1_error)
   __pyx_type_10lagrangian_AbstractIntegration.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_AbstractIntegration.tp_dictoffset && __pyx_type_10lagrangian_AbstractIntegration.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_AbstractIntegration.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_AbstractIntegration.tp_dict, __pyx_vtabptr_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 688, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "AbstractIntegration", (PyObject *)&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 688, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 688, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_AbstractIntegration.tp_dict, __pyx_vtabptr_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 691, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "AbstractIntegration", (PyObject *)&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 691, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_AbstractIntegration) < 0) __PYX_ERR(0, 691, __pyx_L1_error)
   __pyx_ptype_10lagrangian_AbstractIntegration = &__pyx_type_10lagrangian_AbstractIntegration;
   __pyx_vtabptr_10lagrangian_Integration = &__pyx_vtable_10lagrangian_Integration;
   __pyx_vtable_10lagrangian_Integration.__pyx_base = *__pyx_vtabptr_10lagrangian_AbstractIntegration;
   __pyx_type_10lagrangian_Integration.tp_base = __pyx_ptype_10lagrangian_AbstractIntegration;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 741, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 744, __pyx_L1_error)
   __pyx_type_10lagrangian_Integration.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Integration.tp_dictoffset && __pyx_type_10lagrangian_Integration.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Integration.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Integration.tp_dict, __pyx_vtabptr_10lagrangian_Integration) < 0) __PYX_ERR(0, 741, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Integration", (PyObject *)&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 741, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 741, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Integration.tp_dict, __pyx_vtabptr_10lagrangian_Integration) < 0) __PYX_ERR(0, 744, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Integration", (PyObject *)&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 744, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Integration) < 0) __PYX_ERR(0, 744, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Integration = &__pyx_type_10lagrangian_Integration;
   __pyx_vtabptr_10lagrangian_Path = &__pyx_vtable_10lagrangian_Path;
   __pyx_vtable_10lagrangian_Path.__pyx_base = *__pyx_vtabptr_10lagrangian_AbstractIntegration;
   __pyx_type_10lagrangian_Path.tp_base = __pyx_ptype_10lagrangian_AbstractIntegration;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 758, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 761, __pyx_L1_error)
   __pyx_type_10lagrangian_Path.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Path.tp_dictoffset && __pyx_type_10lagrangian_Path.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Path.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Path.tp_dict, __pyx_vtabptr_10lagrangian_Path) < 0) __PYX_ERR(0, 758, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "Path", (PyObject *)&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 758, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 758, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_Path.tp_dict, __pyx_vtabptr_10lagrangian_Path) < 0) __PYX_ERR(0, 761, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Path", (PyObject *)&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 761, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Path) < 0) __PYX_ERR(0, 761, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Path = &__pyx_type_10lagrangian_Path;
-  if (PyType_Ready(&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 785, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 788, __pyx_L1_error)
   __pyx_type_10lagrangian_FiniteLyapunovExponents.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_FiniteLyapunovExponents.tp_dictoffset && __pyx_type_10lagrangian_FiniteLyapunovExponents.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_FiniteLyapunovExponents.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "FiniteLyapunovExponents", (PyObject *)&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 785, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 785, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "FiniteLyapunovExponents", (PyObject *)&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 788, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_FiniteLyapunovExponents) < 0) __PYX_ERR(0, 788, __pyx_L1_error)
   __pyx_ptype_10lagrangian_FiniteLyapunovExponents = &__pyx_type_10lagrangian_FiniteLyapunovExponents;
   __pyx_vtabptr_10lagrangian_FiniteLyapunovExponentsIntegration = &__pyx_vtable_10lagrangian_FiniteLyapunovExponentsIntegration;
   __pyx_vtable_10lagrangian_FiniteLyapunovExponentsIntegration.__pyx_base = *__pyx_vtabptr_10lagrangian_AbstractIntegration;
   __pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_base = __pyx_ptype_10lagrangian_AbstractIntegration;
-  if (PyType_Ready(&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 866, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 869, __pyx_L1_error)
   __pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_dictoffset && __pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_dict, __pyx_vtabptr_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 866, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "FiniteLyapunovExponentsIntegration", (PyObject *)&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 866, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 866, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration.tp_dict, __pyx_vtabptr_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 869, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "FiniteLyapunovExponentsIntegration", (PyObject *)&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 869, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration) < 0) __PYX_ERR(0, 869, __pyx_L1_error)
   __pyx_ptype_10lagrangian_FiniteLyapunovExponentsIntegration = &__pyx_type_10lagrangian_FiniteLyapunovExponentsIntegration;
-  if (PyType_Ready(&__pyx_type_10lagrangian_AbstractReader) < 0) __PYX_ERR(0, 1099, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_AbstractReader) < 0) __PYX_ERR(0, 1102, __pyx_L1_error)
   __pyx_type_10lagrangian_AbstractReader.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_AbstractReader.tp_dictoffset && __pyx_type_10lagrangian_AbstractReader.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_AbstractReader.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_AbstractReader) < 0) __PYX_ERR(0, 1099, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_AbstractReader) < 0) __PYX_ERR(0, 1102, __pyx_L1_error)
   __pyx_ptype_10lagrangian_AbstractReader = &__pyx_type_10lagrangian_AbstractReader;
   __pyx_type_10lagrangian_Reader.tp_base = __pyx_ptype_10lagrangian_AbstractReader;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Reader) < 0) __PYX_ERR(0, 1109, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Reader) < 0) __PYX_ERR(0, 1112, __pyx_L1_error)
   __pyx_type_10lagrangian_Reader.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Reader.tp_dictoffset && __pyx_type_10lagrangian_Reader.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Reader.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Reader) < 0) __PYX_ERR(0, 1109, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Reader) < 0) __PYX_ERR(0, 1112, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Reader = &__pyx_type_10lagrangian_Reader;
   __pyx_type_10lagrangian_Netcdf.tp_base = __pyx_ptype_10lagrangian_Reader;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1167, __pyx_L1_error)
   __pyx_type_10lagrangian_Netcdf.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Netcdf.tp_dictoffset && __pyx_type_10lagrangian_Netcdf.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Netcdf.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "Netcdf", (PyObject *)&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1164, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Netcdf", (PyObject *)&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1167, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Netcdf) < 0) __PYX_ERR(0, 1167, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Netcdf = &__pyx_type_10lagrangian_Netcdf;
   __pyx_type_10lagrangian_PythonReader.tp_base = __pyx_ptype_10lagrangian_AbstractReader;
-  if (PyType_Ready(&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1200, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1203, __pyx_L1_error)
   __pyx_type_10lagrangian_PythonReader.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_PythonReader.tp_dictoffset && __pyx_type_10lagrangian_PythonReader.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_PythonReader.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "PythonReader", (PyObject *)&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1200, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1200, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "PythonReader", (PyObject *)&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1203, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_PythonReader) < 0) __PYX_ERR(0, 1203, __pyx_L1_error)
   __pyx_ptype_10lagrangian_PythonReader = &__pyx_type_10lagrangian_PythonReader;
-  if (PyType_Ready(&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1220, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
   __pyx_type_10lagrangian_Factory.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_Factory.tp_dictoffset && __pyx_type_10lagrangian_Factory.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_Factory.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "Factory", (PyObject *)&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1220, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1220, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Factory", (PyObject *)&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_Factory) < 0) __PYX_ERR(0, 1223, __pyx_L1_error)
   __pyx_ptype_10lagrangian_Factory = &__pyx_type_10lagrangian_Factory;
   __pyx_type_10lagrangian_TimeSerie.tp_base = __pyx_ptype_10lagrangian_Field;
-  if (PyType_Ready(&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1234, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
   __pyx_type_10lagrangian_TimeSerie.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_TimeSerie.tp_dictoffset && __pyx_type_10lagrangian_TimeSerie.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_TimeSerie.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "TimeSerie", (PyObject *)&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1234, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1234, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "TimeSerie", (PyObject *)&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_TimeSerie) < 0) __PYX_ERR(0, 1237, __pyx_L1_error)
   __pyx_ptype_10lagrangian_TimeSerie = &__pyx_type_10lagrangian_TimeSerie;
-  if (PyType_Ready(&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1297, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1300, __pyx_L1_error)
   __pyx_type_10lagrangian_MapProperties.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_MapProperties.tp_dictoffset && __pyx_type_10lagrangian_MapProperties.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_MapProperties.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "MapProperties", (PyObject *)&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1297, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1297, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "MapProperties", (PyObject *)&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1300, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_MapProperties) < 0) __PYX_ERR(0, 1300, __pyx_L1_error)
   __pyx_ptype_10lagrangian_MapProperties = &__pyx_type_10lagrangian_MapProperties;
   __pyx_vtabptr_10lagrangian_MapOfFiniteLyapunovExponents = &__pyx_vtable_10lagrangian_MapOfFiniteLyapunovExponents;
   __pyx_vtable_10lagrangian_MapOfFiniteLyapunovExponents.get_map = (PyArrayObject *(*)(struct __pyx_obj_10lagrangian_MapOfFiniteLyapunovExponents *, double, lagrangian::Map<double>  *))__pyx_f_10lagrangian_28MapOfFiniteLyapunovExponents_get_map;
-  if (PyType_Ready(&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1405, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1408, __pyx_L1_error)
   __pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_dictoffset && __pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_dict, __pyx_vtabptr_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1405, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "MapOfFiniteLyapunovExponents", (PyObject *)&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1405, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1405, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents.tp_dict, __pyx_vtabptr_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1408, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "MapOfFiniteLyapunovExponents", (PyObject *)&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1408, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents) < 0) __PYX_ERR(0, 1408, __pyx_L1_error)
   __pyx_ptype_10lagrangian_MapOfFiniteLyapunovExponents = &__pyx_type_10lagrangian_MapOfFiniteLyapunovExponents;
-  if (PyType_Ready(&__pyx_type_10lagrangian___pyx_scope_struct____iter__) < 0) __PYX_ERR(0, 565, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lagrangian___pyx_scope_struct____iter__) < 0) __PYX_ERR(0, 568, __pyx_L1_error)
   __pyx_type_10lagrangian___pyx_scope_struct____iter__.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lagrangian___pyx_scope_struct____iter__.tp_dictoffset && __pyx_type_10lagrangian___pyx_scope_struct____iter__.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lagrangian___pyx_scope_struct____iter__.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
@@ -30840,7 +30892,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_t_1 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 41, __pyx_L1_error)
 
-  /* "lagrangian.pyx":384
+  /* "lagrangian.pyx":387
  *     indicating whether the calculated velocities are valid or not.
  *     """
  *     def __cinit__(self, UnitType unit_type=cpp_lagrangian.kMetric):             # <<<<<<<<<<<<<<
@@ -30849,36 +30901,36 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_k__18 = ((enum __pyx_t_10lagrangian_UnitType)lagrangian::Field::kMetric);
 
-  /* "lagrangian.pyx":1225
+  /* "lagrangian.pyx":1228
  *     """
  *     @staticmethod
  *     def new_reader(ReaderType reader_type):             # <<<<<<<<<<<<<<
  *         """
  *         Get an instance of a given reader
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_7Factory_1new_reader, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_7Factory_1new_reader, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10lagrangian_Factory->tp_dict, __pyx_n_s_new_reader, __pyx_t_2) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10lagrangian_Factory->tp_dict, __pyx_n_s_new_reader, __pyx_t_2) < 0) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   PyType_Modified(__pyx_ptype_10lagrangian_Factory);
 
-  /* "lagrangian.pyx":1224
+  /* "lagrangian.pyx":1227
  *     Reader Factory
  *     """
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def new_reader(ReaderType reader_type):
  *         """
  */
-  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10lagrangian_Factory, __pyx_n_s_new_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10lagrangian_Factory, __pyx_n_s_new_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1224, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10lagrangian_Factory->tp_dict, __pyx_n_s_new_reader, __pyx_t_3) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10lagrangian_Factory->tp_dict, __pyx_n_s_new_reader, __pyx_t_3) < 0) __PYX_ERR(0, 1228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_10lagrangian_Factory);
 
-  /* "lagrangian.pyx":1240
+  /* "lagrangian.pyx":1243
  *     def __cinit__(self,
  *                   str ini not None,
  *                   UnitType unit_type=kMetric,             # <<<<<<<<<<<<<<
@@ -30887,7 +30939,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_k__61 = __pyx_e_10lagrangian_kMetric;
 
-  /* "lagrangian.pyx":1241
+  /* "lagrangian.pyx":1244
  *                   str ini not None,
  *                   UnitType unit_type=kMetric,
  *                   ReaderType reader_type=kNetCDF):             # <<<<<<<<<<<<<<
@@ -30896,7 +30948,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_k__62 = __pyx_e_10lagrangian_kNetCDF;
 
-  /* "lagrangian.pyx":1416
+  /* "lagrangian.pyx":1419
  *                   MapProperties map_properties,
  *                   FiniteLyapunovExponentsIntegration fle_integration,
  *                   Stencil stencil=kTriplet,             # <<<<<<<<<<<<<<
@@ -30905,40 +30957,40 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_k__67 = __pyx_e_10lagrangian_kTriplet;
 
-  /* "lagrangian.pyx":1573
+  /* "lagrangian.pyx":1576
  *             nan, self.wrapped.GetMapOfFinalSeparation(nan, cpp_fle_integration[0]))
  * 
  * def debug(str msg not None):             # <<<<<<<<<<<<<<
  *     """
  *     Display a debugging message
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_1debug, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1573, __pyx_L1_error)
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_1debug, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1576, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_debug, __pyx_t_3) < 0) __PYX_ERR(0, 1573, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_debug, __pyx_t_3) < 0) __PYX_ERR(0, 1576, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "lagrangian.pyx":1582
+  /* "lagrangian.pyx":1585
  * 
  * 
  * def set_verbose(cpython.bool value):             # <<<<<<<<<<<<<<
  *     """
  *     Enable or disable verbose mode
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_3set_verbose, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1582, __pyx_L1_error)
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_3set_verbose, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1585, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_set_verbose, __pyx_t_3) < 0) __PYX_ERR(0, 1582, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_set_verbose, __pyx_t_3) < 0) __PYX_ERR(0, 1585, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "lagrangian.pyx":1589
+  /* "lagrangian.pyx":1592
  * 
  * 
  * def version():             # <<<<<<<<<<<<<<
  *     """
  *     Return the version number
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_5version, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1589, __pyx_L1_error)
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_10lagrangian_5version, NULL, __pyx_n_s_lagrangian); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1592, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_t_3) < 0) __PYX_ERR(0, 1589, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_t_3) < 0) __PYX_ERR(0, 1592, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "(tree fragment)":1
@@ -33611,50 +33663,6 @@ fail:;
   return -1;
 }
 
-/* ExtTypeTest */
-  static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
-    if (unlikely(!type)) {
-        PyErr_SetString(PyExc_SystemError, "Missing type object");
-        return 0;
-    }
-    if (likely(__Pyx_TypeCheck(obj, type)))
-        return 1;
-    PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
-                 Py_TYPE(obj)->tp_name, type->tp_name);
-    return 0;
-}
-
-/* GetAttr */
-  static CYTHON_INLINE PyObject *__Pyx_GetAttr(PyObject *o, PyObject *n) {
-#if CYTHON_USE_TYPE_SLOTS
-#if PY_MAJOR_VERSION >= 3
-    if (likely(PyUnicode_Check(n)))
-#else
-    if (likely(PyString_Check(n)))
-#endif
-        return __Pyx_PyObject_GetAttrStr(o, n);
-#endif
-    return PyObject_GetAttr(o, n);
-}
-
-/* HasAttr */
-  static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
-    PyObject *r;
-    if (unlikely(!__Pyx_PyBaseString_Check(n))) {
-        PyErr_SetString(PyExc_TypeError,
-                        "hasattr(): attribute name must be string");
-        return -1;
-    }
-    r = __Pyx_GetAttr(o, n);
-    if (unlikely(!r)) {
-        PyErr_Clear();
-        return 0;
-    } else {
-        Py_DECREF(r);
-        return 1;
-    }
-}
-
 /* PyCFunctionFastCall */
   #if CYTHON_FAST_PYCCALL
 static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
@@ -33857,6 +33865,50 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
     return result;
 }
 #endif
+
+/* ExtTypeTest */
+  static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
+    if (unlikely(!type)) {
+        PyErr_SetString(PyExc_SystemError, "Missing type object");
+        return 0;
+    }
+    if (likely(__Pyx_TypeCheck(obj, type)))
+        return 1;
+    PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
+                 Py_TYPE(obj)->tp_name, type->tp_name);
+    return 0;
+}
+
+/* GetAttr */
+  static CYTHON_INLINE PyObject *__Pyx_GetAttr(PyObject *o, PyObject *n) {
+#if CYTHON_USE_TYPE_SLOTS
+#if PY_MAJOR_VERSION >= 3
+    if (likely(PyUnicode_Check(n)))
+#else
+    if (likely(PyString_Check(n)))
+#endif
+        return __Pyx_PyObject_GetAttrStr(o, n);
+#endif
+    return PyObject_GetAttr(o, n);
+}
+
+/* HasAttr */
+  static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
+    PyObject *r;
+    if (unlikely(!__Pyx_PyBaseString_Check(n))) {
+        PyErr_SetString(PyExc_TypeError,
+                        "hasattr(): attribute name must be string");
+        return -1;
+    }
+    r = __Pyx_GetAttr(o, n);
+    if (unlikely(!r)) {
+        PyErr_Clear();
+        return 0;
+    } else {
+        Py_DECREF(r);
+        return 1;
+    }
+}
 
 /* RaiseTooManyValuesToUnpack */
   static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {

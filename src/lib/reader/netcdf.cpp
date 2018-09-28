@@ -26,7 +26,8 @@ static inline double BilinearInterpolation(const double x0, const double x1,
                                            const double y0, const double y1,
                                            const double z00, const double z10,
                                            const double z01, const double z11,
-                                           const double x, const double y) {
+                                           const double x,
+                                           const double y) noexcept {
   double dx0 = x - x0;
   double dy0 = y - y0;
   double dx1 = x1 - x;
@@ -118,6 +119,9 @@ double Netcdf::Interpolate(const double longitude, const double latitude,
 
     if (!axis_x_.FindIndexes(x, ix0, ix1) ||
         !axis_y_.FindIndexes(latitude, iy0, iy1)) {
+      // The search for the new cell is forced for the next call to this
+      // method.
+      cell = CellProperties::NONE();
       return fill_value;
     }
 
