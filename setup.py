@@ -25,6 +25,8 @@ import distutils.dist
 import distutils.errors
 import distutils.extension
 import distutils.log
+import distutils.version
+import platform
 import os
 import re
 import setuptools
@@ -354,15 +356,26 @@ CLASSIFIERS = [
     'Topic :: Scientific/Engineering :: Physics',
 ]
 
+EXTRA_COMPILE_ARGS = ['-std=c++11']
+EXTRA_LINK_ARGS = []
+
+
+if platform.system() == "Darwin":
+    EXTRA_LINK_ARGS.append("-stdlib=libc++")
+    if distutils.version.LooseVersion(platform.release()) >= \
+            distutils.version.LooseVersion("18.0.0"):
+        EXTRA_COMPILE_ARGS.append("-mmacosx-version-min=10.9")
+
 
 EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
-        extra_compile_args=['-std=c++11'],
+        extra_compile_args=EXTRA_COMPILE_ARGS,
         sources=[
             os.path.join("src", "wrapper", "lagrangian.pyx")
         ] + SetupConfig.sources(),
+        extra_link_args=EXTRA_LINK_ARGS,
         library_dirs=[
             os.path.join(
                 'build', SetupConfig.get_build_directory('lib'))]
