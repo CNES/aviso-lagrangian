@@ -11,7 +11,8 @@ package using Distutils.
 #
 # lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more
+# details.
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
