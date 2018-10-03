@@ -2,4 +2,4 @@ recursive-include src *.hpp *.h *.pxd *.pyx
 recursive-include doc/source *
 recursive-include test *.py *.nc *.ini *.txt
 include doc/Makefile doc/make.bat doc/cpp/*
-include README.md
+include README.md *.yaml COPYING
