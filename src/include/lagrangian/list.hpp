@@ -82,7 +82,7 @@ class SplitList : public std::list<T> {
    * @param value Value to test
    * @return false
    */
-  static inline bool predicate(const T& value) { return false; }
+  static inline bool predicate(const T& /*value*/) { return false; }
 
  public:
   /**
@@ -124,7 +124,7 @@ class SplitList : public std::list<T> {
    * @return List of sublist.
    */
   template <typename Predicate>
-  std::list<Splitter<T>> Erase(Predicate predicate, const int n_sublist);
+  std::list<Splitter<T>> Erase(Predicate predicate, int n_sublist);
 };
 
 template <class T>
@@ -161,7 +161,9 @@ std::list<Splitter<T>> SplitList<T>::Erase(Predicate predicate,
       ++it;
     }
   }
-  if (first != it) splitters.push_back(Splitter<T>(first, it));
+  if (first != it) {
+    splitters.push_back(Splitter<T>(first, it));
+  }
   return splitters;
 }
 

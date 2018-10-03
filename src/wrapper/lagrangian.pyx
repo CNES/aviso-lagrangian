@@ -14,7 +14,6 @@
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-cimport cpp_lagrangian
 cimport cpython
 cimport cpython.datetime
 cimport cython
@@ -145,6 +144,9 @@ cdef class Axis:
         """
         Get the ith coordinate value.
         """
+        if index < 0 or index >= self.wrapped.GetNumElements():
+            raise IndexError(index)
+
         return self.wrapped.GetCoordinateValue(index)
 
     def get_min_value(self):

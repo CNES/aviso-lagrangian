@@ -28,13 +28,13 @@ class WrappedField : public lagrangian::Field {
   PyObject* object_;
 
  public:
-  WrappedField(PyObject* object, const lagrangian::Field::UnitType unit_type =
-                                     lagrangian::Field::kMetric);
+  explicit WrappedField(
+      PyObject* object,
+      lagrangian::Field::UnitType unit_type = lagrangian::Field::kMetric);
 
   ~WrappedField() override;
 
-  bool Compute(const double t, const double x, const double y, double& u,
-               double& v,
+  bool Compute(double t, double x, double y, double& u, double& v,
                lagrangian::CellProperties& cell =
                    lagrangian::CellProperties::NONE()) const override;
 };

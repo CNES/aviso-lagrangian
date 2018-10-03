@@ -26,7 +26,8 @@ static inline double BilinearInterpolation(const double x0, const double x1,
                                            const double y0, const double y1,
                                            const double z00, const double z10,
                                            const double z01, const double z11,
-                                           const double x, const double y) {
+                                           const double x,
+                                           const double y) noexcept {
   double dx0 = x - x0;
   double dy0 = y - y0;
   double dx1 = x1 - x;
@@ -67,19 +68,25 @@ void Netcdf::Open(const std::string& filename) {
           break;
       }
       it = variables.erase(it);
-    } else
+    } else {
       it++;
+    }
   }
 
   if (axis_x_.get_type() == Axis::kUnknown ||
-      axis_y_.get_type() == Axis::kUnknown)
+      axis_y_.get_type() == Axis::kUnknown) {
     throw std::logic_error(
         "Unable to Find the description of spatial"
         " coordinates.");
+  }
 
   // The axes are to be defined in degrees.
-  if (axis_x_.get_type() == Axis::kLongitude) axis_x_.Convert("degrees");
-  if (axis_y_.get_type() == Axis::kLatitude) axis_y_.Convert("degrees");
+  if (axis_x_.get_type() == Axis::kLongitude) {
+    axis_x_.Convert("degrees");
+  }
+  if (axis_y_.get_type() == Axis::kLatitude) {
+    axis_y_.Convert("degrees");
+  }
 }
 
 // ___________________________________________________________________________//
@@ -87,7 +94,7 @@ void Netcdf::Open(const std::string& filename) {
 void Netcdf::Load(const std::string& name, const std::string& unit) {
   netcdf::Variable variable = FindVariable(name);
 
-  unit == "" ? variable.Read(data_) : variable.Read(data_, unit);
+  unit.empty() ? variable.Read(data_) : variable.Read(data_, unit);
 
   pGetIndex_ =
       variable.get_shape(0) == static_cast<size_t>(axis_y_.GetNumElements())
@@ -100,7 +107,9 @@ void Netcdf::Load(const std::string& name, const std::string& unit) {
 double Netcdf::Interpolate(const double longitude, const double latitude,
                            const double fill_value,
                            CellProperties& cell) const {
-  if (data_.size() == 0) throw std::logic_error("No data loaded into memory");
+  if (data_.empty()) {
+    throw std::logic_error("No data loaded into memory");
+  }
 
   double x = axis_x_.Normalize(longitude, 360);
 
@@ -109,8 +118,12 @@ double Netcdf::Interpolate(const double longitude, const double latitude,
     int iy0, iy1;
 
     if (!axis_x_.FindIndexes(x, ix0, ix1) ||
-        !axis_y_.FindIndexes(latitude, iy0, iy1))
+        !axis_y_.FindIndexes(latitude, iy0, iy1)) {
+      // The search for the new cell is forced for the next call to this
+      // method.
+      cell = CellProperties::NONE();
       return fill_value;
+    }
 
     cell.Update(axis_x_.GetCoordinateValue(ix0),
                 axis_x_.GetCoordinateValue(ix1),
@@ -132,10 +145,11 @@ DateTime Netcdf::GetDateTime(const std::string& name) const {
   netcdf::Variable variable = FindVariable(name);
   netcdf::Attribute attribute = variable.FindAttributeIgnoreCase("date");
 
-  if (attribute == netcdf::Attribute::MISSING)
+  if (attribute == netcdf::Attribute::MISSING) {
     throw std::logic_error(name + ":date: No such attribute");
+  }
 
-  return {std::move(attribute.get_string())};
+  return DateTime(attribute.get_string());
 }
 
 }  // namespace reader

@@ -39,7 +39,7 @@ static std::string ExpandShell(std::string& s) {
   while (regex_search(start, end, what, re)) {
     char* env = getenv(what.str(1).c_str());
 
-    if (env) {
+    if (env != nullptr) {
       boost::replace_first(s, what.str(0), env);
       start = s.begin();
       end = s.end();
@@ -76,7 +76,7 @@ bool Parameter::Parse(std::string& line, std::string& buffer) {
     boost::erase_range(buffer,
                        boost::make_iterator_range(it.begin(), buffer.end()));
   } else {
-    if (buffer.length()) {
+    if (buffer.length() != 0u) {
       static const std::regex re("^([^=]*)=(.*)");
       std::smatch what;
 
@@ -107,13 +107,14 @@ bool Parameter::Parse(std::string& line, std::string& buffer) {
  */
 void Parameter::Load(const std::string& filename) {
   std::ifstream infile;
-  std::string buffer = "";
+  std::string buffer;
   int line_number = 0;
 
   infile.open(filename.c_str(), std::ifstream::in);
-  if (!infile.is_open())
+  if (!infile.is_open()) {
     throw std::runtime_error(
         boost::str(boost::format("Couldn't open `%s' for reading") % filename));
+  }
 
   while (!infile.eof()) {
     static const std::regex re(R"(^\s*#include\s+"(.*)\")");
@@ -123,11 +124,14 @@ void Parameter::Load(const std::string& filename) {
     ++line_number;
 
     getline(infile, line);
-    if (regex_match(line, what, re)) Load(what[1].str());
+    if (regex_match(line, what, re)) {
+      Load(what[1].str());
+    }
 
-    if (!Parse(line, buffer))
+    if (!Parse(line, buffer)) {
       throw std::runtime_error(boost::str(
           boost::format("syntax error line %d: %s") % line_number % line));
+    }
   }
 }
 }  // namespace lagrangian

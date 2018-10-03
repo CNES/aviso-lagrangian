@@ -34,7 +34,9 @@ void FiniteLyapunovExponents::Initialize(
       // If the user restart initialization, it must release the
       // allocated resources
       auto position = map_.GetItem(ix, iy);
-      if (position) delete position;
+      if (position) {
+        delete position;
+      }
 
       // Allocate and store the new stencil
       position =
@@ -58,7 +60,9 @@ void FiniteLyapunovExponents::Initialize(
       // If the user restart initialization, it must release the
       // allocated resources
       auto position = map_.GetItem(ix, iy);
-      if (position) delete position;
+      if (position) {
+        delete position;
+      }
 
       // Allocate and store the new stencil
       position =
@@ -66,10 +70,11 @@ void FiniteLyapunovExponents::Initialize(
 
       if (std::isnan(reader.Interpolate(
               map_.GetXValue(ix), map_.GetYValue(iy),
-              std::numeric_limits<double>::quiet_NaN(), cell)))
+              std::numeric_limits<double>::quiet_NaN(), cell))) {
         position->set_completed();
-      else
+      } else {
         indexes_.push_back(Index(ix, iy));
+      }
       map_.SetItem(ix, iy, position);
     }
   }
@@ -126,7 +131,9 @@ void FiniteLyapunovExponents::Compute(
                       this, std::ref(item), std::ref(fle), std::ref(it)));
     }
 
-    for (auto& item : threads) item.join();
+    for (auto& item : threads) {
+      item.join();
+    }
     threads.clear();
 
     // Removing cells that are completed

@@ -97,56 +97,56 @@ class CellProperties {
    *
    * @return The first longitude
    */
-  inline double x0() const { return x0_; }
+  inline double x0() const noexcept { return x0_; }
 
   /**
    * @brief Get the last longitude of the cell
    *
    * @return The last longitude of the cell
    */
-  inline double x1() const { return x1_; }
+  inline double x1() const noexcept { return x1_; }
 
   /**
    * @brief Get the first latitude of the cell
    *
    * @return The first latitude
    */
-  inline double y0() const { return y0_; }
+  inline double y0() const noexcept { return y0_; }
 
   /**
    * @brief Get the last latitude of the cell
    *
    * @return The last longitude
    */
-  inline double y1() const { return y1_; }
+  inline double y1() const noexcept { return y1_; }
 
   /**
    * @brief Get the index of the first longitude in the grid
    *
    * @return The index of the first longitude
    */
-  inline int ix0() const { return ix0_; }
+  inline int ix0() const noexcept { return ix0_; }
 
   /**
    * @brief Get the index of the last longitude in the grid
    *
    * @return The index of the last longitude
    */
-  inline int ix1() const { return ix1_; }
+  inline int ix1() const noexcept { return ix1_; }
 
   /**
    * @brief Get the index of the first latitude in the grid
    *
    * @return The index of the first latitude
    */
-  inline int iy0() const { return iy0_; }
+  inline int iy0() const noexcept { return iy0_; }
 
   /**
    * @brief Get the index of the last latitude in the grid
    *
    * @return The index of the first latitude
    */
-  inline int iy1() const { return iy1_; }
+  inline int iy1() const noexcept { return iy1_; }
 };
 
 /**
@@ -183,8 +183,7 @@ class Reader {
    * if point is outside the grid.
    */
   virtual double Interpolate(
-      const double longitude, const double latitude,
-      const double fill_value = 0,
+      double longitude, double latitude, double fill_value = 0,
       CellProperties& cell = CellProperties::NONE()) const = 0;
 
   /**

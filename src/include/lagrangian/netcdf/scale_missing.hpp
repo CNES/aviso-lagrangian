@@ -69,7 +69,7 @@ class ScaleMissing {
    *
    * @param group an existing Group
    */
-  ScaleMissing(const Group& group);
+  explicit ScaleMissing(const Group& group);
 
   /**
    * @brief The variable defined a valid data range
@@ -109,12 +109,14 @@ class ScaleMissing {
    * @return true if value it's outside the valid range
    */
   inline bool IsInvalidData(const double value) const {
-    if (HasInvalidData())
+    if (HasInvalidData()) {
       return (value < valid_min_) || (value > valid_max_);
-    else if (has_valid_min_)
+    }
+    if (has_valid_min_) {
       return value < valid_min_;
-    else if (has_valid_max_)
+    } else if (has_valid_max_) {
       return value > valid_max_;
+    }
     return false;
   }
 
@@ -153,9 +155,15 @@ class ScaleMissing {
    * @return true if value is missing
    */
   inline bool IsMissing(const double value) const {
-    if (std::isnan(value)) return true;
-    if (IsMissingValue(value)) return true;
-    if (IsFillValue(value)) return true;
+    if (std::isnan(value)) {
+      return true;
+    }
+    if (IsMissingValue(value)) {
+      return true;
+    }
+    if (IsFillValue(value)) {
+      return true;
+    }
     return false;
   }
 
@@ -165,11 +173,14 @@ class ScaleMissing {
    * @param array data to convert
    */
   void ConvertScaleOffset(std::vector<double>& array) const {
-    if (!has_scale_offset_) return;
+    if (!has_scale_offset_) {
+      return;
+    }
 
-    for (auto& item : array)
+    for (auto& item : array) {
       item = !IsMissing(item) ? item * scale_ + offset_
                               : std::numeric_limits<double>::quiet_NaN();
+    }
   }
 
   /**
@@ -180,10 +191,15 @@ class ScaleMissing {
    *
    */
   void SetMissingToNan(std::vector<double>& array) const {
-    if (!HasMissing()) return;
+    if (!HasMissing()) {
+      return;
+    }
 
-    for (auto& item : array)
-      if (IsMissing(item)) item = std::numeric_limits<double>::quiet_NaN();
+    for (auto& item : array) {
+      if (IsMissing(item)) {
+        item = std::numeric_limits<double>::quiet_NaN();
+      }
+    }
   }
 };
 

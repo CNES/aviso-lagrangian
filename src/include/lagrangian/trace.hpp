@@ -37,7 +37,7 @@ void Debug(std::string const& message);
  *
  * @param value True to enable verbose mode
  */
-void SetVerbose(const bool value);
+void SetVerbose(bool value);
 
 /**
  * @brief Return the version number

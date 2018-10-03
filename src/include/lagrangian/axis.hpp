@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <utility>
 
 // ___________________________________________________________________________//
 
@@ -64,7 +65,7 @@ class Unit {
   /**
    * @brief Constructor
    */
-  Unit() : unit_() {}
+  Unit() {}
 };
 
 // ___________________________________________________________________________//
@@ -149,6 +150,12 @@ class Axis {
   bool is_ascending_{false};
   bool is_circle_{false};
 
+  /// Function pointer to search an index for a given value on the axis
+  using SearchIndex = int (Axis::*)(double, bool) const;
+
+  /// Function used to search an index for a given value on the axis
+  SearchIndex search_index_{nullptr};
+
   // Check if  value(i) = start_ + i * increment_.
   void CalcIsRegular();
 
@@ -164,17 +171,20 @@ class Axis {
     auto index =
         static_cast<int>(std::round((coordinate - start_) / increment_));
 
-    if (index < 0) return bounded ? 0 : -1;
+    if (index < 0) {
+      return bounded ? 0 : -1;
+    }
 
-    if (index >= static_cast<int>(points_.size()))
+    if (index >= static_cast<int>(points_.size())) {
       return bounded ? static_cast<int>(points_.size() - 1) : -1;
+    }
 
     return index;
   }
 
   // Perform a binary search to find of the element of the array whose value
   // is contained in the interval. Values must be contiguous.
-  int FindIndexIrregular(const double coordinate, bool bounded) const;
+  int FindIndexIrregular(double coordinate, bool bounded) const;
 
   // Computes axis's properties
   void ComputeProperties() {
@@ -186,9 +196,16 @@ class Axis {
 
     // If the axis data are not spaced regularly, compute edges.
     MakeEdges();
+
+    // Sets the function used to search an index for a given value on this axis
+    search_index_ =
+        is_regular_ ? &Axis::FindIndexRegular : &Axis::FindIndexIrregular;
   }
 
  public:
+  /**
+   * @brief Default constructor
+   */
   Axis() = default;
 
   /**
@@ -196,7 +213,7 @@ class Axis {
    *
    * @param variable an existing NetCDF Variable
    */
-  Axis(const netcdf::Variable& variable);
+  explicit Axis(const netcdf::Variable& variable);
 
   /**
    * @brief Create a coordinate axis from values.
@@ -206,9 +223,8 @@ class Axis {
    * @param unit unit
    * @param type of axis
    */
-  Axis(const std::vector<double>& points, const Axis::Type type,
-       const std::string& unit = "")
-      : type_(type), points_(points), unit_(unit) {
+  Axis(std::vector<double> points, const Axis::Type type, std::string unit = "")
+      : type_(type), points_(std::move(points)), unit_(std::move(unit)) {
     ComputeProperties();
   }
 
@@ -231,7 +247,7 @@ class Axis {
    *
    * @return type of axis
    */
-  inline Type get_type() const { return type_; }
+  inline Type get_type() const noexcept { return type_; }
 
   /**
    * @brief Get the ith coordinate value.
@@ -241,7 +257,7 @@ class Axis {
    * @return coordinate value
    */
   inline double GetCoordinateValue(const int index) const {
-    return points_.at(index);
+    return points_[index];
   }
 
   /**
@@ -267,14 +283,14 @@ class Axis {
    *
    * @return the number of values
    */
-  inline int GetNumElements() const { return points_.size(); }
+  inline int GetNumElements() const noexcept { return points_.size(); }
 
   /**
    * @brief The axis values are spaced regularly
    *
    * @return true if value(i) = GetStart() + i * GetIncrement()
    */
-  inline bool is_regular() const { return is_regular_; }
+  inline bool is_regular() const noexcept { return is_regular_; }
 
   /**
    * @brief Given a coordinate position, find what grid element contains it.
@@ -289,8 +305,7 @@ class Axis {
    * @return index of the grid point containing it or -1 if outside grid area
    */
   inline int FindIndex(double coordinate) const {
-    return is_regular_ ? FindIndexRegular(coordinate, false)
-                       : FindIndexIrregular(coordinate, false);
+    return (this->*search_index_)(coordinate, false);
   }
 
   /**
@@ -301,8 +316,7 @@ class Axis {
    * @return index of the grid point containing it or -1 if outside grid area
    */
   inline int FindIndexBounded(double coordinate) const {
-    return is_regular_ ? FindIndexRegular(coordinate, true)
-                       : FindIndexIrregular(coordinate, true);
+    return (this->*search_index_)(coordinate, true);
   }
 
   /**
@@ -314,15 +328,14 @@ class Axis {
    * @return Longitude between [GetMinValue(), GetMinValue() + circle]
    */
   double Normalize(const double coordinate, const double circle) const {
-    static const double epsilon = 1e-9;
-    double result = coordinate;
-
-    if (type_ == kLongitude) {
-      while (result >= points_[0] + circle - epsilon) result -= circle;
-      while (result < points_[0] - epsilon) result += circle;
-      if (fabs(result - coordinate) <= epsilon) result = coordinate;
+    if (coordinate < start_ || coordinate > start_ + circle) {
+      double result = std::remainder(coordinate - start_, circle);
+      if (result < 0) {
+        result += circle;
+      }
+      return result + start_;
     }
-    return result;
+    return coordinate;
   }
 
   /**
@@ -332,9 +345,9 @@ class Axis {
    *
    * @return true if units attribute exists otherwise false
    */
-  inline bool get_units(std::string& units) const {
+  inline bool get_units(std::string& units) const noexcept {
     units = unit_;
-    return unit_ != "";
+    return !unit_.empty();
   }
 
   /**
@@ -344,7 +357,9 @@ class Axis {
    * @param unit the new unit
    */
   void Convert(const std::string& unit) {
-    if (unit_ == "") throw std::logic_error("The unit of axis is not defined");
+    if (unit_.empty()) {
+      throw std::logic_error("The unit of axis is not defined");
+    }
 
     UnitConverter converter = Units::GetConverter(unit_, unit);
     if (!converter.IsNull()) {
@@ -403,14 +418,14 @@ class Axis {
    *
    * @return starting value if is_regular()
    */
-  inline double get_start() const { return start_; }
+  inline double get_start() const noexcept { return start_; }
 
   /**
    * @brief Get increment value if is_regular()
    *
    * @return increment value if is_regular()
    */
-  inline double get_increment() const { return increment_; }
+  inline double get_increment() const noexcept { return increment_; }
 
   /**
    * @brief compare two variables instances

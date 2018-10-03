@@ -31,20 +31,21 @@ namespace netcdf {
 bool Variable::GetDescription(std::string& desc) const {
   Attribute attribute = FindAttributeIgnoreCase("long_name");
 
-  if (attribute != Attribute::MISSING && attribute.IsString())
+  if (attribute != Attribute::MISSING && attribute.IsString()) {
     desc = attribute.get_string();
-  else {
+  } else {
     attribute = FindAttributeIgnoreCase("description");
-    if (attribute != Attribute::MISSING && attribute.IsString())
+    if (attribute != Attribute::MISSING && attribute.IsString()) {
       desc = attribute.get_string();
-    else {
+    } else {
       attribute = FindAttributeIgnoreCase("title");
-      if (attribute != Attribute::MISSING && attribute.IsString())
+      if (attribute != Attribute::MISSING && attribute.IsString()) {
         desc = attribute.get_string();
-      else {
+      } else {
         attribute = FindAttributeIgnoreCase("standard_name");
-        if (attribute != Attribute::MISSING && attribute.IsString())
+        if (attribute != Attribute::MISSING && attribute.IsString()) {
           desc = attribute.get_string();
+        }
       }
     }
   }
@@ -82,8 +83,9 @@ void Variable::Read(std::vector<double>& data) const {
 void Variable::Read(std::vector<double>& data, const std::string& to) const {
   std::string from;
 
-  if (!GetUnitsString(from))
+  if (!GetUnitsString(from)) {
     throw std::logic_error(name_ + ":" + CF::UNITS + ": no such attribute");
+  }
 
   Read(data);
   Units::GetConverter(from, to).Convert(data);
@@ -94,8 +96,9 @@ void Variable::Read(std::vector<double>& data, const std::string& to) const {
 Variable::Variable(const netCDF::NcVar& ncvar)
     : name_(ncvar.getName()), ncvar_(ncvar) {
   // Set globals attributes
-  for (auto& item : ncvar_.getAtts())
+  for (auto& item : ncvar_.getAtts()) {
     attributes_.emplace_back(Attribute(item.second));
+  }
 
   // populates defined variables
   for (auto& item : ncvar_.getDims()) {

@@ -16,6 +16,7 @@
 */
 
 #include <boost/format.hpp>
+#include <memory>
 #include <stdexcept>
 
 // ___________________________________________________________________________//
@@ -27,9 +28,12 @@
 namespace lagrangian {
 
 void Netcdf::Open(const std::string& filename) {
+  if (filename.empty()) {
+    throw std::system_error(ENOENT, std::system_category(), filename);
+  }
+
   try {
-    ncfile_ = std::shared_ptr<netCDF::NcFile>(
-        new netCDF::NcFile(filename, netCDF::NcFile::read));
+    ncfile_ = std::make_shared<netCDF::NcFile>(filename, netCDF::NcFile::read);
 
     for (auto& item : ncfile_->getDims()) {
       dimensions_.emplace_back(netcdf::Dimension(item.second.getName(),
@@ -37,8 +41,9 @@ void Netcdf::Open(const std::string& filename) {
                                                  item.second.isUnlimited()));
     }
 
-    for (auto& item : ncfile_->getVars())
+    for (auto& item : ncfile_->getVars()) {
       variables_.emplace_back(netcdf::Variable(item.second));
+    }
   } catch (netCDF::exceptions::NcException) {
     throw std::runtime_error(
         boost::str(boost::format("Couldn't open `%s' for reading") % filename));

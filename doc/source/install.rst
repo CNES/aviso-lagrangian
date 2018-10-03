@@ -62,9 +62,10 @@ command :
 
 .. code-block:: bash
 
-    python setup.py setup netcdf-includes=/opt/local/include netcdf-
-    libraries=/opt/local/lib udunits-includes=/opt/local/include/udunits2
-    boost_mt=1
+    python setup.py setup --netcdf-includes=/opt/local/include \
+    --netcdf-libraries=/opt/local/lib \
+    --udunits-includes=/opt/local/include/udunits2 \
+    --boost_mt=1
 
 You can check your build environment with :
 

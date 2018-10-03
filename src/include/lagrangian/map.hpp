@@ -20,6 +20,7 @@
 // ___________________________________________________________________________//
 
 #include <cstdlib>
+#include <thread>
 
 // ___________________________________________________________________________//
 
@@ -33,7 +34,7 @@
 
 namespace std {
 using ::getenv;
-}
+}  // namespace std
 
 // ___________________________________________________________________________//
 
@@ -244,13 +245,13 @@ class FiniteLyapunovExponents {
    */
   FiniteLyapunovExponents(const int nx, const int ny, const double x_min,
                           const double y_min, const double step)
-      : num_threads_(1),
+      : num_threads_(std::thread::hardware_concurrency()),
         map_(nx, ny, x_min, y_min, step)
 
   {
     // Get the number of threads wanted by the user
     char* omp_num_threads = std::getenv("OMP_NUM_THREADS");
-    if (omp_num_threads) {
+    if (omp_num_threads != nullptr) {
       try {
         num_threads_ = boost::lexical_cast<int>(omp_num_threads);
       } catch (boost::bad_lexical_cast& e) {
@@ -266,8 +267,11 @@ class FiniteLyapunovExponents {
    * @brief Default method invoked when a map is destroyed.
    */
   virtual ~FiniteLyapunovExponents() {
-    for (int ix = 0; ix < map_.get_nx(); ++ix)
-      for (int iy = 0; iy < map_.get_ny(); ++iy) delete map_.GetItem(ix, iy);
+    for (int ix = 0; ix < map_.get_nx(); ++ix) {
+      for (int iy = 0; iy < map_.get_ny(); ++iy) {
+        delete map_.GetItem(ix, iy);
+      }
+    }
   }
 
   /**
@@ -279,7 +283,7 @@ class FiniteLyapunovExponents {
    */
   void Initialize(
       lagrangian::FiniteLyapunovExponentsIntegration& fle,
-      const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+      lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
           lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
   /**
@@ -294,7 +298,7 @@ class FiniteLyapunovExponents {
   void Initialize(
       lagrangian::FiniteLyapunovExponentsIntegration& fle,
       lagrangian::reader::Netcdf& reader,
-      const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
+      lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
           lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
   /**
@@ -330,7 +334,7 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
       const double nan,
       lagrangian::FiniteLyapunovExponentsIntegration& fle_integration,
       GetExponent pGetExponent, GetExponent pGetUndefinedExponent) const {
-    lagrangian::FiniteLyapunovExponents fle;
+    lagrangian::FiniteLyapunovExponents fle{};
 
     auto result =
         new Map<double>(map_.get_nx(), map_.get_ny(), map_.get_x_min(),

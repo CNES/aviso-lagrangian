@@ -19,7 +19,7 @@
 WrappedField::WrappedField(PyObject* object,
                            const lagrangian::Field::UnitType unit_type)
     : lagrangian::Field(unit_type), object_(nullptr) {
-  if (import_lagrangian()) {
+  if (import_lagrangian() != 0) {
     throw std::runtime_error("Import error");
   }
   object_ = object;
@@ -27,16 +27,18 @@ WrappedField::WrappedField(PyObject* object,
 }
 
 WrappedField::~WrappedField() {
-  if (object_) Py_XDECREF(object_);
+  if (object_ != nullptr) {
+    Py_XDECREF(object_);
+  }
 }
 
 bool WrappedField::Compute(const double t, const double x, const double y,
                            double& u, double& v,
-                           lagrangian::CellProperties& cell) const {
+                           lagrangian::CellProperties& /*cell*/) const {
   std::string error;
   bool result;
   int rc = PythonFieldCompute(object_, t, x, y, &u, &v, &result, &error);
-  if (rc) {
+  if (rc != 0) {
     throw std::runtime_error(error);
   }
   return result;

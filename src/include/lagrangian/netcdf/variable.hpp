@@ -48,7 +48,7 @@ class Variable : public Group {
   /**
    * @brief Default constructor
    */
-  Variable() : name_(""), shape_(), ncvar_(), scale_missing_() {}
+  Variable() : name_("") {}
 
  public:
   /**
@@ -80,9 +80,10 @@ class Variable : public Group {
    */
   inline long GetSize() const {
     long result = 1;
-    std::vector<size_t>::const_iterator it;
 
-    for (auto& item : shape_) result *= item;
+    for (auto& item : shape_) {
+      result *= item;
+    }
 
     return result;
   }
@@ -127,7 +128,7 @@ class Variable : public Group {
    *
    * @param var an instance of NcVar object
    */
-  Variable(const netCDF::NcVar& var);
+  explicit Variable(const netCDF::NcVar& var);
 
   /**
    * @brief Calculate if this is a classic coordinate variable: has same name
@@ -136,7 +137,9 @@ class Variable : public Group {
   inline bool IsCoordinateVariable() const {
     if (GetRank() == 1) {
       Dimension first_dimension = GetDimension(0);
-      if (name_ == first_dimension.get_name()) return true;
+      if (name_ == first_dimension.get_name()) {
+        return true;
+      }
     }
     return false;
   }
@@ -179,7 +182,7 @@ class Variable : public Group {
    * @param data read and converted
    * @param unit used to convert data
    */
-  void Read(std::vector<double>& data, const std::string& unit) const;
+  void Read(std::vector<double>& data, const std::string& to) const;
 
   /**
    * @brief Represents a missing variable.

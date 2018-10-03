@@ -37,8 +37,8 @@ class DateTime {
    * @param datetime Instance of a ptime object. If t isn't set, the new
    * instance will be contain the current date.
    */
-  DateTime(const boost::posix_time::ptime& datetime =
-               boost::posix_time::microsec_clock::universal_time())
+  explicit DateTime(const boost::posix_time::ptime& datetime =
+                        boost::posix_time::microsec_clock::universal_time())
       : datetime_(datetime) {}
 
   /**
@@ -46,7 +46,7 @@ class DateTime {
    *
    * @param s String to parse.
    */
-  DateTime(const std::string& s)
+  explicit DateTime(const std::string& s)
       : datetime_(boost::posix_time::time_from_string(s)) {}
 
   /**
@@ -54,7 +54,7 @@ class DateTime {
    *
    * @param time_map time map to parse.
    */
-  DateTime(const struct tm& time_map)
+  explicit DateTime(const struct tm& time_map)
       : datetime_(boost::posix_time::ptime_from_tm(time_map)) {}
 
   /**
@@ -71,7 +71,7 @@ class DateTime {
     boost::posix_time::ptime datetime(boost::posix_time::from_time_t(integer));
     datetime += boost::posix_time::microseconds(fractional);
 
-    return {datetime};
+    return DateTime(datetime);
   }
 
   /**

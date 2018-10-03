@@ -106,8 +106,12 @@ inline double Distance(const double lon0, const double lat0, const double lon1,
  */
 inline double NormalizeLongitude(double x, const double circle,
                                  const double half_circle) {
-  while (x < -half_circle) x += circle;
-  while (x >= half_circle) x -= circle;
+  while (x < -half_circle) {
+    x += circle;
+  }
+  while (x >= half_circle) {
+    x -= circle;
+  }
   return x;
 }
 

@@ -11,7 +11,8 @@ package using Distutils.
 #
 # lagrangian is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
+# A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more
+# details.
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
@@ -25,7 +26,10 @@ import distutils.dist
 import distutils.errors
 import distutils.extension
 import distutils.log
+import distutils.version
+import platform
 import os
+import re
 import setuptools
 import setuptools.command.install
 import subprocess
@@ -38,8 +42,17 @@ class SDist(distutils.command.sdist.sdist):
     """
     Creation of the version tag from information provided by mercurial
     """
-    @staticmethod
-    def get_version():
+    #: Path to file that contains the release number
+    PATH = os.path.join("src", "lib", "trace.cpp")
+
+    #: Pattern for searching the version number.
+    PATTERN = re.compile(r'return "(.*)"').search
+
+    #: Design to be replaced by the version number.
+    VERSION = b"__VERSION__"
+
+    @classmethod
+    def get_version(cls):
         """
         Read information tag from mercurial
         """
@@ -52,7 +65,14 @@ class SDist(distutils.command.sdist.sdist):
         for item in stdout.decode('utf8').split("\n"):
             if item and not item.startswith('tip'):
                 return item.split()[0].strip().encode('utf8')
-        return b"unofficial"
+        with open(cls.PATH) as stream:
+            for item in stream:
+                match = cls.PATTERN(item)
+                if match is not None:
+                    result = match.group(1).encode("utf8")
+                    if result != cls.VERSION:
+                        return result
+        return b'unofficial'
 
     @classmethod
     def patch_trace_cpp(cls, src, dst):
@@ -65,8 +85,8 @@ class SDist(distutils.command.sdist.sdist):
         with open(src, 'rb') as h_src:
             with open(dst, 'wb') as h_dst:
                 for line in h_src:
-                    if b'__VERSION__' in line:
-                        line = line.replace(b'__VERSION__', version)
+                    if cls.VERSION in line:
+                        line = line.replace(cls.VERSION, version)
                         if not isinstance(line, bytes):
                             line = line.encode('utf8')
                     h_dst.write(line)
@@ -79,7 +99,7 @@ class SDist(distutils.command.sdist.sdist):
                                                         base_dir,
                                                         files)
         for item in files:
-            if item == 'src/lib/trace.cpp':
+            if item == self.PATH:
                 dest = os.path.join(base_dir, item)
                 self.patch_trace_cpp(item, dest)
 
@@ -171,9 +191,9 @@ class SetupConfig(object):
         Returns the list of necessary files to build the extension
         """
         result = []
-        for root, dir, files in os.walk(os.path.join(cls.CWD, 'src')):
-            if 'wrapper' in dir:
-                dir.remove('wrapper')
+        for root, dirs, files in os.walk(os.path.join(cls.CWD, 'src')):
+            if 'wrapper' in dirs:
+                dirs.remove('wrapper')
             for item in files:
                 if item.endswith('.cpp'):
                     path = os.path.join(root, item)
@@ -276,6 +296,7 @@ class Config(distutils.command.config.config, SetupConfig):
     """
     Configuration commands
     """
+
     def __init__(self, *args, **kwargs):
         # old class style
         distutils.command.config.config.__init__(self, *args, **kwargs)
@@ -300,8 +321,8 @@ class Config(distutils.command.config.config, SetupConfig):
                     'Cannot find %r header.' % header)
 
         for header in ['netcdf',
-                       'boost/date_time.hpp',
-                       'boost/version.hpp']:
+                       os.path.join('boost', 'date_time.hpp'),
+                       os.path.join('boost', 'version.hpp')]:
             distutils.log.info('Checking for C++ header file %r' % header)
             # Work around a bug of the "check_header" that does not take into
             # account the parameter "lang".
@@ -324,24 +345,41 @@ class Config(distutils.command.config.config, SetupConfig):
 
 
 CLASSIFIERS = [
+    'Description-Content-Type: text/markdown',
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
-    'OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+    'OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+    'Platform: Linux',
+    'Platform: Mac OS X',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2',
     'Programming Language :: Python :: 3',
     'Topic :: Scientific/Engineering :: Physics',
 ]
 
+EXTRA_COMPILE_ARGS = ['-std=c++11']
+EXTRA_LINK_ARGS = []
+
+
+if platform.system() == "Darwin":
+    EXTRA_LINK_ARGS.append("-stdlib=libc++")
+    if distutils.version.LooseVersion(platform.release()) >= \
+            distutils.version.LooseVersion("18.0.0"):
+        EXTRA_COMPILE_ARGS.append("-mmacosx-version-min=10.9")
+
 
 EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian',
         language='c++',
-        extra_compile_args=['-std=c++11'],
-        sources=["src/wrapper/lagrangian.pyx"] + SetupConfig.sources(),
-        library_dirs=[os.path.join('build',
-                                   SetupConfig.get_build_directory('lib'))]
+        extra_compile_args=EXTRA_COMPILE_ARGS,
+        sources=[
+            os.path.join("src", "wrapper", "lagrangian.pyx")
+        ] + SetupConfig.sources(),
+        extra_link_args=EXTRA_LINK_ARGS,
+        library_dirs=[
+            os.path.join(
+                'build', SetupConfig.get_build_directory('lib'))]
     )
 ]
 
@@ -352,30 +390,39 @@ if not os.path.exists(SETUP.path):
     SETUP.initialize_options()
     SETUP.run()
 
+with open(
+    os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'README.md')) as stream:
+    LONG_DESCRIPTION = "".join(stream.readlines())
 
 distutils.core.setup(
     name="lagrangian",
-    version="2.1.1",
+    version=SDist.get_version().decode("utf8"),
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
-    description="Lagrangian analysis",
+    description=("Lagrangian Coherent Structures and Finite-Time "
+                 "Lyapunov Exponents"),
     license="License :: OSI Approved :: "
             "GNU Library or Lesser General Public License (LGPL)",
+    long_description=LONG_DESCRIPTION,
     keywords="oceanography lagrangian analysis fsle ftle",
-    # tests_require=requires,
     test_suite='test',
-    install_requires=['numpy'],
+    install_requires=['netCDF4', 'numpy', 'python-dateutil'],
     setup_requires=['numpy'],
-    packages=setuptools.find_packages(where='./src'),
-    package_dir={'lagrangian': 'src/'},
-    scripts=[os.path.join('src/etc', item)
-             for item in os.listdir('src/etc')],
+    packages=setuptools.find_packages(where='src'),
+    package_dir={'lagrangian': 'src'},
+    scripts=[os.path.join('src', 'etc', item)
+             for item in os.listdir(os.path.join('src', 'etc'))],
+    url='https://bitbucket.org/cnes_aviso/lagrangian',
     classifiers=CLASSIFIERS,
     cmdclass={
         'setup': Setup,
         'config': Config,
         'sdist': SDist
     },
-    ext_modules=Cython.Build.cythonize(EXTENSIONS)
+    ext_modules=Cython.Build.cythonize(EXTENSIONS, include_path=[
+        os.path.join(SetupConfig.CWD, "src", "wrapper")
+    ])
 )

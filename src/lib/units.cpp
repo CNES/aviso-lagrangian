@@ -15,7 +15,6 @@
     along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/lexical_cast.hpp>
 #include <iostream>
 
 // ___________________________________________________________________________//
@@ -29,15 +28,17 @@ namespace lagrangian {
 static void HandleParseStatus(ut_unit* unit, const std::string& str) {
   if (unit == nullptr) {
     ut_status status = ut_get_status();
-    if (status == UT_BAD_ARG)
+    if (status == UT_BAD_ARG) {
       throw units::Exception("empty units attribute string");
-    if (status == UT_SYNTAX)
+    }
+    if (status == UT_SYNTAX) {
       throw units::Exception("'" + str + "' contained a syntax error");
-    if (status == UT_UNKNOWN)
+    }
+    if (status == UT_UNKNOWN) {
       throw units::Exception("'" + str +
                              "' string contained an unknown identifier");
-    throw units::Exception("Unhandled exception: " +
-                           boost::lexical_cast<std::string>(status));
+    }
+    throw units::Exception("Unhandled exception: " + std::to_string(status));
   }
 }
 
@@ -46,17 +47,20 @@ static void HandleConverterStatus(cv_converter* converter,
                                   const std::string& to) {
   if (converter == nullptr) {
     ut_status status = ut_get_status();
-    if (status == UT_BAD_ARG) throw units::Exception("one of units is null");
-    if (status == UT_NOT_SAME_SYSTEM)
+    if (status == UT_BAD_ARG) {
+      throw units::Exception("one of units is null");
+    }
+    if (status == UT_NOT_SAME_SYSTEM) {
       throw units::Exception("the units '" + from + "' and '" + to +
                              "' don't belong to the same unit-system");
-    if (status == UT_MEANINGLESS)
+    }
+    if (status == UT_MEANINGLESS) {
       throw units::Exception(
           "the units '" + from + "' and '" + to +
           "' belong to the same unit-system but conversion " +
           "between them is meaningless");
-    throw units::Exception("Unhandled exception: " +
-                           boost::lexical_cast<std::string>(status));
+    }
+    throw units::Exception("Unhandled exception: " + std::to_string(status));
   }
 }
 
@@ -69,28 +73,28 @@ static units::SmartUtSystem g_system;
 UnitConverter Units::GetConverter(const std::string& from,
                                   const std::string& to) {
   if (from == to) {
-    return {};
-  } else {
-    g_system.Allocates();
-
-    ut_unit* ut_from = ut_parse(g_system.get(), from.c_str(), UT_UTF8);
-    HandleParseStatus(ut_from, from);
-
-    ut_unit* ut_to = ut_parse(g_system.get(), to.c_str(), UT_UTF8);
-    HandleParseStatus(ut_from, to);
-
-    cv_converter* converter = ut_get_converter(ut_from, ut_to);
-    HandleConverterStatus(converter, from, to);
-
-    double offset = cv_convert_double(converter, 0);
-    double scale = cv_convert_double(converter, 1) - offset;
-
-    ut_free(ut_from);
-    ut_free(ut_to);
-    cv_free(converter);
-
-    return {offset, scale};
+    return UnitConverter();
   }
+
+  g_system.Allocates();
+
+  ut_unit* ut_from = ut_parse(g_system.get(), from.c_str(), UT_UTF8);
+  HandleParseStatus(ut_from, from);
+
+  ut_unit* ut_to = ut_parse(g_system.get(), to.c_str(), UT_UTF8);
+  HandleParseStatus(ut_from, to);
+
+  cv_converter* converter = ut_get_converter(ut_from, ut_to);
+  HandleConverterStatus(converter, from, to);
+
+  double offset = cv_convert_double(converter, 0);
+  double scale = cv_convert_double(converter, 1) - offset;
+
+  ut_free(ut_from);
+  ut_free(ut_to);
+  cv_free(converter);
+
+  return UnitConverter(offset, scale);
 }
 
 bool Units::AreConvertible(const std::string& unit1, const std::string& unit2) {
