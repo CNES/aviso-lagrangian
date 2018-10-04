@@ -22,24 +22,24 @@ import sys
 import dateutil.parser
 import netCDF4
 import numpy
-import lagrangian
+import lagrangian.core as core
 
 
 SYSTEM_UNITS = {
-    "metric": lagrangian.kMetric,
-    "angular": lagrangian.kAngular
+    "metric": core.kMetric,
+    "angular": core.kAngular
 }
 
 
 STENCIL = {
-    "triplet": lagrangian.kTriplet,
-    "quintuplet": lagrangian.kQuintuplet
+    "triplet": core.kTriplet,
+    "quintuplet": core.kQuintuplet
 }
 
 
 MODE = {
-    "fsle": lagrangian.kFSLE,
-    "ftle": lagrangian.kFTLE
+    "fsle": core.kFSLE,
+    "ftle": core.kFTLE
 }
 
 
@@ -223,7 +223,7 @@ def usage():
 
     args, _ = parser.parse_known_args()
     if args.version:
-        print(lagrangian.version())
+        print(core.version())
         sys.exit(0)
 
     parser.add_argument('--help', '-h',
@@ -239,7 +239,7 @@ def usage():
                         type=datetime_type)
 
     args = parser.parse_args()
-    if MODE[args.mode] == lagrangian.kFTLE:
+    if MODE[args.mode] == core.kFTLE:
         if args.final_separation != -1:
             parser.error('argument --final_separation not allowed in FTLE '
                          'mode')
@@ -295,12 +295,12 @@ def calculation():
         os.environ["OMP_NUM_THREADS"] = str(args.threads)
 
     # Set debug
-    lagrangian.set_verbose(args.verbose)
+    core.set_verbose(args.verbose)
 
     # Display set parameter values for the integration
     for item in args._get_kwargs():
         option, value = item
-        lagrangian.debug("%s: %s" % (option, value))
+        core.debug("%s: %s" % (option, value))
 
     # Check X & Y range
     if not args.x_min < args.x_max:
@@ -312,18 +312,18 @@ def calculation():
     NC_FILL_DOUBLE = netCDF4.default_fillvals['f8']
 
     # Initializes the time series to process
-    ts = lagrangian.TimeSerie(args.configuration,
-                              SYSTEM_UNITS[args.unit])
+    ts = core.TimeSerie(args.configuration,
+                        SYSTEM_UNITS[args.unit])
     delta = datetime.timedelta(0, args.integration_time_step * 60 * 60)
 
-    start_time = lagrangian.DateTime(args.start_time)()
+    start_time = core.DateTime(args.start_time)()
 
     # Calculate the end of the integration depending on the advection time
     # direction
     if TimeDirection.choices()[args.time_direction] == TimeDirection.BACKWARD:
-        end_time = lagrangian.DateTime(start_time - args.advection_time)()
+        end_time = core.DateTime(start_time - args.advection_time)()
     else:
-        end_time = lagrangian.DateTime(start_time + args.advection_time)()
+        end_time = core.DateTime(start_time + args.advection_time)()
 
     check_period(ts, start_time, end_time)
 
@@ -335,7 +335,7 @@ def calculation():
         args.initial_separation = args.resolution
 
     # Build the map properties
-    map_properties = lagrangian.MapProperties(
+    map_properties = core.MapProperties(
         nx,
         ny,
         args.x_min,
@@ -343,7 +343,7 @@ def calculation():
         args.resolution)
 
     # Initializes the FLE to process
-    fle = lagrangian.FiniteLyapunovExponentsIntegration(
+    fle = core.FiniteLyapunovExponentsIntegration(
         start_time,
         end_time,
         delta,
@@ -356,14 +356,14 @@ def calculation():
     # up the calculation we use a external grid to remove these cells from
     # the calculation.
     if args.mask:
-        reader = lagrangian.Netcdf()
+        reader = core.Netcdf()
         reader.open(args.mask[0])
         reader.load(args.mask[1])
     else:
         reader = None
 
     # Initializes the map to process
-    map_of_fle = lagrangian.MapOfFiniteLyapunovExponents(
+    map_of_fle = core.MapOfFiniteLyapunovExponents(
         map_properties,
         fle,
         STENCIL[args.stencil],
@@ -444,7 +444,7 @@ def calculation():
         diag_sep[:] = map_of_fle.get_map_of_final_separation(
             NC_FILL_DOUBLE)
 
-        if MODE[args.mode] == lagrangian.kFSLE:
+        if MODE[args.mode] == core.kFSLE:
             diag_advtime = rootgrp.createVariable(
                 'advection_time',
                 'f8',

@@ -132,7 +132,7 @@ If you see this error message:
     File "src/etc/map_of_fle.py", line 306, in calculation
         SYSTEM_UNITS[args.unit])
     File "src/wrapper/lagrangian.pyx", line 1244, in lagrangian.TimeSerie.__cinit__
-        self.wrapped = new cpp_lagrangian.TimeSerie(
+        self.wrapped = new lagrangian.TimeSerie(
     RuntimeError: The variable UDUNITS2_XML_PATH is unset, and the installed, default unit, database couldn't be opened: No such file or directory
 
 This means that you must position variable UDUNITS2_XML_PATH to the database

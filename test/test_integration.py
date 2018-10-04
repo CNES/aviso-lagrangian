@@ -10,14 +10,14 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
-import lagrangian
 import unittest
 import os
+import lagrangian.core as core
 
 
-class Field(lagrangian.PythonField):
+class Field(core.PythonField):
     def compute(self, t, x, y):
         return (x * 1e-9, y * 1e-9, t >= 0)
 
@@ -33,10 +33,10 @@ class TestIntegration(unittest.TestCase):
     def test_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
-        integration = lagrangian.Integration(start,
-                                             end,
-                                             datetime.timedelta(days=1),
-                                             lagrangian.Vonkarman())
+        integration = core.Integration(start,
+                                       end,
+                                       datetime.timedelta(days=1),
+                                       core.Vonkarman())
         it = integration.get_iterator()
         x = []
         for value in it:
@@ -52,10 +52,10 @@ class TestIntegration(unittest.TestCase):
     def test_path_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
-        integration = lagrangian.Path(start,
-                                      end,
-                                      datetime.timedelta(days=1),
-                                      lagrangian.Vonkarman())
+        integration = core.Path(start,
+                                end,
+                                datetime.timedelta(days=1),
+                                core.Vonkarman())
         it = integration.get_iterator()
         x = []
         for value in it:
@@ -71,19 +71,19 @@ class TestIntegration(unittest.TestCase):
     def test_fle_integration(self):
         start = datetime.datetime(2000, 1, 1)
         end = datetime.datetime(2000, 12, 31)
-        integration = lagrangian.FiniteLyapunovExponentsIntegration(
+        integration = core.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
-            lagrangian.kFSLE,
+            core.kFSLE,
             1,
             0.5,
-            Field(lagrangian.kAngular))
+            Field(core.kAngular))
         position = integration.set_initial_point(
             0.01,
             0.01,
-            lagrangian.kTriplet)
-        self.assertEqual(type(position), lagrangian.Position)
+            core.kTriplet)
+        self.assertEqual(type(position), core.Position)
         self.assertFalse(integration.separation(position))
         a00, a01, a10, a11 = position.strain_tensor()
         self.assertEqual(a00, 0.5)
@@ -96,13 +96,13 @@ class TestIntegration(unittest.TestCase):
             self.assertTrue(integration.compute(
                 it,
                 position,
-                lagrangian.CellProperties()))
+                core.CellProperties()))
 
         self.assertTrue(integration.compute(
             it,
             position,
-            lagrangian.CellProperties()))
-        fle = lagrangian.FiniteLyapunovExponents()
+            core.CellProperties()))
+        fle = core.FiniteLyapunovExponents()
         self.assertTrue(integration.exponents(position, fle))
         self.assertAlmostEqual(fle.lambda1, 0)
         self.assertAlmostEqual(fle.lambda2, 0)
@@ -111,21 +111,21 @@ class TestIntegration(unittest.TestCase):
         self.assertAlmostEqual(fle.final_separation, 0.5161084399903032)
         self.assertAlmostEqual(fle.delta_t, 31622400)
 
-        integration = lagrangian.FiniteLyapunovExponentsIntegration(
+        integration = core.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
-            lagrangian.kFSLE,
+            core.kFSLE,
             0.2,
             0.5,
-            lagrangian.Vonkarman())
-        position = integration.set_initial_point(0, 0, lagrangian.kTriplet)
+            core.Vonkarman())
+        position = integration.set_initial_point(0, 0, core.kTriplet)
         self.assertTrue(integration.separation(position))
         self.assertTrue(integration.compute(
             it,
             position,
-            lagrangian.CellProperties()))
-        fle = lagrangian.FiniteLyapunovExponents()
+            core.CellProperties()))
+        fle = core.FiniteLyapunovExponents()
         self.assertTrue(integration.exponents(position, fle))
 
 
@@ -135,12 +135,12 @@ class TestPath(unittest.TestCase):
         self.ini = os.path.join(os.environ['ROOT'], 'path.ini')
 
     def test(self):
-        ts = lagrangian.TimeSerie(self.ini,
-                                  lagrangian.kMetric,
-                                  lagrangian.kNetCDF)
+        ts = core.TimeSerie(self.ini,
+                            core.kMetric,
+                            core.kNetCDF)
         start = datetime.datetime(2010, 1, 1)
         end = datetime.datetime(2010, 3, 30)
-        path = lagrangian.Path(
+        path = core.Path(
             start,
             end,
             datetime.timedelta(0, 6 * 60 * 60),

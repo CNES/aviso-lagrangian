@@ -15,7 +15,7 @@ package using Distutils.
 # details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 try:
     import configparser
 except ImportError:
@@ -370,11 +370,11 @@ if platform.system() == "Darwin":
 
 EXTENSIONS = [
     distutils.extension.Extension(
-        name='lagrangian',
+        name='lagrangian.core',
         language='c++',
         extra_compile_args=EXTRA_COMPILE_ARGS,
         sources=[
-            os.path.join("src", "wrapper", "lagrangian.pyx")
+            os.path.join("src", "wrapper", "core.pyx")
         ] + SetupConfig.sources(),
         extra_link_args=EXTRA_LINK_ARGS,
         library_dirs=[
@@ -412,7 +412,7 @@ distutils.core.setup(
     install_requires=['netCDF4', 'numpy', 'python-dateutil'],
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='src'),
-    package_dir={'lagrangian': 'src'},
+    package_dir={'lagrangian': os.path.join('src', 'lagrangian')},
     scripts=[os.path.join('src', 'etc', item)
              for item in os.listdir(os.path.join('src', 'etc'))],
     url='https://bitbucket.org/cnes_aviso/lagrangian',
@@ -423,6 +423,6 @@ distutils.core.setup(
         'sdist': SDist
     },
     ext_modules=Cython.Build.cythonize(EXTENSIONS, include_path=[
-        os.path.join(SetupConfig.CWD, "src", "wrapper")
+        os.path.join(SetupConfig.CWD, "src", "include")
     ])
 )

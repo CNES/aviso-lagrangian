@@ -13,7 +13,7 @@ This script is the entry point for unit tests.
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import hashlib
 try:

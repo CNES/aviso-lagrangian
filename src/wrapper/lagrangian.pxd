@@ -10,7 +10,7 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 cimport libcpp
 cimport libcpp.string
 cimport libcpp.vector

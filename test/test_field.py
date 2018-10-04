@@ -10,15 +10,15 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
-import lagrangian
 import unittest
 import os
 import time
+import lagrangian.core as core
 
 
-class Field(lagrangian.PythonField):
+class Field(core.PythonField):
     PASS = False
 
     def compute(self, t, x, y):
@@ -26,7 +26,7 @@ class Field(lagrangian.PythonField):
         return (x * 1.1, y * 1.1, t >= 0)
 
 
-class BadField(lagrangian.PythonField):
+class BadField(core.PythonField):
     pass
 
 
@@ -42,7 +42,7 @@ class TestBadField(unittest.TestCase):
 
 class TestVonkarman(unittest.TestCase):
     def test(self):
-        v = lagrangian.Vonkarman()
+        v = core.Vonkarman()
         result = v.compute(1, 1, 1)
         self.assertAlmostEqual(result[0], 7.1994043111518895)
         self.assertAlmostEqual(result[1], -5.766799394736108)
@@ -50,7 +50,7 @@ class TestVonkarman(unittest.TestCase):
 
 class TestCellProperties(unittest.TestCase):
     def test(self):
-        cell = lagrangian.CellProperties()
+        cell = core.CellProperties()
         self.assertFalse(cell.contains(0, 0))
         cell.update(-1, 1, -1.5, 1.5, 0, 1, 2, 3)
         self.assertTrue(cell.contains(0, 0))
@@ -72,7 +72,7 @@ class TestRungeKutta(unittest.TestCase):
 
     def test(self):
         self.assertFalse(Field.PASS)
-        rk = lagrangian.RungeKutta(2, Field())
+        rk = core.RungeKutta(2, Field())
         result = rk.compute(1, 1, 1)
         self.assertTrue(Field.PASS)
         self.assertAlmostEqual(result[0], 1.0000197882850568)
@@ -80,7 +80,7 @@ class TestRungeKutta(unittest.TestCase):
         result = rk.compute(-1, 1, 1)
         self.assertEqual(result, None)
 
-        rk = lagrangian.RungeKutta(2, lagrangian.Vonkarman())
+        rk = core.RungeKutta(2, core.Vonkarman())
         result = rk.compute(1, 1, 1)
         self.assertAlmostEqual(result[0], 1.0001294980342101)
         self.assertAlmostEqual(result[1], 0.9998962711974987)
@@ -88,7 +88,7 @@ class TestRungeKutta(unittest.TestCase):
 
 class TestIterator(unittest.TestCase):
     def test(self):
-        it = lagrangian.Iterator(0, 10, 0.25)
+        it = core.Iterator(0, 10, 0.25)
         x = []
         for value in it:
             x.append(value)
@@ -98,7 +98,7 @@ class TestIterator(unittest.TestCase):
 
 class TestPosition(unittest.TestCase):
     def test(self):
-        position = lagrangian.Position()
+        position = core.Position()
 
         for method in ['get_xi', 'get_yi']:
             try:
@@ -117,14 +117,14 @@ class TestPosition(unittest.TestCase):
         self.assertEqual(position.max_distance(), 0)
 
         self.assertTrue(position.compute(
-            lagrangian.RungeKutta(2, lagrangian.Vonkarman()),
-            lagrangian.Iterator(0, 10, 0.25),
-            lagrangian.CellProperties()))
+            core.RungeKutta(2, core.Vonkarman()),
+            core.Iterator(0, 10, 0.25),
+            core.CellProperties()))
 
 
 class TestTriplet(unittest.TestCase):
     def test(self):
-        position = lagrangian.Triplet(0, 0, 1, 2)
+        position = core.Triplet(0, 0, 1, 2)
         self.assertEqual(
             (position.get_xi(0), position.get_yi(0)),
             (0, 0))
@@ -140,9 +140,9 @@ class TestTriplet(unittest.TestCase):
         self.assertAlmostEqual(position.max_distance(), 1)
 
         self.assertTrue(position.compute(
-            lagrangian.RungeKutta(2, Field()),
-            lagrangian.Iterator(0, 10, 0.25),
-            lagrangian.CellProperties()))
+            core.RungeKutta(2, Field()),
+            core.Iterator(0, 10, 0.25),
+            core.CellProperties()))
 
         self.assertAlmostEqual(position.get_xi(0), 0)
         self.assertAlmostEqual(position.get_yi(0), 0)
@@ -166,7 +166,7 @@ class TestTriplet(unittest.TestCase):
 
 class TestQuintuplet(unittest.TestCase):
     def test(self):
-        position = lagrangian.Quintuplet(0, 0, 1, 2)
+        position = core.Quintuplet(0, 0, 1, 2)
         self.assertEqual(
             (position.get_xi(0), position.get_yi(0)),
             (0, 0))
@@ -204,9 +204,9 @@ class TestTimeSerie(unittest.TestCase):
         self.ini = os.path.join(os.environ['ROOT'], 'map.ini')
 
     def test(self):
-        ts = lagrangian.TimeSerie(self.ini,
-                                  lagrangian.kMetric,
-                                  lagrangian.kNetCDF)
+        ts = core.TimeSerie(self.ini,
+                            core.kMetric,
+                            core.kNetCDF)
         self.assertEqual(ts.start_time(),
                          datetime.datetime(2009, 12, 30))
         self.assertEqual(ts.end_time(),

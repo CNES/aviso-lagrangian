@@ -12,20 +12,21 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along with
-# lagrangian.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
+# core.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
 import datetime
 import argparse
 import os
 import re
 import sys
 import dateutil.parser
-import lagrangian
+import lagrangian.core as core
 
 
 class FileType(object):
     """
     FileType factory
     """
+
     def __init__(self, mode='r'):
         self.__mode = mode
 
@@ -75,7 +76,7 @@ def usage():
     # Checks whether the user wishes to display the version number
     args, _ = parser.parse_known_args()
     if args.version:
-        print(lagrangian.version())
+        print(core.version())
         sys.exit(0)
 
     parser.add_argument('configuration',
@@ -176,7 +177,7 @@ def main():
     """
     args = usage()
 
-    ts = lagrangian.TimeSerie(args.configuration)
+    ts = core.TimeSerie(args.configuration)
     delta = datetime.timedelta(0, 6 * 60 * 60)
 
     if args.start_time < ts.start_time():
@@ -191,7 +192,7 @@ def main():
                            (args.end_time.ToString("%Y-%m-%dT%H:%M:%S"),
                             ts.end_time().ToString("%Y-%m-%dT%H:%M:%S")))
 
-    path = lagrangian.Path(args.start_time, args.end_time, delta, ts)
+    path = core.Path(args.start_time, args.end_time, delta, ts)
     positions = []
 
     # Loading input file

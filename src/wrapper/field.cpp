@@ -12,14 +12,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of GNU Lesser General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "field.hpp"
 
 WrappedField::WrappedField(PyObject* object,
                            const lagrangian::Field::UnitType unit_type)
     : lagrangian::Field(unit_type), object_(nullptr) {
-  if (import_lagrangian() != 0) {
+  if (import_lagrangian__core() != 0) {
     throw std::runtime_error("Import error");
   }
   object_ = object;

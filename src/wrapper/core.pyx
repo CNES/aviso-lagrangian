@@ -13,11 +13,11 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 cimport cpython
 cimport cpython.datetime
 cimport cython
-cimport cpp_lagrangian
+cimport lagrangian
 cimport libcpp.string
 cimport libcpp.vector
 cimport numpy
@@ -46,7 +46,7 @@ cdef class AxisUnit:
     """
     Units known for a given type of axis.
     """
-    cdef cpp_lagrangian.AxisUnit* wrapped
+    cdef lagrangian.AxisUnit* wrapped
 
     def __dealloc__(self):
         del self.wrapped
@@ -64,7 +64,7 @@ cdef class LatitudeUnit(AxisUnit):
     Units setting out latitudes
     """
     def __cinit__(self):
-        self.wrapped = new cpp_lagrangian.LatitudeUnit()
+        self.wrapped = new lagrangian.LatitudeUnit()
 
 
 cdef class LongitudeUnit(AxisUnit):
@@ -72,16 +72,16 @@ cdef class LongitudeUnit(AxisUnit):
     Units setting out longitudes
     """
     def __cinit__(self):
-        self.wrapped = new cpp_lagrangian.LongitudeUnit()
+        self.wrapped = new lagrangian.LongitudeUnit()
 
 
 cpdef enum AxisType:
-    kUnknown = cpp_lagrangian.kUnknown
-    kLatitude = cpp_lagrangian.kLatitude
-    kLongitude = cpp_lagrangian.kLongitude
-    kTime = cpp_lagrangian.kTime
-    kX = cpp_lagrangian.kX
-    kY = cpp_lagrangian.kY
+    kUnknown = lagrangian.kUnknown
+    kLatitude = lagrangian.kLatitude
+    kLongitude = lagrangian.kLongitude
+    kTime = lagrangian.kTime
+    kX = lagrangian.kX
+    kY = lagrangian.kY
 
 
 cdef class Axis:
@@ -102,7 +102,7 @@ cdef class Axis:
          A2(i, j, k, ...) -> S1
          An(i, j, k, ...) -> Sn
     """
-    cdef cpp_lagrangian.Axis* wrapped
+    cdef lagrangian.Axis* wrapped
 
     @cython.boundscheck(False)
     def __cinit__(self,
@@ -126,7 +126,7 @@ cdef class Axis:
         for idx in range(size):
             cpp_points[idx] = points[idx]
 
-        self.wrapped = new cpp_lagrangian.Axis(cpp_points,
+        self.wrapped = new lagrangian.Axis(cpp_points,
                                                axis_type,
                                                cpp_unit)
 
@@ -254,7 +254,7 @@ cdef class Axis:
 
         if other is None:
             return False
-        result = cpp_lagrangian.AxisCompare(this.wrapped[0],
+        result = lagrangian.AxisCompare(this.wrapped[0],
                                             other.wrapped[0])
         if operator == 2:
             return not result
@@ -270,21 +270,21 @@ cdef class DateTime:
     current Gregorian calendar extended in both directions; like a time object,
     datetime assumes there are exactly 3600*24 seconds in every day.
     """
-    cdef cpp_lagrangian.DateTime* wrapped
+    cdef lagrangian.DateTime* wrapped
 
     def __cinit__(self, object argument=None):
         cdef libcpp.string.string cpp_string
 
-        self.wrapped = new cpp_lagrangian.DateTime()
+        self.wrapped = new lagrangian.DateTime()
 
         if argument is None:
             return
 
         if isinstance(argument, cpython.datetime.datetime):
-            self.wrapped[0] = cpp_lagrangian.from_pydatetime(argument)
+            self.wrapped[0] = lagrangian.from_pydatetime(argument)
         elif isinstance(argument, str):
             cpp_string = argument.encode('utf8')
-            self.wrapped[0] = cpp_lagrangian.DateTime(cpp_string)
+            self.wrapped[0] = lagrangian.DateTime(cpp_string)
         else:
             raise TypeError("a string or a datetime object is required")
 
@@ -295,7 +295,7 @@ cdef class DateTime:
         return self.wrapped.ToString("%Y-%m-%dT%M:%M:%s")
 
     def __call__(self):
-        return cpp_lagrangian.to_pydatetime(self.wrapped[0])
+        return lagrangian.to_pydatetime(self.wrapped[0])
 
 
 # Utility function to check the implementation of a pure virtual method in
@@ -337,8 +337,8 @@ cdef public api int PythonFieldCompute(object self,
 
 
 cpdef enum UnitType:
-    kMetric = cpp_lagrangian.kMetric
-    kAngular = cpp_lagrangian.kAngular
+    kMetric = lagrangian.kMetric
+    kAngular = lagrangian.kAngular
 
 
 cdef class Field:
@@ -346,7 +346,7 @@ cdef class Field:
     Abstract class defining a field where it is possible to calculate a
     speed
     """
-    cdef cpp_lagrangian.Field* wrapped
+    cdef lagrangian.Field* wrapped
 
     def __cinit__(self, *args):
         if type(self) is Field:
@@ -384,14 +384,14 @@ cdef class PythonField(Field):
     where ``u`` and ``v`` are the velocities computed, and ``defined`` a boolean
     indicating whether the calculated velocities are valid or not.
     """
-    def __cinit__(self, UnitType unit_type=cpp_lagrangian.kMetric):
+    def __cinit__(self, UnitType unit_type=lagrangian.kMetric):
 
         # Compute must be implemented in a derived class
         if not hasattr(self, "compute"):
             raise NotImplementedError(
                 "unimplemented pure virtual method 'compute'")
 
-        self.wrapped = new cpp_lagrangian.WrappedField(
+        self.wrapped = new lagrangian.WrappedField(
             <cpython.ref.PyObject*>self, unit_type)
 
 
@@ -408,7 +408,7 @@ cdef class Vonkarman(Field):
                   double y0 = 0.3,
                   double l = 2,
                   double u0 = 14):
-        self.wrapped = new cpp_lagrangian.Vonkarman(
+        self.wrapped = new lagrangian.Vonkarman(
             a, w, r0, tc, alpha, y0, l, u0)
 
     def compute(self, double t, double x, double y):
@@ -427,10 +427,10 @@ cdef class CellProperties:
     """
     Cell properties of the grid used for the interpolation.
     """
-    cdef cpp_lagrangian.CellProperties* wrapped
+    cdef lagrangian.CellProperties* wrapped
 
     def __cinit__(self):
-        self.wrapped = new cpp_lagrangian.CellProperties()
+        self.wrapped = new lagrangian.CellProperties()
 
     def __dealloc__(self):
         del self.wrapped
@@ -516,11 +516,11 @@ cdef class RungeKutta:
     """
     Fourth-order Runge-Kutta method
     """
-    cdef cpp_lagrangian.RungeKutta* wrapped
+    cdef lagrangian.RungeKutta* wrapped
     cdef Field field
 
     def __cinit__(self, double size_of_interval, Field field):
-        self.wrapped = new cpp_lagrangian.RungeKutta(size_of_interval,
+        self.wrapped = new lagrangian.RungeKutta(size_of_interval,
                                                      field.wrapped)
 
         # Stores the Python object "Field " in the instance members, to be
@@ -556,10 +556,10 @@ cdef class Iterator:
     """
     Definition of an iterator over a time period
     """
-    cdef cpp_lagrangian.Iterator* wrapped
+    cdef lagrangian.Iterator* wrapped
 
     def __cinit__(self, double begin, double end, double inc):
-        self.wrapped = new cpp_lagrangian.Iterator(begin, end, inc)
+        self.wrapped = new lagrangian.Iterator(begin, end, inc)
 
     @staticmethod
     cdef Iterator Null():
@@ -586,16 +586,16 @@ cdef class Position:
                 |
                 Mₖ₊ₙ
     """
-    cdef cpp_lagrangian.Position* wrapped
+    cdef lagrangian.Position* wrapped
 
     def __cinit__(self):
         if type(self) is Position:
-            self.wrapped = new cpp_lagrangian.Position()
+            self.wrapped = new lagrangian.Position()
 
     def __dealloc__(self):
         del self.wrapped
 
-    cdef void assign(self, cpp_lagrangian.Position* position):
+    cdef void assign(self, lagrangian.Position* position):
         del self.wrapped
         self.wrapped = position
 
@@ -677,7 +677,7 @@ cdef class Triplet(Position):
     Define the position of 3 points
     """
     def __cinit__(self, double x, double y, double delta, double start=0):
-        self.wrapped = new cpp_lagrangian.Triplet(x, y, delta, start)
+        self.wrapped = new lagrangian.Triplet(x, y, delta, start)
 
 
 cdef class Quintuplet(Position):
@@ -685,14 +685,14 @@ cdef class Quintuplet(Position):
     Define the position of 5 points
     """
     def __cinit__(self, double x, double y, double delta, double start=0):
-        self.wrapped = new cpp_lagrangian.Quintuplet(x, y, delta, start)
+        self.wrapped = new lagrangian.Quintuplet(x, y, delta, start)
 
 
 cdef class AbstractIntegration:
     """
     Handles the time integration
     """
-    cdef cpp_lagrangian.Integration* wrapped
+    cdef lagrangian.Integration* wrapped
     cdef Field field
 
     def __cinit__(self, *args):
@@ -751,10 +751,10 @@ cdef class Integration(AbstractIntegration):
                   cpython.datetime.timedelta delta_t,
                   Field field):
         self.set_field(field)
-        self.wrapped = new cpp_lagrangian.Integration(
-            cpp_lagrangian.from_pydatetime(start_time),
-            cpp_lagrangian.from_pydatetime(end_time),
-            cpp_lagrangian.from_pytimedelta(delta_t),
+        self.wrapped = new lagrangian.Integration(
+            lagrangian.from_pydatetime(start_time),
+            lagrangian.from_pydatetime(end_time),
+            lagrangian.from_pytimedelta(delta_t),
             field.wrapped)
 
 
@@ -768,21 +768,21 @@ cdef class Path(AbstractIntegration):
                   cpython.datetime.timedelta delta_t,
                   Field field):
         self.set_field(field)
-        self.wrapped = new cpp_lagrangian.Path(
-            cpp_lagrangian.from_pydatetime(start_time),
-            cpp_lagrangian.from_pydatetime(end_time),
-            cpp_lagrangian.from_pytimedelta(delta_t),
+        self.wrapped = new lagrangian.Path(
+            lagrangian.from_pydatetime(start_time),
+            lagrangian.from_pydatetime(end_time),
+            lagrangian.from_pytimedelta(delta_t),
             field.wrapped)
 
 
 cpdef enum Mode:
-    kFSLE = cpp_lagrangian.kFSLE
-    kFTLE = cpp_lagrangian.kFTLE
+    kFSLE = lagrangian.kFSLE
+    kFTLE = lagrangian.kFTLE
 
 
 cpdef enum Stencil:
-    kTriplet = cpp_lagrangian.kTriplet
-    kQuintuplet = cpp_lagrangian.kQuintuplet
+    kTriplet = lagrangian.kTriplet
+    kQuintuplet = lagrangian.kQuintuplet
 
 
 cdef class FiniteLyapunovExponents:
@@ -793,10 +793,10 @@ cdef class FiniteLyapunovExponents:
 
         FiniteLyapunovExponentsIntegration
     """
-    cdef cpp_lagrangian.FiniteLyapunovExponents* wrapped
+    cdef lagrangian.FiniteLyapunovExponents* wrapped
 
     def __cinit__(self):
-        self.wrapped = new cpp_lagrangian.FiniteLyapunovExponents()
+        self.wrapped = new lagrangian.FiniteLyapunovExponents()
 
     def __dealloc__(self):
         del self.wrapped
@@ -807,8 +807,8 @@ cdef class FiniteLyapunovExponents:
         Get the FLE associated to the maximum eigenvalue of the Cauchy-Green
         strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_lambda1()
 
@@ -818,8 +818,8 @@ cdef class FiniteLyapunovExponents:
         Get the FLE associated to the minimum eigenvalue of the Cauchy-Green
         strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_lambda2()
 
@@ -829,8 +829,8 @@ cdef class FiniteLyapunovExponents:
         Get the orientation of the eigenvector associated to the maximum
         eigenvalue of the Cauchy-Green strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_theta1()
 
@@ -840,8 +840,8 @@ cdef class FiniteLyapunovExponents:
         FLE associated to the minimum eigenvalues of Cauchy-Green
         strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_theta2()
 
@@ -850,8 +850,8 @@ cdef class FiniteLyapunovExponents:
         """
         Get the acutal advection time
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_delta_t()
 
@@ -860,8 +860,8 @@ cdef class FiniteLyapunovExponents:
         """
         Get the final separation distance
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponents* fle = \
-            <cpp_lagrangian.FiniteLyapunovExponents*> self.wrapped
+        cdef lagrangian.FiniteLyapunovExponents* fle = \
+            <lagrangian.FiniteLyapunovExponents*> self.wrapped
 
         return fle.get_final_separation()
 
@@ -924,10 +924,10 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
                   double delta,
                   Field field):
         self.set_field(field)
-        self.wrapped = new cpp_lagrangian.FiniteLyapunovExponentsIntegration(
-            cpp_lagrangian.from_pydatetime(start_time),
-            cpp_lagrangian.from_pydatetime(end_time),
-            cpp_lagrangian.from_pytimedelta(delta_t),
+        self.wrapped = new lagrangian.FiniteLyapunovExponentsIntegration(
+            lagrangian.from_pydatetime(start_time),
+            lagrangian.from_pydatetime(end_time),
+            lagrangian.from_pytimedelta(delta_t),
             mode,
             min_separation,
             delta,
@@ -941,12 +941,12 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
         Set the value of the initial point
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* fle_integration
-            cpp_lagrangian.Position* cpp_position
+            lagrangian.FiniteLyapunovExponentsIntegration* fle_integration
+            lagrangian.Position* cpp_position
             Position result
 
         fle_integration = \
-            <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+            <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
         cpp_position = fle_integration.SetInitialPoint(x, y, stencil)
 
         result = Position()
@@ -958,9 +958,9 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
         """
         Determine whether the particle is deemed to be separate
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+        cdef lagrangian.FiniteLyapunovExponentsIntegration* \
             fle_integration = \
-                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+                <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
         return fle_integration.Separation(position.wrapped)
 
@@ -969,9 +969,9 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
         """
         Get mode of integration
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+        cdef lagrangian.FiniteLyapunovExponentsIntegration* \
             fle_integration = \
-                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+                <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
         return fle_integration.get_mode()
 
@@ -979,9 +979,9 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
         """
         Calculate the integration
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+        cdef lagrangian.FiniteLyapunovExponentsIntegration* \
             fle_integration = \
-                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+                <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
         return fle_integration.Compute(it.wrapped[0],
                                        position.wrapped,
@@ -992,9 +992,9 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
         Compute the eigenvalue and the orientation of the eigenvectors
         of the Cauchy-Green strain tensor
         """
-        cdef cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+        cdef lagrangian.FiniteLyapunovExponentsIntegration* \
             fle_integration = \
-                <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
+                <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
 
         return fle_integration.ComputeExponents(position.wrapped,
                                                 fle.wrapped[0])
@@ -1055,7 +1055,7 @@ cdef public api int PythonFieldInterpolate(object self,
                                            double longitude,
                                            double latitude,
                                            double fill_value,
-                                           cpp_lagrangian.CellProperties cell,
+                                           lagrangian.CellProperties cell,
                                            double* result,
                                            libcpp.string.string* error):
     cdef:
@@ -1078,7 +1078,7 @@ cdef public api int PythonFieldInterpolate(object self,
 # DateTime lagrangian::Reader::GetDateTime(const std::string& name)
 cdef public api int PythonFieldGetDateTime(object self,
                                            libcpp.string.string name,
-                                           cpp_lagrangian.DateTime* result,
+                                           lagrangian.DateTime* result,
                                            libcpp.string.string* error):
     cdef:
         int rc = 0
@@ -1088,7 +1088,7 @@ cdef public api int PythonFieldGetDateTime(object self,
         py_name = name
         function = getattr(self, "get_datetime");
         py_result = function(py_name)
-        result[0] = cpp_lagrangian.from_pydatetime(py_result)
+        result[0] = lagrangian.from_pydatetime(py_result)
         error[0] = ""
     except Exception as err:
         rc = 1
@@ -1103,7 +1103,7 @@ cdef class AbstractReader:
     """
     Abstract class that defines a velocity reader fields.
     """
-    cdef cpp_lagrangian.Reader* wrapped
+    cdef lagrangian.Reader* wrapped
 
     def __dealloc__(self):
         del self.wrapped
@@ -1141,7 +1141,7 @@ cdef class Reader(AbstractReader):
         Computes the velocity of the grid point requested
         """
         cdef:
-            cpp_lagrangian.CellProperties cpp_cell
+            lagrangian.CellProperties cpp_cell
 
         if cell is None:
             return self.wrapped.Interpolate(
@@ -1160,7 +1160,7 @@ cdef class Reader(AbstractReader):
         """
         cdef libcpp.string.string cpp_string = name.encode('utf8')
 
-        return cpp_lagrangian.to_pydatetime(
+        return lagrangian.to_pydatetime(
             self.wrapped.GetDateTime(cpp_string))
 
 
@@ -1197,7 +1197,7 @@ cdef class Netcdf(Reader):
 
     """
     def __cinit__(self):
-        self.wrapped = new cpp_lagrangian.NetcdfReader()
+        self.wrapped = new lagrangian.NetcdfReader()
 
 
 cdef class PythonReader(AbstractReader):
@@ -1206,7 +1206,7 @@ cdef class PythonReader(AbstractReader):
     """
     def __cinit__(self):
 
-        self.wrapped = new cpp_lagrangian.WrappedReader(
+        self.wrapped = new lagrangian.WrappedReader(
             <cpython.ref.PyObject*>self)
 
         # pure virtual methods must be implemented in a derived class
@@ -1217,7 +1217,7 @@ cdef class PythonReader(AbstractReader):
 
 
 cpdef enum ReaderType:
-    kNetCDF = cpp_lagrangian.kNetCDF
+    kNetCDF = lagrangian.kNetCDF
 
 
 cdef class Factory:
@@ -1230,7 +1230,7 @@ cdef class Factory:
         Get an instance of a given reader
         """
         cdef Reader result = Reader()
-        result.wrapped = cpp_lagrangian.NewReader(reader_type)
+        result.wrapped = lagrangian.NewReader(reader_type)
         return result
 
 
@@ -1243,7 +1243,7 @@ cdef class TimeSerie(Field):
                   UnitType unit_type=kMetric,
                   ReaderType reader_type=kNetCDF):
         cdef cpp_ini = ini.encode('utf8')
-        self.wrapped = new cpp_lagrangian.TimeSerie(
+        self.wrapped = new lagrangian.TimeSerie(
             cpp_ini, unit_type, reader_type)
 
     def fetch(self, double t0, double t1):
@@ -1251,9 +1251,9 @@ cdef class TimeSerie(Field):
         Loads the grids used to interpolate the velocities in the
         interval [t0, t1]
         """
-        cdef cpp_lagrangian.TimeSerie* ts
+        cdef lagrangian.TimeSerie* ts
 
-        ts = <cpp_lagrangian.TimeSerie*> self.wrapped
+        ts = <lagrangian.TimeSerie*> self.wrapped
         ts.Fetch(t0, t1)
 
     def compute(self,
@@ -1282,26 +1282,26 @@ cdef class TimeSerie(Field):
         """
         Returns the date of the first grid constituting the time series.
         """
-        cdef cpp_lagrangian.TimeSerie* ts
+        cdef lagrangian.TimeSerie* ts
 
-        ts = <cpp_lagrangian.TimeSerie*> self.wrapped
-        return cpp_lagrangian.to_pydatetime(ts.StartTime())
+        ts = <lagrangian.TimeSerie*> self.wrapped
+        return lagrangian.to_pydatetime(ts.StartTime())
 
     def end_time(self):
         """
         Returns the date of the last grid constituting the time series.
         """
-        cdef cpp_lagrangian.TimeSerie* ts
+        cdef lagrangian.TimeSerie* ts
 
-        ts = <cpp_lagrangian.TimeSerie*> self.wrapped
-        return cpp_lagrangian.to_pydatetime(ts.EndTime())
+        ts = <lagrangian.TimeSerie*> self.wrapped
+        return lagrangian.to_pydatetime(ts.EndTime())
 
 
 cdef class MapProperties:
     """
     Properties of a regular grid
     """
-    cdef cpp_lagrangian.MapProperties* wrapped
+    cdef lagrangian.MapProperties* wrapped
 
     def __cinit__(self,
                   int nx,
@@ -1309,7 +1309,7 @@ cdef class MapProperties:
                   double x_min,
                   double y_min,
                   double step):
-        self.wrapped = new cpp_lagrangian.MapProperties(
+        self.wrapped = new lagrangian.MapProperties(
             nx, ny, x_min, y_min, step)
 
     def __dealloc__(self):
@@ -1410,7 +1410,7 @@ cdef class MapOfFiniteLyapunovExponents:
     Handles a map of Finite Size or Time Lyapunov Exponents
     """
     cdef:
-        cpp_lagrangian.MapOfFiniteLyapunovExponents* wrapped
+        lagrangian.MapOfFiniteLyapunovExponents* wrapped
         FiniteLyapunovExponentsIntegration fle_integration
 
     def __cinit__(self,
@@ -1419,11 +1419,11 @@ cdef class MapOfFiniteLyapunovExponents:
                   Stencil stencil=kTriplet,
                   Netcdf netcdf_reader=None):
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration
-            cpp_lagrangian.NetcdfReader* cpp_reader
+            lagrangian.NetcdfReader* cpp_reader
 
-        self.wrapped = new cpp_lagrangian.MapOfFiniteLyapunovExponents(
+        self.wrapped = new lagrangian.MapOfFiniteLyapunovExponents(
             map_properties.wrapped.get_nx(),
             map_properties.wrapped.get_ny(),
             map_properties.wrapped.get_x_min(),
@@ -1432,9 +1432,9 @@ cdef class MapOfFiniteLyapunovExponents:
         self.fle_integration = fle_integration
 
         cpp_fle_integration = \
-            <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+            <lagrangian.FiniteLyapunovExponentsIntegration*> \
                 self.fle_integration.wrapped
-        cpp_reader = <cpp_lagrangian.NetcdfReader*> netcdf_reader.wrapped
+        cpp_reader = <lagrangian.NetcdfReader*> netcdf_reader.wrapped
 
         if netcdf_reader is not None:
             self.wrapped.Initialize(cpp_fle_integration[0],
@@ -1452,16 +1452,16 @@ cdef class MapOfFiniteLyapunovExponents:
         Compute the map
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration
 
         cpp_fle_integration \
-            = <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+            = <lagrangian.FiniteLyapunovExponentsIntegration*> \
                 self.fle_integration.wrapped
         self.wrapped.Compute(cpp_fle_integration[0])
 
     @cython.boundscheck(False)
-    cdef numpy.ndarray get_map(self, double fill_value, cpp_lagrangian.Map[double]* map_of):
+    cdef numpy.ndarray get_map(self, double fill_value, lagrangian.Map[double]* map_of):
         # Utility function to return the computed matrix to Python
         cdef:
             numpy.ndarray result
@@ -1496,9 +1496,9 @@ cdef class MapOfFiniteLyapunovExponents:
         Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1510,9 +1510,9 @@ cdef class MapOfFiniteLyapunovExponents:
         Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1524,9 +1524,9 @@ cdef class MapOfFiniteLyapunovExponents:
         to the maximum eigenvalues of Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1538,9 +1538,9 @@ cdef class MapOfFiniteLyapunovExponents:
         to the minimum eigenvalues of Cauchy-Green strain tensor
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1552,9 +1552,9 @@ cdef class MapOfFiniteLyapunovExponents:
         since the of the integration)
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1565,9 +1565,9 @@ cdef class MapOfFiniteLyapunovExponents:
         Get the map of the final separation distance (unit degree)
         """
         cdef:
-            cpp_lagrangian.FiniteLyapunovExponentsIntegration* \
+            lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration = \
-                    <cpp_lagrangian.FiniteLyapunovExponentsIntegration*> \
+                    <lagrangian.FiniteLyapunovExponentsIntegration*> \
                         self.fle_integration.wrapped
 
         return self.get_map(
@@ -1579,19 +1579,19 @@ def debug(str msg not None):
     """
     cdef cpp_string = msg.encode('utf8')
 
-    cpp_lagrangian.Debug(cpp_string)
+    lagrangian.Debug(cpp_string)
 
 
 def set_verbose(cpython.bool value):
     """
     Enable or disable verbose mode
     """
-    cpp_lagrangian.SetVerbose(value)
+    lagrangian.SetVerbose(value)
 
 
 def version():
     """
     Return the version number
     """
-    return cpp_lagrangian.Version()
+    return lagrangian.Version()
 

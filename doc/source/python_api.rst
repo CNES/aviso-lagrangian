@@ -255,7 +255,7 @@ Velocity fields
         :return: unit
         :rtype: str
 
-.. py:class:: lagrangian.PythonField(unit_type=cpp_lagrangian.kMetric)
+.. py:class:: lagrangian.PythonField(unit_type=lagrangian.kMetric)
 
     Bases: lagrangian.Field
 

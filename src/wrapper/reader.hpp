@@ -12,14 +12,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of GNU Lesser General Public License
-    along with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
 
 // ___________________________________________________________________________//
 
 #include "lagrangian/reader.hpp"
-#include "lagrangian_api.h"
+#include "core_api.h"
 
 // ___________________________________________________________________________//
 

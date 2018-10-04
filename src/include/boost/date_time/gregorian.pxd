@@ -10,7 +10,7 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 cdef extern from "boost/date_time/gregorian/gregorian.hpp" nogil:
     cdef cppclass gregorian_date "boost::gregorian::date":
         gregorian_date()

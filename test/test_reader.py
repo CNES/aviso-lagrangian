@@ -10,19 +10,19 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
-import lagrangian
 import math
 import os
 import unittest
+import lagrangian.core as core
 
 
-class BadReader(lagrangian.PythonReader):
+class BadReader(core.PythonReader):
     pass
 
 
-class Reader(lagrangian.PythonReader):
+class Reader(core.PythonReader):
     def open(self, filename):
         pass
 
@@ -44,7 +44,7 @@ class TestNetcdf(unittest.TestCase):
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):
-        reader = lagrangian.Netcdf()
+        reader = core.Netcdf()
         reader.open(self.path)
         reader.load("Grid_0001")
 
@@ -112,9 +112,9 @@ class TestFactory(unittest.TestCase):
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):
-        reader = lagrangian.Factory.new_reader(lagrangian.kNetCDF)
+        reader = core.Factory.new_reader(core.kNetCDF)
         self.assertTrue(type(reader).__name__, 'Reader')
-        reader = lagrangian.Netcdf()
+        reader = core.Netcdf()
         reader.open(self.path)
         reader.load("Grid_0001")
 

@@ -10,10 +10,10 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
-import lagrangian
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import unittest
 import numpy
+import lagrangian.core as core
 
 
 class TestAxis(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestAxis(unittest.TestCase):
         pass
 
     def test_latitude_unit(self):
-        obj = lagrangian.LatitudeUnit()
+        obj = core.LatitudeUnit()
         self.assertTrue(obj("degrees_north"))
         self.assertTrue(obj("degree_north"))
         self.assertTrue(obj("degree_N"))
@@ -35,7 +35,7 @@ class TestAxis(unittest.TestCase):
         self.assertFalse(obj('foo'))
 
     def test_longitude_unit(self):
-        obj = lagrangian.LongitudeUnit()
+        obj = core.LongitudeUnit()
         self.assertTrue(obj("degrees_east"))
         self.assertTrue(obj("degree_east"))
         self.assertTrue(obj("degree_E"))
@@ -45,10 +45,10 @@ class TestAxis(unittest.TestCase):
         self.assertFalse(obj('foo'))
 
     def test_axis(self):
-        axis = lagrangian.Axis(numpy.arange(10, dtype='f8'),
-                               lagrangian.kX,
+        axis = core.Axis(numpy.arange(10, dtype='f8'),
+                               core.kX,
                                "m")
-        self.assertEqual(axis.type, lagrangian.kX)
+        self.assertEqual(axis.type, core.kX)
         self.assertEqual(axis.get_coordinate_value(5), 5)
         try:
             axis.get_coordinate_value(20)
@@ -76,9 +76,9 @@ class TestAxis(unittest.TestCase):
         self.assertEqual(axis.get_min_value(), 0)
         self.assertEqual(axis.get_max_value(), 90)
         self.assertTrue(axis.is_regular)
-        axis = lagrangian.Axis(
+        axis = core.Axis(
             numpy.array([1, 2, 4, 16, 32, 64], dtype='f8'),
-            lagrangian.kX,
+            core.kX,
             "m")
         self.assertFalse(axis.is_regular)
         self.assertEqual(axis.find_index(16), 3)
@@ -87,9 +87,9 @@ class TestAxis(unittest.TestCase):
         self.assertEqual(axis.find_indexes(16), (3, 4))
         self.assertEqual(axis.find_indexes(20), (3, 4))
         self.assertEqual(axis.find_indexes(128), None)
-        axis = lagrangian.Axis(
+        axis = core.Axis(
             numpy.array([-180, -90, 0, 90], dtype='f8'),
-            lagrangian.kLongitude,
+            core.kLongitude,
             "m")
         self.assertEqual(axis.get_min_value(), -180)
         self.assertEqual(axis.get_max_value(), 90)
@@ -98,21 +98,21 @@ class TestAxis(unittest.TestCase):
         self.assertEqual(axis.increment, 90)
         self.assertEqual(
             axis,
-            lagrangian.Axis(
+            core.Axis(
                 numpy.array([-180, -90, 0, 90], dtype='f8'),
-                lagrangian.kLongitude,
+                core.kLongitude,
                 "m"))
         self.assertNotEqual(
             axis,
-            lagrangian.Axis(
+            core.Axis(
                 numpy.array([-180, -90, 0, 90], dtype='f8'),
-                lagrangian.kX,
+                core.kX,
                 "m"))
         self.assertNotEqual(
             axis,
-            lagrangian.Axis(
+            core.Axis(
                 numpy.array([-180, -90, 0, 90], dtype='f8'),
-                lagrangian.kLongitude))
+                core.kLongitude))
 
 
 if __name__ == "__main__":

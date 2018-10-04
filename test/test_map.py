@@ -13,16 +13,16 @@ FSLE map generation unit tests.
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along
-# with lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import os
 import unittest
-import lagrangian
+import lagrangian.core as core
 
 
 class TestMapProperties(unittest.TestCase):
     def test(self):
-        map_properties = lagrangian.MapProperties(360, 180, -180, -90, 1)
+        map_properties = core.MapProperties(360, 180, -180, -90, 1)
         self.assertEqual(map_properties.get_x_value(180), 0)
         self.assertEqual(map_properties.get_y_value(90), 0)
         self.assertEqual(map_properties.nx, 360)
@@ -51,28 +51,28 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         os.environ['OMP_NUM_THREADS'] = '4'
 
     def test(self):
-        ts = lagrangian.TimeSerie(self.ini,
-                                  lagrangian.kMetric,
-                                  lagrangian.kNetCDF)
-        map_properties = lagrangian.MapProperties(360, 180, -180, -90, 1)
+        ts = core.TimeSerie(self.ini,
+                            core.kMetric,
+                            core.kNetCDF)
+        map_properties = core.MapProperties(360, 180, -180, -90, 1)
         start = datetime.datetime(2010, 1, 1)
         end = datetime.datetime(2010, 3, 30)
-        integration = lagrangian.FiniteLyapunovExponentsIntegration(
+        integration = core.FiniteLyapunovExponentsIntegration(
             start,
             end,
             datetime.timedelta(days=1),
-            lagrangian.kFSLE,
+            core.kFSLE,
             0.1,
             0.05,
             ts)
-        reader = lagrangian.Netcdf()
+        reader = core.Netcdf()
         reader.open(self.path)
         reader.load("Grid_0001")
-        map_of_fsle = lagrangian.MapOfFiniteLyapunovExponents(
+        map_of_fsle = core.MapOfFiniteLyapunovExponents(
             map_properties,
             integration,
             netcdf_reader=reader)
-        # lagrangian.set_verbose(True)
+        # core.set_verbose(True)
         map_of_fsle.compute()
         lambda1 = map_of_fsle.get_map_of_lambda1(0)
         lambda2 = map_of_fsle.get_map_of_lambda2(0)

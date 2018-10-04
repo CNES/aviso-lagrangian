@@ -12,13 +12,13 @@
 # A PARTICULAR PURPOSE.  See GNU Lesser General Public License for more details.
 #
 # You should have received a copy of GNU Lesser General Public License along with
-# lagrangian.  If not, see <http://www.gnu.org/licenses/>.
+# core.  If not, see <http://www.gnu.org/licenses/>.
 import argparse
 import fnmatch
 import os
-import lagrangian
 import netCDF4
 import numpy
+import lagrangian.core as core
 
 
 def directory(path):
@@ -76,9 +76,9 @@ def get_axis(variables):
     y = None
     for name, variable in variables.items():
         if variable.ndim == 1 and variable.dimensions[0] == name:
-            if lagrangian.LongitudeUnit()(variable.units.encode('ASCII')):
+            if core.LongitudeUnit()(variable.units.encode('ASCII')):
                 x = name
-            elif lagrangian.LatitudeUnit()(variable.units.encode('ASCII')):
+            elif core.LatitudeUnit()(variable.units.encode('ASCII')):
                 y = name
     if x is None:
         raise RuntimeError("Could not find the X-axis")
@@ -125,7 +125,7 @@ def read_var(variable):
     """
     Read velocity component and convert it in m/s if needed
     """
-    offset, scale = lagrangian.Units.GetConverter(
+    offset, scale = core.Units.GetConverter(
         variable.units.encode('ASCII'), "m/s")
     return variable[:] * scale + offset
 
