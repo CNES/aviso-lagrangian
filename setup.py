@@ -423,6 +423,7 @@ distutils.core.setup(
         'sdist': SDist
     },
     ext_modules=Cython.Build.cythonize(EXTENSIONS, include_path=[
-        os.path.join(SetupConfig.CWD, "src", "include")
+        os.path.join(SetupConfig.CWD, "src", "include"),
+        os.path.join(SetupConfig.CWD, "src", "wrapper")
     ])
 )

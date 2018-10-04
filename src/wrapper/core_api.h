@@ -94,7 +94,7 @@ bad:
 #endif
 
 
-static int import_lagrangian__core(void) {
+static int import_core(void) {
   PyObject *module = 0;
   module = __Pyx_ImportModule("lagrangian.core");
   if (!module) goto bad;
