@@ -50,30 +50,32 @@ class SDist(distutils.command.sdist.sdist):
     PATTERN = re.compile(r'return "(.*)"').search
 
     #: Design to be replaced by the version number.
-    VERSION = b"__VERSION__"
+    VERSION = "__VERSION__"
 
     @classmethod
     def get_version(cls):
         """
-        Read information tag from mercurial
+        Read information tag from git
         """
-        process = subprocess.Popen("LANG=C hg tags",
-                                   shell=True,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
+        process = subprocess.Popen(
+            "git describe --tags --dirty --long --always",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         stdout, _ = process.communicate()
 
-        for item in stdout.decode('utf8').split("\n"):
-            if item and not item.startswith('tip'):
-                return item.split()[0].strip().encode('utf8')
-        with open(cls.PATH) as stream:
-            for item in stream:
-                match = cls.PATTERN(item)
-                if match is not None:
-                    result = match.group(1).encode("utf8")
-                    if result != cls.VERSION:
-                        return result
-        return b'unofficial'
+        pattern = re.compile(r'([\w\d\.]+)-(\d+)-g([\w\d]+)(?:-(dirty))?')
+        match = pattern.search(stdout.decode("utf8"))
+
+        # If the information is unavailable (execution of this function outside the
+        # development environment), file generation is not possible
+        if not stdout:
+            with open(cls.PATH) as stream:
+                for item in stream:
+                    match = cls.PATTERN(item)
+                    if match is not None:
+                        return match.group(1)
+        return match.group(1)
 
     @classmethod
     def patch_trace_cpp(cls, src, dst):
@@ -96,9 +98,7 @@ class SDist(distutils.command.sdist.sdist):
         """
         Creating files list to insert in distribution package
         """
-        distutils.command.sdist.sdist.make_release_tree(self,
-                                                        base_dir,
-                                                        files)
+        distutils.command.sdist.sdist.make_release_tree(self, base_dir, files)
         for item in files:
             if item == self.PATH:
                 dest = os.path.join(base_dir, item)
@@ -123,8 +123,14 @@ class SetupConfig(object):
         Parse a boolean value from a string
         """
         boolean_states = {
-            '1': True, 'yes': True, 'true': True, 'on': True,
-            '0': False, 'no': False, 'false': False, 'off': False
+            '1': True,
+            'yes': True,
+            'true': True,
+            'on': True,
+            '0': False,
+            'no': False,
+            'false': False,
+            'off': False
         }
         if v.lower() not in boolean_states:
             raise ValueError('Not a boolean: %s' % v)
@@ -144,18 +150,15 @@ class SetupConfig(object):
         include_dirs, libraries, library_dirs = (None, None, None)
         if self.parser.has_section('build_ext'):
             if self.parser.has_option('build_ext', 'include_dirs'):
-                include_dirs = self.parser.get('build_ext',
-                                               'include_dirs')
+                include_dirs = self.parser.get('build_ext', 'include_dirs')
                 include_dirs = include_dirs.split(':') \
                     if include_dirs else None
             if self.parser.has_option('build_ext', 'libraries'):
-                libraries = self.parser.get('build_ext',
-                                            'libraries')
+                libraries = self.parser.get('build_ext', 'libraries')
                 libraries = libraries.split(' ') \
                     if libraries else None
             if self.parser.has_option('build_ext', 'library_dirs'):
-                library_dirs = self.parser.get('build_ext',
-                                               'library_dirs')
+                library_dirs = self.parser.get('build_ext', 'library_dirs')
                 library_dirs = library_dirs.split(':') \
                     if library_dirs else None
 
@@ -168,8 +171,7 @@ class SetupConfig(object):
         if not self.parser.has_section('build_ext'):
             self.parser.add_section('build_ext')
         if library_dirs:
-            self.parser.set('build_ext',
-                            'library_dirs',
+            self.parser.set('build_ext', 'library_dirs',
                             ":".join(library_dirs))
         elif self.parser.has_option('build_ext', 'library_dirs'):
             self.parser.remove_option('build_ext', 'library_dirs')
@@ -183,12 +185,8 @@ class SetupConfig(object):
             include_dirs += np.get_numpy_include_dirs()
         except ImportError:
             pass
-        self.parser.set('build_ext',
-                        'include_dirs',
-                        ":".join(include_dirs))
-        self.parser.set('build_ext',
-                        'libraries',
-                        " ".join(libraries))
+        self.parser.set('build_ext', 'include_dirs', ":".join(include_dirs))
+        self.parser.set('build_ext', 'libraries', " ".join(libraries))
 
     @classmethod
     def sources(cls):
@@ -226,21 +224,14 @@ class Setup(setuptools.Command, SetupConfig):
     """
     description = "Configuration commands"
     user_options = [
-        ('boost-includes=', None,
-         "Location of boost C++ headers"),
-        ('boost-libraries=', None,
-         "Location of boost C++ libraries"),
-        ('boost-mt=', None,
-         "Set to True to use boost C++ libraries with "
+        ('boost-includes=', None, "Location of boost C++ headers"),
+        ('boost-libraries=', None, "Location of boost C++ libraries"),
+        ('boost-mt=', None, "Set to True to use boost C++ libraries with "
          "multithreading support enabled"),
-        ('netcdf-includes=', None,
-         "Location of NetCDF headers"),
-        ('netcdf-libraries=', None,
-         "Location of NetCDF libraries"),
-        ('udunits-includes=', None,
-         "Location of UDUNITS-2 headers"),
-        ('udunits-librairies=', None,
-         "Location of UDUNITS-2 libraries"),
+        ('netcdf-includes=', None, "Location of NetCDF headers"),
+        ('netcdf-libraries=', None, "Location of NetCDF libraries"),
+        ('udunits-includes=', None, "Location of UDUNITS-2 headers"),
+        ('udunits-librairies=', None, "Location of UDUNITS-2 libraries"),
     ]
 
     def __init__(self, *args, **kwargs):
@@ -329,26 +320,30 @@ class Config(distutils.command.config.config, SetupConfig):
                 raise distutils.errors.DistutilsPlatformError(
                     'Cannot find %r header.' % header)
 
-        for header in ['netcdf',
-                       os.path.join('boost', 'date_time.hpp'),
-                       os.path.join('boost', 'version.hpp')]:
+        for header in [
+                'netcdf',
+                os.path.join('boost', 'date_time.hpp'),
+                os.path.join('boost', 'version.hpp')
+        ]:
             distutils.log.info('Checking for C++ header file %r' % header)
             # Work around a bug of the "check_header" that does not take into
             # account the parameter "lang".
             # if not self.check_header(header, lang='c++'):
-            if not self.try_cpp(body="/* No body */",
-                                headers=[header],
-                                include_dirs=include_dirs,
-                                lang='c++'):
+            if not self.try_cpp(
+                    body="/* No body */",
+                    headers=[header],
+                    include_dirs=include_dirs,
+                    lang='c++'):
                 raise distutils.errors.DistutilsPlatformError(
                     'Cannot find %r header.' % header)
 
         for library in libraries:
             distutils.log.info('Checking for library %r' % library)
-            if not self.try_link("int main (void) { }",
-                                 libraries=[library],
-                                 library_dirs=library_dirs,
-                                 lang='c++'):
+            if not self.try_link(
+                    "int main (void) { }",
+                    libraries=[library],
+                    library_dirs=library_dirs,
+                    lang='c++'):
                 raise distutils.errors.DistutilsPlatformError(
                     'Cannot find library %r.' % library)
 
@@ -369,29 +364,24 @@ CLASSIFIERS = [
 EXTRA_COMPILE_ARGS = ['-std=c++11']
 EXTRA_LINK_ARGS = []
 
-
 if platform.system() == "Darwin":
     EXTRA_LINK_ARGS.append("-stdlib=libc++")
     if distutils.version.LooseVersion(platform.release()) >= \
             distutils.version.LooseVersion("18.0.0"):
         EXTRA_COMPILE_ARGS.append("-mmacosx-version-min=10.9")
 
-
 EXTENSIONS = [
     distutils.extension.Extension(
         name='lagrangian.core',
         language='c++',
         extra_compile_args=EXTRA_COMPILE_ARGS,
-        sources=[
-            os.path.join("src", "wrapper", "core.pyx")
-        ] + SetupConfig.sources(),
+        sources=[os.path.join("src", "wrapper", "core.pyx")] +
+        SetupConfig.sources(),
         extra_link_args=EXTRA_LINK_ARGS,
         library_dirs=[
-            os.path.join(
-                'build', SetupConfig.get_build_directory('lib'))]
-    )
+            os.path.join('build', SetupConfig.get_build_directory('lib'))
+        ])
 ]
-
 
 # Create the default setup configuration
 SETUP = Setup(distutils.dist.Distribution())
@@ -400,21 +390,20 @@ if not os.path.exists(SETUP.path):
     SETUP.run()
 
 with open(
-    os.path.join(
-        os.path.abspath(os.path.dirname(__file__)),
-        'README.md')) as stream:
+        os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                     'README.md')) as stream:
     LONG_DESCRIPTION = "".join(stream.readlines())
 
 distutils.core.setup(
     name="lagrangian",
-    version=SDist.get_version().decode("utf8"),
+    version=SDist.get_version(),
     author="CLS/LOCEAN",
     author_email="fbriol@cls.fr",
     include_package_data=True,
     description=("Lagrangian Coherent Structures and Finite-Time "
                  "Lyapunov Exponents"),
     license="License :: OSI Approved :: "
-            "GNU Library or Lesser General Public License (LGPL)",
+    "GNU Library or Lesser General Public License (LGPL)",
     long_description=LONG_DESCRIPTION,
     keywords="oceanography lagrangian analysis fsle ftle",
     test_suite='test',
@@ -422,8 +411,10 @@ distutils.core.setup(
     setup_requires=['numpy'],
     packages=setuptools.find_packages(where='src'),
     package_dir={'lagrangian': os.path.join('src', 'lagrangian')},
-    scripts=[os.path.join('src', 'etc', item)
-             for item in os.listdir(os.path.join('src', 'etc'))],
+    scripts=[
+        os.path.join('src', 'etc', item)
+        for item in os.listdir(os.path.join('src', 'etc'))
+    ],
     url='https://bitbucket.org/cnes_aviso/lagrangian',
     classifiers=CLASSIFIERS,
     cmdclass={
@@ -431,8 +422,9 @@ distutils.core.setup(
         'config': Config,
         'sdist': SDist
     },
-    ext_modules=Cython.Build.cythonize(EXTENSIONS, include_path=[
-        os.path.join(SetupConfig.CWD, "src", "include"),
-        os.path.join(SetupConfig.CWD, "src", "wrapper")
-    ])
-)
+    ext_modules=Cython.Build.cythonize(
+        EXTENSIONS,
+        include_path=[
+            os.path.join(SetupConfig.CWD, "src", "include"),
+            os.path.join(SetupConfig.CWD, "src", "wrapper")
+        ]))
