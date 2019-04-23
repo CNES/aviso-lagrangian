@@ -85,13 +85,11 @@ class SDist(distutils.command.sdist.sdist):
         """
         version = cls.get_version()
         os.unlink(dst)
-        with open(src, 'rb') as h_src:
-            with open(dst, 'wb') as h_dst:
+        with open(src, 'r') as h_src:
+            with open(dst, 'w') as h_dst:
                 for line in h_src:
                     if cls.VERSION in line:
                         line = line.replace(cls.VERSION, version)
-                        if not isinstance(line, bytes):
-                            line = line.encode('utf8')
                     h_dst.write(line)
 
     def make_release_tree(self, base_dir, files):

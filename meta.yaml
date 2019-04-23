@@ -1,31 +1,30 @@
 package:
   name: lagrangian
-  version: 2.3.0
+  version: 2.3.1
 
 source:
-  url: https://bitbucket.org/cnes_aviso/lagrangian/downloads/lagrangian-2.3.0.tar.gz
+        url: https://bitbucket.org/cnes_aviso/lagrangian/downloads/lagrangian-2.3.1.tar.gz
+        sha256: 5c9f2c7a8b0b08997063b54e0fc54a37bda8da6cd0a7ce0a8f72baf4c2c9e869
 
 requirements:
   build:
-    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+  host:
     - cython
-    - libnetcdf
     - libboost
+    - libnetcdf
     - netcdf4
-    - netcdf-cxx4
     - numpy
     - python {{ python }}
-    - setuptools
     - python-dateutil
+    - setuptools
     - udunits2
   run:
-    - python {{ python }}
-    - libnetcdf
     - libboost
-    - netcdf-cxx4
+    - libnetcdf
     - netcdf4
     - numpy
+    - python {{ python }}
     - python-dateutil
     - udunits2
 
