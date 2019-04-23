@@ -63,18 +63,18 @@ class SDist(distutils.command.sdist.sdist):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         stdout, _ = process.communicate()
-
         pattern = re.compile(r'([\w\d\.]+)-(\d+)-g([\w\d]+)(?:-(dirty))?')
-        match = pattern.search(stdout.decode("utf8"))
 
-        # If the information is unavailable (execution of this function outside the
-        # development environment), file generation is not possible
+        # If the information is unavailable (execution of this function
+        # outside the development environment), file generation is not
+        # possible
         if not stdout:
             with open(cls.PATH) as stream:
                 for item in stream:
                     match = cls.PATTERN(item)
                     if match is not None:
                         return match.group(1)
+        match = pattern.search(stdout.decode("utf8"))
         return match.group(1)
 
     @classmethod
