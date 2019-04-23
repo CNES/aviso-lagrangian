@@ -5,9 +5,11 @@ pipelines:
     - step:
         script:
           - apt-get update -q -y
-          - apt-get install python-setuptools python-pip python-dev cython -q -y
+          - apt-get install git python-setuptools python-pip python-dev cython -q -y
           - apt-get install libhdf5-serial-dev libnetcdf-dev python-numpy libudunits2-dev libnetcdf-c++4-dev -q -y
           - apt-get install libboost-date-time-dev libboost-regex-dev libboost-thread-dev -q -y
+          - git submodule init
+          - git submodule update
           - python setup.py setup
           - python setup.py config --include-dirs=$PWD/third_party/netcdf-cxx4/cxx4
           - python setup.py build
