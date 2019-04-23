@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-$PYTHON setup.py setup --netcdf-includes=$CONDA_DEFAULT_ENV/include --netcdf-libraries=$CONDA_DEFAULT_ENV/lib --boost-mt=0
-$PYTHON setup.py config
-$PYTHON setup.py build
-$PYTHON setup.py install
+${PREFIX}/bin/python setup.py setup --netcdf-includes=${PREFIX}/include --netcdf-libraries=${PREFIX}/lib --boost-mt=0
+${PREFIX}/bin/python setup.py config
+${PREFIX}/bin/python setup.py build
+${PREFIX}/bin/python setup.py install

@@ -1,15 +1,12 @@
-image: ubuntu:bionic
+image: continuumio/miniconda3
 
 pipelines:
   default:
     - step:
         script:
-          - apt-get update -q -y
-          - apt-get install git python-setuptools python-pip python-dev cython -q -y
-          - apt-get install libhdf5-serial-dev libnetcdf-dev python-numpy libudunits2-dev libnetcdf-c++4-dev -q -y
-          - apt-get install libboost-date-time-dev libboost-regex-dev libboost-thread-dev -q -y
-          - git submodule init
-          - git submodule update
-          - python setup.py setup
-          - python setup.py config --include-dirs=$PWD/third_party/netcdf-cxx4/cxx4
-          - python setup.py build
+          - conda install -y cython libboost libnetcdf netcdf4 numpy python-dateutil setuptools udunits2
+          - conda install -y -c conda-forge cxx-compiler
+          - git submodule update --init
+          - python setup.py setup  --netcdf-includes=/opt/conda/include --netcdf-libraries=/opt/conda/lib --boost-mt=0
+          - python setup.py config
+          - python setup.py build --parallel $(getconf _NPROCESSORS_ONLN)
