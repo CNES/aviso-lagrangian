@@ -19,7 +19,7 @@
 WrappedField::WrappedField(PyObject* object,
                            const lagrangian::Field::UnitType unit_type)
     : lagrangian::Field(unit_type), object_(nullptr) {
-  if (import_core() != 0) {
+  if (import_lagrangian__core() != 0) {
     throw std::runtime_error("Import error");
   }
   object_ = object;

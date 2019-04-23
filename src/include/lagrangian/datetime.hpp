@@ -69,7 +69,7 @@ class DateTime {
     long double fractional = std::modf(epoch, &integer);
 
     boost::posix_time::ptime datetime(boost::posix_time::from_time_t(integer));
-    datetime += boost::posix_time::microseconds(fractional);
+    datetime += boost::posix_time::microseconds(static_cast<int64_t>(fractional));
 
     return DateTime(datetime);
   }

@@ -17,7 +17,7 @@
 #include "reader.hpp"
 
 WrappedReader::WrappedReader(PyObject* object) : object_(nullptr) {
-  if (import_core() != 0) {
+  if (import_lagrangian__core() != 0) {
     throw std::runtime_error("Import error");
   }
   object_ = object;

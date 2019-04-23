@@ -1,0 +1,7 @@
+.vscode/**
+*build*/**
+src/lagrangian/*.so
+**/__pycache__/**
+test/data/*.nc
+*.egg-info
+setup.cfg

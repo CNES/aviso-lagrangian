@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 This script is the entry point for building, distributing and installing this
 package using Distutils.
@@ -172,7 +173,11 @@ class SetupConfig(object):
                             ":".join(library_dirs))
         elif self.parser.has_option('build_ext', 'library_dirs'):
             self.parser.remove_option('build_ext', 'library_dirs')
-        include_dirs += ['src/include']
+        include_dirs += [
+            'src/include',
+            os.path.join(
+                os.path.abspath("third_party"), "netcdf-cxx4", "cxx4")
+        ]
         try:
             import numpy.distutils.misc_util as np
             include_dirs += np.get_numpy_include_dirs()
@@ -191,6 +196,10 @@ class SetupConfig(object):
         Returns the list of necessary files to build the extension
         """
         result = []
+        cxx4 = os.path.join("third_party", "netcdf-cxx4", "cxx4")
+        for item in os.listdir(cxx4):
+            if item.startswith("nc") and item.endswith(".cpp"):
+                result.append(os.path.join(cxx4, item))
         for root, dirs, files in os.walk(os.path.join(cls.CWD, 'src')):
             if 'wrapper' in dirs:
                 dirs.remove('wrapper')
@@ -282,7 +291,7 @@ class Setup(setuptools.Command, SetupConfig):
         if self.udunits_includes:
             include_dirs.append(self.udunits_includes)
 
-        libraries = ['udunits2', "netcdf", "netcdf_c++4"]
+        libraries = ['udunits2', "netcdf"]
         if self.boost_mt:
             libraries += ["%s-mt" % item for item in boost]
         else:
