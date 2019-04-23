@@ -4,7 +4,7 @@ package:
 
 source:
         url: https://bitbucket.org/cnes_aviso/lagrangian/downloads/lagrangian-2.3.1.tar.gz
-        sha256: 5c9f2c7a8b0b08997063b54e0fc54a37bda8da6cd0a7ce0a8f72baf4c2c9e869
+        sha256: c6541e36dc644a3f70d6a2e4dfed1db689c62d635668d2f0ce943420e4f585a4
 
 requirements:
   build:
