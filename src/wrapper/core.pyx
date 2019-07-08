@@ -1,4 +1,4 @@
-# cython: c_string_type=unicode, c_string_encoding=utf8
+# cython: c_string_type=unicode, c_string_encoding=utf8, language_level=2
 # distutils: sources=src/wrapper/field.cpp src/wrapper/reader.cpp
 
 # This file is part of lagrangian library.
