@@ -61,7 +61,7 @@ class Integration {
    */
   Integration(const DateTime& start_time, const DateTime& end_time,
               const boost::posix_time::time_duration& delta_t, Field* field)
-      : size_of_interval_(delta_t.total_seconds()),
+      : size_of_interval_(delta_t.total_microseconds() * 1e-6),
         field_(field),
         start_time_(start_time.ToUnixTime()),
         end_time_(end_time.ToUnixTime()),
@@ -110,6 +110,13 @@ class Integration {
                       double& x1, double& y1) const {
     return rk_.Compute(it(), x0, y0, x1, y1);
   }
+
+  /**
+   * Gets the field used for computing the velocity of a point.
+   * 
+   * @return the velocity field used.
+   */
+  const Field* get_field() const { return field_; }
 };
 
 // ___________________________________________________________________________//
