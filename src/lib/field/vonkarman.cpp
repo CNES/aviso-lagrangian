@@ -32,8 +32,8 @@ bool Vonkarman::Compute(const double t, const double x, const double y,
   const double x2 = Square(x);
   const double y2 = Square(y);
   const double rho = sqrt(x2 + y2);
-  const double xv1 = 1.0 + l_ * FractionnalPart(t / tc_);
-  const double xv2 = 1.0 + l_ * FractionnalPart((t - tc_ / 2.0) / tc_);
+  const double xv1 = 1.0 + l_ * FractionalPart(t / tc_);
+  const double xv2 = 1.0 + l_ * FractionalPart((t - tc_ / 2.0) / tc_);
   const double d4 = exp(-(x2 - 2 * x + 1) / alpha2_ - y2);
   const double s = 1 - d4;
   const double h1 = fabs(sin(M_PI * t / tc_));

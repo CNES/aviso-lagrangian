@@ -33,11 +33,11 @@ const double kEarthRadius = 6371000;
 // ___________________________________________________________________________//
 
 /**
- * @brief Compute the fracionnal part
+ * @brief Compute the fractional part
  *
- * @return the fractionnal part of x
+ * @return the fractional part of x
  */
-inline double FractionnalPart(const double x) {
+inline double FractionalPart(const double x) {
   double i;
 
   return std::modf(x, &i);
