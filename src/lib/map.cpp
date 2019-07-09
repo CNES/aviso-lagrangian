@@ -29,6 +29,8 @@ namespace map {
 void FiniteLyapunovExponents::Initialize(
     lagrangian::FiniteLyapunovExponentsIntegration& fle,
     const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
+  auto spherical_equatorial =
+      fle.get_field()->get_coordinates_type() == Field::kSphericalEquatorial;
   for (auto ix = 0; ix < map_.get_nx(); ++ix) {
     for (auto iy = 0; iy < map_.get_ny(); ++iy) {
       // If the user restart initialization, it must release the
@@ -39,8 +41,8 @@ void FiniteLyapunovExponents::Initialize(
       }
 
       // Allocate and store the new stencil
-      position =
-          fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+      position = fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy),
+                                     stencil, spherical_equatorial);
       map_.SetItem(ix, iy, position);
       indexes_.push_back(Index(ix, iy));
     }
@@ -51,9 +53,11 @@ void FiniteLyapunovExponents::Initialize(
 
 void FiniteLyapunovExponents::Initialize(
     lagrangian::FiniteLyapunovExponentsIntegration& fle,
-    lagrangian::reader::Netcdf& reader,
+    const lagrangian::Reader* reader,
     const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
   CellProperties cell;
+  auto spherical_equatorial =
+      fle.get_field()->get_coordinates_type() == Field::kSphericalEquatorial;
 
   for (auto ix = 0; ix < map_.get_nx(); ++ix) {
     for (auto iy = 0; iy < map_.get_ny(); ++iy) {
@@ -65,10 +69,10 @@ void FiniteLyapunovExponents::Initialize(
       }
 
       // Allocate and store the new stencil
-      position =
-          fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy), stencil);
+      position = fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy),
+                                     stencil, spherical_equatorial);
 
-      if (std::isnan(reader.Interpolate(
+      if (std::isnan(reader->Interpolate(
               map_.GetXValue(ix), map_.GetYValue(iy),
               std::numeric_limits<double>::quiet_NaN(), cell))) {
         position->set_completed();

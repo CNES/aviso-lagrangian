@@ -341,6 +341,11 @@ cpdef enum UnitType:
     kAngular = lagrangian.kAngular
 
 
+cpdef enum CoordinatesType:
+    kSphericalEquatorial = lagrangian.kSphericalEquatorial
+    kCartesian = lagrangian.kCartesian
+
+
 cdef class Field:
     """
     Abstract class defining a field where it is possible to calculate a
@@ -361,6 +366,13 @@ cdef class Field:
         Unit type used by this field.
         """
         return self.wrapped.get_unit_type()
+
+    @property
+    def coordinates_type(self):
+        """
+        Coordinates type used by this field
+        """
+        return self.wrapped.get_coordinates_type()
 
     def get_unit(self):
         """
@@ -384,7 +396,9 @@ cdef class PythonField(Field):
     where ``u`` and ``v`` are the velocities computed, and ``defined`` a boolean
     indicating whether the calculated velocities are valid or not.
     """
-    def __cinit__(self, UnitType unit_type=lagrangian.kMetric):
+    def __cinit__(self,
+                  UnitType unit_type=lagrangian.kMetric,
+                  CoordinatesType coordinates_type=lagrangian.kSphericalEquatorial):
 
         # Compute must be implemented in a derived class
         if not hasattr(self, "compute"):
@@ -392,7 +406,7 @@ cdef class PythonField(Field):
                 "unimplemented pure virtual method 'compute'")
 
         self.wrapped = new lagrangian.WrappedField(
-            <cpython.ref.PyObject*>self, unit_type)
+            <cpython.ref.PyObject*>self, unit_type, coordinates_type)
 
 
 cdef class Vonkarman(Field):
@@ -676,16 +690,28 @@ cdef class Triplet(Position):
     """
     Define the position of 3 points
     """
-    def __cinit__(self, double x, double y, double delta, double start=0):
-        self.wrapped = new lagrangian.Triplet(x, y, delta, start)
+    def __cinit__(self,
+                  double x,
+                  double y,
+                  double delta,
+                  double start=0,
+                  cpython.bool spherical_equatorial=True):
+        self.wrapped = new lagrangian.Triplet(
+            x, y, delta, start, spherical_equatorial)
 
 
 cdef class Quintuplet(Position):
     """
     Define the position of 5 points
     """
-    def __cinit__(self, double x, double y, double delta, double start=0):
-        self.wrapped = new lagrangian.Quintuplet(x, y, delta, start)
+    def __cinit__(self,
+                  double x,
+                  double y,
+                  double delta,
+                  double start=0,
+                  cpython.bool spherical_equatorial=True):
+        self.wrapped = new lagrangian.Quintuplet(
+            x, y, delta, start, spherical_equatorial)
 
 
 cdef class AbstractIntegration:
@@ -936,7 +962,8 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
     def set_initial_point(self,
                           double x,
                           double y,
-                          Stencil stencil):
+                          Stencil stencil,
+                          cpython.bool spherical_equatorial=True):
         """
         Set the value of the initial point
         """
@@ -947,7 +974,8 @@ cdef class FiniteLyapunovExponentsIntegration(AbstractIntegration):
 
         fle_integration = \
             <lagrangian.FiniteLyapunovExponentsIntegration*> self.wrapped
-        cpp_position = fle_integration.SetInitialPoint(x, y, stencil)
+        cpp_position = fle_integration.SetInitialPoint(
+            x, y, stencil, spherical_equatorial)
 
         result = Position()
         result.assign(cpp_position)
@@ -1241,10 +1269,11 @@ cdef class TimeSerie(Field):
     def __cinit__(self,
                   str ini not None,
                   UnitType unit_type=kMetric,
+                  CoordinatesType coordinates_type=kSphericalEquatorial,
                   ReaderType reader_type=kNetCDF):
         cdef cpp_ini = ini.encode('utf8')
         self.wrapped = new lagrangian.TimeSerie(
-            cpp_ini, unit_type, reader_type)
+            cpp_ini, unit_type, coordinates_type, reader_type)
 
     def fetch(self, double t0, double t1):
         """
@@ -1417,11 +1446,11 @@ cdef class MapOfFiniteLyapunovExponents:
                   MapProperties map_properties,
                   FiniteLyapunovExponentsIntegration fle_integration,
                   Stencil stencil=kTriplet,
-                  Netcdf netcdf_reader=None):
+                  Reader reader=None):
         cdef:
             lagrangian.FiniteLyapunovExponentsIntegration* \
                 cpp_fle_integration
-            lagrangian.NetcdfReader* cpp_reader
+            lagrangian.Reader* cpp_reader
 
         self.wrapped = new lagrangian.MapOfFiniteLyapunovExponents(
             map_properties.wrapped.get_nx(),
@@ -1434,11 +1463,11 @@ cdef class MapOfFiniteLyapunovExponents:
         cpp_fle_integration = \
             <lagrangian.FiniteLyapunovExponentsIntegration*> \
                 self.fle_integration.wrapped
-        cpp_reader = <lagrangian.NetcdfReader*> netcdf_reader.wrapped
+        cpp_reader = <lagrangian.Reader*> reader.wrapped
 
-        if netcdf_reader is not None:
+        if reader is not None:
             self.wrapped.Initialize(cpp_fle_integration[0],
-                                    cpp_reader[0],
+                                    cpp_reader,
                                     stencil)
         else:
             self.wrapped.Initialize(cpp_fle_integration[0],

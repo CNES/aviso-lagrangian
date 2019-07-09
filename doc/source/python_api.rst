@@ -237,6 +237,30 @@ Dates and time
 Velocity fields
 ---------------
 
+.. py:class:: lagrangian.UnitType
+
+    Type of physical unit used by a velocities field
+
+    .. py:attribute:: kMetric
+
+        The field velocity is expressed in the metric system (eg. m/s)
+
+    .. py:attribute:: kAngular
+
+        The field velocity is expressed in the angular system (eg. deg/s)
+
+.. py:class:: lagrangian.CoordinatesType
+
+    Type of coordinates type used by a velocities field
+
+    .. py:attribute:: kSphericalEquatorial
+
+        Spherical equatorial (lon/lat)
+
+    .. py:attribute:: kCartesian
+
+        Cartesian space (x/y)
+
 .. py:class:: lagrangian.Field(*args)
 
     Bases: object
@@ -248,6 +272,10 @@ Velocity fields
 
         Unit type used by this field.
 
+    .. py:attribute:: coordinates_type
+
+        Coordinates type used by this field.
+
     .. py:method:: get_unit()
 
         Unit used by this field.
@@ -255,7 +283,7 @@ Velocity fields
         :return: unit
         :rtype: str
 
-.. py:class:: lagrangian.PythonField(unit_type=lagrangian.kMetric)
+.. py:class:: lagrangian.PythonField(unit_type=lagrangian.kMetric, coordinates_type=lagrangian.kSphericalEquatorial)
 
     Bases: lagrangian.Field
 
@@ -273,6 +301,8 @@ Velocity fields
 
     :param unit_type: Unit field
     :type unit_type: lagrangian.UnitType
+    :param coordinates_type: Coordinates type
+    :type coordinates_type: lagrangian.CoordinatesType
 
 .. py:class:: lagrangian.Vonkarman(a=1, w=35.06, r0=0.35, tc=1, alpha=2, y0=0.3, l=2, u0=14)
 
@@ -570,7 +600,7 @@ Stencils
 
         TODO
 
-.. py:class:: lagrangian.Triplet(x, y, delta)
+.. py:class:: lagrangian.Triplet(x, y, delta, spherical_equatorial=True)
 
     Bases: lagrangian.Position
 
@@ -583,8 +613,11 @@ Stencils
     :param delta: Initial initial separation in degrees of neighboring
         particles
     :type delta: float
+    :param spherical_equatorial: True if the coordinates system is Lon/lat
+        otherwise false
+    :type spherical_equatorial: bool
 
-.. py:class:: lagrangian.Quintuplet(x, y, delta)
+.. py:class:: lagrangian.Quintuplet(x, y, delta, spherical_equatorial=True)
 
     Bases: lagrangian.Position
 
@@ -597,6 +630,9 @@ Stencils
     :param delta: Initial initial separation in degrees of neighboring
         particles
     :type delta: float
+    :param spherical_equatorial: True if the coordinates system is Lon/lat
+        otherwise false
+    :type spherical_equatorial: bool
 
 .. py:class:: lagrangian.Stencil
 
@@ -939,7 +975,7 @@ Velocity readers
 Map of Lyapunov Exponents
 -------------------------
 
-.. py:class:: lagrangian.MapOfFiniteLyapunovExponents(map_properties, fle, stencil=langrangian.kTriplet, netcdf_reader=None)
+.. py:class:: lagrangian.MapOfFiniteLyapunovExponents(map_properties, fle, stencil=langrangian.kTriplet, reader=None)
 
     Bases: object
 
@@ -952,12 +988,12 @@ Map of Lyapunov Exponents
     :param stencil: Type of stencil used for the calculation of finite
         difference.
     :type stencil: lagrangian.Stencil
-    :param netcdf_reader: NetCDF used to locate the hidden values
+    :param reader: Reader used to locate the hidden values
         ​​(eg continents). These cells identified will not be taken into
         account during the calculation process, in order to accelerate it.
         If this parameter is not defined, all cells will be processed in the
         calculation step.
-    :type netcdf_reader: lagrangian.Netcdf
+    :type reader: lagrangian.Reader
 
     .. py:method:: lagrangian.MapOfFiniteLyapunovExponents.compute()
 

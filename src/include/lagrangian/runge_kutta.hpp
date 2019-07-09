@@ -43,17 +43,18 @@ class RungeKutta {
 
   MoveFunction pMove_;
 
-  // Move a point in a field speed expressed in degrees per second
-  inline void MoveAngular(const double t, const double x0, const double y0,
+  // Move a point in a cartesian space
+  inline void MoveCartesian(const double t, const double x0, const double y0,
                           const double u, const double v, double& x1,
                           double& y1) const {
     x1 = x0 + u * t;
     y1 = y0 + v * t;
   }
 
-  // Move a point in a field speed expressed in meters per second
-  inline void MoveMetric(const double t, const double x0, const double y0,
-                         const double u, const double v, double& x1,
+  // Move a point in a field in a spherical equatorial space
+  inline void MoveSphericalEquatorial(const double t, const double x0,
+                                      const double y0, const double u,
+                                      const double v, double& x1,
                          double& y1) const {
     const double xr = DegreesToRadians(x0);
     const double yr = DegreesToRadians(y0);
@@ -85,10 +86,12 @@ class RungeKutta {
       : h_(size_of_interval), h_2_(h_ / 2), h_6_(h_ / 6), field_(field) {
     switch (field_->get_unit_type()) {
       case Field::kAngular:
-        pMove_ = &RungeKutta::MoveAngular;
+        pMove_ = &RungeKutta::MoveCartesian;
         break;
       case Field::kMetric:
-        pMove_ = &RungeKutta::MoveMetric;
+        pMove_ = field_->get_coordinates_type() == Field::kSphericalEquatorial
+                     ? &RungeKutta::MoveSphericalEquatorial
+                     : &RungeKutta::MoveCartesian;
         break;
     }
   }

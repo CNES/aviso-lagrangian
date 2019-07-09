@@ -79,12 +79,25 @@ inline double RadiansToDegrees(const double x) {
 // ___________________________________________________________________________//
 
 /**
- * @brief Calculate distance between two latitudes/longitudes
+ * @brief Calculate distance between two points in a Cartesian space
+ *
+ * @return distance in meters
+ */
+inline double Distance(const double x0, const double y0, const double x1,
+                       const double y1) {
+  auto dx = x1 - x0;
+  auto dy = y1 - y0;
+  return std::sqrt((dx * dx) + (dy * dy));
+}
+
+/**
+ * @brief Calculate distance between two points in a spherical equatorial
+ * coordinates system
  *
  * @return distance in degrees
  */
-inline double Distance(const double lon0, const double lat0, const double lon1,
-                       const double lat1) {
+inline double GeodeticDistance(const double lon0, const double lat0,
+                               const double lon1, const double lat1) {
   double y0 = DegreesToRadians(lat0);
   double x0 = DegreesToRadians(lon0);
   double y1 = DegreesToRadians(lat1);

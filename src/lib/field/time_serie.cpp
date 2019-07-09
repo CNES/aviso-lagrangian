@@ -27,8 +27,9 @@ namespace field {
 
 TimeSerie::TimeSerie(const std::string& configuration,
                      const Field::UnitType unit_type,
+                     const Field::CoordinatesType coordinates_type,
                      const reader::Factory::Type reader_type)
-    : Field(unit_type), u_(nullptr), v_(nullptr) {
+    : Field(unit_type, coordinates_type), u_(nullptr), v_(nullptr) {
   Parameter p(configuration);
 
   u_ = new lagrangian::TimeSerie(p.Values<std::string>("U"),

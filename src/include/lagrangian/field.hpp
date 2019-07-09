@@ -41,23 +41,35 @@ class Field {
    */
   enum UnitType {
     kMetric,  //!< The field velocity is expressed in the metric
-    //	system (eg. m/s)
+              //!<	system (eg. m/s)
     kAngular  //!< The field velocity is expressed in the angular
-              // 	system (eg. deg/s)
+              //!< 	system (eg. deg/s)
+  };
+
+  /**
+   * @brief Type of coordinates
+   */
+  enum CoordinatesType {
+    kSphericalEquatorial,  //!< kSphericalEquatorial
+    kCartesian             //!< kCartesian
   };
 
  private:
   UnitType unit_type_;
+  CoordinatesType coordinates_type_;
 
  public:
   /**
    * @brief Default constructor
    *
    * @param unit_type Unit field
+   * @param coordinate_type Type of the coordinate system.
    *
-   * @throw std::invalid_argument if the type of unit is unknown
+   * @throw std::invalid_argument if the type of unit or the coordinate system
+   * is unknown
    */
-  explicit Field(const Field::UnitType unit_type) : unit_type_(unit_type) {
+  Field(const UnitType unit_type, const CoordinatesType coordinates_type)
+      : unit_type_(unit_type), coordinates_type_(coordinates_type) {
     switch (unit_type_) {
       case kMetric:
         break;
@@ -65,6 +77,14 @@ class Field {
         break;
       default:
         throw std::invalid_argument("invalid Field::UnitType value");
+    }
+    switch (coordinates_type_) {
+      case kSphericalEquatorial:
+        break;
+      case kCartesian:
+        break;
+      default:
+        throw std::invalid_argument("invalid Field::CoordinatesType value");
     }
   }
 
@@ -107,7 +127,16 @@ class Field {
    *
    * @return unit type.
    */
-  UnitType get_unit_type() const { return unit_type_; }
+  UnitType get_unit_type() const noexcept { return unit_type_; }
+
+  /**
+   * @brief Coordinates type used by this field.
+   *
+   * @return coordinates type.
+   */
+  CoordinatesType get_coordinates_type() const noexcept {
+    return coordinates_type_;
+  }
 
   /**
    * @brief Unit used by this field.

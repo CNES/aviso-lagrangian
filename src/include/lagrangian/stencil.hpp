@@ -98,6 +98,10 @@ class Iterator {
  */
 class Position {
  protected:
+  /// Distance calculation function
+  using DistanceCalculator = double (*)(const double x0, const double x1,
+                                        const double y0, const double y1);
+
   /// Abscissas of the point
   std::vector<double> x_;
 
@@ -109,6 +113,9 @@ class Position {
 
   /// Indicate whether the integration is over or not
   bool completed_{false};
+
+  /// Function used to calculate distance
+  DistanceCalculator pDistance_{&GeodeticDistance};
 
  private:
   /**
@@ -139,8 +146,13 @@ class Position {
   /**
    * @brief Constructor with start_time setting
    *
+   * @param start_time Advection starting time particles
+   * @param spherical_equatorial True if the coordinates system is Lon/lat
+   * otherwise false
    */
-  explicit Position(const double start_time) : time_(start_time) {}
+  explicit Position(const double start_time, const bool spherical_equatorial)
+      : time_(start_time),
+        pDistance_(spherical_equatorial ? &GeodeticDistance : &Distance) {}
 
   /**
    * Move constructor
@@ -218,7 +230,7 @@ class Position {
     double result = 0;
 
     for (size_t idx = 1; idx < x_.size(); ++idx) {
-      double distance = Distance(x_[0], y_[0], x_[idx], y_[idx]);
+      double distance = (*pDistance_)(x_[0], y_[0], x_[idx], y_[idx]);
       if (distance > result) {
         result = distance;
       }
@@ -279,12 +291,13 @@ class Triplet : public Position {
    * @param x Longitude of the initial point
    * @param y Latitude of the initial point
    * @param delta Initial separation in degrees of neighboring
-   * @param start_time Advection starting time
-   *  particles
+   * @param start_time Advection starting time particles
+   * @param spherical_equatorial True if the coordinates system is Lon/lat
+   * otherwise false
    */
   Triplet(const double x, const double y, const double delta,
-          const double start_time)
-      : Position(start_time) {
+          const double start_time, const bool spherical_equatorial)
+      : Position(start_time, spherical_equatorial) {
     x_.push_back(x);
     x_.push_back(x + delta);
     x_.push_back(x);
@@ -340,12 +353,13 @@ class Quintuplet : public Position {
    * @param x Longitude of the initial point
    * @param y Latitude of the initial point
    * @param delta Initial separation in degrees of neighboring
-   * @param start_time Advection starting time
-   *  particles
+   * @param start_time Advection starting time particles
+   * @param spherical_equatorial True if the coordinates system is Lon/lat
+   * otherwise false
    */
   Quintuplet(const double x, const double y, const double delta,
-             const double start_time)
-      : Position(start_time) {
+             const double start_time, const bool spherical_equatorial)
+      : Position(start_time, spherical_equatorial) {
     x_.push_back(x);
     x_.push_back(x + delta);
     x_.push_back(x);

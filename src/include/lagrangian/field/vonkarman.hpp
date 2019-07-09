@@ -54,7 +54,7 @@ class Vonkarman : public Field {
                      const double r0 = 0.35, const double tc = 1,
                      const double alpha = 2, const double y0 = 0.3,
                      const double l = 2, const double u0 = 14)
-      : Field(kMetric),
+      : Field(kMetric, kSphericalEquatorial),
         a_(a),
         w_(w),
         r0_(r0),

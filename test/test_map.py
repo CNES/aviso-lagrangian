@@ -71,7 +71,7 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         map_of_fsle = core.MapOfFiniteLyapunovExponents(
             map_properties,
             integration,
-            netcdf_reader=reader)
+            reader=reader)
         # core.set_verbose(True)
         map_of_fsle.compute()
         lambda1 = map_of_fsle.get_map_of_lambda1(0)

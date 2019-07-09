@@ -207,6 +207,7 @@ class TestTimeSerie(unittest.TestCase):
         ts = core.TimeSerie(self.ini,
                             core.kMetric,
                             core.kNetCDF)
+        self.assertEqual(ts.coordinates_type, core.kSphericalEquatorial)
         self.assertEqual(ts.start_time(),
                          datetime.datetime(2009, 12, 30))
         self.assertEqual(ts.end_time(),

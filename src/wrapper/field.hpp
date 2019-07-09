@@ -30,7 +30,9 @@ class WrappedField : public lagrangian::Field {
  public:
   explicit WrappedField(
       PyObject* object,
-      lagrangian::Field::UnitType unit_type = lagrangian::Field::kMetric);
+      lagrangian::Field::UnitType unit_type = lagrangian::Field::kMetric,
+      lagrangian::Field::CoordinatesType coordinate_type =
+          lagrangian::Field::kSphericalEquatorial);
 
   ~WrappedField() override;
 

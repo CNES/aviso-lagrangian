@@ -54,6 +54,7 @@ class TimeSerie : public Field {
   explicit TimeSerie(
       const std::string& configuration_file,
       Field::UnitType unit_type = kMetric,
+      Field::CoordinatesType coordinates_type = kSphericalEquatorial,
       reader::Factory::Type reader_type = reader::Factory::kNetCDF);
 
   /**

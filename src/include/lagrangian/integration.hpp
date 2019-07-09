@@ -113,7 +113,7 @@ class Integration {
 
   /**
    * Gets the field used for computing the velocity of a point.
-   * 
+   *
    * @return the velocity field used.
    */
   const Field* get_field() const { return field_; }
@@ -504,16 +504,19 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    * @param x Longitude
    * @param y Latitude
    * @param stencil Type of stencil used
+   * @param spherical_equatorial True if the coordinates system is Lon/lat
+   * otherwise false
    *
    * @return The position of the initial point
    */
   inline Position* SetInitialPoint(const double x, const double y,
-                                   const Stencil stencil) const {
+                                   const Stencil stencil,
+                                   const bool spherical_equatorial) const {
     switch (stencil) {
       case kTriplet:
-        return new Triplet(x, y, delta_, start_time_);
+        return new Triplet(x, y, delta_, start_time_, spherical_equatorial);
       case kQuintuplet:
-        return new Quintuplet(x, y, delta_, start_time_);
+        return new Quintuplet(x, y, delta_, start_time_, spherical_equatorial);
       default:
         throw std::invalid_argument(
             "invalid FiniteLyapunovExponents::Stencil type");

@@ -16,9 +16,10 @@
  */
 #include "field.hpp"
 
-WrappedField::WrappedField(PyObject* object,
-                           const lagrangian::Field::UnitType unit_type)
-    : lagrangian::Field(unit_type), object_(nullptr) {
+WrappedField::WrappedField(
+    PyObject* object, const lagrangian::Field::UnitType unit_type,
+    const lagrangian::Field::CoordinatesType coordinates_type)
+    : lagrangian::Field(unit_type, coordinates_type), object_(nullptr) {
   if (import_lagrangian__core() != 0) {
     throw std::runtime_error("Import error");
   }

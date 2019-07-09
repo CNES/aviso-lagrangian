@@ -297,7 +297,7 @@ class FiniteLyapunovExponents {
    */
   void Initialize(
       lagrangian::FiniteLyapunovExponentsIntegration& fle,
-      lagrangian::reader::Netcdf& reader,
+      const lagrangian::Reader* reader,
       lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
           lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 

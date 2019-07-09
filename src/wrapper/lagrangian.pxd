@@ -82,16 +82,21 @@ cdef extern from "field.hpp" nogil:
         kMetric "lagrangian::Field::kMetric"
         kAngular "lagrangian::Field::kAngular"
 
+    enum CoordinatesType "lagrangian::Field::CoordinatesType":
+        kSphericalEquatorial "lagrangian::Field::kSphericalEquatorial"
+        kCartesian "lagrangian::Field::kCartesian"
+
     cdef cppclass Field "lagrangian::Field":
         Field()
         libcpp.bool Compute(double, double, double, double, double) except+
         libcpp.bool Compute(double, double, double, double, double, CellProperties) except+
         UnitType get_unit_type()
+        CoordinatesType get_coordinates_type()
         libcpp.string.string GetUnit() except+
 
     cdef cppclass WrappedField(Field):
         WrappedField()
-        WrappedField(cpython.ref.PyObject*, UnitType)
+        WrappedField(cpython.ref.PyObject*, UnitType, CoordinatesType)
 
 
 cdef extern from "lagrangian/field/vonkarman.hpp" nogil:
@@ -110,7 +115,7 @@ cdef extern from "lagrangian/field/vonkarman.hpp" nogil:
 
 cdef extern from "lagrangian/field/time_serie.hpp" nogil:
     cdef cppclass TimeSerie "lagrangian::field::TimeSerie"(Field):
-        TimeSerie(libcpp.string.string, UnitType, ReaderType) except+
+        TimeSerie(libcpp.string.string, UnitType, CoordinatesType, ReaderType) except+
         void Fetch(double, double) except+
         DateTime StartTime()
         DateTime EndTime()
@@ -208,11 +213,11 @@ cdef extern from "lagrangian/stencil.hpp" nogil:
 
     cdef cppclass Triplet "lagrangian::Triplet"(Position):
         Triplet()
-        Triplet(double, double, double, double)
+        Triplet(double, double, double, double, bool)
 
     cdef cppclass Quintuplet "lagrangian::Quintuplet"(Position):
         Quintuplet()
-        Quintuplet(double, double, double, double)
+        Quintuplet(double, double, double, double, bool)
 
 
 cdef extern from "lagrangian/integration.hpp" nogil:
@@ -263,7 +268,7 @@ cdef extern from "lagrangian/integration.hpp" nogil:
                                            double,
                                            double,
                                            Field*) except+
-        Position* SetInitialPoint(double, double, Stencil) except+
+        Position* SetInitialPoint(double, double, Stencil, bool) except+
         libcpp.bool Separation(Position*)
         Mode get_mode()
         libcpp.bool Compute(Iterator, Position*, CellProperties)
@@ -288,7 +293,7 @@ cdef extern from "lagrangian/map.hpp" nogil:
     cdef cppclass MapOfFiniteLyapunovExponents "lagrangian::MapOfFiniteLyapunovExponents":
         MapOfFiniteLyapunovExponents (int, int, double, double, double) except+
         void Initialize(FiniteLyapunovExponentsIntegration, Stencil) except+
-        void Initialize(FiniteLyapunovExponentsIntegration, NetcdfReader, Stencil) except+
+        void Initialize(FiniteLyapunovExponentsIntegration, Reader*, Stencil) except+
         void Compute(FiniteLyapunovExponentsIntegration) except+
         Map[double]* GetMapOfLambda1(double, FiniteLyapunovExponentsIntegration) except+
         Map[double]* GetMapOfLambda2(double, FiniteLyapunovExponentsIntegration) except+
@@ -351,9 +356,9 @@ cdef inline long get_microseconds(
     ticks = duration.ticks_per_second()
     fractional = duration.fractional_seconds()
     if ticks > 1000000:
-        result = fractional / (ticks / 1000000)
+        result = <long>(fractional / (ticks / 1000000))
     else:
-        result = fractional * (1000000 / ticks)
+        result = <long>(fractional * (1000000 / ticks))
     return result
 
 
