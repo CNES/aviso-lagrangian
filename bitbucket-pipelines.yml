@@ -7,6 +7,4 @@ pipelines:
           - conda install -y cython libboost libnetcdf netcdf4 numpy python-dateutil setuptools udunits2
           - conda install -y -c conda-forge cxx-compiler
           - git submodule update --init
-          - python setup.py setup  --netcdf-includes=/opt/conda/include --netcdf-libraries=/opt/conda/lib --boost-mt=0
-          - python setup.py config
-          - python setup.py build --parallel $(getconf _NPROCESSORS_ONLN)
+          - CXXFLAGS="-I/opt/conda/include" LDFLAGS="-L/opt/conda/lib" python setup.py build --parallel $(getconf _NPROCESSORS_ONLN)
