@@ -43,7 +43,7 @@ about:
   home: https://bitbucket.org/cnes_aviso/lagrangian
   license: LGPLv3+
   license_family: LGPL
-  license_file: LICENSE
+  license_file: COPYING
   summary: 'Finite Size Lyapunov Exponent (FSLE)'
   description: |
     Finite Size Lyapunov Exponent (FSLE) is a local lagrangian diagnostics that
