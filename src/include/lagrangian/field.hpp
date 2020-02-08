@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -41,9 +38,9 @@ class Field {
    */
   enum UnitType {
     kMetric,  //!< The field velocity is expressed in the metric
-              //!<	system (eg. m/s)
+              //!< system (eg. m/s)
     kAngular  //!< The field velocity is expressed in the angular
-              //!< 	system (eg. deg/s)
+              //!< system (eg. deg/s)
   };
 
   /**
@@ -114,9 +111,10 @@ class Field {
    *
    * @return true if the value of the speed is set otherwise false.
    */
-  virtual bool Compute(
-      const double /*t*/, const double /*x*/, const double /*y*/, double& u,
-      double& v, CellProperties& /*cell*/ = CellProperties::NONE()) const {
+  virtual auto Compute(const double /*t*/, const double /*x*/,
+                       const double /*y*/, double& u, double& v,
+                       CellProperties& /*cell*/ = CellProperties::NONE()) const
+      -> bool {
     u = std::numeric_limits<double>::quiet_NaN();
     v = std::numeric_limits<double>::quiet_NaN();
     return false;
@@ -127,14 +125,16 @@ class Field {
    *
    * @return unit type.
    */
-  UnitType get_unit_type() const noexcept { return unit_type_; }
+  [[nodiscard]] auto get_unit_type() const noexcept -> UnitType {
+    return unit_type_;
+  }
 
   /**
    * @brief Coordinates type used by this field.
    *
    * @return coordinates type.
    */
-  CoordinatesType get_coordinates_type() const noexcept {
+  [[nodiscard]] auto get_coordinates_type() const noexcept -> CoordinatesType {
     return coordinates_type_;
   }
 
@@ -143,7 +143,7 @@ class Field {
    *
    * @return unit.
    */
-  const std::string GetUnit() const {
+  [[nodiscard]] auto GetUnit() const -> std::string {
     switch (unit_type_) {
       case kMetric:
         return "m/s";

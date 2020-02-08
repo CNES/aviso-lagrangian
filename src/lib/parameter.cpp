@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <regex>
@@ -29,7 +26,7 @@ namespace lagrangian {
 
 // Interpolation of an environment variable. If the variable is not found, the
 // part of the chain containing the variable is not changed.
-static std::string ExpandShell(std::string& s) {
+static auto ExpandShell(std::string& s) -> std::string {
   static const std::regex re(R"(\$\{(\w+)\})");
 
   std::match_results<std::string::const_iterator> what;
@@ -58,7 +55,7 @@ static std::string ExpandShell(std::string& s) {
  *
  * @return True if parsing is OK if not false
  */
-bool Parameter::Parse(std::string& line, std::string& buffer) {
+auto Parameter::Parse(std::string& line, std::string& buffer) -> bool {
   boost::trim(line);
 
   // Delete comment
@@ -76,7 +73,7 @@ bool Parameter::Parse(std::string& line, std::string& buffer) {
     boost::erase_range(buffer,
                        boost::make_iterator_range(it.begin(), buffer.end()));
   } else {
-    if (buffer.length() != 0u) {
+    if (buffer.length() != 0U) {
       static const std::regex re("^([^=]*)=(.*)");
       std::smatch what;
 

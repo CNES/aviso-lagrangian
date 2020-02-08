@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -34,11 +31,6 @@ namespace lagrangian {
  * @brief Cell properties of the grid used for the interpolation.
  */
 class CellProperties {
- private:
-  double x0_{std::numeric_limits<double>::max()},
-      x1_{std::numeric_limits<double>::max()}, y0_{}, y1_{};
-  int ix0_{}, ix1_{}, iy0_{}, iy1_{};
-
  public:
   /**
    * @brief Default constructor
@@ -53,7 +45,8 @@ class CellProperties {
    *
    * @return True if the coordinate is in the cell.
    */
-  inline bool Contains(const double x, const double y) const {
+  [[nodiscard]] inline auto Contains(const double x, const double y) const
+      -> bool {
     return x >= x0_ && x <= x1_ && y >= y0_ && y <= y1_;
   }
 
@@ -62,7 +55,7 @@ class CellProperties {
    *
    * @return A cell unhandled
    */
-  static CellProperties& NONE() {
+  static auto NONE() -> CellProperties& {
     static CellProperties result;
     return result;
   }
@@ -97,56 +90,61 @@ class CellProperties {
    *
    * @return The first longitude
    */
-  inline double x0() const noexcept { return x0_; }
+  [[nodiscard]] inline auto x0() const noexcept -> double { return x0_; }
 
   /**
    * @brief Get the last longitude of the cell
    *
    * @return The last longitude of the cell
    */
-  inline double x1() const noexcept { return x1_; }
+  [[nodiscard]] inline auto x1() const noexcept -> double { return x1_; }
 
   /**
    * @brief Get the first latitude of the cell
    *
    * @return The first latitude
    */
-  inline double y0() const noexcept { return y0_; }
+  [[nodiscard]] inline auto y0() const noexcept -> double { return y0_; }
 
   /**
    * @brief Get the last latitude of the cell
    *
    * @return The last longitude
    */
-  inline double y1() const noexcept { return y1_; }
+  [[nodiscard]] inline auto y1() const noexcept -> double { return y1_; }
 
   /**
    * @brief Get the index of the first longitude in the grid
    *
    * @return The index of the first longitude
    */
-  inline int ix0() const noexcept { return ix0_; }
+  [[nodiscard]] inline auto ix0() const noexcept -> int { return ix0_; }
 
   /**
    * @brief Get the index of the last longitude in the grid
    *
    * @return The index of the last longitude
    */
-  inline int ix1() const noexcept { return ix1_; }
+  [[nodiscard]] inline auto ix1() const noexcept -> int { return ix1_; }
 
   /**
    * @brief Get the index of the first latitude in the grid
    *
    * @return The index of the first latitude
    */
-  inline int iy0() const noexcept { return iy0_; }
+  [[nodiscard]] inline auto iy0() const noexcept -> int { return iy0_; }
 
   /**
    * @brief Get the index of the last latitude in the grid
    *
    * @return The index of the first latitude
    */
-  inline int iy1() const noexcept { return iy1_; }
+  [[nodiscard]] inline auto iy1() const noexcept -> int { return iy1_; }
+
+ private:
+  double x0_{std::numeric_limits<double>::max()},
+      x1_{std::numeric_limits<double>::max()}, y0_{}, y1_{};
+  int ix0_{}, ix1_{}, iy0_{}, iy1_{};
 };
 
 /**
@@ -182,9 +180,10 @@ class Reader {
    * @return Interpolated velocity or std::numeric_limits<double>::quiet_NaN()
    * if point is outside the grid.
    */
-  virtual double Interpolate(
-      double longitude, double latitude, double fill_value = 0,
-      CellProperties& cell = CellProperties::NONE()) const = 0;
+  virtual auto Interpolate(double longitude, double latitude,
+                           double fill_value = 0,
+                           CellProperties& cell = CellProperties::NONE()) const
+      -> double = 0;
 
   /**
    * @brief Returns the date of the grid.
@@ -193,7 +192,8 @@ class Reader {
    *
    * @return the date
    */
-  virtual DateTime GetDateTime(const std::string& name) const = 0;
+  [[nodiscard]] virtual auto GetDateTime(const std::string& name) const
+      -> DateTime = 0;
 
   /**
    * @brief Default method invoked when a reader is destroyed.

@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include <boost/format.hpp>
 #include <memory>
 #include <stdexcept>
@@ -27,7 +24,7 @@
 
 namespace lagrangian {
 
-void Netcdf::Open(const std::string& filename) {
+void NetCDF::Open(const std::string& filename) {
   if (filename.empty()) {
     throw std::system_error(ENOENT, std::system_category(), filename);
   }

@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -26,8 +23,7 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace reader {
+namespace lagrangian::reader {
 
 /**
  * @brief Grid NetCDF CF reader.
@@ -55,72 +51,32 @@ namespace reader {
  *        v:_FillValue = 999f ;
  *        v:long_name = "U" ;
  *        v:units = "cm/s" ;
- *        V:date = "2012-01-01 00:00:00.000000 UTC" ;
+ *        v:date = "2012-01-01 00:00:00.000000 UTC" ;
  * @endcode
  *
  * @note: The variable to be read must set an attribute named "date" that
  * define the date of data contained in the variable.
  */
-class Netcdf : public Reader {
- private:
-  using GetIndex = size_t (Netcdf::*)(const double ix, const double iy) const;
-
-  Axis axis_x_;
-  Axis axis_y_;
-
-  lagrangian::Netcdf netcdf_;
-
-  std::vector<double> data_;
-
-  GetIndex pGetIndex_{nullptr};
-
-  // Search for a variable in the NetCDF file
-  netcdf::Variable FindVariable(const std::string& name) const {
-    netcdf::Variable variable = netcdf_.FindVariable(name);
-
-    if (variable == netcdf::Variable::MISSING) {
-      throw std::logic_error(name + ": no such variable");
-    }
-
-    return variable;
-  }
-
-  // Get the index of the cell of a grid [Y, X]
-  inline size_t GetIndexXY(const double ix, const double iy) const noexcept {
-    return ix * axis_y_.GetNumElements() + iy;
-  }
-
-  // Get the index of the cell of a grid [X, Y]
-  inline size_t GetIndexYX(const double ix, const double iy) const noexcept {
-    return iy * axis_x_.GetNumElements() + ix;
-  }
-
-  // Get the value of the cell [ix, iy] of the grid
-  inline double GetValue(const int ix, const int iy,
-                         const double fill_value = 0) const noexcept {
-    double result = data_[(this->*pGetIndex_)(ix, iy)];
-    return std::isnan(result) ? fill_value : result;
-  }
-
+class NetCDF : public Reader {
  public:
   /**
    * @brief Constructor
    */
-  Netcdf() : pGetIndex_(nullptr) {}
+  NetCDF() : pGetIndex_(nullptr) {}
 
   /**
    * Move constructor
    *
    * @param rhs right value
    */
-  Netcdf(Netcdf&& rhs) = default;
+  NetCDF(NetCDF&& rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  Netcdf& operator=(Netcdf&& rhs) = default;
+  auto operator=(NetCDF&& rhs) -> NetCDF& = default;
 
   /**
    * @brief Opens a NetCDF grid in read-only.
@@ -155,9 +111,9 @@ class Netcdf : public Reader {
    * @return Interpolated value or std::numeric_limits<double>::quiet_NaN() if
    * point is outside the grid.
    */
-  double Interpolate(
-      double longitude, double latitude, double fill_value = 0,
-      CellProperties& cell = CellProperties::NONE()) const override;
+  auto Interpolate(double longitude, double latitude, double fill_value = 0,
+                   CellProperties& cell = CellProperties::NONE()) const
+      -> double override;
 
   /**
    * @brief Returns the date of the grid.
@@ -166,8 +122,52 @@ class Netcdf : public Reader {
    *
    * @return the date
    */
-  DateTime GetDateTime(const std::string& name) const override;
+  [[nodiscard]] auto GetDateTime(const std::string& name) const
+      -> DateTime override;
+
+ private:
+  using GetIndex = size_t (NetCDF::*)(const double ix, const double iy) const;
+
+  Axis axis_x_;
+  Axis axis_y_;
+
+  lagrangian::NetCDF netcdf_;
+
+  std::vector<double> data_;
+
+  GetIndex pGetIndex_{nullptr};
+
+  // Search for a variable in the NetCDF file
+  [[nodiscard]] auto FindVariable(const std::string& name) const
+      -> netcdf::Variable {
+    netcdf::Variable variable = netcdf_.FindVariable(name);
+
+    if (variable == netcdf::Variable::MISSING) {
+      throw std::logic_error(name + ": no such variable");
+    }
+
+    return variable;
+  }
+
+  // Get the index of the cell of a grid [Y, X]
+  [[nodiscard]] inline auto GetIndexXY(const double ix, const double iy) const
+      noexcept -> size_t {
+    return ix * axis_y_.GetNumElements() + iy;
+  }
+
+  // Get the index of the cell of a grid [X, Y]
+  [[nodiscard]] inline auto GetIndexYX(const double ix, const double iy) const
+      noexcept -> size_t {
+    return iy * axis_x_.GetNumElements() + ix;
+  }
+
+  // Get the value of the cell [ix, iy] of the grid
+  [[nodiscard]] inline auto GetValue(const int ix, const int iy,
+                                     const double fill_value = 0) const noexcept
+      -> double {
+    double result = data_[(this->*pGetIndex_)(ix, iy)];
+    return std::isnan(result) ? fill_value : result;
+  }
 };
 
-}  // namespace reader
-}  // namespace lagrangian
+}  // namespace lagrangian::reader

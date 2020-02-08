@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include <boost/algorithm/string.hpp>
 
 // ___________________________________________________________________________//
@@ -84,7 +81,8 @@ void Axis::MakeEdges() {
 
 // ___________________________________________________________________________//
 
-int Axis::FindIndexIrregular(const double coordinate, bool bounded) const {
+auto Axis::FindIndexIrregular(const double coordinate, bool bounded) const
+    -> int {
   int low = 0;
   int mid = 0;
   int high = points_.size();
@@ -110,18 +108,18 @@ int Axis::FindIndexIrregular(const double coordinate, bool bounded) const {
 
     return low;
   }
-    while (high > low + 1) {
-      mid = (low + high) >> 1;
-      auto value = edges_[mid];
+  while (high > low + 1) {
+    mid = (low + high) >> 1;
+    auto value = edges_[mid];
 
-      if (value == coordinate) {
-        return mid;
-      }
-
-      value < coordinate ? high = mid : low = mid;
+    if (value == coordinate) {
+      return mid;
     }
 
-    return high - 1;
+    value < coordinate ? high = mid : low = mid;
+  }
+
+  return high - 1;
 }
 
 // ___________________________________________________________________________//
@@ -177,7 +175,7 @@ Axis::Axis(const netcdf::Variable& variable) {
 //
 // True if a & b are the same coordinate
 //
-static inline bool IsSame(const double a, const double b) {
+static inline auto IsSame(const double a, const double b) -> bool {
   return std::fabs(a - b) <= 1e-4;
 }
 

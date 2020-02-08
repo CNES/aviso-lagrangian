@@ -1,19 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -39,13 +37,6 @@ namespace lagrangian {
  * @brief Handles the time integration
  */
 class Integration {
- protected:
-  double size_of_interval_;  //!< Integration time in number of seconds
-  Field* field_;             //!< Field used to compute the velocity
-  double start_time_;        //!< Start time of the integration
-  double end_time_;          //!< End time of the integration
-  RungeKutta rk_;            //!< Runge-Kutta object
-
  public:
   /**
    * @brief Default constructor
@@ -81,7 +72,7 @@ class Integration {
    *
    * @return The iterator
    */
-  Iterator GetIterator() const {
+  [[nodiscard]] auto GetIterator() const -> Iterator {
     return {start_time_, end_time_, size_of_interval_};
   }
 
@@ -106,8 +97,8 @@ class Integration {
    *
    * @return true if the new position is defined otherwise false.
    */
-  inline bool Compute(const Iterator& it, const double x0, const double y0,
-                      double& x1, double& y1) const {
+  inline auto Compute(const Iterator& it, const double x0, const double y0,
+                      double& x1, double& y1) const -> bool {
     return rk_.Compute(it(), x0, y0, x1, y1);
   }
 
@@ -116,7 +107,14 @@ class Integration {
    *
    * @return the velocity field used.
    */
-  const Field* get_field() const { return field_; }
+  [[nodiscard]] auto get_field() const -> const Field* { return field_; }
+
+ protected:
+  double size_of_interval_;  //!< Integration time in number of seconds
+  Field* field_;             //!< Field used to compute the velocity
+  double start_time_;        //!< Start time of the integration
+  double end_time_;          //!< End time of the integration
+  RungeKutta rk_;            //!< Runge-Kutta object
 };
 
 // ___________________________________________________________________________//
@@ -169,7 +167,7 @@ class Index {
   /**
    * @brief Move assignment operator
    */
-  Index& operator=(Index&& rhs) = default;
+  auto operator=(Index&& rhs) -> Index& = default;
 
   /**
    * @brief Construct a new object defining an index
@@ -184,14 +182,14 @@ class Index {
    *
    * @return The nth i
    */
-  inline int get_i() const { return i_; }
+  [[nodiscard]] inline auto get_i() const -> int { return i_; }
 
   /**
    * @brief Get the index j
    *
    * @return The nth j
    */
-  inline double get_j() const { return j_; }
+  [[nodiscard]] inline auto get_j() const -> double { return j_; }
 };
 
 // ___________________________________________________________________________//
@@ -202,14 +200,6 @@ class Index {
  * @see FiniteLyapunovExponentsIntegration
  */
 class FiniteLyapunovExponents {
- private:
-  double delta_t_;
-  double final_separation_;
-  double lambda1_;
-  double lambda2_;
-  double theta1_;
-  double theta2_;
-
  public:
   /**
    * @brief Set the effective advection time
@@ -225,7 +215,7 @@ class FiniteLyapunovExponents {
    * @return The advection time (unit number of seconds elapsed since the
    * beginning of the integration)
    */
-  inline double get_delta_t() const { return delta_t_; }
+  [[nodiscard]] inline auto get_delta_t() const -> double { return delta_t_; }
 
   /**
    * @brief Get the effective advection time (delta_t) in case of undefined FLE
@@ -237,7 +227,9 @@ class FiniteLyapunovExponents {
    * @return The effective advection time (unit number of seconds elapsed since
    * the beginning of the integration)
    */
-  inline double GetUndefinedDeltaT() const { return delta_t_; }
+  [[nodiscard]] inline auto GetUndefinedDeltaT() const -> double {
+    return delta_t_;
+  }
 
   /**
    * @brief Set the FLE associated to the maximum eigenvalue of Cauchy-Green
@@ -253,7 +245,7 @@ class FiniteLyapunovExponents {
    *
    * @return λ₁ (unit 1/sec)
    */
-  inline double get_lambda1() const { return lambda1_; }
+  [[nodiscard]] inline auto get_lambda1() const -> double { return lambda1_; }
 
   /**
    * @brief Set the FLE associated to the minimum eigenvalue of the Cauchy-Green
@@ -269,7 +261,7 @@ class FiniteLyapunovExponents {
    *
    * @return λ₂ (unit 1/sec)
    */
-  inline double get_lambda2() const { return lambda2_; }
+  [[nodiscard]] inline auto get_lambda2() const -> double { return lambda2_; }
 
   /**
    * @brief Get missing value of FLE in case of undefined FLE
@@ -281,7 +273,9 @@ class FiniteLyapunovExponents {
    *
    * @return default value (unit 1/sec)
    */
-  inline double GetUndefinedExponent() const { return 0.0; }
+  [[nodiscard]] inline auto GetUndefinedExponent() const -> double {
+    return 0.0;
+  }
 
   /**
    * @brief Set the orientation of the eigenvector associated to the maximum
@@ -297,7 +291,7 @@ class FiniteLyapunovExponents {
    *
    * @return θ₁ (unit degrees)
    */
-  inline double get_theta1() const { return theta1_; }
+  [[nodiscard]] inline auto get_theta1() const -> double { return theta1_; }
 
   /**
    * @brief Set the orientation of the eigenvector associated to the minimum
@@ -313,7 +307,7 @@ class FiniteLyapunovExponents {
    *
    * @return θ₂ (unit degrees)
    */
-  inline double get_theta2() const { return theta2_; }
+  [[nodiscard]] inline auto get_theta2() const -> double { return theta2_; }
 
   /**
    * @brief Get the missing value of the orientation ot the eigenvectors of the
@@ -326,7 +320,7 @@ class FiniteLyapunovExponents {
    *
    * @return default value (unit degrees)
    */
-  inline double GetUndefinedVector() const { return 0.0; }
+  [[nodiscard]] inline auto GetUndefinedVector() const -> double { return 0.0; }
 
   /**
    * @brief Set the final separation distance
@@ -342,7 +336,9 @@ class FiniteLyapunovExponents {
    *
    * @return the final separation distance (unit degree)
    */
-  inline double get_final_separation() const { return final_separation_; }
+  [[nodiscard]] inline auto get_final_separation() const -> double {
+    return final_separation_;
+  }
 
   /**
    * @brief Get the missing value of the final separation distance in case of
@@ -356,7 +352,7 @@ class FiniteLyapunovExponents {
    *
    * @return the missing value of final separation distance (unit degree)
    */
-  inline double GetUndefinedFinalSeparation() const {
+  [[nodiscard]] inline auto GetUndefinedFinalSeparation() const -> double {
     return final_separation_;
   }
 
@@ -367,6 +363,14 @@ class FiniteLyapunovExponents {
     lambda1_ = lambda2_ = theta1_ = theta2_ =
         std::numeric_limits<double>::quiet_NaN();
   }
+
+ private:
+  double delta_t_;
+  double final_separation_;
+  double lambda1_;
+  double lambda2_;
+  double theta1_;
+  double theta2_;
 };
 
 /**
@@ -437,25 +441,6 @@ class FiniteLyapunovExponentsIntegration : public Integration {
     kQuintuplet  //!< kQuintuplet
   };
 
- private:
-  using SeparationFunction = bool (FiniteLyapunovExponentsIntegration::*)(
-      const Position* const p) const;
-
-  const double delta_;
-  double min_separation_;
-  Mode mode_;
-  SeparationFunction pSeparation_;
-  double f2_;
-
-  inline bool SeparationFSLE(const Position* const position) const {
-    return position->MaxDistance() > min_separation_;
-  }
-
-  inline bool SeparationFTLE(const Position* const /*unused*/) const {
-    return false;
-  }
-
- public:
   /**
    * @brief Default constructor
    *
@@ -509,9 +494,9 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return The position of the initial point
    */
-  inline Position* SetInitialPoint(const double x, const double y,
-                                   const Stencil stencil,
-                                   const bool spherical_equatorial) const {
+  [[nodiscard]] inline auto SetInitialPoint(
+      const double x, const double y, const Stencil stencil,
+      const bool spherical_equatorial) const -> Position* {
     switch (stencil) {
       case kTriplet:
         return new Triplet(x, y, delta_, start_time_, spherical_equatorial);
@@ -530,7 +515,7 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the particle is separated.
    */
-  inline bool Separation(const Position* const position) const {
+  inline auto Separation(const Position* const position) const -> bool {
     return (this->*pSeparation_)(position);
   }
 
@@ -539,7 +524,7 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return The mode of the integration
    */
-  inline Mode get_mode() const { return mode_; }
+  [[nodiscard]] inline auto get_mode() const -> Mode { return mode_; }
 
   /**
    * @brief Calculate the integration
@@ -550,8 +535,8 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the integration is defined otherwise false
    */
-  inline bool Compute(const Iterator& it, Position* const position,
-                      CellProperties& cell) const {
+  inline auto Compute(const Iterator& it, Position* const position,
+                      CellProperties& cell) const -> bool {
     return position->Compute(rk_, it, cell);
   }
 
@@ -564,7 +549,26 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the exponents are defined
    */
-  bool ComputeExponents(const Position* position, FiniteLyapunovExponents& fle);
+  auto ComputeExponents(const Position* position, FiniteLyapunovExponents& fle)
+      -> bool;
+
+ private:
+  using SeparationFunction = bool (FiniteLyapunovExponentsIntegration::*)(
+      const Position* const p) const;
+
+  const double delta_;
+  double min_separation_;
+  Mode mode_;
+  SeparationFunction pSeparation_;
+  double f2_;
+
+  inline auto SeparationFSLE(const Position* const position) const -> bool {
+    return position->MaxDistance() > min_separation_;
+  }
+
+  inline auto SeparationFTLE(const Position* const /*unused*/) const -> bool {
+    return false;
+  }
 };
 
 }  // namespace lagrangian

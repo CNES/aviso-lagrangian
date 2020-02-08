@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/Users/fbriol/anaconda3/include",
+                "${workspaceFolder}/**",
+                "/Users/fbriol/anaconda3/include/python3.7m"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "compilerArgs": []
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/fbriol/anaconda3/include",
+                "${workspaceFolder}/**",
+                "/home/fbriol/anaconda3/include/python3.7m"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "compilerArgs": []
+        }
+    ],
+    "version": 4
+}

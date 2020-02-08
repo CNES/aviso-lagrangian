@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -35,11 +32,6 @@ namespace lagrangian {
  * @brief Management of a time series consisting of a list of files.
  */
 class FileList {
- private:
-  Axis axis_;
-  std::vector<std::string> filenames_;
-  bool same_coordinates_;
-
  public:
   /**
    * @brief Create a new instance of FileList.
@@ -76,7 +68,9 @@ class FileList {
    *
    * @return number of filenames
    */
-  inline int GetNumElements() const { return axis_.GetNumElements(); }
+  [[nodiscard]] inline auto GetNumElements() const -> int {
+    return axis_.GetNumElements();
+  }
 
   /**
    * @brief Get the ith filename.
@@ -87,7 +81,9 @@ class FileList {
    *
    * @throw std::out_of_range if index is out of range
    */
-  inline std::string& GetItem(const int index) { return filenames_.at(index); }
+  inline auto GetItem(const int index) -> std::string& {
+    return filenames_.at(index);
+  }
 
   /**
    * @brief Get the ith date
@@ -96,7 +92,7 @@ class FileList {
    *
    * @return date in JulianDay
    */
-  inline double GetDate(const int index) const {
+  [[nodiscard]] inline auto GetDate(const int index) const -> double {
     return axis_.GetCoordinateValue(index);
   }
 
@@ -105,7 +101,14 @@ class FileList {
    *
    * @return false if the file list have different spatial coordinates.
    */
-  inline bool same_coordinates() const { return same_coordinates_; }
+  [[nodiscard]] inline auto same_coordinates() const -> bool {
+    return same_coordinates_;
+  }
+
+ private:
+  Axis axis_;
+  std::vector<std::string> filenames_;
+  bool same_coordinates_;
 };
 
 // ___________________________________________________________________________//
@@ -117,18 +120,6 @@ class FileList {
  * file.
  */
 class TimeSerie {
- private:
-  std::vector<Reader*> readers_;
-  FileList* time_serie_;
-  int first_index_, last_index_;
-  std::string varname_;
-  std::string unit_;
-  reader::Factory::Type type_;
-  std::map<std::string, int> files_;
-
-  // Load new files in memory if necessary.
-  void Load(int ix0, int ix1);
-
  public:
   /**
    * @brief Loads the data necessary for the interpolation of the values in
@@ -180,22 +171,24 @@ class TimeSerie {
    *
    * @return the interpolated value
    */
-  double Interpolate(double date, double longitude, double latitude,
-                     double fill_value, CellProperties& cell);
+  auto Interpolate(double date, double longitude, double latitude,
+                   double fill_value, CellProperties& cell) -> double;
 
   /**
    * @brief Returns the first date of the time series.
    *
    * @returns the first date
    */
-  inline double GetFirstDate() const { return time_serie_->GetDate(0); }
+  [[nodiscard]] inline auto GetFirstDate() const -> double {
+    return time_serie_->GetDate(0);
+  }
 
   /**
    * @brief Returns the last date of the time series.
    *
    * @returns the last date
    */
-  inline double GetLastDate() const {
+  [[nodiscard]] inline auto GetLastDate() const -> double {
     return time_serie_->GetDate(time_serie_->GetNumElements() - 1);
   }
 
@@ -204,7 +197,21 @@ class TimeSerie {
    *
    * @return number of filenames
    */
-  inline int GetNumElements() const { return time_serie_->GetNumElements(); }
+  [[nodiscard]] inline auto GetNumElements() const -> int {
+    return time_serie_->GetNumElements();
+  }
+
+ private:
+  std::vector<Reader*> readers_;
+  FileList* time_serie_;
+  int first_index_, last_index_;
+  std::string varname_;
+  std::string unit_;
+  reader::Factory::Type type_;
+  std::map<std::string, int> files_;
+
+  // Load new files in memory if necessary.
+  void Load(int ix0, int ix1);
 };
 
 }  // namespace lagrangian

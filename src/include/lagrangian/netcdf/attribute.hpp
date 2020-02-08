@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -25,8 +22,7 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace netcdf {
+namespace lagrangian::netcdf {
 
 /**
  * @brief An Attribute has a name and values, used for associating
@@ -36,12 +32,6 @@ namespace netcdf {
  *
  */
 class Attribute {
- private:
-  std::string name_;
-  std::string svalue_;
-  std::vector<double> value_;
-  Attribute() : name_(""), svalue_("") {}
-
  public:
   /**
    * @brief Constructor
@@ -53,7 +43,7 @@ class Attribute {
     if (ncatt.getType() == netCDF::ncChar ||
         ncatt.getType() == netCDF::ncString) {
       ncatt.getValues(svalue_);
-    // Get Attributes values as double
+      // Get Attributes values as double
     } else {
       value_.resize(ncatt.getAttLength());
       ncatt.getValues(&value_[0]);
@@ -65,14 +55,16 @@ class Attribute {
    *
    * @return name
    */
-  inline std::string const& get_name() const { return name_; }
+  [[nodiscard]] inline auto get_name() const -> std::string const& {
+    return name_;
+  }
 
   /**
    * @brief True if value is a string.
    *
    * @return if its a string
    */
-  inline bool IsString() const { return value_.empty(); }
+  [[nodiscard]] inline auto IsString() const -> bool { return value_.empty(); }
 
   /**
    * @brief Retrieve String value; only call if IsString() is true.
@@ -83,7 +75,7 @@ class Attribute {
    *
    * @see Attribute#IsString
    */
-  inline std::string const& get_string() const {
+  [[nodiscard]] inline auto get_string() const -> std::string const& {
     if (!IsString()) {
       throw std::logic_error("Attribute is numeric");
     }
@@ -99,7 +91,7 @@ class Attribute {
    *
    * @return ith value.
    */
-  inline double get_value(const int index = 0) const {
+  [[nodiscard]] inline auto get_value(const int index = 0) const -> double {
     if (IsString()) {
       throw std::logic_error("Attribute isn't numeric");
     }
@@ -111,7 +103,7 @@ class Attribute {
    *
    * @return number of elements for this attribute.
    */
-  inline int GetLength() const {
+  [[nodiscard]] inline auto GetLength() const -> int {
     return IsString() ? svalue_.size() : value_.size();
   }
 
@@ -123,7 +115,8 @@ class Attribute {
    *
    * @return if attributes are equals
    */
-  inline friend bool operator==(Attribute const& a, Attribute const& b) {
+  inline friend auto operator==(Attribute const& a, Attribute const& b)
+      -> bool {
     return a.name_ == b.name_ && a.svalue_ == b.svalue_ && a.value_ == b.value_;
   }
 
@@ -135,7 +128,8 @@ class Attribute {
    *
    * @return if attributes are different
    */
-  inline friend bool operator!=(Attribute const& a, Attribute const& b) {
+  inline friend auto operator!=(Attribute const& a, Attribute const& b)
+      -> bool {
     return a.name_ != b.name_ || a.svalue_ != b.svalue_ || a.value_ != b.value_;
   }
 
@@ -143,7 +137,12 @@ class Attribute {
    * @brief Represents a missing attribute
    */
   static Attribute const MISSING;
+
+ private:
+  std::string name_;
+  std::string svalue_;
+  std::vector<double> value_;
+  Attribute() : name_(""), svalue_("") {}
 };
 
-}  // namespace netcdf
-}  // namespace lagrangian
+}  // namespace lagrangian::netcdf

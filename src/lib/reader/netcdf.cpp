@@ -1,26 +1,22 @@
-/*
- This file is part of lagrangian library.
-
- lagrangian is free software: you can redistribute it and/or modify
- it under the terms of GNU Lesser General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- lagrangian is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of GNU Lesser General Public License
- along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include "lagrangian/reader/netcdf.hpp"
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace reader {
+namespace lagrangian::reader {
 
 static inline double BilinearInterpolation(const double x0, const double x1,
                                            const double y0, const double y1,
@@ -28,10 +24,10 @@ static inline double BilinearInterpolation(const double x0, const double x1,
                                            const double z01, const double z11,
                                            const double x,
                                            const double y) noexcept {
-  double dx0 = x - x0;
-  double dy0 = y - y0;
-  double dx1 = x1 - x;
-  double dy1 = y1 - y;
+  auto dx0 = x - x0;
+  auto dy0 = y - y0;
+  auto dx1 = x1 - x;
+  auto dy1 = y1 - y;
 
   return (dy1 * (dx1 * z00 + dx0 * z10) + dy0 * (dx1 * z01 + dx0 * z11)) /
          ((x1 - x0) * (y1 - y0));
@@ -39,8 +35,8 @@ static inline double BilinearInterpolation(const double x0, const double x1,
 
 // ___________________________________________________________________________//
 
-void Netcdf::Open(const std::string& filename) {
-  netcdf_ = lagrangian::Netcdf(filename);
+void NetCDF::Open(const std::string& filename) {
+  netcdf_ = lagrangian::NetCDF(filename);
 
   auto variables = netcdf_.get_variables();
   auto it = variables.begin();
@@ -91,20 +87,20 @@ void Netcdf::Open(const std::string& filename) {
 
 // ___________________________________________________________________________//
 
-void Netcdf::Load(const std::string& name, const std::string& unit) {
+void NetCDF::Load(const std::string& name, const std::string& unit) {
   netcdf::Variable variable = FindVariable(name);
 
   unit.empty() ? variable.Read(data_) : variable.Read(data_, unit);
 
   pGetIndex_ =
       variable.get_shape(0) == static_cast<size_t>(axis_y_.GetNumElements())
-          ? &Netcdf::GetIndexYX
-          : &Netcdf::GetIndexXY;
+          ? &NetCDF::GetIndexYX
+          : &NetCDF::GetIndexXY;
 }
 
 // ___________________________________________________________________________//
 
-double Netcdf::Interpolate(const double longitude, const double latitude,
+double NetCDF::Interpolate(const double longitude, const double latitude,
                            const double fill_value,
                            CellProperties& cell) const {
   if (data_.empty()) {
@@ -114,8 +110,10 @@ double Netcdf::Interpolate(const double longitude, const double latitude,
   double x = axis_x_.Normalize(longitude, 360);
 
   if (!cell.Contains(x, latitude)) {
-    int ix0, ix1;
-    int iy0, iy1;
+    int ix0;
+    int ix1;
+    int iy0;
+    int iy1;
 
     if (!axis_x_.FindIndexes(x, ix0, ix1) ||
         !axis_y_.FindIndexes(latitude, iy0, iy1)) {
@@ -141,7 +139,7 @@ double Netcdf::Interpolate(const double longitude, const double latitude,
 
 // ___________________________________________________________________________//
 
-DateTime Netcdf::GetDateTime(const std::string& name) const {
+DateTime NetCDF::GetDateTime(const std::string& name) const {
   netcdf::Variable variable = FindVariable(name);
   netcdf::Attribute attribute = variable.FindAttributeIgnoreCase("date");
 
@@ -152,5 +150,4 @@ DateTime Netcdf::GetDateTime(const std::string& name) const {
   return DateTime(attribute.get_string());
 }
 
-}  // namespace reader
-}  // namespace lagrangian
+}  // namespace lagrangian::reader

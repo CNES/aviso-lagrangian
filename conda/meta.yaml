@@ -1,0 +1,59 @@
+{% set name = "lagrangian" %}
+{% set version = "2.3.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+    git_url: https://bitbucket.org/cnes_aviso/lagrangian.git
+    git_rev: HEAD
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [linux32 or win32 or py<36]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}  # [linux or osx]
+    - vs2017_win-64          # [win]
+    - cmake
+  host:
+    - boost-cpp
+    - libnetcdf
+    - numpy
+    - pip
+    - pytest
+    - python
+    - setuptools
+    - udunits2
+  run:
+    - {{ pin_compatible('numpy') }}
+    - python
+    - libnetcdf
+    - udunits2
+    - boost-cpp
+
+test:
+  imports:
+    - lagrangian.core
+
+about:
+  home: https://bitbucket.org/cnes_aviso/lagrangian
+  license: LGPLv3+
+  license_family: LGPL
+  license_file: LICENSE
+  summary: 'Finite Size Lyapunov Exponent (FSLE)'
+  description: |
+    Finite Size Lyapunov Exponent (FSLE) is a local lagrangian diagnostics that
+    is widely used for the study of transport and mixing processes of
+    oceanographic tracers (Sea surface temperature, Ocean color ...). Its
+    computation is derived from the definition of Finite-Time Lyapunov Exponent
+    that allows the identification of Lagrangian Coherent Structures.
+  doc_url: https://lagrangian.readthedocs.io/
+  dev_url: https://bitbucket.org/cnes_aviso/lagrangian
+
+extra:
+  recipe-maintainers:
+    - fbriol

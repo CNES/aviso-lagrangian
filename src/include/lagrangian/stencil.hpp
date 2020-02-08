@@ -1,20 +1,17 @@
-/*
-  This file is part of lagrangian library.
-
-  lagrangian is free software: you can redistribute it and/or modify
-  it under the terms of GNU Lesser General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  lagrangian is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of GNU Lesser General Public License
-  along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -36,11 +33,6 @@ namespace lagrangian {
  * @brief Definition of an iterator over a time period
  */
 class Iterator {
- private:
-  double end_;
-  double inc_;
-  double ix_;
-
  public:
   /**
    * @brief Default constructor
@@ -60,7 +52,9 @@ class Iterator {
    *
    * @return True if the path in the time interval is not complete.
    */
-  inline bool GoAfter() const { return inc_ > 0 ? ix_ <= end_ : ix_ >= end_; }
+  [[nodiscard]] inline auto GoAfter() const -> bool {
+    return inc_ > 0 ? ix_ <= end_ : ix_ >= end_;
+  }
 
   /**
    * @brief Move to the next time step.
@@ -73,14 +67,19 @@ class Iterator {
    * @return The current time expressed in number of seconds elapsed since
    * 1970
    */
-  inline double operator()() const { return ix_; }
+  inline auto operator()() const -> double { return ix_; }
 
   /**
    * @brief Get the time step defined
    *
    * @return The time step expressed in seconds
    */
-  inline double inc() const { return inc_; }
+  [[nodiscard]] inline auto inc() const -> double { return inc_; }
+
+ private:
+  double end_;
+  double inc_;
+  double ix_;
 };
 
 // ___________________________________________________________________________//
@@ -93,45 +92,10 @@ class Iterator {
  *            |
  *    Mᵢ₊ᵢ ⎯⎯ M₀ ⎯⎯  Mᵢ
  *            |
- *            Mᵢ₊ₙ
+ *            Mᵢ
  * </PRE>
  */
 class Position {
- protected:
-  /// Distance calculation function
-  using DistanceCalculator = double (*)(const double x0, const double x1,
-                                        const double y0, const double y1);
-
-  /// Abscissas of the point
-  std::vector<double> x_;
-
-  /// Ordinates of the point
-  std::vector<double> y_;
-
-  /// Integration time (number of seconds elapsed since 1970)
-  double time_{0};
-
-  /// Indicate whether the integration is over or not
-  bool completed_{false};
-
-  /// Function used to calculate distance
-  DistanceCalculator pDistance_{&GeodeticDistance};
-
- private:
-  /**
-   * @brief Update the position
-   *
-   * @param time Time step (number of seconds elapsed since 1970)
-   * @param x Longitude of points
-   * @param y Latitude of points
-   */
-  inline void Update(const double time, const std::vector<double>& x,
-                     const std::vector<double>& y) {
-    x_ = x;
-    y_ = y;
-    time_ = time;
-  }
-
  public:
   /**
    * @brief Default constructor
@@ -166,7 +130,7 @@ class Position {
    *
    * @param rhs right value
    */
-  Position& operator=(Position&& rhs) = default;
+  auto operator=(Position&& rhs) -> Position& = default;
 
   /**
    * @brief Destructor
@@ -174,32 +138,43 @@ class Position {
   virtual ~Position() = default;
 
   /**
+   * @brief Get the number of positions handled by this instance
+   *
+   * @return The number of positions
+   */
+  [[nodiscard]] inline auto size() const -> size_t { return x_.size(); }
+
+  /**
    * @brief Get the longitude of the point \#idx
    *
    * @return The longitude in degrees
    */
-  inline double get_xi(const size_t idx) const { return x_.at(idx); }
+  [[nodiscard]] inline auto get_xi(const size_t idx) const -> double {
+    return x_.at(idx);
+  }
 
   /**
    * @brief Get the latitude of the point \#idx
    *
    * @return The latitude in degrees
    */
-  inline double get_yi(const size_t idx) const { return y_.at(idx); }
+  [[nodiscard]] inline auto get_yi(const size_t idx) const -> double {
+    return y_.at(idx);
+  }
 
   /**
    * @brief Get the time at the end of the integration
    *
    * @return The time expressed in number of seconds elapsed since 1970
    */
-  inline double get_time() const { return time_; }
+  [[nodiscard]] inline auto get_time() const -> double { return time_; }
 
   /**
    * @brief Test if the integration is over
    *
    * @return True if the integration is over
    */
-  inline bool get_completed() const { return completed_; }
+  [[nodiscard]] inline auto is_completed() const -> bool { return completed_; }
 
   /**
    * @brief Indicate that the integration is complete.
@@ -219,14 +194,14 @@ class Position {
    *
    * @return True if the integration is defined.
    */
-  inline bool IsMissing() { return x_.empty() && y_.empty(); }
+  inline auto IsMissing() -> bool { return x_.empty() && y_.empty(); }
 
   /**
    * @brief Compute the distance max
    *
    * @return The max distance
    */
-  inline double MaxDistance() const {
+  [[nodiscard]] inline auto MaxDistance() const -> double {
     double result = 0;
 
     for (size_t idx = 1; idx < x_.size(); ++idx) {
@@ -247,7 +222,7 @@ class Position {
    *
    * @return True if the particle could be moved otherwise false
    */
-  bool Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell) {
+  auto Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell) -> bool {
     std::vector<double> x(x_.size());
     std::vector<double> y(y_.size());
 
@@ -273,6 +248,41 @@ class Position {
     // make clang-check happy
     a00 = a01 = a10 = a11 = std::numeric_limits<double>::quiet_NaN();
   }
+
+ protected:
+  /// Distance calculation function
+  using DistanceCalculator = double (*)(const double x0, const double x1,
+                                        const double y0, const double y1);
+
+  /// Abscissas of the point
+  std::vector<double> x_;
+
+  /// Ordinates of the point
+  std::vector<double> y_;
+
+  /// Integration time (number of seconds elapsed since 1970)
+  double time_{0};
+
+  /// Indicate whether the integration is over or not
+  bool completed_{false};
+
+  /// Function used to calculate distance
+  DistanceCalculator pDistance_{&GeodeticDistance};
+
+ private:
+  /**
+   * @brief Update the position
+   *
+   * @param time Time step (number of seconds elapsed since 1970)
+   * @param x Longitude of points
+   * @param y Latitude of points
+   */
+  inline void Update(const double time, const std::vector<double>& x,
+                     const std::vector<double>& y) {
+    x_ = x;
+    y_ = y;
+    time_ = time;
+  }
 };
 
 /**
@@ -283,7 +293,7 @@ class Triplet : public Position {
   /**
    * Default constructor
    */
-  Triplet() {}
+  Triplet() = default;
 
   /**
    * @brief Construct a new object defining the position of the N points
@@ -318,7 +328,7 @@ class Triplet : public Position {
    *
    * @param rhs right value
    */
-  Triplet& operator=(Triplet&& rhs) = default;
+  auto operator=(Triplet&& rhs) -> Triplet& = default;
 
   /**
    * @brief TODO
@@ -345,7 +355,7 @@ class Quintuplet : public Position {
   /**
    * Default constructor
    */
-  Quintuplet() {}
+  Quintuplet() = default;
 
   /**
    * @brief Construct a new object defining the position of the N points
@@ -385,7 +395,7 @@ class Quintuplet : public Position {
    *
    * @param rhs right value
    */
-  Quintuplet& operator=(Quintuplet&& rhs) = default;
+  auto operator=(Quintuplet&& rhs) -> Quintuplet& = default;
 
   /**
    * @brief TODO
@@ -403,4 +413,5 @@ class Quintuplet : public Position {
     a11 = y_[2] - y_[4];
   }
 };
+
 }  // namespace lagrangian

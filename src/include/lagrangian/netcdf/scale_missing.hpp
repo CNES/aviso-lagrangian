@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -28,8 +25,7 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace netcdf {
+namespace lagrangian::netcdf {
 
 /**
  * @brief A variable decorator that handles missing data, and scale/offset
@@ -44,20 +40,6 @@ namespace netcdf {
  *
  */
 class ScaleMissing {
- private:
-  bool has_scale_offset_;
-  bool has_valid_range_;
-  bool has_valid_min_;
-  bool has_valid_max_;
-  bool has_fill_value_;
-  bool has_missing_value_;
-  double valid_min_;
-  double valid_max_;
-  double scale_;
-  double offset_;
-  double fill_value_;
-  double missing_value_;
-
  public:
   /**
    * @brief Default constructor
@@ -77,7 +59,7 @@ class ScaleMissing {
    * @return true if variable has valid_range, valid_min or valid_max
    * attributes
    */
-  inline bool HasInvalidData() const {
+  [[nodiscard]] inline auto HasInvalidData() const -> bool {
     return has_valid_range_ || has_valid_min_ || has_valid_max_;
   }
 
@@ -86,21 +68,27 @@ class ScaleMissing {
    *
    * @return true if Variable has missing data values
    */
-  inline bool HasMissing() const { return HasInvalidData() || has_fill_value_; }
+  [[nodiscard]] inline auto HasMissing() const -> bool {
+    return HasInvalidData() || has_fill_value_;
+  }
 
   /**
    * @brief Minimum value in the valid range
    *
    * @return the minimum value in the valid range
    */
-  inline double get_valid_min() const { return valid_min_; }
+  [[nodiscard]] inline auto get_valid_min() const -> double {
+    return valid_min_;
+  }
 
   /**
    * @brief Maximum value in the valid range
    *
    * @return the maximum value in the valid range
    */
-  inline double get_valid_max() const { return valid_max_; }
+  [[nodiscard]] inline auto get_valid_max() const -> double {
+    return valid_max_;
+  }
 
   /**
    * @brief Value it's outside the valid range
@@ -108,13 +96,14 @@ class ScaleMissing {
    * @param value Value to test
    * @return true if value it's outside the valid range
    */
-  inline bool IsInvalidData(const double value) const {
+  [[nodiscard]] inline auto IsInvalidData(const double value) const -> bool {
     if (HasInvalidData()) {
       return (value < valid_min_) || (value > valid_max_);
     }
     if (has_valid_min_) {
       return value < valid_min_;
-    } else if (has_valid_max_) {
+    }
+    if (has_valid_max_) {
       return value > valid_max_;
     }
     return false;
@@ -125,7 +114,9 @@ class ScaleMissing {
    *
    * @return true if Variable has _FillValue attribute
    */
-  inline bool has_fill_value() const { return has_fill_value_; }
+  [[nodiscard]] inline auto has_fill_value() const -> bool {
+    return has_fill_value_;
+  }
 
   /**
    * @brief Determines if value equals the _FillValue
@@ -133,7 +124,7 @@ class ScaleMissing {
    * @param value Value to test
    * @return true if value equals the _FillValue
    */
-  inline bool IsFillValue(const double value) const {
+  [[nodiscard]] inline auto IsFillValue(const double value) const -> bool {
     return has_fill_value_ && (value == fill_value_);
   }
 
@@ -143,7 +134,7 @@ class ScaleMissing {
    * @param value Value to test
    * @return true if value equals the missing_value
    */
-  inline bool IsMissingValue(const double value) const {
+  [[nodiscard]] inline auto IsMissingValue(const double value) const -> bool {
     return has_missing_value_ && (value == missing_value_);
   }
 
@@ -154,7 +145,7 @@ class ScaleMissing {
    *
    * @return true if value is missing
    */
-  inline bool IsMissing(const double value) const {
+  [[nodiscard]] inline auto IsMissing(const double value) const -> bool {
     if (std::isnan(value)) {
       return true;
     }
@@ -201,7 +192,20 @@ class ScaleMissing {
       }
     }
   }
+
+ private:
+  bool has_scale_offset_;
+  bool has_valid_range_;
+  bool has_valid_min_;
+  bool has_valid_max_;
+  bool has_fill_value_;
+  bool has_missing_value_;
+  double valid_min_;
+  double valid_max_;
+  double scale_;
+  double offset_;
+  double fill_value_;
+  double missing_value_;
 };
 
-}  // namespace netcdf
-}  // namespace lagrangian
+}  // namespace lagrangian::netcdf

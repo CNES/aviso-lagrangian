@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -31,10 +28,6 @@ namespace lagrangian {
  */
 template <class T>
 class Splitter {
- private:
-  typename std::list<T>::iterator begin_;
-  typename std::list<T>::iterator end_;
-
  public:
   /**
    * @brief Default constructor
@@ -58,17 +51,25 @@ class Splitter {
    *
    * @param rhs right value
    */
-  Splitter& operator=(Splitter&& rhs) = default;
+  auto operator=(Splitter&& rhs) -> Splitter& = default;
 
   /**
    * @brief Start of the sublist
    */
-  inline const typename std::list<T>::iterator begin() const { return begin_; }
+  inline auto begin() const -> typename std::list<T>::iterator {
+    return begin_;
+  }
 
   /**
    * @brief End of the sublist
    */
-  inline const typename std::list<T>::iterator& end() const { return end_; }
+  inline auto end() const -> const typename std::list<T>::iterator& {
+    return end_;
+  }
+
+ private:
+  typename std::list<T>::iterator begin_;
+  typename std::list<T>::iterator end_;
 };
 
 /**
@@ -76,14 +77,6 @@ class Splitter {
  */
 template <class T>
 class SplitList : public std::list<T> {
- private:
-  /**
-   * @brief To split a list into n sublists without deleting items
-   * @param value Value to test
-   * @return false
-   */
-  static inline bool predicate(const T& /*value*/) { return false; }
-
  public:
   /**
    * @brief Default constructor
@@ -102,14 +95,14 @@ class SplitList : public std::list<T> {
    *
    * @param rhs right value
    */
-  SplitList& operator=(SplitList&& rhs) = default;
+  auto operator=(SplitList&& rhs) -> SplitList& = default;
 
   /**
    * @brief Divides the list in sublists
    *
    * @param n_sublist Number of sublist to handle
    */
-  inline std::list<Splitter<T>> Split(const int n_sublist) {
+  inline auto Split(const int n_sublist) -> std::list<Splitter<T>> {
     return Erase(predicate, n_sublist);
   }
 
@@ -124,13 +117,21 @@ class SplitList : public std::list<T> {
    * @return List of sublist.
    */
   template <typename Predicate>
-  std::list<Splitter<T>> Erase(Predicate predicate, int n_sublist);
+  auto Erase(Predicate predicate, int n_sublist) -> std::list<Splitter<T>>;
+
+ private:
+  /**
+   * @brief To split a list into n sublists without deleting items
+   * @param value Value to test
+   * @return false
+   */
+  static inline auto predicate(const T & /*value*/) -> bool { return false; }
 };
 
 template <class T>
 template <typename Predicate>
-std::list<Splitter<T>> SplitList<T>::Erase(Predicate predicate,
-                                           const int n_sublist) {
+auto SplitList<T>::Erase(Predicate predicate, const int n_sublist)
+    -> std::list<Splitter<T>> {
   typename std::list<T>::iterator it = this->begin();
   typename std::list<T>::iterator last = this->end();
   typename std::list<T>::iterator first = it;

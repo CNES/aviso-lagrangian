@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-*/
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <cfloat>
 #include <utility>
@@ -97,8 +94,8 @@ struct SortPredicate {
    *
    * @return true if date a is less than the date b otherwise false
    */
-  bool operator()(const std::pair<double, std::string>& a,
-                  const std::pair<double, std::string>& b) {
+  auto operator()(const std::pair<double, std::string>& a,
+                  const std::pair<double, std::string>& b) -> bool {
     return a.first < b.first;
   }
 };
@@ -162,10 +159,11 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
 
 // ___________________________________________________________________________//
 
-double TimeSerie::Interpolate(const double date, const double longitude,
-                              const double latitude, const double fill_value,
-                              CellProperties& cell) {
-  int it0, it1;
+auto TimeSerie::Interpolate(const double date, const double longitude,
+                            const double latitude, const double fill_value,
+                            CellProperties& cell) -> double {
+  int it0;
+  int it1;
 
   // Verify that the user has loaded the grids needed for interpolation
   if (first_index_ == -1) {
@@ -174,21 +172,21 @@ double TimeSerie::Interpolate(const double date, const double longitude,
 
   time_serie_->FindIndexes(date, it0, it1);
 
-  const double t0 = time_serie_->GetDate(it0);
-  const double t1 = time_serie_->GetDate(it1);
+  const auto t0 = time_serie_->GetDate(it0);
+  const auto t1 = time_serie_->GetDate(it1);
 
   it0 -= first_index_;
   it1 -= first_index_;
 
-  const double dx = 1 / (t1 - t0);
+  const auto dx = 1 / (t1 - t0);
 
-  const double x0 =
+  const auto x0 =
       readers_[it0]->Interpolate(longitude, latitude, fill_value, cell);
-  const double x1 =
+  const auto x1 =
       readers_[it1]->Interpolate(longitude, latitude, fill_value, cell);
 
-  const double w0 = (t1 - date) * dx;
-  const double w1 = (date - t0) * dx;
+  const auto w0 = (t1 - date) * dx;
+  const auto w1 = (date - t0) * dx;
 
   return (w0 * x0 + w1 * x1) / (w0 + w1);
 }
@@ -196,7 +194,10 @@ double TimeSerie::Interpolate(const double date, const double longitude,
 // ___________________________________________________________________________//
 
 void TimeSerie::Load(const double t0, const double t1) {
-  int it00, it01, it10, it11;
+  int it00;
+  int it01;
+  int it10;
+  int it11;
 
   time_serie_->FindIndexes(t0, it00, it01);
   time_serie_->FindIndexes(t1, it10, it11);

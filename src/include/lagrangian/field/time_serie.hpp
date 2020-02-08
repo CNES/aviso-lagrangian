@@ -1,25 +1,23 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
 
 #include <algorithm>
+#include <memory>
 
 // ___________________________________________________________________________//
 
@@ -30,18 +28,12 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace field {
+namespace lagrangian::field {
 
 /**
  * @brief Time series of velocity field
  */
 class TimeSerie : public Field {
- private:
-  lagrangian::TimeSerie* u_;
-  lagrangian::TimeSerie* v_;
-  double fill_value_;
-
  public:
   /**
    * @brief Default constructor
@@ -60,10 +52,7 @@ class TimeSerie : public Field {
   /**
    * @brief Default method invoked when a TimeSerie is destroyed.
    */
-  ~TimeSerie() override {
-    delete u_;
-    delete v_;
-  }
+  ~TimeSerie() override = default;
 
   /**
    * @brief Loads the grids used to interpolate the velocities in the
@@ -99,7 +88,7 @@ class TimeSerie : public Field {
    *
    * @return the julian day of the first date
    */
-  inline DateTime StartTime() const {
+  [[nodiscard]] inline DateTime StartTime() const {
     return DateTime::FromUnixTime(
         std::max(u_->GetFirstDate(), v_->GetFirstDate()));
   }
@@ -109,11 +98,15 @@ class TimeSerie : public Field {
    *
    * @return the julian day of the last date
    */
-  inline DateTime EndTime() const {
+  [[nodiscard]] inline DateTime EndTime() const {
     return DateTime::FromUnixTime(
         std::min(u_->GetLastDate(), v_->GetLastDate()));
   }
+
+ private:
+  std::shared_ptr<lagrangian::TimeSerie> u_{nullptr};
+  std::shared_ptr<lagrangian::TimeSerie> v_{nullptr};
+  double fill_value_;
 };
 
-}  // namespace field
-}  // namespace lagrangian
+}  // namespace lagrangian::field

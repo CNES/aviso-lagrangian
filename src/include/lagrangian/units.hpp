@@ -1,29 +1,27 @@
-/*
- This file is part of lagrangian library.
-
- lagrangian is free software: you can redistribute it and/or modify
- it under the terms of GNU Lesser General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- lagrangian is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of GNU Lesser General Public License
- along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
 
-#include <udunits2.h>
 #include <cstring>
+#include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <udunits2.h>
 #include <vector>
 
 namespace lagrangian {
@@ -57,7 +55,7 @@ class Exception : public std::runtime_error {
  */
 class SmartUtSystem {
  private:
-  ut_system* system_{nullptr};
+  std::shared_ptr<ut_system> system_;
 
  public:
   /**
@@ -68,15 +66,16 @@ class SmartUtSystem {
   /**
    * @brief Frees resources used by udunits2
    */
-  ~SmartUtSystem() { ut_free_system(system_); }
+  ~SmartUtSystem() = default;
 
   /**
    * @brief Allocates resources used by uduntits2
    */
   void Allocates() {
-    if (system_ == nullptr) {
+    if (!system_) {
       ut_set_error_message_handler(&ut_ignore);
-      system_ = ut_read_xml(nullptr);
+      system_ =
+          std::shared_ptr<ut_system>(ut_read_xml(nullptr), ut_free_system);
 
       // We search for the type of error in order to point the user to the
       // possible problem of definition for the variable UDUNITS2_XML_PATH.
@@ -93,7 +92,8 @@ class SmartUtSystem {
                         "installed, default unit, database couldn't be "
                         "opened: ") +
             std::strerror(errno));
-      } else if (status != UT_SUCCESS) {
+      }
+      if (status != UT_SUCCESS) {
         throw units::Exception("failed to initialize UDUnits2 library");
       }
     }
@@ -102,7 +102,7 @@ class SmartUtSystem {
   /**
    * @brief Returns the unit system used.
    */
-  inline ut_system* get() const { return system_; }
+  [[nodiscard]] inline auto get() const -> ut_system* { return system_.get(); }
 };
 
 // ___________________________________________________________________________//
@@ -123,14 +123,21 @@ class UnitConverter {
    * @param scale the numeric scale factor
    */
   explicit UnitConverter(const double offset = 0, const double scale = 1)
-      : offset_(offset), scale_(scale) {}
+      : offset_(offset),
+        scale_(scale){}
 
-  /**
-   * Tests if the converter is null
-   *
-   * @return true if the converter is null otherwise false
-   */
-  inline bool IsNull() const { return offset_ == 0 && scale_ == 1; }
+            /**
+             * Tests if the converter is null
+             *
+             * @return true if the converter is null otherwise false
+             */
+            [[nodiscard]] inline auto IsNull() const -> bool {
+    return offset_ == 0 && scale_ == 1;
+  }
+
+  [[nodiscard]] inline auto get_offset() const -> double { return offset_; }
+
+  [[nodiscard]] inline auto get_scale() const -> double { return scale_; }
 
   /**
    * Converts a value value and returns the new value
@@ -156,7 +163,7 @@ class UnitConverter {
   /**
    * @return A string representation of the converter
    */
-  std::string ToString() const {
+  [[nodiscard]] auto ToString() const -> std::string {
     std::stringstream ss;
     ss.precision(6);
     ss << std::fixed << "x * " << scale_ << " + " << offset_;
@@ -183,8 +190,8 @@ class Units {
    * @param to the unit to which to convert values.
    * @return The converter computed
    */
-  static UnitConverter GetConverter(const std::string& from,
-                                    const std::string& to);
+  static auto GetConverter(const std::string& from, const std::string& to)
+      -> UnitConverter;
 
   /**
    * @brief Checks if numeric values in unit "from" are convertible to numeric
@@ -195,8 +202,8 @@ class Units {
    *
    * @return Numeric values can be converted between the units.
    */
-  static bool AreConvertible(const std::string& unit1,
-                             const std::string& unit2);
+  static auto AreConvertible(const std::string& unit1, const std::string& unit2)
+      -> bool;
 
   /**
    * @brief Checks if numeric value in unit "unit" are convertible to time
@@ -206,7 +213,7 @@ class Units {
    *
    * @return If unit represents a time
    */
-  static bool IsTime(const std::string& unit) {
+  static auto IsTime(const std::string& unit) -> bool {
     return AreConvertible(unit, "seconds since 1970-01-01 00:00:00");
   }
 };

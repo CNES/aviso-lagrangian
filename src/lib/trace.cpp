@@ -62,7 +62,7 @@ class Configuration {
    *
    * @return The version number
    */
-  static std::string Version() { return "__VERSION__"; }
+  static auto Version() -> std::string { return "2.3.0"; }
 };
 
 static Configuration g_configuration;
@@ -71,5 +71,6 @@ void SetVerbose(const bool value) { g_configuration.set_verbose(value); }
 
 void Debug(std::string const& message) { g_configuration.Debug(message); }
 
-std::string Version() { return lagrangian::Configuration::Version(); }
+auto Version() -> std::string { return lagrangian::Configuration::Version(); }
+
 }  // namespace lagrangian

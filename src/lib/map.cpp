@@ -1,20 +1,17 @@
-/*
- This file is part of lagrangian library.
-
- lagrangian is free software: you can redistribute it and/or modify
- it under the terms of GNU Lesser General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- lagrangian is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of GNU Lesser General Public License
- along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include <thread>
 
 // ___________________________________________________________________________//
@@ -23,8 +20,7 @@
 
 // ___________________________________________________________________________//
 
-namespace lagrangian {
-namespace map {
+namespace lagrangian::map {
 
 void FiniteLyapunovExponents::Initialize(
     lagrangian::FiniteLyapunovExponentsIntegration& fle,
@@ -36,9 +32,7 @@ void FiniteLyapunovExponents::Initialize(
       // If the user restart initialization, it must release the
       // allocated resources
       auto position = map_.GetItem(ix, iy);
-      if (position) {
-        delete position;
-      }
+      delete position;
 
       // Allocate and store the new stencil
       position = fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy),
@@ -64,9 +58,7 @@ void FiniteLyapunovExponents::Initialize(
       // If the user restart initialization, it must release the
       // allocated resources
       auto position = map_.GetItem(ix, iy);
-      if (position) {
-        delete position;
-      }
+      delete position;
 
       // Allocate and store the new stencil
       position = fle.SetInitialPoint(map_.GetXValue(ix), map_.GetYValue(iy),
@@ -112,13 +104,18 @@ void FiniteLyapunovExponents::ComputeHt(
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::Compute(
-    lagrangian::FiniteLyapunovExponentsIntegration& fle) {
+    lagrangian::FiniteLyapunovExponentsIntegration& fle,
+    size_t num_threads) {
   auto it = fle.GetIterator();
   std::list<std::thread> threads;
 
+  if(num_threads == 0) {
+    num_threads = std::thread::hardware_concurrency();
+  }
+
   // Number of cells to process
   double items = map_.get_nx() * map_.get_ny();
-  auto splitters = indexes_.Split(num_threads_);
+  auto splitters = indexes_.Split(num_threads);
 
   while (it.GoAfter()) {
     fle.Fetch(it());
@@ -143,7 +140,7 @@ void FiniteLyapunovExponents::Compute(
     // Removing cells that are completed
     splitters = indexes_.Erase(std::bind(&FiniteLyapunovExponents::Completed,
                                          this, std::placeholders::_1),
-                               num_threads_);
+                               num_threads);
 
     Debug(str(boost::format("Close time step %s (%.02f%% completed)") % date %
               ((items - indexes_.size()) / items * 100)));
@@ -152,5 +149,4 @@ void FiniteLyapunovExponents::Compute(
   }
 }
 
-}  // namespace map
-}  // namespace lagrangian
+}  // namespace lagrangian::map

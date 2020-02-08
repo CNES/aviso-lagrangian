@@ -1,19 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -64,12 +62,13 @@ class DateTime {
    *
    * @return The datetime
    */
-  inline static DateTime FromUnixTime(const long double epoch) {
+  inline static auto FromUnixTime(const long double epoch) -> DateTime {
     long double integer;
     long double fractional = std::modf(epoch, &integer);
 
     boost::posix_time::ptime datetime(boost::posix_time::from_time_t(integer));
-    datetime += boost::posix_time::microseconds(static_cast<int64_t>(fractional * 1e6));
+    datetime +=
+        boost::posix_time::microseconds(static_cast<int64_t>(fractional * 1e6));
 
     return DateTime(datetime);
   }
@@ -79,14 +78,18 @@ class DateTime {
    *
    * @return Year
    */
-  inline int Year() const { return datetime_.date().year(); }
+  [[nodiscard]] inline auto Year() const -> int {
+    return datetime_.date().year();
+  }
 
   /**
    * @brief Get the month part of the date.
    *
    * @return Month between 1 and 12 inclusive.
    */
-  inline int Month() const { return datetime_.date().month(); }
+  [[nodiscard]] inline auto Month() const -> int {
+    return datetime_.date().month();
+  }
 
   /**
    * @brief Get the day part of the date.
@@ -94,41 +97,49 @@ class DateTime {
    * @return Between 1 and the number of days in the given month of the given
    * year.
    */
-  inline int Day() const { return datetime_.date().day(); }
+  [[nodiscard]] inline auto Day() const -> int {
+    return datetime_.date().day();
+  }
 
   /**
    * @brief Get the number of normalized hours
    *
    * @return Hour between 0 and 23 inclusive.
    */
-  inline int Hour() const { return datetime_.time_of_day().hours(); }
+  [[nodiscard]] inline auto Hour() const -> int {
+    return datetime_.time_of_day().hours();
+  }
 
   /**
    * @brief Get the number of normalized minutes
    *
    * @return Minute between 0 and 59 inclusive.
    */
-  inline int Minute() const { return datetime_.time_of_day().minutes(); }
+  [[nodiscard]] inline auto Minute() const -> int {
+    return datetime_.time_of_day().minutes();
+  }
 
   /**
    * @brief Get the normalized number of second
    *
    * @return Minute between 0 and 59 inclusive.
    */
-  inline int Second() const { return datetime_.time_of_day().seconds(); }
+  [[nodiscard]] inline auto Second() const -> int {
+    return datetime_.time_of_day().seconds();
+  }
 
   /**
    * @brief Get the normalized number of microsecond
    *
    * @return Microsecond between 0 and 999999 inclusive
    */
-  inline int Microsecond() const {
+  [[nodiscard]] inline auto Microsecond() const -> int {
     static int ticks = boost::posix_time::time_duration::ticks_per_second();
     boost::posix_time::time_duration time_duration = datetime_.time_of_day();
     int fractional = time_duration.fractional_seconds();
 
-    return ticks > 1000000 ? fractional / (ticks * 1e-6)
-                           : fractional * (1000000 / ticks);
+    return ticks > 1000000 ? static_cast<int>(fractional / (ticks * 1e-6))
+                           : static_cast<int>(fractional * (1000000 / ticks));
   }
 
   /**
@@ -137,7 +148,7 @@ class DateTime {
    * @return the number of seconds elapsed since midnight Coordinated
    * Universal Time (UTC) of January 1, 1970, not counting leap seconds.
    */
-  inline long double ToUnixTime() const {
+  [[nodiscard]] inline auto ToUnixTime() const -> long double {
     static boost::posix_time::ptime epoch(boost::gregorian::date(1970, 1, 1));
     return (datetime_ - epoch).total_seconds() + Microsecond() * 1e-6;
   }
@@ -150,7 +161,7 @@ class DateTime {
    * @return True if this datetime is earlier than the other datetime,
    * otherwise false
    */
-  inline bool operator<(const DateTime& datetime) const {
+  inline auto operator<(const DateTime& datetime) const -> bool {
     return datetime_ < datetime.datetime_;
   }
 
@@ -162,7 +173,7 @@ class DateTime {
    * @return True if this datetime is later than the other datetime,
    * otherwise false
    */
-  inline bool operator>(const DateTime& datetime) const {
+  inline auto operator>(const DateTime& datetime) const -> bool {
     return datetime_ > datetime.datetime_;
   }
 
@@ -175,7 +186,7 @@ class DateTime {
    * @return True if this datetime is earlier than or equal to the other
    *     datetime, otherwise false
    */
-  inline bool operator<=(const DateTime& datetime) const {
+  inline auto operator<=(const DateTime& datetime) const -> bool {
     return datetime_ <= datetime.datetime_;
   }
 
@@ -188,7 +199,7 @@ class DateTime {
    * @return True if this datetime is later than or equal to the other
    *     datetime, otherwise false
    */
-  inline bool operator>=(const DateTime& datetime) const {
+  inline auto operator>=(const DateTime& datetime) const -> bool {
     return datetime_ >= datetime.datetime_;
   }
 
@@ -200,7 +211,7 @@ class DateTime {
    * @return True if this datetime is equal to the other datetime, otherwise
    *     false
    */
-  inline bool operator==(const DateTime& datetime) const {
+  inline auto operator==(const DateTime& datetime) const -> bool {
     return datetime_ == datetime.datetime_;
   }
 
@@ -212,7 +223,7 @@ class DateTime {
    * @return True if this datetime is different from the other datetime,
    *     otherwise false
    */
-  inline bool operator!=(const DateTime& datetime) const {
+  inline auto operator!=(const DateTime& datetime) const -> bool {
     return datetime_ != datetime.datetime_;
   }
 
@@ -230,6 +241,7 @@ class DateTime {
    * possibles date format.
    * @endhtmlonly
    */
-  std::string ToString(const std::string& format) const;
+  [[nodiscard]] auto ToString(const std::string& format) const -> std::string;
 };
+
 }  // namespace lagrangian

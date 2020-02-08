@@ -1,20 +1,17 @@
-/*
-    This file is part of lagrangian library.
-
-    lagrangian is free software: you can redistribute it and/or modify
-    it under the terms of GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    lagrangian is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of GNU Lesser General Public License
-    along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
- */
-
+// This file is part of lagrangian library.
+//
+// lagrangian is free software: you can redistribute it and/or modify
+// it under the terms of GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// lagrangian is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of GNU Lesser General Public License
+// along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 // ___________________________________________________________________________//
@@ -39,12 +36,6 @@ namespace axis {
  * @brief Units known for a given type of axis.
  */
 class Unit {
- protected:
-  /**
-   * @brief Unit known
-   */
-  std::set<std::string> unit_;
-
  public:
   /**
    * @brief Checks if the unit can define this type of axis.
@@ -53,7 +44,7 @@ class Unit {
    *
    * @return if the unit can define this type of axis
    */
-  inline bool operator()(const std::string& unit) const {
+  inline auto operator()(const std::string& unit) const -> bool {
     return unit_.find(unit) != unit_.end();
   }
 
@@ -65,7 +56,13 @@ class Unit {
   /**
    * @brief Constructor
    */
-  Unit() {}
+  Unit() = default;
+
+ protected:
+  /**
+   * @brief Unit known
+   */
+  std::set<std::string> unit_;
 };
 
 // ___________________________________________________________________________//
@@ -139,70 +136,6 @@ class Axis {
    */
   enum Type { kUnknown, kLatitude, kLongitude, kTime, kX, kY };
 
- private:
-  Type type_{kUnknown};
-  std::vector<double> points_;
-  std::vector<double> edges_;
-  std::string unit_;
-  double start_{};
-  double increment_{};
-  bool is_regular_{false};
-  bool is_ascending_{false};
-  bool is_circle_{false};
-
-  /// Function pointer to search an index for a given value on the axis
-  using SearchIndex = int (Axis::*)(double, bool) const;
-
-  /// Function used to search an index for a given value on the axis
-  SearchIndex search_index_{nullptr};
-
-  // Check if  value(i) = start_ + i * increment_.
-  void CalcIsRegular();
-
-  // Put longitude into the range [0, 360] degrees.
-  void NormalizeLongitude();
-
-  // Computes the edges, if the axis data are not spaced regularly.
-  void MakeEdges();
-
-  // Get the index of the given points. Compute index from formula:
-  // (value - start) / step
-  inline int FindIndexRegular(const double coordinate, bool bounded) const {
-    auto index =
-        static_cast<int>(std::round((coordinate - start_) / increment_));
-
-    if (index < 0) {
-      return bounded ? 0 : -1;
-    }
-
-    if (index >= static_cast<int>(points_.size())) {
-      return bounded ? static_cast<int>(points_.size() - 1) : -1;
-    }
-
-    return index;
-  }
-
-  // Perform a binary search to find of the element of the array whose value
-  // is contained in the interval. Values must be contiguous.
-  int FindIndexIrregular(double coordinate, bool bounded) const;
-
-  // Computes axis's properties
-  void ComputeProperties() {
-    // Normalizes longitudes
-    NormalizeLongitude();
-
-    // Determine if axis data are spaced regularly
-    CalcIsRegular();
-
-    // If the axis data are not spaced regularly, compute edges.
-    MakeEdges();
-
-    // Sets the function used to search an index for a given value on this axis
-    search_index_ =
-        is_regular_ ? &Axis::FindIndexRegular : &Axis::FindIndexIrregular;
-  }
-
- public:
   /**
    * @brief Default constructor
    */
@@ -240,14 +173,14 @@ class Axis {
    *
    * @param rhs right value
    */
-  Axis& operator=(Axis&& rhs) = default;
+  auto operator=(Axis&& rhs) -> Axis& = default;
 
   /**
    * @brief Get type of axis
    *
    * @return type of axis
    */
-  inline Type get_type() const noexcept { return type_; }
+  [[nodiscard]] inline auto get_type() const noexcept -> Type { return type_; }
 
   /**
    * @brief Get the ith coordinate value.
@@ -256,7 +189,8 @@ class Axis {
    *
    * @return coordinate value
    */
-  inline double GetCoordinateValue(const int index) const {
+  [[nodiscard]] inline auto GetCoordinateValue(const int index) const
+      -> double {
     return points_[index];
   }
 
@@ -265,7 +199,7 @@ class Axis {
    *
    * @return minimum coordinate value
    */
-  inline double GetMinValue() const {
+  [[nodiscard]] inline auto GetMinValue() const -> double {
     return *(std::min_element(points_.begin(), points_.end()));
   }
 
@@ -274,7 +208,7 @@ class Axis {
    *
    * @return maximum coordinate value
    */
-  inline double GetMaxValue() const {
+  [[nodiscard]] inline auto GetMaxValue() const -> double {
     return *(std::max_element(points_.begin(), points_.end()));
   }
 
@@ -283,14 +217,18 @@ class Axis {
    *
    * @return the number of values
    */
-  inline int GetNumElements() const noexcept { return points_.size(); }
+  [[nodiscard]] inline auto GetNumElements() const noexcept -> int {
+    return points_.size();
+  }
 
   /**
    * @brief The axis values are spaced regularly
    *
    * @return true if value(i) = GetStart() + i * GetIncrement()
    */
-  inline bool is_regular() const noexcept { return is_regular_; }
+  [[nodiscard]] inline auto is_regular() const noexcept -> bool {
+    return is_regular_;
+  }
 
   /**
    * @brief Given a coordinate position, find what grid element contains it.
@@ -304,7 +242,7 @@ class Axis {
    *
    * @return index of the grid point containing it or -1 if outside grid area
    */
-  inline int FindIndex(double coordinate) const {
+  [[nodiscard]] inline auto FindIndex(double coordinate) const -> int {
     return (this->*search_index_)(coordinate, false);
   }
 
@@ -315,7 +253,7 @@ class Axis {
    * @param coordinate position in this coordinate system
    * @return index of the grid point containing it or -1 if outside grid area
    */
-  inline int FindIndexBounded(double coordinate) const {
+  [[nodiscard]] inline auto FindIndexBounded(double coordinate) const -> int {
     return (this->*search_index_)(coordinate, true);
   }
 
@@ -327,7 +265,8 @@ class Axis {
    *
    * @return Longitude between [GetMinValue(), GetMinValue() + circle]
    */
-  double Normalize(const double coordinate, const double circle) const {
+  [[nodiscard]] auto Normalize(const double coordinate,
+                               const double circle) const -> double {
     if (coordinate < start_ || coordinate > start_ + circle) {
       double result = std::remainder(coordinate - start_, circle);
       if (result < 0) {
@@ -345,7 +284,7 @@ class Axis {
    *
    * @return true if units attribute exists otherwise false
    */
-  inline bool get_units(std::string& units) const noexcept {
+  inline auto get_units(std::string& units) const noexcept -> bool {
     units = unit_;
     return !unit_.empty();
   }
@@ -381,7 +320,7 @@ class Axis {
    *
    * @return true if coordinate is inside grid area
    */
-  bool FindIndexes(const double coordinate, int& i0, int& i1) const {
+  auto FindIndexes(const double coordinate, int& i0, int& i1) const -> bool {
     i0 = i1 = FindIndex(coordinate);
 
     if (i0 == -1 && is_circle_) {
@@ -418,14 +357,18 @@ class Axis {
    *
    * @return starting value if is_regular()
    */
-  inline double get_start() const noexcept { return start_; }
+  [[nodiscard]] inline auto get_start() const noexcept -> double {
+    return start_;
+  }
 
   /**
    * @brief Get increment value if is_regular()
    *
    * @return increment value if is_regular()
    */
-  inline double get_increment() const noexcept { return increment_; }
+  [[nodiscard]] inline auto get_increment() const noexcept -> double {
+    return increment_;
+  }
 
   /**
    * @brief compare two variables instances
@@ -435,11 +378,76 @@ class Axis {
    *
    * @return if variables are equals
    */
-  inline friend bool operator==(Axis const& a, Axis const& b) {
+  inline friend auto operator==(Axis const& a, Axis const& b) -> bool {
     return a.points_ == b.points_ && a.unit_ == b.unit_ && a.type_ == b.type_;
   }
-  inline friend bool operator!=(Axis const& a, Axis const& b) {
+  inline friend auto operator!=(Axis const& a, Axis const& b) -> bool {
     return !(a == b);
+  }
+
+ private:
+  Type type_{kUnknown};
+  std::vector<double> points_;
+  std::vector<double> edges_;
+  std::string unit_;
+  double start_{};
+  double increment_{};
+  bool is_regular_{false};
+  bool is_ascending_{false};
+  bool is_circle_{false};
+
+  /// Function pointer to search an index for a given value on the axis
+  using SearchIndex = int (Axis::*)(double, bool) const;
+
+  /// Function used to search an index for a given value on the axis
+  SearchIndex search_index_{nullptr};
+
+  // Check if  value(i) = start_ + i * increment_.
+  void CalcIsRegular();
+
+  // Put longitude into the range [0, 360] degrees.
+  void NormalizeLongitude();
+
+  // Computes the edges, if the axis data are not spaced regularly.
+  void MakeEdges();
+
+  // Get the index of the given points. Compute index from formula:
+  // (value - start) / step
+  [[nodiscard]] inline auto FindIndexRegular(const double coordinate,
+                                             bool bounded) const -> int {
+    auto index =
+        static_cast<int>(std::round((coordinate - start_) / increment_));
+
+    if (index < 0) {
+      return bounded ? 0 : -1;
+    }
+
+    if (index >= static_cast<int>(points_.size())) {
+      return bounded ? static_cast<int>(points_.size() - 1) : -1;
+    }
+
+    return index;
+  }
+
+  // Perform a binary search to find of the element of the array whose value
+  // is contained in the interval. Values must be contiguous.
+  [[nodiscard]] auto FindIndexIrregular(double coordinate, bool bounded) const
+      -> int;
+
+  // Computes axis's properties
+  void ComputeProperties() {
+    // Normalizes longitudes
+    NormalizeLongitude();
+
+    // Determine if axis data are spaced regularly
+    CalcIsRegular();
+
+    // If the axis data are not spaced regularly, compute edges.
+    MakeEdges();
+
+    // Sets the function used to search an index for a given value on this axis
+    search_index_ =
+        is_regular_ ? &Axis::FindIndexRegular : &Axis::FindIndexIrregular;
   }
 };
 
