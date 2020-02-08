@@ -6,7 +6,7 @@ pipelines:
         script:
           - apt-get update -q -y
           - apt-get install -y libc++-dev g++ cmake
-          - apt-get install git python3-setuptools python3-pip python3-dev -q -y
+          - apt-get install git python3-pytest python3-setuptools python3-pip python3-dev -q -y
           - apt-get install libhdf5-serial-dev libnetcdf-dev python3-numpy libudunits2-dev -q -y
           - apt-get install libboost-date-time-dev -q -y
           - git submodule init
