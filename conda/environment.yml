@@ -1,0 +1,7 @@
+name: RTD
+dependencies:
+  - lagrangian
+  - python=3.7
+  - netcdf4
+channels:
+  - fbriol
