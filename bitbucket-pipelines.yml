@@ -9,5 +9,5 @@ pipelines:
           - apt-get install git python3-setuptools python3-pip python3-dev -q -y
           - apt-get install libhdf5-serial-dev libnetcdf-dev python3-numpy libudunits2-dev -q -y
           - apt-get install libboost-date-time-dev -q -y
-          - python setup.py build
-          - python setup.py test
+          - python3 setup.py build
+          - python3 setup.py test
