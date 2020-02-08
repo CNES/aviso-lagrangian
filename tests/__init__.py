@@ -61,6 +61,8 @@ class DownloadData(object):
 
     def __init__(self):
         self.prefix = os.path.join(os.path.dirname(__file__), "data")
+        if not os.path.exists(self.prefix):
+            os.makedirs(self.prefix)
         while not self.check():
             temp = tempfile.NamedTemporaryFile()
             self.download(temp)
