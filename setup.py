@@ -179,13 +179,14 @@ class BuildExt(setuptools.command.build_ext.build_ext):
 
         build_args = ['--config', cfg]
 
+        if self.verbose:
+            os.environ["VERBOSE"] = "1"
+
         if platform.system() != 'Windows':
             build_args += ['--', '-j%d' % os.cpu_count()]
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             if platform.system() == 'Darwin':
                 cmake_args += ['-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14']
-            if self.verbose:
-                build_args.insert(0, "--verbose")
         else:
             cmake_args += [
                 '-G', 'Visual Studio 15 2017',
@@ -194,8 +195,6 @@ class BuildExt(setuptools.command.build_ext.build_ext):
                     cfg.upper(), extdir)
             ]
             build_args += ['--', '/m']
-            if self.verbose:
-                build_args += ['/verbosity:n']
 
         os.chdir(str(build_temp))
 
