@@ -56,7 +56,7 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         reader.open(self.path)
         reader.load("Grid_0001")
         map_of_fsle = lagrangian.MapOfFiniteLyapunovExponents(
-            map_properties, integration, lagrangian.core.Stencil.TRIPLET,
+            map_properties, integration, lagrangian.Stencil.TRIPLET,
             reader)
         # lagrangian.set_verbose(True)
         map_of_fsle.compute()

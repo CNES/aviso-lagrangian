@@ -56,7 +56,9 @@ class DownloadData(object):
         "dt_upd_global_merged_madt_uv_20100331_20100331_20110329.nc":
         "c0e717977296add28ce297f19c2110bcd1499793cbdff36c613658715c8ad027",
         "dt_upd_global_merged_madt_uv_20100407_20100407_20110329.nc":
-        "eb58f62c1a4b9a7a5f9019c8cce85bcb91cc581afd49f16ff9d1e968d0f1d4a6"
+        "eb58f62c1a4b9a7a5f9019c8cce85bcb91cc581afd49f16ff9d1e968d0f1d4a6",
+        "fsle.nc":
+        "39894437cc1d3db788e359b1257d60cd164b96b3d346af0bc2c07a27ae9378d1"
     }
 
     def __init__(self):

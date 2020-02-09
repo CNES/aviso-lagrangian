@@ -1,5 +1,5 @@
 build/**
-tests/data/dt*.nc
+tests/data/*.nc
 src/lagrangian.egg-info
 dist/**
 *.so

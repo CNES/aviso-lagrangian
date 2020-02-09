@@ -311,7 +311,7 @@ class MapOfFiniteLyapunovExponents:
                  reader: Reader = None) -> None:
         ...
 
-    def compute(self, num_threads: int) -> None:
+    def compute(self, num_threads: int = 0) -> None:
         ...
 
     def map_of_delta_t(self, fill_value: float = numpy.nan) -> numpy.ndarray:
