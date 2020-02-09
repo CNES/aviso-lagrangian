@@ -187,15 +187,15 @@ def usage():
         cluster = parser.add_argument_group(
             'Runs the calculation on a cluster (divides the calculation by '
             'geographical area).')
-        cluster.add_argument("--scheduler_file",
-                             help="Path to a file with DASK scheduler "
-                             "information",
-                             metavar='PATH',
-                             default=None)
-        cluster.add_argument(
-            "--local-cluster",
-            help="Use a dask local cluster for testing purpose",
-            action="store_true")
+        group = cluster.add_mutually_exclusive_group()
+        group.add_argument("--scheduler_file",
+                           help="Path to a file with DASK scheduler "
+                           "information",
+                           metavar='PATH',
+                           default=None)
+        group.add_argument("--local-cluster",
+                           help="Use a dask local cluster for testing purpose",
+                           action="store_true")
 
     data = parser.add_argument_group('reader arguments',
                                      'Set options of the NetCDF reader.')
@@ -374,14 +374,13 @@ def build_dask_array(args: argparse.Namespace,
     x_axis = map_properties.x_axis()
     y_axis = map_properties.y_axis()
     y_chunks = numpy.array_split(y_axis, workers)
-    chunks = ((6 if args.diagnostic else 4, ),
-              (x_axis.size, ), tuple(item.size for item in y_chunks))
+    chunks = ((6 if args.diagnostic else 4, ), (x_axis.size, ),
+              tuple(item.size for item in y_chunks))
     dsk = dict()
     name = "lagrangian"
     for (i, y_chunk) in enumerate(y_chunks):
-        map_properties_ = MapProperties(x_axis.size, len(y_chunk),
-                                        x_axis[0], y_chunk[0],
-                                        map_properties.step)
+        map_properties_ = MapProperties(x_axis.size, len(y_chunk), x_axis[0],
+                                        y_chunk[0], map_properties.step)
         dsk[(name, 0, 0, i)] = (worker_task, args, fsle, map_properties_,
                                 threads_per_worker)
 
@@ -542,7 +541,7 @@ def main():
                                              args.final_separation,
                                              args.initial_separation, ts)
 
-    if HAVE_DASK and args.scheduler_file is not None or args.local_cluster:
+    if HAVE_DASK:
         if args.local_cluster:
             client = dask.distributed.Client(dask.distributed.LocalCluster())
         else:
