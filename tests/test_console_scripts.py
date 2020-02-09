@@ -27,7 +27,7 @@ class TestConsoleScripts(unittest.TestCase):
         os.environ['ROOT'] = os.path.dirname(__file__)
         cls.pos = os.path.join(os.environ['ROOT'], 'buoys.txt')
         cls.ini = os.path.join(os.environ['ROOT'], 'map.ini')
-        cls.exe = os.path.join(sys.prefix, 'bin', 'python')
+        cls.exe = os.path.join(sys.prefix, 'bin', 'python3')
         cls.ref = os.path.join(os.environ['ROOT'], 'data', 'fsle.nc')
         cls.new = os.path.join(tempfile.gettempdir(), "fsle.nc")
 
