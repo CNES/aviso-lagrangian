@@ -69,7 +69,7 @@ class Variable : public Group {
     long result = 1;
 
     for (auto& item : shape_) {
-      result *= item;
+      result *= static_cast<long>(item);
     }
 
     return result;

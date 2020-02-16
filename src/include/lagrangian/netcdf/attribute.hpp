@@ -104,7 +104,7 @@ class Attribute {
    * @return number of elements for this attribute.
    */
   [[nodiscard]] inline auto GetLength() const -> int {
-    return IsString() ? svalue_.size() : value_.size();
+    return static_cast<int>(IsString() ? svalue_.size() : value_.size());
   }
 
   /**

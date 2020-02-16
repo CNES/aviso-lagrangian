@@ -105,7 +105,7 @@ void FiniteLyapunovExponents::ComputeHt(
 
 void FiniteLyapunovExponents::Compute(
     lagrangian::FiniteLyapunovExponentsIntegration& fle,
-    size_t num_threads) {
+    int num_threads) {
   auto it = fle.GetIterator();
   std::list<std::thread> threads;
 

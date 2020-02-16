@@ -33,9 +33,9 @@ void NetCDF::Open(const std::string& filename) {
     ncfile_ = std::make_shared<netCDF::NcFile>(filename, netCDF::NcFile::read);
 
     for (auto& item : ncfile_->getDims()) {
-      dimensions_.emplace_back(netcdf::Dimension(item.second.getName(),
-                                                 item.second.getSize(),
-                                                 item.second.isUnlimited()));
+      dimensions_.emplace_back(netcdf::Dimension(
+          item.second.getName(), static_cast<int>(item.second.getSize()),
+          item.second.isUnlimited()));
     }
 
     for (auto& item : ncfile_->getVars()) {

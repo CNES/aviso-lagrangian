@@ -415,7 +415,7 @@ def main():
         long_description=long_description(),
         long_description_content_type='text/markdown',
         packages=setuptools.find_namespace_packages(
-            where=pathlib.Path("src").absolute(),
+            where=str(pathlib.Path("src").absolute()),
             exclude=(
                 "lib*",
                 "core*",

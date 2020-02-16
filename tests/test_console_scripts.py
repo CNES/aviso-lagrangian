@@ -15,6 +15,7 @@
 import os
 import unittest
 import tempfile
+import platform
 import subprocess
 import sys
 import netCDF4
@@ -27,33 +28,34 @@ class TestConsoleScripts(unittest.TestCase):
         os.environ['ROOT'] = os.path.dirname(__file__)
         cls.pos = os.path.join(os.environ['ROOT'], 'buoys.txt')
         cls.ini = os.path.join(os.environ['ROOT'], 'map.ini')
-        cls.exe = os.path.join(sys.prefix, 'bin', 'python3')
+        cls.exe = sys.executable
+        with tempfile.NamedTemporaryFile() as stream:
+            cls.tst = stream.name
         cls.ref = os.path.join(os.environ['ROOT'], 'data', 'fsle.nc')
         cls.new = os.path.join(tempfile.gettempdir(), "fsle.nc")
 
     @classmethod
     def tearDownClass(cls) -> None:
         try:
+            os.unlink(cls.tst)
             os.unlink(cls.new)
         except FileNotFoundError:
             pass
 
     def test_map_of_fle(self):
-        with tempfile.NamedTemporaryFile(mode="w") as stream:
+        with open(self.tst, "w") as stream:
             stream.write("""
 import lagrangian.console_scripts.map_of_fle
 
 if __name__ == "__main__":
     lagrangian.console_scripts.map_of_fle.main()
 """)
-            stream.flush()
-            subprocess.check_call([
-                self.exe, stream.name, self.ini, self.new, "2010-01-01",
-                "--advection_time=89", "--resolution=0.05", "--x_min=40",
-                "--x_max=59.95", "--y_min=-60", "--y_max=-40.05",
-                "--final_separation=0.2", "--verbose",
-                "--time_direction=forward"
-            ])
+        subprocess.check_call([
+            self.exe, stream.name, self.ini, self.new, "2010-01-01",
+            "--advection_time=89", "--resolution=0.05", "--x_min=40",
+            "--x_max=59.95", "--y_min=-60", "--y_max=-40.05",
+            "--final_separation=0.2", "--verbose", "--time_direction=forward"
+        ])
         with netCDF4.Dataset(self.ref) as ref:
             with netCDF4.Dataset(self.new) as new:
                 for item in ref.variables:
@@ -64,20 +66,20 @@ if __name__ == "__main__":
                     self.assertAlmostEqual(numpy.mean(x - y), 0, delta=1e-9)
 
     def test_path(self):
-        with tempfile.NamedTemporaryFile(mode="w") as stream:
+        with open(self.tst, "w") as stream:
             stream.write("""
 import lagrangian.console_scripts.path
 
 if __name__ == "__main__":
     lagrangian.console_scripts.path.main()
 """)
-            stream.flush()
-            lines = subprocess.check_output([
-                self.exe, stream.name, self.ini, self.pos, "2010-01-01",
-                "2010-01-02"
-            ])
-            self.assertEqual(
-                lines.decode(), """0\t0.000000\t0.000000\t2010-01-01T00:00:00
+        lines = subprocess.check_output([
+            self.exe, stream.name, self.ini, self.pos, "2010-01-01",
+            "2010-01-02"
+        ])
+        expected = [
+            item.strip()
+            for item in """0\t0.000000\t0.000000\t2010-01-01T00:00:00
 1\t1.433333\t43.600000\t2010-01-01T00:00:00
 2\t2.000000\t2.000000\t2010-01-01T00:00:00
 3\t4.000000\t4.000000\t2010-01-01T00:00:00
@@ -122,7 +124,13 @@ if __name__ == "__main__":
 6\t32.000000\t32.000000\t2010-01-02T00:00:00
 7\t64.000000\t64.000000\t2010-01-02T00:00:00
 8\t70.035436\t1.048449\t2010-01-02T00:00:00
-""")
+""".split("\n") if item.strip()
+        ]
+        lines = [
+            item.strip() for item in lines.decode().split("\n")
+            if item.strip()
+        ]
+        self.assertListEqual(lines, expected)
 
 
 if __name__ == "__main__":

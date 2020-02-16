@@ -233,6 +233,9 @@ def usage():
     if MODE[args.mode] == lagrangian.IntegrationMode.FTLE and \
             args.final_separation != -1:
         parser.error('argument --final_separation not allowed in FTLE ' 'mode')
+    if not HAVE_DASK:
+        args.__dict__["local_cluster"] = None
+        args.__dict__["scheduler_file"] = None
     return args
 
 
@@ -541,7 +544,7 @@ def main():
                                              args.final_separation,
                                              args.initial_separation, ts)
 
-    if HAVE_DASK:
+    if args.local_cluster or args.scheduler_file:
         if args.local_cluster:
             client = dask.distributed.Client(dask.distributed.LocalCluster())
         else:

@@ -102,7 +102,7 @@ Variable::Variable(const netCDF::NcVar& ncvar)
 
     shape_.push_back(size);
     dimensions_.emplace_back(
-        Dimension(item.getName(), size, item.isUnlimited()));
+        Dimension(item.getName(), static_cast<int>(size), item.isUnlimited()));
   }
 
   // Set scale, offset, missing and invalid data from attributes

@@ -138,7 +138,7 @@ auto SplitList<T>::Erase(Predicate predicate, const int n_sublist)
   std::list<Splitter<T>> splitters;
   int ix = 0;
   int i_sublist = 0;
-  int size = this->size();
+  int size = static_cast<int>(this->size());
   int stop = size / n_sublist;
 
   // For all items

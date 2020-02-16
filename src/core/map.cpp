@@ -41,7 +41,7 @@ class MapOfFiniteLyapunovExponents {
     }
   }
 
-  void compute(const size_t num_threads) {
+  void compute(const int num_threads) {
     auto gil = py::gil_scoped_release();
     map_.Compute(fle_, num_threads);
   }

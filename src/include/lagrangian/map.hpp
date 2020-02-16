@@ -257,7 +257,7 @@ class FiniteLyapunovExponents {
    * all, which is useful for debugging.
    */
   void Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle,
-               size_t num_threads);
+               int num_threads);
 
  protected:
   /// Grid

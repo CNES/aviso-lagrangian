@@ -67,11 +67,11 @@ void Axis::MakeEdges() {
     return;
   }
 
-  const int n = points_.size();
+  const auto n = points_.size();
 
   edges_.resize(n + 1);
 
-  for (int ix = 1; ix < n; ++ix) {
+  for (auto ix = 1ULL; ix < n; ++ix) {
     edges_[ix] = (points_[ix - 1] + points_[ix]) / 2;
   }
 
@@ -85,7 +85,7 @@ auto Axis::FindIndexIrregular(const double coordinate, bool bounded) const
     -> int {
   int low = 0;
   int mid = 0;
-  int high = points_.size();
+  int high = static_cast<int>(points_.size());
 
   if (coordinate < edges_[low]) {
     return bounded ? 0 : -1;
@@ -182,7 +182,7 @@ static inline auto IsSame(const double a, const double b) -> bool {
 // ___________________________________________________________________________//
 
 void Axis::CalcIsRegular() {
-  int n = points_.size();
+  auto n = static_cast<int>(points_.size());
 
   start_ = GetCoordinateValue(0);
 

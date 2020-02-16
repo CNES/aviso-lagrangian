@@ -218,7 +218,7 @@ class Axis {
    * @return the number of values
    */
   [[nodiscard]] inline auto GetNumElements() const noexcept -> int {
-    return points_.size();
+    return static_cast<int>(points_.size());
   }
 
   /**

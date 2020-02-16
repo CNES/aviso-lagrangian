@@ -66,10 +66,12 @@ class DownloadData(object):
         if not os.path.exists(self.prefix):
             os.makedirs(self.prefix)
         while not self.check():
-            temp = tempfile.NamedTemporaryFile()
-            self.download(temp)
-            temp.flush()
-            self.extract(temp.name)
+            temp = tempfile.NamedTemporaryFile().name
+            try:
+                self.download(temp)
+                self.extract(temp)
+            finally:
+                os.unlink(temp)
 
     def extract(self, name):
         """
@@ -94,7 +96,7 @@ class DownloadData(object):
         return True
 
     @staticmethod
-    def download(stream):
+    def download(name):
         """
         Download data from bitbucket
         """
@@ -103,11 +105,12 @@ class DownloadData(object):
               "downloads/data.zip")
         response = urllib.request.urlopen(url)
 
-        while True:
-            data = response.read(65536)
-            if not data:
-                break
-            stream.write(data)
+        with open(name, "wb") as stream:
+            while True:
+                data = response.read(65536)
+                if not data:
+                    break
+                stream.write(data)
 
     @staticmethod
     def sha256sum(path):

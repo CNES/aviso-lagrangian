@@ -19,7 +19,7 @@
 
 namespace pybind11::detail {
 
-auto microseconds = [](const boost::posix_time::time_duration& time_duration) {
+auto inline microseconds = [](const boost::posix_time::time_duration& time_duration) {
   static int ticks = boost::posix_time::time_duration::ticks_per_second();
   int fractional = time_duration.fractional_seconds();
 
