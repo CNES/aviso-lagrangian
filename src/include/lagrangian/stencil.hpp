@@ -222,7 +222,8 @@ class Position {
    *
    * @return True if the particle could be moved otherwise false
    */
-  auto Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell) -> bool {
+  auto Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell)
+      -> bool {
     std::vector<double> x(x_.size());
     std::vector<double> y(y_.size());
 
@@ -283,6 +284,47 @@ class Position {
     y_ = y;
     time_ = time;
   }
+};
+
+/**
+ * @brief Define the position of one point
+ */
+class Point : public Position {
+ public:
+  /**
+   * Default constructor
+   */
+  Point() = default;
+
+  /**
+   * @brief Construct a new object defining the position of the N points
+   *
+   * @param x Longitude of the initial point
+   * @param y Latitude of the initial point
+   * @param start_time Advection starting time particles
+   * @param spherical_equatorial True if the coordinates system is Lon/lat
+   * otherwise false
+   */
+  Point(const double x, const double y, const double start_time,
+        const bool spherical_equatorial)
+      : Position(start_time, spherical_equatorial) {
+    x_.push_back(x);
+    y_.push_back(y);
+  }
+
+  /**
+   * Move constructor
+   *
+   * @param rhs right value
+   */
+  Point(Point&& rhs) = default;
+
+  /**
+   * Move assignment operator
+   *
+   * @param rhs right value
+   */
+  auto operator=(Point&& rhs) -> Point& = default;
 };
 
 /**

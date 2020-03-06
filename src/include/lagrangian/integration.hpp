@@ -109,6 +109,16 @@ class Integration {
    */
   [[nodiscard]] auto get_field() const -> const Field* { return field_; }
 
+  /**
+   * @brief Gets the Runge-Kutta object
+   */
+  [[nodiscard]] auto get_rk4() const -> RungeKutta const& { return rk_; }
+
+  /**
+   * @brief Gets start time of the integration
+   */
+  [[nodiscard]] auto get_start_time() const -> double { return start_time_; }
+
  protected:
   double size_of_interval_;  //!< Integration time in number of seconds
   Field* field_;             //!< Field used to compute the velocity

@@ -149,4 +149,103 @@ void FiniteLyapunovExponents::Compute(
   }
 }
 
+// ___________________________________________________________________________//
+
+void Advect::Initialize(Integration& integration,
+                        const std::optional<lagrangian::Reader*> reader) {
+  CellProperties cell;
+  auto spherical_equatorial = integration.get_field()->get_coordinates_type() ==
+                              Field::kSphericalEquatorial;
+  auto start_time = integration.get_start_time();
+
+  for (auto ix = 0; ix < map_.get_nx(); ++ix) {
+    for (auto iy = 0; iy < map_.get_ny(); ++iy) {
+      // If the user restart initialization, it must release the
+      // allocated resources
+      auto position = map_.GetItem(ix, iy);
+      delete position;
+
+      // Allocate and store the new stencil
+      position = new Point(map_.GetXValue(ix), map_.GetYValue(iy), start_time,
+                           spherical_equatorial);
+
+      if (reader.has_value() &&
+          std::isnan((*reader)->Interpolate(
+              map_.GetXValue(ix), map_.GetYValue(iy),
+              std::numeric_limits<double>::quiet_NaN(), cell))) {
+        position->set_completed();
+      } else {
+        indexes_.push_back(Index(ix, iy));
+      }
+      map_.SetItem(ix, iy, position);
+    }
+  }
+}
+
+// ___________________________________________________________________________//
+
+void Advect::ComputeHt(Splitter<Index>& splitter, const RungeKutta& rk4,
+                       Iterator& it) {
+  // Creating an object containing the properties of the interpolation
+  CellProperties cell;
+
+  auto first = splitter.begin();
+  while (first != splitter.end()) {
+    auto ix = first->get_i();
+    auto iy = first->get_j();
+    auto position = map_.GetItem(ix, iy);
+
+    if (!position->Compute(rk4, it, cell)) {
+      position->Missing();
+    }
+    ++first;
+  }
+}
+
+// ___________________________________________________________________________//
+
+void Advect::Compute(Integration& integration, int num_threads) {
+  auto it = integration.GetIterator();
+  std::list<std::thread> threads;
+
+  if (num_threads == 0) {
+    num_threads = std::thread::hardware_concurrency();
+  }
+
+  // Number of cells to process
+  double items = map_.get_nx() * map_.get_ny();
+  auto splitters = indexes_.Split(num_threads);
+
+  while (it.GoAfter()) {
+    integration.Fetch(it());
+
+    auto date =
+        DateTime(DateTime::FromUnixTime(it())).ToString("%Y-%m-%d %H:%M:%S");
+
+    Debug(str(boost::format("Start time step %s (%d cells)") % date %
+              indexes_.size()));
+
+    for (auto& item : splitters) {
+      threads.emplace_back(
+          std::thread(&lagrangian::map::Advect::ComputeHt, this, std::ref(item),
+                      std::ref(integration.get_rk4()), std::ref(it)));
+    }
+
+    for (auto& item : threads) {
+      item.join();
+    }
+    threads.clear();
+
+    // Removing cells that are completed
+    splitters = indexes_.Erase(
+        std::bind(&Advect::Completed, this, std::placeholders::_1),
+        num_threads);
+
+    Debug(str(boost::format("Close time step %s (%.02f%% completed)") % date %
+              ((items - indexes_.size()) / items * 100)));
+
+    ++it;
+  }
+}
+
 }  // namespace lagrangian::map

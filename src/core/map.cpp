@@ -92,6 +92,45 @@ class MapOfFiniteLyapunovExponents {
   }
 };
 
+class Advect: public lagrangian::map::Advect {
+public:
+     using lagrangian::map::Advect::Advect;
+
+     auto get_map_of_x(const double fill_value) -> py::array_t<double> {
+       return get_map(fill_value, &lagrangian::Position::get_xi);
+     }
+
+     auto get_map_of_y(const double fill_value) -> py::array_t<double> {
+       return get_map(fill_value, &lagrangian::Position::get_yi);
+     }
+
+private:
+ auto get_map(const double fill_value,
+              const std::function<double(const lagrangian::Position&,
+                                         size_t idx)>& getter)
+     -> py::array_t<double> {
+   auto result = py::array_t<double>(
+       py::array::ShapeContainer({map_.get_nx(), map_.get_ny()}));
+   auto result_ = result.mutable_unchecked<2>();
+
+   {
+     auto gil = py::gil_scoped_release();
+
+     for (auto ix = 0; ix < map_.get_nx(); ++ix) {
+       for (auto iy = 0; iy < map_.get_ny(); ++iy) {
+         auto position = map_.GetItem(ix, iy);
+         if (position->IsMissing()) {
+           result_(ix, iy) = fill_value;
+         } else {
+           result_(ix, iy) = getter(*position, 0);
+         }
+       }
+     }
+   }
+   return result;
+ }
+};
+
 void init_map(pybind11::module& m) {
   py::class_<lagrangian::MapProperties>(m, "MapProperties",
                                         "Properties of a regular grid")
@@ -142,6 +181,63 @@ Args:
             return result;
           },
           "Gets the y-axis values");
+
+  py::class_<Advect>(m, "Advect", "Advection of grid points")
+      .def(py::init<int, int, double, double, double>(), py::arg("nx"),
+           py::arg("ny"), py::arg("x_min"), py::arg("y_min"), py::arg("step"),
+           R"__doc__(
+Default constructor
+
+Args:
+     nx (int): Number of longitudes
+     ny (int): Number of latitudes
+     x_min (float): Minimal longitude
+     y_min (float): Minimal latitude
+     step (float): Step between two consecutive longitudes and latitudes
+)__doc__")
+      .def("Initialize", &Advect::Initialize, py::arg("integration"),
+           py::arg("field") = py::none(), R"__doc__(
+Initializing the grid cells.
+
+Args:
+     integration (lagrangian.Integration): Integration peoprties
+     reader (lagragian.Reader.NetCDF): NetCDF reader allow to access of the
+          mask's value. If no reader is defined, all gris points are used
+          during the calculation
+)__doc__")
+      .def("compute", &Advect::Compute, py::arg("integration"),
+           py::arg("num_threads") = 0, R"__doc__(
+Compute the map
+
+Args:
+     integration (lagrangian.Integration): Integration peoprties
+     num_threads (int, optional): The number of threads to use for the
+          computation. If 0 all CPUs are used. If 1 is given, no parallel
+          computing code is used at all, which is useful for debugging.
+          Defaults to 0.
+)__doc__")
+      .def("map_of_x", &Advect::get_map_of_x,
+           py::arg("fill_value") = std::numeric_limits<double>::quiet_NaN(),
+           R"__doc__(
+Get the abscissa coordinates at the end of the integration.
+
+Args:
+     fill_value (float): value used for missing cells
+
+Returns:
+     numpy.ndarray: The map X coordinates at the end of the integration
+)__doc__")
+      .def("map_of_y", &Advect::get_map_of_y,
+           py::arg("fill_value") = std::numeric_limits<double>::quiet_NaN(),
+           R"__doc__(
+Get the ordinate coordinates at the end of the integration.
+
+Args:
+     fill_value (float): value used for missing cells
+
+Returns:
+     numpy.ndarray: The map Y coordinates at the end of the integration
+)__doc__");
 
   py::class_<MapOfFiniteLyapunovExponents>(
       m, "MapOfFiniteLyapunovExponents",

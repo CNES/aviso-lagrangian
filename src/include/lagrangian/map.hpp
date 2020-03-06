@@ -18,6 +18,7 @@
 
 #include <cstdlib>
 #include <thread>
+#include <optional>
 
 // ___________________________________________________________________________//
 
@@ -284,6 +285,89 @@ class FiniteLyapunovExponents {
   inline auto Completed(const Index& index) -> bool {
     Position* position = map_.GetItem(index.get_i(), index.get_j());
     return position->is_completed() || position->IsMissing();
+  }
+
+  /// List of cells of the matrix to be solved
+  SplitList<Index> indexes_;
+};
+
+
+/**
+ * @brief Advection of grid points
+ */
+class Advect {
+ public:
+  /**
+   * @brief Default constructor
+   *
+   * @param nx Number of longitudes
+   * @param ny Number of latitudes
+   * @param x_min Minimal longitude
+   * @param y_min Minimal latitude
+   * @param step Step between two consecutive longitudes and latitudes
+   *
+   * @throw std::runtime_error if the shell variable OMP_NUM_THREADS
+   * contains an invalid value
+   */
+  Advect(const int nx, const int ny, const double x_min, const double y_min,
+         const double step)
+      : map_(nx, ny, x_min, y_min, step) {}
+
+  /**
+   * @brief Default method invoked when a map is destroyed.
+   */
+  virtual ~Advect() {
+    for (int ix = 0; ix < map_.get_nx(); ++ix) {
+      for (int iy = 0; iy < map_.get_ny(); ++iy) {
+        delete map_.GetItem(ix, iy);
+      }
+    }
+  }
+
+  /**
+   * @brief Initializing the grid cells. Cells located on the hidden values
+   * ​​(eg continents) will be deleted from the calculation
+   *
+   * @param integration Integration peoprties
+   * @param reader NetCDF reader allow to access of the mask's value.
+   */
+  void Initialize(Integration& integration,
+                  const std::optional<lagrangian::Reader*> reader);
+
+  /**
+   * @brief Compute the map
+   *
+   * @param integration Integration properties
+   * @param num_threads The number of threads to use for the computation. If 0
+   * all CPUs are used. If 1 is given, no parallel computing code is used at
+   * all, which is useful for debugging.
+   */
+  void Compute(Integration& integration, int num_threads);
+
+ protected:
+  /// Grid
+  Map<Position*> map_;
+
+ private:
+  /**
+   * @brief Compute a sub part of the map in a separate thread
+   *
+   * @param splitter Parameters of the sub-matrix to compute
+   * @param fle Finite Lyapunov exponents
+   * @param it Current time step
+   */
+  void ComputeHt(Splitter<Index>& splitter, const RungeKutta& rk4,
+                 Iterator& it);
+
+  /**
+   * @brief Test if the computation for a cell is over
+   *
+   * @param index %Index of the cell
+   * @return True if the computation is over otherwise false
+   */
+  inline auto Completed(const Index& index) -> bool {
+    Position* position = map_.GetItem(index.get_i(), index.get_j());
+    return position->IsMissing();
   }
 
   /// List of cells of the matrix to be solved
