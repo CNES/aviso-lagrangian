@@ -100,9 +100,8 @@ class DownloadData(object):
         """
         Download data from bitbucket
         """
-        url = "https://bitbucket.org/cnes_aviso/lagrangian/downloads/data.zip"
-        print("downloading https://bitbucket.org/cnes_aviso/lagrangian/"
-              "downloads/data.zip")
+        url = "https://github.com/CNES/aviso-lagrangian/wiki/data.zip"
+        print("downloading %s" % url)
         response = urllib.request.urlopen(url)
 
         with open(name, "wb") as stream:
