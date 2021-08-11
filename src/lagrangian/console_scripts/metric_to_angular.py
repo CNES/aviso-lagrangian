@@ -209,18 +209,19 @@ def main():
             u = read_var(src.variables[args.u])
             v = read_var(src.variables[args.v])
 
-            u, v = convert(x, y, u, v)
+            u, v = convert(x, y, u[0, :], v[0, :])
 
-            dst.variables[args.u][:] = u * 1e6
+            dst.variables[args.u][0, :] = u * 1e6
             dst.variables[args.u].units = "microdegrees/s"
-            dst.variables[args.v][:] = v * 1e6
+            dst.variables[args.v][0, :] = v * 1e6
             dst.variables[args.v].units = "microdegrees/s"
 
             src.close()
             dst.close()
-        finally:
+        except:
             if os.path.exists(path):
                 os.unlink(path)
+            raise
 
 
 if __name__ == '__main__':
