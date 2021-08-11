@@ -404,7 +404,7 @@ def main():
         version=release(),
         description=("Lagrangian Coherent Structures and Finite-Time "
                      "Lyapunov Exponents"),
-        url='https://bitbucket.org/cnes_aviso/lagrangian',
+        url='https://github.com/CNES/aviso-lagrangian',
         author='CLS/LOCEAN',
         author_email="fbriol@cls.fr",
         classifiers=CLASSIFIERS,
