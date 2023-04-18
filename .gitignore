@@ -24,3 +24,4 @@ __pycache__/
 *$py.class
 docs/build/
 docs/source/generated
+*.nc

@@ -62,7 +62,7 @@ class Configuration {
    *
    * @return The version number
    */
-  static auto Version() -> std::string { return "1.3.1"; }
+  static auto Version() -> std::string { return "2.3.0"; }
 };
 
 static Configuration g_configuration;

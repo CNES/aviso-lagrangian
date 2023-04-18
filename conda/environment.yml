@@ -3,5 +3,8 @@ dependencies:
   - lagrangian
   - python=3.7
   - netcdf4
+  # Evita error: ImportError: libnetcdf.so.13: cannot open shared object file: No such file or directory
+  # Referencia: https://github.com/conda-forge/vtk-feedstock/issues/85
+  - libnetcdf=4.6.2
 channels:
   - fbriol
