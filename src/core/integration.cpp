@@ -29,10 +29,10 @@ struct Iterator : public lagrangian::Iterator {
   bool first_or_done_{true};
 };
 
-void init_integration(pybind11::module& m) {
+void init_integration(pybind11::module &m) {
   py::class_<lagrangian::RungeKutta>(m, "RungeKutta",
                                      "Fourth-order Runge-Kutta method")
-      .def(py::init<double, lagrangian::Field*>(), R"__doc__(
+      .def(py::init<double, lagrangian::Field *>(), R"__doc__(
 Default constructor
 
 Args:
@@ -42,9 +42,9 @@ Args:
            py::keep_alive<1, 3>())
       .def(
           "compute",
-          [](const lagrangian::RungeKutta& self, const lagrangian::DateTime& t,
+          [](const lagrangian::RungeKutta &self, const lagrangian::DateTime &t,
              const double x, const double y,
-             lagrangian::CellProperties& cell) -> py::tuple {
+             lagrangian::CellProperties &cell) -> py::tuple {
             double xi;
             double yi;
             if (self.Compute(t.ToUnixTime(), x, y, xi, yi, cell)) {
@@ -97,7 +97,7 @@ Default constructor
     minus advection starting time (- start_time_) which is not correct. (see
     FiniteLyapunovExponentsIntegration::ComputeExponents in integration.cpp)
 )__doc__")
-      .def(py::init([](const lagrangian::DateTime& date,
+      .def(py::init([](const lagrangian::DateTime &date,
                        const bool spherical_equatorial) {
              return std::make_unique<lagrangian::Position>(
                  date.ToUnixTime(), spherical_equatorial);
@@ -113,7 +113,7 @@ Args:
 )__doc__")
       .def(
           "xi",
-          [](const lagrangian::Position& self) -> py::array_t<double> {
+          [](const lagrangian::Position &self) -> py::array_t<double> {
             auto result =
                 py::array_t<double>(py::array::ShapeContainer({self.size()}));
             auto result_ = result.mutable_unchecked<1>();
@@ -126,7 +126,7 @@ Args:
           "Returns the x-axis of the point")
       .def(
           "yi",
-          [](const lagrangian::Position& self) -> py::array_t<double> {
+          [](const lagrangian::Position &self) -> py::array_t<double> {
             auto result =
                 py::array_t<double>(py::array::ShapeContainer({self.size()}));
             auto result_ = result.mutable_unchecked<1>();
@@ -139,7 +139,7 @@ Args:
           "Returns the y-axis of the point")
       .def_property_readonly(
           "time",
-          [](const lagrangian::Position& self) -> lagrangian::DateTime {
+          [](const lagrangian::Position &self) -> lagrangian::DateTime {
             return lagrangian::DateTime::FromUnixTime(self.get_time());
           },
           "Returns the time at the end of the integration")
@@ -153,8 +153,8 @@ Args:
            "Compute the distance max")
       .def(
           "compute",
-          [](lagrangian::Position& self, const lagrangian::RungeKutta& rk4,
-             const Iterator& it, lagrangian::CellProperties& cell) -> bool {
+          [](lagrangian::Position &self, const lagrangian::RungeKutta &rk4,
+             const Iterator &it, lagrangian::CellProperties &cell) -> bool {
             return self.Compute(rk4, it, cell);
           },
           py::arg("rk4"), py::arg("it"), py::arg("cell"), R"__doc__(
@@ -169,7 +169,7 @@ Args:
 Returns:
     bool: True if the particle could be moved otherwise false
 )__doc__")
-      .def("strain_tensor", [](const lagrangian::Position& self) -> py::tuple {
+      .def("strain_tensor", [](const lagrangian::Position &self) -> py::tuple {
         double a00;
         double a01;
         double a10;
@@ -182,7 +182,7 @@ Returns:
       m, "Triplet", "Define the position of 3 points")
       .def(py::init<>())
       .def(py::init([](const double x, const double y, const double delta,
-                       const lagrangian::DateTime& date,
+                       const lagrangian::DateTime &date,
                        const bool spherical_equatorial) {
              return std::make_unique<lagrangian::Triplet>(
                  x, y, delta, date.ToUnixTime(), spherical_equatorial);
@@ -205,7 +205,7 @@ Args:
       m, "Quintuplet", "Define the position of 5 points")
       .def(py::init<>())
       .def(py::init([](const double x, const double y, const double delta,
-                       const lagrangian::DateTime& date,
+                       const lagrangian::DateTime &date,
                        const bool spherical_equatorial) {
              return std::make_unique<lagrangian::Quintuplet>(
                  x, y, delta, date.ToUnixTime(), spherical_equatorial);
@@ -226,8 +226,8 @@ Args:
 
   py::class_<Iterator>(m, "Iterator",
                        "Definition of an iterator over a time period")
-      .def("__iter__", [](Iterator& self) -> Iterator& { return self; })
-      .def("__next__", [](Iterator& self) -> lagrangian::DateTime {
+      .def("__iter__", [](Iterator &self) -> Iterator & { return self; })
+      .def("__next__", [](Iterator &self) -> lagrangian::DateTime {
         if (!self.first_or_done_) {
           ++self;
         } else {
@@ -243,7 +243,7 @@ Args:
   py::class_<lagrangian::Integration>(m, "Integration",
                                       "Handles the time integration")
       .def(py::init<lagrangian::DateTime, lagrangian::DateTime,
-                    boost::posix_time::time_duration, lagrangian::Field*>(),
+                    boost::posix_time::time_duration, lagrangian::Field *>(),
            py::arg("start_time"), py::arg("end_time"), py::arg("delta_t"),
            py::arg("field"), R"__doc__(Default constructor
 
@@ -257,7 +257,7 @@ Args:
            py::keep_alive<1, 5>())
       .def(
           "iterator",
-          [](const lagrangian::Integration& self) -> Iterator {
+          [](const lagrangian::Integration &self) -> Iterator {
             return Iterator(self.GetIterator());
           },
           R"__doc__(Return an iterator that describes the integration period
@@ -267,7 +267,7 @@ Returns:
 )__doc__")
       .def(
           "fetch",
-          [](lagrangian::Integration& self, const lagrangian::DateTime& date)
+          [](lagrangian::Integration &self, const lagrangian::DateTime &date)
               -> void { self.Fetch(date.ToUnixTime()); },
           py::arg("date"),
           R"__doc__(Perform the tasks before a new time step (eg load grids required)
@@ -277,7 +277,7 @@ Args:
 )__doc__")
       .def(
           "compute",
-          [](const lagrangian::Integration& self, const Iterator& it,
+          [](const lagrangian::Integration &self, const Iterator &it,
              const double x0, const double y0) -> py::object {
             double x1;
             double y1;
@@ -304,7 +304,7 @@ Returns:
       m, "Path",
       "Handles the movement of a particle using the Runge-Kutta method.")
       .def(py::init<lagrangian::DateTime, lagrangian::DateTime,
-                    boost::posix_time::time_duration, lagrangian::Field*>(),
+                    boost::posix_time::time_duration, lagrangian::Field *>(),
            py::arg("start_time"), py::arg("end_time"), py::arg("delta_t"),
            py::arg("field"), R"__doc__(Default constructor
 
@@ -402,7 +402,7 @@ For more details see:
       .def(py::init<lagrangian::DateTime, lagrangian::DateTime,
                     boost::posix_time::time_duration,
                     lagrangian::FiniteLyapunovExponentsIntegration::Mode,
-                    double, double, lagrangian::Field*>(),
+                    double, double, lagrangian::Field *>(),
            py::arg("start_time"), py::arg("end_time"), py::arg("delta_t"),
            py::arg("mode"), py::arg("min_sepration"), py::arg("delta"),
            py::arg("field") = nullptr, R"__doc__(Default constructor
@@ -451,9 +451,9 @@ Returns:
           "Mode of integration")
       .def(
           "compute",
-          [](const lagrangian::FiniteLyapunovExponentsIntegration& self,
-             const Iterator& it, lagrangian::Position* const position,
-             lagrangian::CellProperties& cell) -> bool {
+          [](const lagrangian::FiniteLyapunovExponentsIntegration &self,
+             const Iterator &it, lagrangian::Position *const position,
+             lagrangian::CellProperties &cell) -> bool {
             return self.Compute(it, position, cell);
           },
           py::arg("it"), py::arg("position"), py::arg("cell"), R"__doc__(

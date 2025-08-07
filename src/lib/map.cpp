@@ -23,7 +23,7 @@
 namespace lagrangian::map {
 
 void FiniteLyapunovExponents::Initialize(
-    lagrangian::FiniteLyapunovExponentsIntegration& fle,
+    lagrangian::FiniteLyapunovExponentsIntegration &fle,
     const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
   auto spherical_equatorial =
       fle.get_field()->get_coordinates_type() == Field::kSphericalEquatorial;
@@ -46,8 +46,8 @@ void FiniteLyapunovExponents::Initialize(
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::Initialize(
-    lagrangian::FiniteLyapunovExponentsIntegration& fle,
-    const lagrangian::Reader* reader,
+    lagrangian::FiniteLyapunovExponentsIntegration &fle,
+    const lagrangian::Reader *reader,
     const lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil) {
   CellProperties cell;
   auto spherical_equatorial =
@@ -79,8 +79,8 @@ void FiniteLyapunovExponents::Initialize(
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::ComputeHt(
-    Splitter<Index>& splitter,
-    lagrangian::FiniteLyapunovExponentsIntegration& fle, Iterator& it) {
+    Splitter<Index> &splitter,
+    lagrangian::FiniteLyapunovExponentsIntegration &fle, Iterator &it) {
   // Creating an object containing the properties of the interpolation
   CellProperties cell;
 
@@ -104,7 +104,7 @@ void FiniteLyapunovExponents::ComputeHt(
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::Compute(
-    lagrangian::FiniteLyapunovExponentsIntegration& fle, int num_threads) {
+    lagrangian::FiniteLyapunovExponentsIntegration &fle, int num_threads) {
   auto it = fle.GetIterator();
   std::list<std::thread> threads;
 
@@ -125,13 +125,13 @@ void FiniteLyapunovExponents::Compute(
     Debug(str(boost::format("Start time step %s (%d cells)") % date %
               indexes_.size()));
 
-    for (auto& item : splitters) {
+    for (auto &item : splitters) {
       threads.emplace_back(
           std::thread(&lagrangian::map::FiniteLyapunovExponents::ComputeHt,
                       this, std::ref(item), std::ref(fle), std::ref(it)));
     }
 
-    for (auto& item : threads) {
+    for (auto &item : threads) {
       item.join();
     }
     threads.clear();
@@ -150,8 +150,8 @@ void FiniteLyapunovExponents::Compute(
 
 // ___________________________________________________________________________//
 
-void Advect::Initialize(Integration& integration,
-                        const std::optional<lagrangian::Reader*> reader) {
+void Advect::Initialize(Integration &integration,
+                        const std::optional<lagrangian::Reader *> reader) {
   CellProperties cell;
   auto spherical_equatorial = integration.get_field()->get_coordinates_type() ==
                               Field::kSphericalEquatorial;
@@ -183,8 +183,8 @@ void Advect::Initialize(Integration& integration,
 
 // ___________________________________________________________________________//
 
-void Advect::ComputeHt(Splitter<Index>& splitter, const RungeKutta& rk4,
-                       Iterator& it) {
+void Advect::ComputeHt(Splitter<Index> &splitter, const RungeKutta &rk4,
+                       Iterator &it) {
   // Creating an object containing the properties of the interpolation
   CellProperties cell;
 
@@ -203,7 +203,7 @@ void Advect::ComputeHt(Splitter<Index>& splitter, const RungeKutta& rk4,
 
 // ___________________________________________________________________________//
 
-void Advect::Compute(Integration& integration, int num_threads) {
+void Advect::Compute(Integration &integration, int num_threads) {
   auto it = integration.GetIterator();
   std::list<std::thread> threads;
 
@@ -224,13 +224,13 @@ void Advect::Compute(Integration& integration, int num_threads) {
     Debug(str(boost::format("Start time step %s (%d cells)") % date %
               indexes_.size()));
 
-    for (auto& item : splitters) {
+    for (auto &item : splitters) {
       threads.emplace_back(
           std::thread(&lagrangian::map::Advect::ComputeHt, this, std::ref(item),
                       std::ref(integration.get_rk4()), std::ref(it)));
     }
 
-    for (auto& item : threads) {
+    for (auto &item : threads) {
       item.join();
     }
     threads.clear();

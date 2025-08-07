@@ -19,7 +19,7 @@
 namespace lagrangian {
 
 auto FiniteLyapunovExponentsIntegration::ComputeExponents(
-    const Position* const position, FiniteLyapunovExponents& fle) -> bool {
+    const Position *const position, FiniteLyapunovExponents &fle) -> bool {
   // Advection time T
   fle.set_delta_t(position->get_time() - start_time_);
 

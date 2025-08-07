@@ -145,8 +145,8 @@ if __name__ == "__main__":
 """.split('\n') if item.strip()
         ]
         lines = {
-            item.strip() for item in lines.decode().split('\n')
-            if item.strip()
+            item.strip()
+            for item in lines.decode().split('\n') if item.strip()
         }
         self.assertEqual(lines, set(expected),
                          'Output does not match expected results')

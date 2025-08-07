@@ -72,8 +72,8 @@ class Vonkarman : public Field {
    *
    * @return true
    */
-  bool Compute(double t, double x, double y, double& u, double& v,
-               CellProperties& cell = CellProperties::NONE()) const override;
+  bool Compute(double t, double x, double y, double &u, double &v,
+               CellProperties &cell = CellProperties::NONE()) const override;
 };
 
 }  // namespace lagrangian::field

@@ -19,13 +19,13 @@
 
 namespace py = pybind11;
 
-void init_unit(pybind11::module& m) {
+void init_unit(pybind11::module &m) {
   py::module units = m.def_submodule("units");
   py::class_<lagrangian::Units>(
       units, "Units", "Provides support for units of physical quantities.")
       .def_static(
           "get_converter",
-          [](const std::string& from, const std::string& to) -> py::tuple {
+          [](const std::string &from, const std::string &to) -> py::tuple {
             auto converter = lagrangian::Units::GetConverter(from, to);
             return py::make_tuple(converter.get_offset(),
                                   converter.get_scale());

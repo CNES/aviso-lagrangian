@@ -44,7 +44,7 @@ class Unit {
    *
    * @return if the unit can define this type of axis
    */
-  inline auto operator()(const std::string& unit) const -> bool {
+  inline auto operator()(const std::string &unit) const -> bool {
     return unit_.find(unit) != unit_.end();
   }
 
@@ -146,7 +146,7 @@ class Axis {
    *
    * @param variable an existing NetCDF Variable
    */
-  explicit Axis(const netcdf::Variable& variable);
+  explicit Axis(const netcdf::Variable &variable);
 
   /**
    * @brief Create a coordinate axis from values.
@@ -166,14 +166,14 @@ class Axis {
    *
    * @param rhs right value
    */
-  Axis(Axis&& rhs) = default;
+  Axis(Axis &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Axis&& rhs) -> Axis& = default;
+  auto operator=(Axis &&rhs) -> Axis & = default;
 
   /**
    * @brief Get type of axis
@@ -284,7 +284,7 @@ class Axis {
    *
    * @return true if units attribute exists otherwise false
    */
-  inline auto get_units(std::string& units) const noexcept -> bool {
+  inline auto get_units(std::string &units) const noexcept -> bool {
     units = unit_;
     return !unit_.empty();
   }
@@ -295,7 +295,7 @@ class Axis {
    *
    * @param unit the new unit
    */
-  void Convert(const std::string& unit) {
+  void Convert(const std::string &unit) {
     if (unit_.empty()) {
       throw std::logic_error("The unit of axis is not defined");
     }
@@ -320,7 +320,7 @@ class Axis {
    *
    * @return true if coordinate is inside grid area
    */
-  auto FindIndexes(const double coordinate, int& i0, int& i1) const -> bool {
+  auto FindIndexes(const double coordinate, int &i0, int &i1) const -> bool {
     i0 = i1 = FindIndex(coordinate);
 
     if (i0 == -1 && is_circle_) {
@@ -378,10 +378,10 @@ class Axis {
    *
    * @return if variables are equals
    */
-  inline friend auto operator==(Axis const& a, Axis const& b) -> bool {
+  inline friend auto operator==(Axis const &a, Axis const &b) -> bool {
     return a.points_ == b.points_ && a.unit_ == b.unit_ && a.type_ == b.type_;
   }
-  inline friend auto operator!=(Axis const& a, Axis const& b) -> bool {
+  inline friend auto operator!=(Axis const &a, Axis const &b) -> bool {
     return !(a == b);
   }
 

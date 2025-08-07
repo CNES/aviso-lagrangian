@@ -20,7 +20,7 @@
 
 namespace lagrangian::field {
 
-TimeSerie::TimeSerie(const std::string& configuration_file,
+TimeSerie::TimeSerie(const std::string &configuration_file,
                      const Field::UnitType unit_type,
                      const Field::CoordinatesType coordinates_type,
                      const reader::Factory::Type reader_type)
@@ -39,7 +39,7 @@ TimeSerie::TimeSerie(const std::string& configuration_file,
 // ___________________________________________________________________________//
 
 bool TimeSerie::Compute(const double t, const double x, const double y,
-                        double& u, double& v, CellProperties& cell) const {
+                        double &u, double &v, CellProperties &cell) const {
   u = u_->Interpolate(t, x, y, fill_value_, cell);
   v = v_->Interpolate(t, x, y, fill_value_, cell);
 

@@ -35,8 +35,8 @@ class Splitter {
    * @param begin Start of the sublist
    * @param end End of the sublist
    */
-  Splitter(typename std::list<T>::iterator& begin,
-           typename std::list<T>::iterator& end)
+  Splitter(typename std::list<T>::iterator &begin,
+           typename std::list<T>::iterator &end)
       : begin_(begin), end_(end) {}
 
   /**
@@ -44,14 +44,14 @@ class Splitter {
    *
    * @param rhs right value
    */
-  Splitter(Splitter&& rhs) = default;
+  Splitter(Splitter &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Splitter&& rhs) -> Splitter& = default;
+  auto operator=(Splitter &&rhs) -> Splitter & = default;
 
   /**
    * @brief Start of the sublist
@@ -63,7 +63,7 @@ class Splitter {
   /**
    * @brief End of the sublist
    */
-  inline auto end() const -> const typename std::list<T>::iterator& {
+  inline auto end() const -> const typename std::list<T>::iterator & {
     return end_;
   }
 
@@ -88,14 +88,14 @@ class SplitList : public std::list<T> {
    *
    * @param rhs right value
    */
-  SplitList(SplitList&& rhs) = default;
+  SplitList(SplitList &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(SplitList&& rhs) -> SplitList& = default;
+  auto operator=(SplitList &&rhs) -> SplitList & = default;
 
   /**
    * @brief Divides the list in sublists
@@ -125,7 +125,7 @@ class SplitList : public std::list<T> {
    * @param value Value to test
    * @return false
    */
-  static inline auto predicate(const T& /*value*/) -> bool { return false; }
+  static inline auto predicate(const T & /*value*/) -> bool { return false; }
 };
 
 template <class T>

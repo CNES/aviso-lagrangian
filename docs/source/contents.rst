@@ -4,14 +4,14 @@ Lagrangian Coherent Structures and Finite-Time Lyapunov Exponents
 The transport of a tracer in a fluid is closely related to emergent patterns
 that are commonly referred to as coherent structures or *Lagrangian Coherent
 Structures* (LCS) when they are defined using fluid trajectories. For time-
-independant dynamic systems, they correspond to stable and unstable manifolds
+independent dynamic systems, they correspond to stable and unstable manifolds
 of hyperbolic trajectories [1]_. Coherent structures delimit regions of
 whirls, stretching, or contraction of tracer [2]_: contraction is observed
 along stable manifolds whereas unstable manifolds correspond to divergent
 directions along which the tracer is stretched. Stable and unstable manifolds
 are material curves that act as transport barriers and that exhibits locally
 the strongest attraction, repulsion or shearing in the flow over a finite-time
-interval [3]_. LCSs are usually indentified in a practicall manner as
+interval [3]_. LCSs are usually identified in a practicall manner as
 maximizing ridges of Finite-Time Lyapunov Exponents (FTLE) field [4]_, [5]_,
 [6]_, [7]_, [8]_.
 
@@ -83,7 +83,7 @@ References
 	in three-dimensional fluid flows. *Physica D* **149** (4): 248 -- 277.
 
 .. [5] Haller, G. 2001. Lagrangian structures and the rate of strain in a
-	partition of two-dimensional turbulence. *Physics of Fluids* **13** 
+	partition of two-dimensional turbulence. *Physics of Fluids* **13**
 	(11): 3365 --3385.
 
 .. [6] Haller, G. 2002. Lagrangian coherent structures from approximate

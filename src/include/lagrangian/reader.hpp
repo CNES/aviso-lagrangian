@@ -55,7 +55,7 @@ class CellProperties {
    *
    * @return A cell unhandled
    */
-  static auto NONE() -> CellProperties& {
+  static auto NONE() -> CellProperties & {
     static CellProperties result;
     return result;
   }
@@ -158,7 +158,7 @@ class Reader {
    * @param filename %Path to the grid
    *
    */
-  virtual void Open(const std::string& filename) = 0;
+  virtual void Open(const std::string &filename) = 0;
 
   /**
    * @brief Load into memory grid data
@@ -166,7 +166,7 @@ class Reader {
    * @param name Name of the grid who contains data
    * @param unit Unit of data loaded into memory.
    */
-  virtual void Load(const std::string& name, const std::string& unit = "") = 0;
+  virtual void Load(const std::string &name, const std::string &unit = "") = 0;
 
   /**
    * @brief Computes the velocity of the grid point requested
@@ -182,7 +182,7 @@ class Reader {
    */
   virtual auto Interpolate(double longitude, double latitude,
                            double fill_value = 0,
-                           CellProperties& cell = CellProperties::NONE()) const
+                           CellProperties &cell = CellProperties::NONE()) const
       -> double = 0;
 
   /**
@@ -192,7 +192,7 @@ class Reader {
    *
    * @return the date
    */
-  [[nodiscard]] virtual auto GetDateTime(const std::string& name) const
+  [[nodiscard]] virtual auto GetDateTime(const std::string &name) const
       -> DateTime = 0;
 
   /**

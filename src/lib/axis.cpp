@@ -124,7 +124,7 @@ auto Axis::FindIndexIrregular(const double coordinate, bool bounded) const
 
 // ___________________________________________________________________________//
 
-Axis::Axis(const netcdf::Variable& variable) {
+Axis::Axis(const netcdf::Variable &variable) {
   if (!variable.IsCoordinateVariable()) {
     throw std::invalid_argument(variable.get_name() + ": not an axis");
   }

@@ -19,15 +19,15 @@
 
 namespace py = pybind11;
 
-void init_axis(pybind11::module& m) {
+void init_axis(pybind11::module &m) {
   py::module axis = m.def_submodule("axis");
   py::class_<lagrangian::axis::LatitudeUnit>(axis, "LatitudeUnit",
                                              "Units setting out latitudes")
       .def(py::init<>(), "Default constructor")
       .def(
           "__call__",
-          [](const lagrangian::axis::LatitudeUnit& self,
-             const std::string& unit) -> bool { return self(unit); },
+          [](const lagrangian::axis::LatitudeUnit &self,
+             const std::string &unit) -> bool { return self(unit); },
           py::arg("unit"), "Checks if the unit can define a latitude axis");
 
   py::class_<lagrangian::axis::LongitudeUnit>(axis, "LongitudeUnit",
@@ -35,7 +35,7 @@ void init_axis(pybind11::module& m) {
       .def(py::init<>(), "Default constructor")
       .def(
           "__call__",
-          [](const lagrangian::axis::LongitudeUnit& self,
-             const std::string& unit) -> bool { return self(unit); },
+          [](const lagrangian::axis::LongitudeUnit &self,
+             const std::string &unit) -> bool { return self(unit); },
           py::arg("unit"), "Checks if the unit can define a longitude axis");
 }

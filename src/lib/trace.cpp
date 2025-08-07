@@ -41,7 +41,7 @@ class Configuration {
    *
    * @param message Message to display
    */
-  inline void Debug(std::string const& message) {
+  inline void Debug(std::string const &message) {
     if (verbose_) {
       DateTime now;
       std::cerr << str(boost::format("[ %s ] %s") %
@@ -70,7 +70,7 @@ static Configuration g_configuration;
 
 void SetVerbose(const bool value) { g_configuration.set_verbose(value); }
 
-void Debug(std::string const& message) { g_configuration.Debug(message); }
+void Debug(std::string const &message) { g_configuration.Debug(message); }
 
 auto Version() -> std::string { return lagrangian::Configuration::Version(); }
 

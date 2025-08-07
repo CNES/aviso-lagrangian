@@ -26,7 +26,7 @@ namespace lagrangian {
 
 // Interpolation of an environment variable. If the variable is not found, the
 // part of the chain containing the variable is not changed.
-static auto ExpandShell(std::string& s) -> std::string {
+static auto ExpandShell(std::string &s) -> std::string {
   static const std::regex re(R"(\$\{(\w+)\})");
 
   std::match_results<std::string::const_iterator> what;
@@ -34,7 +34,7 @@ static auto ExpandShell(std::string& s) -> std::string {
   std::string::const_iterator end = s.end();
 
   while (regex_search(start, end, what, re)) {
-    char* env = getenv(what.str(1).c_str());
+    char *env = getenv(what.str(1).c_str());
 
     if (env != nullptr) {
       boost::replace_first(s, what.str(0), env);
@@ -55,7 +55,7 @@ static auto ExpandShell(std::string& s) -> std::string {
  *
  * @return True if parsing is OK if not false
  */
-auto Parameter::Parse(std::string& line, std::string& buffer) -> bool {
+auto Parameter::Parse(std::string &line, std::string &buffer) -> bool {
   boost::trim(line);
 
   // Delete comment
@@ -102,7 +102,7 @@ auto Parameter::Parse(std::string& line, std::string& buffer) -> bool {
  * @throw std::runtime_error if the file does not exist or contains a syntax
  * error
  */
-void Parameter::Load(const std::string& filename) {
+void Parameter::Load(const std::string &filename) {
   std::ifstream infile;
   std::string buffer;
   int line_number = 0;

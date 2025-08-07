@@ -22,8 +22,8 @@
 
 namespace lagrangian::netcdf {
 
-Attribute const& Group::FindAttribute(const std::string& name) const {
-  for (auto& item : attributes_) {
+Attribute const &Group::FindAttribute(const std::string &name) const {
+  for (auto &item : attributes_) {
     if (item.get_name() == name) {
       return item;
     }
@@ -33,8 +33,8 @@ Attribute const& Group::FindAttribute(const std::string& name) const {
 
 // ___________________________________________________________________________//
 
-Attribute const& Group::FindAttributeIgnoreCase(const std::string& name) const {
-  for (auto& item : attributes_) {
+Attribute const &Group::FindAttributeIgnoreCase(const std::string &name) const {
+  for (auto &item : attributes_) {
     if (boost::iequals(item.get_name(), name)) {
       return item;
     }

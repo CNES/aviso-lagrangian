@@ -58,7 +58,7 @@ class Group {
    * @param index of the dimension.
    * @return requested Dimension
    */
-  [[nodiscard]] auto GetDimension(const int index) const -> Dimension const& {
+  [[nodiscard]] auto GetDimension(const int index) const -> Dimension const & {
     return dimensions_[index];
   }
 
@@ -69,7 +69,7 @@ class Group {
    *
    * @return the index of the named Dimension, or -1 if not found.
    */
-  [[nodiscard]] inline auto FindDimensionIndex(const std::string& name) const
+  [[nodiscard]] inline auto FindDimensionIndex(const std::string &name) const
       -> int {
     for (unsigned int ix = 0; ix < dimensions_.size(); ++ix) {
       if (dimensions_[ix].get_name() == name) {
@@ -95,8 +95,8 @@ class Group {
    *
    * @return the Attribute or Attribute::MISSING if not found
    */
-  [[nodiscard]] auto FindAttribute(const std::string& name) const
-      -> Attribute const&;
+  [[nodiscard]] auto FindAttribute(const std::string &name) const
+      -> Attribute const &;
 
   /**
    * @brief Find an Attribute by name, ignoring the case
@@ -105,8 +105,8 @@ class Group {
    *
    * @return the attribute or Attribute::MISSING if not found
    */
-  [[nodiscard]] auto FindAttributeIgnoreCase(const std::string& name) const
-      -> Attribute const&;
+  [[nodiscard]] auto FindAttributeIgnoreCase(const std::string &name) const
+      -> Attribute const &;
 
  protected:
   /// @brief Dimensions known

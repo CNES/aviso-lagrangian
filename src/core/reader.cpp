@@ -24,23 +24,23 @@ class Reader : public lagrangian::Reader {
  public:
   using lagrangian::Reader::Reader;
 
-  void Open(const std::string& path) override {
+  void Open(const std::string &path) override {
     PYBIND11_OVERLOAD_PURE(void, lagrangian::Reader, Open, path);
   }
 
-  void Load(const std::string& name, const std::string& unit = "") override {
+  void Load(const std::string &name, const std::string &unit = "") override {
     PYBIND11_OVERLOAD_PURE(void, lagrangian::Reader, Load, name, unit);
   }
 
   auto Interpolate(double longitude, double latitude, double fill_value = 0,
-                   lagrangian::CellProperties& cell =
+                   lagrangian::CellProperties &cell =
                        lagrangian::CellProperties::NONE()) const
       -> double override {
     PYBIND11_OVERLOAD_PURE(double, lagrangian::Reader, Interpolate, longitude,
                            latitude, fill_value, cell);
   }
 
-  [[nodiscard]] auto GetDateTime(const std::string& name) const
+  [[nodiscard]] auto GetDateTime(const std::string &name) const
       -> lagrangian::DateTime override {
     PYBIND11_OVERLOAD_PURE(lagrangian::DateTime, lagrangian::Reader,
                            GetDateTime, name);
@@ -51,30 +51,30 @@ class NetCDF : public lagrangian::reader::NetCDF {
  public:
   using lagrangian::reader::NetCDF::NetCDF;
 
-  void Open(const std::string& path) override {
+  void Open(const std::string &path) override {
     PYBIND11_OVERLOAD(void, lagrangian::reader::NetCDF, Open, path);
   }
 
-  void Load(const std::string& name, const std::string& unit = "") override {
+  void Load(const std::string &name, const std::string &unit = "") override {
     PYBIND11_OVERLOAD(void, lagrangian::reader::NetCDF, Load, name, unit);
   }
 
   auto Interpolate(double longitude, double latitude, double fill_value = 0,
-                   lagrangian::CellProperties& cell =
+                   lagrangian::CellProperties &cell =
                        lagrangian::CellProperties::NONE()) const
       -> double override {
     PYBIND11_OVERLOAD(double, lagrangian::reader::NetCDF, Interpolate,
                       longitude, latitude, fill_value, cell);
   }
 
-  [[nodiscard]] auto GetDateTime(const std::string& name) const
+  [[nodiscard]] auto GetDateTime(const std::string &name) const
       -> lagrangian::DateTime override {
     PYBIND11_OVERLOAD(lagrangian::DateTime, lagrangian::reader::NetCDF,
                       GetDateTime, name);
   }
 };
 
-void init_reader(pybind11::module& m) {
+void init_reader(pybind11::module &m) {
   py::module reader = m.def_submodule("reader");
   py::enum_<lagrangian::reader::Factory::Type>(reader, "Type",
                                                "Type of fields reader known")

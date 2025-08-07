@@ -19,13 +19,13 @@
 
 namespace py = pybind11;
 
-extern void init_axis(pybind11::module& m);
-extern void init_datetime(pybind11::module& m);
-extern void init_field(pybind11::module& m);
-extern void init_integration(pybind11::module& m);
-extern void init_map(pybind11::module& m);
-extern void init_reader(pybind11::module& m);
-extern void init_unit(pybind11::module& m);
+extern void init_axis(pybind11::module &m);
+extern void init_datetime(pybind11::module &m);
+extern void init_field(pybind11::module &m);
+extern void init_integration(pybind11::module &m);
+extern void init_map(pybind11::module &m);
+extern void init_reader(pybind11::module &m);
+extern void init_unit(pybind11::module &m);
 
 PYBIND11_MODULE(core, m) {
   init_axis(m);

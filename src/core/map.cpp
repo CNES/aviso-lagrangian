@@ -27,10 +27,10 @@ class MapOfFiniteLyapunovExponents {
 
  public:
   MapOfFiniteLyapunovExponents(
-      const lagrangian::MapProperties& map_properties,
-      const lagrangian::FiniteLyapunovExponentsIntegration& fle,
-      const lagrangian::FiniteLyapunovExponentsIntegration::Stencil& stencil,
-      const lagrangian::Reader* reader = nullptr)
+      const lagrangian::MapProperties &map_properties,
+      const lagrangian::FiniteLyapunovExponentsIntegration &fle,
+      const lagrangian::FiniteLyapunovExponentsIntegration::Stencil &stencil,
+      const lagrangian::Reader *reader = nullptr)
       : map_(map_properties.get_nx(), map_properties.get_ny(),
              map_properties.get_x_min(), map_properties.get_y_min(),
              map_properties.get_step()),
@@ -73,7 +73,7 @@ class MapOfFiniteLyapunovExponents {
 
  private:
   static inline auto get_map(const double fill_value,
-                             lagrangian::Map<double>* map)
+                             lagrangian::Map<double> *map)
       -> py::array_t<double> {
     auto result = py::array_t<double>(
         py::array::ShapeContainer({map->get_nx(), map->get_ny()}));
@@ -107,8 +107,8 @@ class Advect : public lagrangian::map::Advect {
 
  private:
   auto get_map(const double fill_value,
-               const std::function<double(const lagrangian::Position&,
-                                          size_t idx)>& getter)
+               const std::function<double(const lagrangian::Position &,
+                                          size_t idx)> &getter)
       -> py::array_t<double> {
     auto result = py::array_t<double>(
         py::array::ShapeContainer({map_.get_nx(), map_.get_ny()}));
@@ -132,7 +132,7 @@ class Advect : public lagrangian::map::Advect {
   }
 };
 
-void init_map(pybind11::module& m) {
+void init_map(pybind11::module &m) {
   py::class_<lagrangian::MapProperties>(m, "MapProperties",
                                         "Properties of a regular grid")
       .def(py::init<int, int, double, double, double>(), py::arg("nx"),
@@ -160,7 +160,7 @@ Args:
           "Step between two consecutive longitudes and latitudes")
       .def(
           "x_axis",
-          [](const lagrangian::MapProperties& self) -> py::array_t<double> {
+          [](const lagrangian::MapProperties &self) -> py::array_t<double> {
             auto result =
                 py::array_t<double>(py::array::ShapeContainer({self.get_nx()}));
             auto result_ = result.mutable_unchecked<1>();
@@ -172,7 +172,7 @@ Args:
           "Gets the x-axis values")
       .def(
           "y_axis",
-          [](const lagrangian::MapProperties& self) -> py::array_t<double> {
+          [](const lagrangian::MapProperties &self) -> py::array_t<double> {
             auto result =
                 py::array_t<double>(py::array::ShapeContainer({self.get_ny()}));
             auto result_ = result.mutable_unchecked<1>();
@@ -246,7 +246,7 @@ Returns:
       .def(py::init<lagrangian::MapProperties,
                     lagrangian::FiniteLyapunovExponentsIntegration,
                     lagrangian::FiniteLyapunovExponentsIntegration::Stencil,
-                    lagrangian::Reader*>(),
+                    lagrangian::Reader *>(),
            py::arg("map_properties"), py::arg("fle"),
            py::arg("stencil") =
                lagrangian::FiniteLyapunovExponentsIntegration::kTriplet,

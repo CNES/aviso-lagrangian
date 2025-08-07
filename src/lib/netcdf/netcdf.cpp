@@ -24,7 +24,7 @@
 
 namespace lagrangian {
 
-void NetCDF::Open(const std::string& filename) {
+void NetCDF::Open(const std::string &filename) {
   if (filename.empty()) {
     throw std::system_error(ENOENT, std::system_category(), filename);
   }
@@ -32,13 +32,13 @@ void NetCDF::Open(const std::string& filename) {
   try {
     ncfile_ = std::make_shared<netCDF::NcFile>(filename, netCDF::NcFile::read);
 
-    for (auto& item : ncfile_->getDims()) {
+    for (auto &item : ncfile_->getDims()) {
       dimensions_.emplace_back(netcdf::Dimension(
           item.second.getName(), static_cast<int>(item.second.getSize()),
           item.second.isUnlimited()));
     }
 
-    for (auto& item : ncfile_->getVars()) {
+    for (auto &item : ncfile_->getVars()) {
       variables_.emplace_back(netcdf::Variable(item.second));
     }
   } catch (netCDF::exceptions::NcException) {

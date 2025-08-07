@@ -35,7 +35,7 @@ class DateTime {
    * @param datetime Instance of a ptime object. If t isn't set, the new
    * instance will be contain the current date.
    */
-  explicit DateTime(const boost::posix_time::ptime& datetime =
+  explicit DateTime(const boost::posix_time::ptime &datetime =
                         boost::posix_time::microsec_clock::universal_time())
       : datetime_(datetime) {}
 
@@ -44,7 +44,7 @@ class DateTime {
    *
    * @param s String to parse.
    */
-  explicit DateTime(const std::string& s)
+  explicit DateTime(const std::string &s)
       : datetime_(boost::posix_time::time_from_string(s)) {}
 
   /**
@@ -52,7 +52,7 @@ class DateTime {
    *
    * @param time_map time map to parse.
    */
-  explicit DateTime(const struct tm& time_map)
+  explicit DateTime(const struct tm &time_map)
       : datetime_(boost::posix_time::ptime_from_tm(time_map)) {}
 
   /**
@@ -161,7 +161,7 @@ class DateTime {
    * @return True if this datetime is earlier than the other datetime,
    * otherwise false
    */
-  inline auto operator<(const DateTime& datetime) const -> bool {
+  inline auto operator<(const DateTime &datetime) const -> bool {
     return datetime_ < datetime.datetime_;
   }
 
@@ -173,7 +173,7 @@ class DateTime {
    * @return True if this datetime is later than the other datetime,
    * otherwise false
    */
-  inline auto operator>(const DateTime& datetime) const -> bool {
+  inline auto operator>(const DateTime &datetime) const -> bool {
     return datetime_ > datetime.datetime_;
   }
 
@@ -186,7 +186,7 @@ class DateTime {
    * @return True if this datetime is earlier than or equal to the other
    *     datetime, otherwise false
    */
-  inline auto operator<=(const DateTime& datetime) const -> bool {
+  inline auto operator<=(const DateTime &datetime) const -> bool {
     return datetime_ <= datetime.datetime_;
   }
 
@@ -199,7 +199,7 @@ class DateTime {
    * @return True if this datetime is later than or equal to the other
    *     datetime, otherwise false
    */
-  inline auto operator>=(const DateTime& datetime) const -> bool {
+  inline auto operator>=(const DateTime &datetime) const -> bool {
     return datetime_ >= datetime.datetime_;
   }
 
@@ -211,7 +211,7 @@ class DateTime {
    * @return True if this datetime is equal to the other datetime, otherwise
    *     false
    */
-  inline auto operator==(const DateTime& datetime) const -> bool {
+  inline auto operator==(const DateTime &datetime) const -> bool {
     return datetime_ == datetime.datetime_;
   }
 
@@ -223,7 +223,7 @@ class DateTime {
    * @return True if this datetime is different from the other datetime,
    *     otherwise false
    */
-  inline auto operator!=(const DateTime& datetime) const -> bool {
+  inline auto operator!=(const DateTime &datetime) const -> bool {
     return datetime_ != datetime.datetime_;
   }
 
@@ -241,7 +241,7 @@ class DateTime {
    * possibles date format.
    * @endhtmlonly
    */
-  [[nodiscard]] auto ToString(const std::string& format) const -> std::string;
+  [[nodiscard]] auto ToString(const std::string &format) const -> std::string;
 };
 
 }  // namespace lagrangian

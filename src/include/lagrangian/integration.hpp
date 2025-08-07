@@ -50,8 +50,8 @@ class Integration {
    *
    * @throw std::runtime_error if the time interval is negative
    */
-  Integration(const DateTime& start_time, const DateTime& end_time,
-              const boost::posix_time::time_duration& delta_t, Field* field)
+  Integration(const DateTime &start_time, const DateTime &end_time,
+              const boost::posix_time::time_duration &delta_t, Field *field)
       : size_of_interval_(delta_t.total_microseconds() * 1e-6),
         field_(field),
         start_time_(start_time.ToUnixTime()),
@@ -97,8 +97,8 @@ class Integration {
    *
    * @return true if the new position is defined otherwise false.
    */
-  inline auto Compute(const Iterator& it, const double x0, const double y0,
-                      double& x1, double& y1) const -> bool {
+  inline auto Compute(const Iterator &it, const double x0, const double y0,
+                      double &x1, double &y1) const -> bool {
     return rk_.Compute(it(), x0, y0, x1, y1);
   }
 
@@ -107,12 +107,12 @@ class Integration {
    *
    * @return the velocity field used.
    */
-  [[nodiscard]] auto get_field() const -> const Field* { return field_; }
+  [[nodiscard]] auto get_field() const -> const Field * { return field_; }
 
   /**
    * @brief Gets the Runge-Kutta object
    */
-  [[nodiscard]] auto get_rk4() const -> RungeKutta const& { return rk_; }
+  [[nodiscard]] auto get_rk4() const -> RungeKutta const & { return rk_; }
 
   /**
    * @brief Gets start time of the integration
@@ -121,7 +121,7 @@ class Integration {
 
  protected:
   double size_of_interval_;  //!< Integration time in number of seconds
-  Field* field_;             //!< Field used to compute the velocity
+  Field *field_;             //!< Field used to compute the velocity
   double start_time_;        //!< Start time of the integration
   double end_time_;          //!< End time of the integration
   RungeKutta rk_;            //!< Runge-Kutta object
@@ -144,8 +144,8 @@ class Path : public Integration {
    * @param delta_t Time interval, in seconds
    * @param field Field to use for computing the velocity of a point.
    */
-  Path(const DateTime& start_time, const DateTime& end_time,
-       const boost::posix_time::time_duration& delta_t, Field* field)
+  Path(const DateTime &start_time, const DateTime &end_time,
+       const boost::posix_time::time_duration &delta_t, Field *field)
       : Integration(start_time, end_time, delta_t, field) {}
 
   /**
@@ -172,12 +172,12 @@ class Index {
   /**
    * @brief Move constructor
    */
-  Index(Index&& rhs) = default;
+  Index(Index &&rhs) = default;
 
   /**
    * @brief Move assignment operator
    */
-  auto operator=(Index&& rhs) -> Index& = default;
+  auto operator=(Index &&rhs) -> Index & = default;
 
   /**
    * @brief Construct a new object defining an index
@@ -466,9 +466,9 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    * @throw std::invalid_argument if the mode of integration is unknown.
    */
   FiniteLyapunovExponentsIntegration(
-      const DateTime& start_time, const DateTime& end_time,
-      const boost::posix_time::time_duration& delta_t, const Mode mode,
-      const double min_separation, const double delta, Field* field)
+      const DateTime &start_time, const DateTime &end_time,
+      const boost::posix_time::time_duration &delta_t, const Mode mode,
+      const double min_separation, const double delta, Field *field)
       : Integration(start_time, end_time, delta_t, field),
         delta_(delta),
         mode_(mode),
@@ -506,7 +506,7 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    */
   [[nodiscard]] inline auto SetInitialPoint(
       const double x, const double y, const Stencil stencil,
-      const bool spherical_equatorial) const -> Position* {
+      const bool spherical_equatorial) const -> Position * {
     switch (stencil) {
       case kTriplet:
         return new Triplet(x, y, delta_, start_time_, spherical_equatorial);
@@ -525,7 +525,7 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the particle is separated.
    */
-  inline auto Separation(const Position* const position) const -> bool {
+  inline auto Separation(const Position *const position) const -> bool {
     return (this->*pSeparation_)(position);
   }
 
@@ -545,8 +545,8 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the integration is defined otherwise false
    */
-  inline auto Compute(const Iterator& it, Position* const position,
-                      CellProperties& cell) const -> bool {
+  inline auto Compute(const Iterator &it, Position *const position,
+                      CellProperties &cell) const -> bool {
     return position->Compute(rk_, it, cell);
   }
 
@@ -559,12 +559,12 @@ class FiniteLyapunovExponentsIntegration : public Integration {
    *
    * @return True if the exponents are defined
    */
-  auto ComputeExponents(const Position* position, FiniteLyapunovExponents& fle)
+  auto ComputeExponents(const Position *position, FiniteLyapunovExponents &fle)
       -> bool;
 
  private:
   using SeparationFunction = bool (FiniteLyapunovExponentsIntegration::*)(
-      const Position* const p) const;
+      const Position *const p) const;
 
   const double delta_;
   double min_separation_;
@@ -572,11 +572,11 @@ class FiniteLyapunovExponentsIntegration : public Integration {
   SeparationFunction pSeparation_;
   double f2_;
 
-  inline auto SeparationFSLE(const Position* const position) const -> bool {
+  inline auto SeparationFSLE(const Position *const position) const -> bool {
     return position->MaxDistance() > min_separation_;
   }
 
-  inline auto SeparationFTLE(const Position* const /*unused*/) const -> bool {
+  inline auto SeparationFTLE(const Position *const /*unused*/) const -> bool {
     return false;
   }
 };

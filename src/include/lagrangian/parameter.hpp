@@ -40,7 +40,7 @@ class Parameter {
    * @throw std::runtime_error if the file does not exist or contains a
    * syntax error.
    */
-  explicit Parameter(const std::string& filename) { Load(filename); }
+  explicit Parameter(const std::string &filename) { Load(filename); }
 
   /**
    * @brief Create a new instance with no data.
@@ -55,14 +55,14 @@ class Parameter {
    * @throw std::runtime_error if the file does not exist or contains a syntax
    * error
    */
-  void Load(const std::string& filename);
+  void Load(const std::string &filename);
 
   /**
    * @brief Deletes data associated with a key.
    *
    * @param key Key to delete
    */
-  inline void Clear(const std::string& key) { data_.erase(key); }
+  inline void Clear(const std::string &key) { data_.erase(key); }
 
   /**
    * @brief Removes all data associated with the instance.
@@ -76,7 +76,7 @@ class Parameter {
    * @param value New value to assign
    */
   template <class T>
-  inline void AddValue(const std::string& key, T value) {
+  inline void AddValue(const std::string &key, T value) {
     data_[key].push_back(boost::lexical_cast<std::string>(value));
   }
 
@@ -87,7 +87,7 @@ class Parameter {
    *
    * @result True if the key exists otherwise false
    */
-  [[nodiscard]] inline auto Exists(const std::string& key) const -> bool {
+  [[nodiscard]] inline auto Exists(const std::string &key) const -> bool {
     auto it = data_.find(key);
     return it != data_.end();
   }
@@ -100,7 +100,7 @@ class Parameter {
    *
    * @result Number of values associated with the key.
    */
-  [[nodiscard]] inline auto Size(const std::string& key) const -> size_t {
+  [[nodiscard]] inline auto Size(const std::string &key) const -> size_t {
     return Items(key).size();
   }
 
@@ -119,7 +119,7 @@ class Parameter {
   [[nodiscard]] auto Keys() const -> std::vector<std::string> {
     std::vector<std::string> result;
 
-    for (auto& item : data_) {
+    for (auto &item : data_) {
       result.push_back(item.first);
     }
 
@@ -132,11 +132,11 @@ class Parameter {
    * @result Value list
    */
   template <class T>
-  [[nodiscard]] auto Values(const std::string& key) const -> std::vector<T> {
+  [[nodiscard]] auto Values(const std::string &key) const -> std::vector<T> {
     std::vector<T> result;
 
     if (Exists(key)) {
-      for (auto& item : Items(key)) {
+      for (auto &item : Items(key)) {
         result.push_back(ParameterCast<T>(item));
       }
     }
@@ -156,7 +156,7 @@ class Parameter {
    * number of available values
    */
   template <class T>
-  inline auto Value(const std::string& key, const int index = 0) const -> T {
+  inline auto Value(const std::string &key, const int index = 0) const -> T {
     return ParameterCast<T>(Items(key).at(index));
   }
 
@@ -165,8 +165,8 @@ class Parameter {
    */
   [[nodiscard]] auto ToString() const -> std::string {
     std::ostringstream ss;
-    for (auto& key : Keys()) {
-      for (auto& value : Values<std::string>(key)) {
+    for (auto &key : Keys()) {
+      for (auto &value : Values<std::string>(key)) {
         ss << key << " = " << value << std::endl;
       }
     }
@@ -177,7 +177,7 @@ class Parameter {
  private:
   std::map<std::string, std::vector<std::string>> data_;
 
-  auto Parse(std::string& line, std::string& buffer) -> bool;
+  auto Parse(std::string &line, std::string &buffer) -> bool;
 
   /**
    * @brief Return items associated with a parameter.
@@ -188,8 +188,8 @@ class Parameter {
    *
    * @throw std::runtime_error if the setting does not exist
    */
-  [[nodiscard]] auto Items(const std::string& key) const
-      -> std::vector<std::string> const& {
+  [[nodiscard]] auto Items(const std::string &key) const
+      -> std::vector<std::string> const & {
     if (!Exists(key)) {
       throw std::runtime_error(
           boost::str(boost::format("parameter `%s' is not defined") % key));
@@ -209,10 +209,10 @@ class Parameter {
    * @throw  std::runtime_error If the value can not be converted to type T.
    */
   template <class T>
-  [[nodiscard]] auto ParameterCast(const std::string& value) const -> T {
+  [[nodiscard]] auto ParameterCast(const std::string &value) const -> T {
     try {
       return boost::lexical_cast<T>(value);
-    } catch (boost::bad_lexical_cast& e) {
+    } catch (boost::bad_lexical_cast &e) {
       throw std::runtime_error(boost::str(
           boost::format("value `%s' could not be interpreted as %s") %
           boost::lexical_cast<std::string>(value) % e.target_type().name()));

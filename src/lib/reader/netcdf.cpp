@@ -35,7 +35,7 @@ static inline double BilinearInterpolation(const double x0, const double x1,
 
 // ___________________________________________________________________________//
 
-void NetCDF::Open(const std::string& filename) {
+void NetCDF::Open(const std::string &filename) {
   netcdf_ = lagrangian::NetCDF(filename);
 
   auto variables = netcdf_.get_variables();
@@ -87,7 +87,7 @@ void NetCDF::Open(const std::string& filename) {
 
 // ___________________________________________________________________________//
 
-void NetCDF::Load(const std::string& name, const std::string& unit) {
+void NetCDF::Load(const std::string &name, const std::string &unit) {
   netcdf::Variable variable = FindVariable(name);
 
   unit.empty() ? variable.Read(data_) : variable.Read(data_, unit);
@@ -102,7 +102,7 @@ void NetCDF::Load(const std::string& name, const std::string& unit) {
 
 double NetCDF::Interpolate(const double longitude, const double latitude,
                            const double fill_value,
-                           CellProperties& cell) const {
+                           CellProperties &cell) const {
   if (data_.empty()) {
     throw std::logic_error("No data loaded into memory");
   }
@@ -139,7 +139,7 @@ double NetCDF::Interpolate(const double longitude, const double latitude,
 
 // ___________________________________________________________________________//
 
-DateTime NetCDF::GetDateTime(const std::string& name) const {
+DateTime NetCDF::GetDateTime(const std::string &name) const {
   netcdf::Variable variable = FindVariable(name);
   netcdf::Attribute attribute = variable.FindAttributeIgnoreCase("date");
 

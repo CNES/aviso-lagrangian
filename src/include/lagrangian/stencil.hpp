@@ -123,14 +123,14 @@ class Position {
    *
    * @param rhs right value
    */
-  Position(Position&& rhs) = default;
+  Position(Position &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Position&& rhs) -> Position& = default;
+  auto operator=(Position &&rhs) -> Position & = default;
 
   /**
    * @brief Destructor
@@ -222,7 +222,7 @@ class Position {
    *
    * @return True if the particle could be moved otherwise false
    */
-  auto Compute(const RungeKutta& rk, const Iterator& it, CellProperties& cell)
+  auto Compute(const RungeKutta &rk, const Iterator &it, CellProperties &cell)
       -> bool {
     std::vector<double> x(x_.size());
     std::vector<double> y(y_.size());
@@ -244,8 +244,8 @@ class Position {
    * @param a10
    * @param a11
    */
-  virtual void StrainTensor(double& a00, double& a01, double& a10,
-                            double& a11) const {
+  virtual void StrainTensor(double &a00, double &a01, double &a10,
+                            double &a11) const {
     // make clang-check happy
     a00 = a01 = a10 = a11 = std::numeric_limits<double>::quiet_NaN();
   }
@@ -278,8 +278,8 @@ class Position {
    * @param x Longitude of points
    * @param y Latitude of points
    */
-  inline void Update(const double time, const std::vector<double>& x,
-                     const std::vector<double>& y) {
+  inline void Update(const double time, const std::vector<double> &x,
+                     const std::vector<double> &y) {
     x_ = x;
     y_ = y;
     time_ = time;
@@ -317,14 +317,14 @@ class Point : public Position {
    *
    * @param rhs right value
    */
-  Point(Point&& rhs) = default;
+  Point(Point &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Point&& rhs) -> Point& = default;
+  auto operator=(Point &&rhs) -> Point & = default;
 };
 
 /**
@@ -363,14 +363,14 @@ class Triplet : public Position {
    *
    * @param rhs right value
    */
-  Triplet(Triplet&& rhs) = default;
+  Triplet(Triplet &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Triplet&& rhs) -> Triplet& = default;
+  auto operator=(Triplet &&rhs) -> Triplet & = default;
 
   /**
    * @brief TODO
@@ -380,8 +380,8 @@ class Triplet : public Position {
    * @param a10
    * @param a11
    */
-  inline void StrainTensor(double& a00, double& a01, double& a10,
-                           double& a11) const override {
+  inline void StrainTensor(double &a00, double &a01, double &a10,
+                           double &a11) const override {
     a00 = x_[1] - x_[0];
     a01 = x_[2] - x_[0];
     a10 = y_[1] - y_[0];
@@ -430,14 +430,14 @@ class Quintuplet : public Position {
    *
    * @param rhs right value
    */
-  Quintuplet(Quintuplet&& rhs) = default;
+  Quintuplet(Quintuplet &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Quintuplet&& rhs) -> Quintuplet& = default;
+  auto operator=(Quintuplet &&rhs) -> Quintuplet & = default;
 
   /**
    * @brief TODO
@@ -447,8 +447,8 @@ class Quintuplet : public Position {
    * @param a10
    * @param a11
    */
-  inline void StrainTensor(double& a00, double& a01, double& a10,
-                           double& a11) const override {
+  inline void StrainTensor(double &a00, double &a01, double &a10,
+                           double &a11) const override {
     a00 = x_[1] - x_[3];
     a01 = x_[2] - x_[4];
     a10 = y_[1] - y_[3];

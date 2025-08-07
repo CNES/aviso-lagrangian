@@ -46,7 +46,7 @@ class Exception : public std::runtime_error {
    *
    * @param msg a character string describing the error
    */
-  explicit Exception(const std::string& msg) : std::runtime_error(msg) {}
+  explicit Exception(const std::string &msg) : std::runtime_error(msg) {}
 };
 
 // ___________________________________________________________________________//
@@ -103,7 +103,7 @@ class SmartUtSystem {
   /**
    * @brief Returns the unit system used.
    */
-  [[nodiscard]] inline auto get() const -> ut_system* { return system_.get(); }
+  [[nodiscard]] inline auto get() const -> ut_system * { return system_.get(); }
 };
 
 // ___________________________________________________________________________//
@@ -145,18 +145,18 @@ class UnitConverter {
    * @param value value to convert
    */
   template <class T>
-  inline void Convert(std::vector<T>& values) const {
+  inline void Convert(std::vector<T> &values) const {
     if (offset_ == 0 && scale_ == 1) {
       return;
     }
 
-    for (auto& item : values) {
+    for (auto &item : values) {
       item = item * scale_ + offset_;
     }
   }
 
   template <class T>
-  inline void Convert(T& value) const {
+  inline void Convert(T &value) const {
     value = value * scale_ + offset_;
   }
 
@@ -190,7 +190,7 @@ class Units {
    * @param to the unit to which to convert values.
    * @return The converter computed
    */
-  static auto GetConverter(const std::string& from, const std::string& to)
+  static auto GetConverter(const std::string &from, const std::string &to)
       -> UnitConverter;
 
   /**
@@ -202,7 +202,7 @@ class Units {
    *
    * @return Numeric values can be converted between the units.
    */
-  static auto AreConvertible(const std::string& unit1, const std::string& unit2)
+  static auto AreConvertible(const std::string &unit1, const std::string &unit2)
       -> bool;
 
   /**
@@ -213,7 +213,7 @@ class Units {
    *
    * @return If unit represents a time
    */
-  static auto IsTime(const std::string& unit) -> bool {
+  static auto IsTime(const std::string &unit) -> bool {
     return AreConvertible(unit, "seconds since 1970-01-01 00:00:00");
   }
 };

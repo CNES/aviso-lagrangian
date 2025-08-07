@@ -22,7 +22,7 @@
 
 namespace lagrangian {
 
-static void HandleParseStatus(ut_unit* unit, const std::string& str) {
+static void HandleParseStatus(ut_unit *unit, const std::string &str) {
   if (unit == nullptr) {
     ut_status status = ut_get_status();
     if (status == UT_BAD_ARG) {
@@ -39,9 +39,9 @@ static void HandleParseStatus(ut_unit* unit, const std::string& str) {
   }
 }
 
-static void HandleConverterStatus(cv_converter* converter,
-                                  const std::string& from,
-                                  const std::string& to) {
+static void HandleConverterStatus(cv_converter *converter,
+                                  const std::string &from,
+                                  const std::string &to) {
   if (converter == nullptr) {
     ut_status status = ut_get_status();
     if (status == UT_BAD_ARG) {
@@ -67,7 +67,7 @@ static units::SmartUtSystem g_system;
 
 // ___________________________________________________________________________//
 
-auto Units::GetConverter(const std::string& from, const std::string& to)
+auto Units::GetConverter(const std::string &from, const std::string &to)
     -> UnitConverter {
   if (from == to) {
     return UnitConverter();
@@ -75,13 +75,13 @@ auto Units::GetConverter(const std::string& from, const std::string& to)
 
   g_system.Allocates();
 
-  ut_unit* ut_from = ut_parse(g_system.get(), from.c_str(), UT_UTF8);
+  ut_unit *ut_from = ut_parse(g_system.get(), from.c_str(), UT_UTF8);
   HandleParseStatus(ut_from, from);
 
-  ut_unit* ut_to = ut_parse(g_system.get(), to.c_str(), UT_UTF8);
+  ut_unit *ut_to = ut_parse(g_system.get(), to.c_str(), UT_UTF8);
   HandleParseStatus(ut_from, to);
 
-  cv_converter* converter = ut_get_converter(ut_from, ut_to);
+  cv_converter *converter = ut_get_converter(ut_from, ut_to);
   HandleConverterStatus(converter, from, to);
 
   double offset = cv_convert_double(converter, 0);
@@ -94,14 +94,14 @@ auto Units::GetConverter(const std::string& from, const std::string& to)
   return UnitConverter(offset, scale);
 }
 
-auto Units::AreConvertible(const std::string& unit1, const std::string& unit2)
+auto Units::AreConvertible(const std::string &unit1, const std::string &unit2)
     -> bool {
   g_system.Allocates();
 
-  ut_unit* ut_unit1 = ut_parse(g_system.get(), unit1.c_str(), UT_UTF8);
+  ut_unit *ut_unit1 = ut_parse(g_system.get(), unit1.c_str(), UT_UTF8);
   HandleParseStatus(ut_unit1, unit1);
 
-  ut_unit* ut_unit2 = ut_parse(g_system.get(), unit2.c_str(), UT_UTF8);
+  ut_unit *ut_unit2 = ut_parse(g_system.get(), unit2.c_str(), UT_UTF8);
   HandleParseStatus(ut_unit2, unit2);
 
   int result = ut_are_convertible(ut_unit1, ut_unit2);

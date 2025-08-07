@@ -27,7 +27,7 @@ namespace lagrangian {
  *
  * @param message Message to display
  */
-void Debug(std::string const& message);
+void Debug(std::string const &message);
 
 /**
  * @brief Enable or disable verbose mode

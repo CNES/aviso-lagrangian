@@ -34,7 +34,7 @@ class RungeKutta {
    * @param size_of_interval Number of time interval
    * @param field Field reader
    */
-  RungeKutta(const double size_of_interval, const Field* const field)
+  RungeKutta(const double size_of_interval, const Field *const field)
       : h_(size_of_interval), h_2_(h_ / 2), h_6_(h_ / 6), field_(field) {
     switch (field_->get_unit_type()) {
       case Field::kAngular:
@@ -60,8 +60,8 @@ class RungeKutta {
    * @return
    */
   inline auto Compute(const double t, const double x, const double y,
-                      double& xi, double& yi,
-                      CellProperties& cell = CellProperties::NONE()) const
+                      double &xi, double &yi,
+                      CellProperties &cell = CellProperties::NONE()) const
       -> bool {
     double u1;
     double u2;
@@ -104,18 +104,18 @@ class RungeKutta {
   double h_;
   double h_2_;
   double h_6_;
-  const Field* const field_;
+  const Field *const field_;
 
   using MoveFunction = void (*)(const double t, const double x, const double y,
-                                const double u, const double v, double& xi,
-                                double& yi);
+                                const double u, const double v, double &xi,
+                                double &yi);
 
   MoveFunction pMove_;
 
   // Move a point in a cartesian space
   static inline void MoveCartesian(const double t, const double x0,
                                    const double y0, const double u,
-                                   const double v, double& x1, double& y1) {
+                                   const double v, double &x1, double &y1) {
     x1 = x0 + u * t;
     y1 = y0 + v * t;
   }
@@ -123,8 +123,8 @@ class RungeKutta {
   // Move a point in a field in a spherical equatorial space
   static inline void MoveSphericalEquatorial(const double t, const double x0,
                                              const double y0, const double u,
-                                             const double v, double& x1,
-                                             double& y1) {
+                                             const double v, double &x1,
+                                             double &y1) {
     const double xr = DegreesToRadians(x0);
     const double yr = DegreesToRadians(y0);
     const double sin_x = sin(xr);

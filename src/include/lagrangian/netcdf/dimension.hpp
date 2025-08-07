@@ -34,7 +34,7 @@ class Dimension {
    *
    * @return name of dimension
    */
-  [[nodiscard]] inline auto get_name() const -> std::string const& {
+  [[nodiscard]] inline auto get_name() const -> std::string const & {
     return name_;
   }
 
@@ -69,7 +69,7 @@ class Dimension {
    * @param other Another instance of %Dimension
    * @return if dimensions are equals
    */
-  inline auto operator==(Dimension& other) -> bool {
+  inline auto operator==(Dimension &other) -> bool {
     return name_ == other.get_name() && length_ == other.get_length() &&
            unlimited_ == other.is_unlimited();
   }

@@ -41,7 +41,7 @@ void TimeSerie::Load(int ix0, const int ix1) {
     }
 
     // Swap readers
-    for (auto& new_file : new_files) {
+    for (auto &new_file : new_files) {
       auto it = files_.find(new_file.first);
 
       // If the file is already open
@@ -51,7 +51,7 @@ void TimeSerie::Load(int ix0, const int ix1) {
 
         if (i1 != i2) {
           // Search index previously used by this file
-          for (auto& file : files_) {
+          for (auto &file : files_) {
             // If the index exists (it cannot exist if we create a
             // new driver) we update the information about these files
             if (file.second == new_file.second) {
@@ -67,7 +67,7 @@ void TimeSerie::Load(int ix0, const int ix1) {
       }
     }
 
-    for (auto& new_file : new_files) {
+    for (auto &new_file : new_files) {
       // If it's a new file, we need to open it.
       if (files_.find(new_file.first) == files_.end()) {
         Debug(str(boost::format("Loading %s from %s") % varname_ %
@@ -94,17 +94,17 @@ struct SortPredicate {
    *
    * @return true if date a is less than the date b otherwise false
    */
-  auto operator()(const std::pair<double, std::string>& a,
-                  const std::pair<double, std::string>& b) -> bool {
+  auto operator()(const std::pair<double, std::string> &a,
+                  const std::pair<double, std::string> &b) -> bool {
     return a.first < b.first;
   }
 };
 
 // ___________________________________________________________________________//
 
-FileList::FileList(const std::vector<std::string>& filenames,
-                   const std::string& varname, Reader* const reader) {
-  std::vector<std::pair<double, std::string> > files;
+FileList::FileList(const std::vector<std::string> &filenames,
+                   const std::string &varname, Reader *const reader) {
+  std::vector<std::pair<double, std::string>> files;
   Axis axis_x;
   Axis axis_y;
 
@@ -112,7 +112,7 @@ FileList::FileList(const std::vector<std::string>& filenames,
 
   // For all files, find the time to create an associative array: date,
   // filename.
-  for (auto& item : filenames) {
+  for (auto &item : filenames) {
     reader->Open(item);
     files.emplace_back(
         std::make_pair(reader->GetDateTime(varname).ToUnixTime(), item));
@@ -124,7 +124,7 @@ FileList::FileList(const std::vector<std::string>& filenames,
   std::vector<double> points;
 
   // Creates the axis to obtain a filename from a date.
-  for (auto& item : files) {
+  for (auto &item : files) {
     points.push_back(item.first);
     filenames_.push_back(item.second);
   }
@@ -133,7 +133,7 @@ FileList::FileList(const std::vector<std::string>& filenames,
 
 // ___________________________________________________________________________//
 
-TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
+TimeSerie::TimeSerie(const std::vector<std::string> &filenames,
                      std::string varname, std::string unit,
                      const reader::Factory::Type type)
     : first_index_(-1),
@@ -146,7 +146,7 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
     readers_.emplace_back(reader::Factory::NewReader(type_));
     readers_.emplace_back(reader::Factory::NewReader(type_));
   } catch (...) {
-    for (auto& item : readers_) {
+    for (auto &item : readers_) {
       delete item;
     }
     readers_.clear();
@@ -161,7 +161,7 @@ TimeSerie::TimeSerie(const std::vector<std::string>& filenames,
 
 auto TimeSerie::Interpolate(const double date, const double longitude,
                             const double latitude, const double fill_value,
-                            CellProperties& cell) -> double {
+                            CellProperties &cell) -> double {
   int it0;
   int it1;
 

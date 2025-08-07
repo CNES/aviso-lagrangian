@@ -24,7 +24,7 @@
 
 namespace lagrangian::netcdf {
 
-bool Variable::GetDescription(std::string& desc) const {
+bool Variable::GetDescription(std::string &desc) const {
   Attribute attribute = FindAttributeIgnoreCase("long_name");
 
   if (attribute != Attribute::MISSING && attribute.IsString()) {
@@ -51,7 +51,7 @@ bool Variable::GetDescription(std::string& desc) const {
 
 // ___________________________________________________________________________//
 
-bool Variable::GetUnitsString(std::string& units) const {
+bool Variable::GetUnitsString(std::string &units) const {
   Attribute attribute = FindAttributeIgnoreCase("units");
   if (attribute != Attribute::MISSING && attribute.IsString()) {
     units = attribute.get_string();
@@ -63,7 +63,7 @@ bool Variable::GetUnitsString(std::string& units) const {
 
 // ___________________________________________________________________________//
 
-void Variable::Read(std::vector<double>& data) const {
+void Variable::Read(std::vector<double> &data) const {
   data.resize(GetSize());
   ncvar_.getVar(&data[0]);
 
@@ -76,7 +76,7 @@ void Variable::Read(std::vector<double>& data) const {
 
 // ___________________________________________________________________________//
 
-void Variable::Read(std::vector<double>& data, const std::string& to) const {
+void Variable::Read(std::vector<double> &data, const std::string &to) const {
   std::string from;
 
   if (!GetUnitsString(from)) {
@@ -89,15 +89,15 @@ void Variable::Read(std::vector<double>& data, const std::string& to) const {
 
 // ___________________________________________________________________________//
 
-Variable::Variable(const netCDF::NcVar& ncvar)
+Variable::Variable(const netCDF::NcVar &ncvar)
     : name_(ncvar.getName()), ncvar_(ncvar) {
   // Set globals attributes
-  for (auto& item : ncvar_.getAtts()) {
+  for (auto &item : ncvar_.getAtts()) {
     attributes_.emplace_back(Attribute(item.second));
   }
 
   // populates defined variables
-  for (auto& item : ncvar_.getDims()) {
+  for (auto &item : ncvar_.getDims()) {
     auto size = item.getSize();
 
     shape_.push_back(size);

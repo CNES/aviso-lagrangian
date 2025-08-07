@@ -136,14 +136,14 @@ class Map : public MapProperties {
    *
    * @param rhs right value
    */
-  Map(Map&& rhs) = default;
+  Map(Map &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(Map&& rhs) -> Map& = default;
+  auto operator=(Map &&rhs) -> Map & = default;
 
   /**
    * @brief Default constructor
@@ -166,7 +166,7 @@ class Map : public MapProperties {
    * @param iy %Index of the latitude in the grid
    * @param item Value
    */
-  inline void SetItem(const int ix, const int iy, const T& item) {
+  inline void SetItem(const int ix, const int iy, const T &item) {
     grid_[ix * get_ny() + iy] = item;
   }
 
@@ -178,7 +178,7 @@ class Map : public MapProperties {
    * @return The value of the cell
    */
   [[nodiscard]] inline auto GetItem(const int ix, const int iy) const
-      -> const T& {
+      -> const T & {
     return grid_[ix * get_ny() + iy];
   }
 
@@ -230,7 +230,7 @@ class FiniteLyapunovExponents {
    * difference.
    */
   void Initialize(
-      lagrangian::FiniteLyapunovExponentsIntegration& fle,
+      lagrangian::FiniteLyapunovExponentsIntegration &fle,
       lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
           lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
@@ -244,8 +244,8 @@ class FiniteLyapunovExponents {
    * difference.
    */
   void Initialize(
-      lagrangian::FiniteLyapunovExponentsIntegration& fle,
-      const lagrangian::Reader* reader,
+      lagrangian::FiniteLyapunovExponentsIntegration &fle,
+      const lagrangian::Reader *reader,
       lagrangian::FiniteLyapunovExponentsIntegration::Stencil stencil =
           lagrangian::FiniteLyapunovExponentsIntegration::kTriplet);
 
@@ -257,12 +257,12 @@ class FiniteLyapunovExponents {
    * all CPUs are used. If 1 is given, no parallel computing code is used at
    * all, which is useful for debugging.
    */
-  void Compute(lagrangian::FiniteLyapunovExponentsIntegration& fle,
+  void Compute(lagrangian::FiniteLyapunovExponentsIntegration &fle,
                int num_threads);
 
  protected:
   /// Grid
-  Map<Position*> map_;
+  Map<Position *> map_;
 
  private:
   /**
@@ -272,9 +272,9 @@ class FiniteLyapunovExponents {
    * @param fle Finite Lyapunov exponents
    * @param it Current time step
    */
-  void ComputeHt(Splitter<Index>& splitter,
-                 lagrangian::FiniteLyapunovExponentsIntegration& fle,
-                 Iterator& it);
+  void ComputeHt(Splitter<Index> &splitter,
+                 lagrangian::FiniteLyapunovExponentsIntegration &fle,
+                 Iterator &it);
 
   /**
    * @brief Test if the computation for a cell is over
@@ -282,8 +282,8 @@ class FiniteLyapunovExponents {
    * @param index %Index of the cell
    * @return True if the computation is over otherwise false
    */
-  inline auto Completed(const Index& index) -> bool {
-    Position* position = map_.GetItem(index.get_i(), index.get_j());
+  inline auto Completed(const Index &index) -> bool {
+    Position *position = map_.GetItem(index.get_i(), index.get_j());
     return position->is_completed() || position->IsMissing();
   }
 
@@ -330,8 +330,8 @@ class Advect {
    * @param integration Integration peoprties
    * @param reader NetCDF reader allow to access of the mask's value.
    */
-  void Initialize(Integration& integration,
-                  const std::optional<lagrangian::Reader*> reader);
+  void Initialize(Integration &integration,
+                  const std::optional<lagrangian::Reader *> reader);
 
   /**
    * @brief Compute the map
@@ -341,11 +341,11 @@ class Advect {
    * all CPUs are used. If 1 is given, no parallel computing code is used at
    * all, which is useful for debugging.
    */
-  void Compute(Integration& integration, int num_threads);
+  void Compute(Integration &integration, int num_threads);
 
  protected:
   /// Grid
-  Map<Position*> map_;
+  Map<Position *> map_;
 
  private:
   /**
@@ -355,8 +355,8 @@ class Advect {
    * @param fle Finite Lyapunov exponents
    * @param it Current time step
    */
-  void ComputeHt(Splitter<Index>& splitter, const RungeKutta& rk4,
-                 Iterator& it);
+  void ComputeHt(Splitter<Index> &splitter, const RungeKutta &rk4,
+                 Iterator &it);
 
   /**
    * @brief Test if the computation for a cell is over
@@ -364,8 +364,8 @@ class Advect {
    * @param index %Index of the cell
    * @return True if the computation is over otherwise false
    */
-  inline auto Completed(const Index& index) -> bool {
-    Position* position = map_.GetItem(index.get_i(), index.get_j());
+  inline auto Completed(const Index &index) -> bool {
+    Position *position = map_.GetItem(index.get_i(), index.get_j());
     return position->IsMissing();
   }
 
@@ -408,8 +408,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    * @return The map of λ₁ (unit 1/sec)
    */
   auto GetMapOfLambda1(const double nan,
-                       lagrangian::FiniteLyapunovExponentsIntegration& fle)
-      const -> Map<double>* {
+                       lagrangian::FiniteLyapunovExponentsIntegration &fle)
+      const -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_lambda1,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
@@ -428,8 +428,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    * @return The map of λ₂ (unit 1/sec)
    */
   auto GetMapOfLambda2(const double nan,
-                       lagrangian::FiniteLyapunovExponentsIntegration& fle)
-      const -> Map<double>* {
+                       lagrangian::FiniteLyapunovExponentsIntegration &fle)
+      const -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_lambda2,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedExponent);
@@ -448,8 +448,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    * @return The map of θ₁ (unit degrees)
    */
   auto GetMapOfTheta1(const double nan,
-                      lagrangian::FiniteLyapunovExponentsIntegration& fle) const
-      -> Map<double>* {
+                      lagrangian::FiniteLyapunovExponentsIntegration &fle) const
+      -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_theta1,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
@@ -468,8 +468,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    * @return The map of θ₂ (unit degrees)
    */
   auto GetMapOfTheta2(const double nan,
-                      lagrangian::FiniteLyapunovExponentsIntegration& fle) const
-      -> Map<double>* {
+                      lagrangian::FiniteLyapunovExponentsIntegration &fle) const
+      -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_theta2,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedVector);
@@ -488,8 +488,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    * since the beginning of the integration)
    */
   auto GetMapOfDeltaT(const double nan,
-                      lagrangian::FiniteLyapunovExponentsIntegration& fle) const
-      -> Map<double>* {
+                      lagrangian::FiniteLyapunovExponentsIntegration &fle) const
+      -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_delta_t,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedDeltaT);
@@ -510,8 +510,8 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    */
   auto GetMapOfFinalSeparation(
       const double nan,
-      lagrangian::FiniteLyapunovExponentsIntegration& fle) const
-      -> Map<double>* {
+      lagrangian::FiniteLyapunovExponentsIntegration &fle) const
+      -> Map<double> * {
     return GetMapOfExponents(
         nan, fle, &lagrangian::FiniteLyapunovExponents::get_final_separation,
         &lagrangian::FiniteLyapunovExponents::GetUndefinedFinalSeparation);
@@ -532,9 +532,9 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
    */
   auto GetMapOfExponents(
       const double nan,
-      lagrangian::FiniteLyapunovExponentsIntegration& fle_integration,
+      lagrangian::FiniteLyapunovExponentsIntegration &fle_integration,
       GetExponent pGetExponent, GetExponent pGetUndefinedExponent) const
-      -> Map<double>* {
+      -> Map<double> * {
     lagrangian::FiniteLyapunovExponents fle{};
 
     auto result =
@@ -543,7 +543,7 @@ class MapOfFiniteLyapunovExponents : public map::FiniteLyapunovExponents {
 
     for (int ix = 0; ix < map_.get_nx(); ++ix) {
       for (int iy = 0; iy < map_.get_ny(); ++iy) {
-        Position* position = map_.GetItem(ix, iy);
+        Position *position = map_.GetItem(ix, iy);
         if (position->IsMissing()) {
           result->SetItem(ix, iy, nan);
         } else {

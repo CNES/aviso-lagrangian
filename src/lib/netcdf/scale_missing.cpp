@@ -43,7 +43,7 @@ ScaleMissing::ScaleMissing() {
 
 // ___________________________________________________________________________//
 
-ScaleMissing::ScaleMissing(const Group& group) {
+ScaleMissing::ScaleMissing(const Group &group) {
   valid_min_ = DBL_MIN;
   valid_max_ = DBL_MAX;
 

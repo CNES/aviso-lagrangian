@@ -112,8 +112,8 @@ class Field {
    * @return true if the value of the speed is set otherwise false.
    */
   virtual auto Compute(const double /*t*/, const double /*x*/,
-                       const double /*y*/, double& u, double& v,
-                       CellProperties& /*cell*/ = CellProperties::NONE()) const
+                       const double /*y*/, double &u, double &v,
+                       CellProperties & /*cell*/ = CellProperties::NONE()) const
       -> bool {
     u = std::numeric_limits<double>::quiet_NaN();
     v = std::numeric_limits<double>::quiet_NaN();

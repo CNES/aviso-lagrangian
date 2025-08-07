@@ -18,9 +18,9 @@
 
 namespace lagrangian {
 
-auto DateTime::ToString(const std::string& format) const -> std::string {
+auto DateTime::ToString(const std::string &format) const -> std::string {
   std::string s;
-  auto* f = new boost::posix_time::time_facet(format.c_str());
+  auto *f = new boost::posix_time::time_facet(format.c_str());
   std::stringstream ss;
 
   ss.imbue(std::locale(ss.getloc(), f));

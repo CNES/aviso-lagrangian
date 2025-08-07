@@ -24,7 +24,7 @@
 namespace pybind11::detail {
 
 auto inline microseconds =
-    [](const boost::posix_time::time_duration& time_duration) {
+    [](const boost::posix_time::time_duration &time_duration) {
       static int ticks = boost::posix_time::time_duration::ticks_per_second();
       int fractional = time_duration.fractional_seconds();
 
@@ -70,7 +70,7 @@ struct type_caster<boost::posix_time::time_duration> {
   /// parent object (for
   /// ``return_value_policy::reference_internal``) and are generally
   /// ignored by implicit casters.
-  static auto cast(const boost::posix_time::time_duration& src,
+  static auto cast(const boost::posix_time::time_duration &src,
                    return_value_policy /* policy */, handle /* parent */)
       -> handle {
     // Lazy initialise the PyDateTime import
@@ -102,7 +102,7 @@ struct type_caster<lagrangian::DateTime> {
     }
 
     if (PyDateTime_Check(src.ptr())) {
-      if (reinterpret_cast<_PyDateTime_BaseTZInfo*>(src.ptr())->hastzinfo !=
+      if (reinterpret_cast<_PyDateTime_BaseTZInfo *>(src.ptr())->hastzinfo !=
           0) {
         throw std::invalid_argument(
             "only the naive datetime object can be converted to the "
@@ -131,7 +131,7 @@ struct type_caster<lagrangian::DateTime> {
   /// indicate the return value policy and parent object (for
   /// ``return_value_policy::reference_internal``) and are generally
   /// ignored by implicit casters.
-  static auto cast(const lagrangian::DateTime& src,
+  static auto cast(const lagrangian::DateTime &src,
                    return_value_policy /* policy */, handle /* parent */)
       -> handle {
     // Lazy initialise the PyDateTime import
@@ -147,7 +147,7 @@ struct type_caster<lagrangian::DateTime> {
 
 }  // namespace pybind11::detail
 
-inline auto to_datetime(const lagrangian::DateTime& datetime)
+inline auto to_datetime(const lagrangian::DateTime &datetime)
     -> pybind11::handle {
   if (PyDateTimeAPI == nullptr) {
     PyDateTime_IMPORT;

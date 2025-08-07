@@ -68,7 +68,7 @@ class Variable : public Group {
   [[nodiscard]] inline auto GetSize() const -> long {
     long result = 1;
 
-    for (auto& item : shape_) {
+    for (auto &item : shape_) {
       result *= static_cast<long>(item);
     }
 
@@ -98,7 +98,7 @@ class Variable : public Group {
    *
    * @return true if a description exists, otherwise false
    */
-  auto GetDescription(std::string& description) const -> bool;
+  auto GetDescription(std::string &description) const -> bool;
 
   /**
    * @brief Get the unit string for the variable
@@ -108,14 +108,14 @@ class Variable : public Group {
    *
    * @return true if units attribute exists otherwise false
    */
-  auto GetUnitsString(std::string& units) const -> bool;
+  auto GetUnitsString(std::string &units) const -> bool;
 
   /**
    * @brief Create a variable.
    *
    * @param var an instance of NcVar object
    */
-  explicit Variable(const netCDF::NcVar& var);
+  explicit Variable(const netCDF::NcVar &var);
 
   /**
    * @brief Calculate if this is a classic coordinate variable: has same name
@@ -139,7 +139,7 @@ class Variable : public Group {
    *
    * @return if variables are equals
    */
-  inline friend auto operator==(Variable const& a, Variable const& b) -> bool {
+  inline friend auto operator==(Variable const &a, Variable const &b) -> bool {
     return a.name_ == b.name_ && a.shape_ == b.shape_;
   }
 
@@ -151,7 +151,7 @@ class Variable : public Group {
    *
    * @return if variables are different
    */
-  inline friend auto operator!=(Variable const& a, Variable const& b) -> bool {
+  inline friend auto operator!=(Variable const &a, Variable const &b) -> bool {
     return a.name_ != b.name_ || a.shape_ != b.shape_;
   }
 
@@ -160,7 +160,7 @@ class Variable : public Group {
    *
    * @param data read
    */
-  void Read(std::vector<double>& data) const;
+  void Read(std::vector<double> &data) const;
 
   /**
    * @brief Read all the data for this variable and convert data to the
@@ -169,7 +169,7 @@ class Variable : public Group {
    * @param data read and converted
    * @param unit used to convert data
    */
-  void Read(std::vector<double>& data, const std::string& to) const;
+  void Read(std::vector<double> &data, const std::string &to) const;
 
   /**
    * @brief Represents a missing variable.

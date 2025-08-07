@@ -21,9 +21,9 @@ namespace py = pybind11;
 /// Class used to validate C++ <-> Python conversion
 class DateTime {
  public:
-  explicit DateTime(const lagrangian::DateTime& dt) : dt_(dt) {}
+  explicit DateTime(const lagrangian::DateTime &dt) : dt_(dt) {}
 
-  auto operator()() const -> const lagrangian::DateTime& { return dt_; }
+  auto operator()() const -> const lagrangian::DateTime & { return dt_; }
 
  private:
   lagrangian::DateTime dt_;
@@ -34,7 +34,7 @@ class TimeDuration {
   explicit TimeDuration(boost::posix_time::time_duration td)
       : td_(std::move(td)) {}
 
-  auto operator()() const -> const boost::posix_time::time_duration& {
+  auto operator()() const -> const boost::posix_time::time_duration & {
     return td_;
   }
 
@@ -42,16 +42,16 @@ class TimeDuration {
   boost::posix_time::time_duration td_;
 };
 
-void init_datetime(py::module& m) {
+void init_datetime(py::module &m) {
   py::class_<DateTime>(m, "DateTime")
       .def(py::init<lagrangian::DateTime>())
       .def("to_datetime",
-           [](const DateTime& self) -> lagrangian::DateTime { return self(); });
+           [](const DateTime &self) -> lagrangian::DateTime { return self(); });
 
   py::class_<TimeDuration>(m, "TimeDuration")
       .def(py::init<boost::posix_time::time_duration>())
       .def("to_timedelta",
-           [](const TimeDuration& self) -> boost::posix_time::time_duration {
+           [](const TimeDuration &self) -> boost::posix_time::time_duration {
              return self();
            });
 }

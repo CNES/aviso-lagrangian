@@ -40,8 +40,8 @@ class FileList {
    * @param varname Name the variable containing data to be processed.
    * @param reader Instance of an object implementing the class Reader.
    */
-  FileList(const std::vector<std::string>& filenames,
-           const std::string& varname, Reader* reader);
+  FileList(const std::vector<std::string> &filenames,
+           const std::string &varname, Reader *reader);
 
   /**
    * @brief Given a date expressed as a number of seconds elapsed since
@@ -57,7 +57,7 @@ class FileList {
    * @throw std::out_of_range if the date requested is not included in the
    * time series.
    */
-  inline void FindIndexes(const double date, int& i0, int& i1) {
+  inline void FindIndexes(const double date, int &i0, int &i1) {
     if (!axis_.FindIndexes(date, i0, i1)) {
       throw std::out_of_range("date out of range");
     }
@@ -81,7 +81,7 @@ class FileList {
    *
    * @throw std::out_of_range if index is out of range
    */
-  inline auto GetItem(const int index) -> std::string& {
+  inline auto GetItem(const int index) -> std::string & {
     return filenames_.at(index);
   }
 
@@ -144,7 +144,7 @@ class TimeSerie {
    * @param type Instance of an object implementing the class Reader. By
    * default the class uses the reader of NetCDF grids.
    */
-  TimeSerie(const std::vector<std::string>& filenames, std::string varname,
+  TimeSerie(const std::vector<std::string> &filenames, std::string varname,
             std::string unit = "",
             reader::Factory::Type type = reader::Factory::kNetCDF);
 
@@ -152,7 +152,7 @@ class TimeSerie {
    * @brief Default method invoked when a TimeSerie is destroyed.
    */
   ~TimeSerie() {
-    for (auto& item : readers_) {
+    for (auto &item : readers_) {
       delete item;
     }
     delete time_serie_;
@@ -172,7 +172,7 @@ class TimeSerie {
    * @return the interpolated value
    */
   auto Interpolate(double date, double longitude, double latitude,
-                   double fill_value, CellProperties& cell) -> double;
+                   double fill_value, CellProperties &cell) -> double;
 
   /**
    * @brief Returns the first date of the time series.
@@ -202,8 +202,8 @@ class TimeSerie {
   }
 
  private:
-  std::vector<Reader*> readers_;
-  FileList* time_serie_;
+  std::vector<Reader *> readers_;
+  FileList *time_serie_;
   int first_index_, last_index_;
   std::string varname_;
   std::string unit_;

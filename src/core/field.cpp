@@ -30,8 +30,8 @@ class Python : public lagrangian::Field {
       : lagrangian::Field(unit_type, coordinates_type),
         parent_(std::move(std::move(parent))) {}
 
-  auto Compute(const double t, const double x, const double y, double& u,
-               double& v, lagrangian::CellProperties& /*cell*/) const
+  auto Compute(const double t, const double x, const double y, double &u,
+               double &v, lagrangian::CellProperties & /*cell*/) const
       -> bool override {
     auto method = parent_.attr("compute");
     auto datetime = to_datetime(lagrangian::DateTime::FromUnixTime(t));
@@ -58,7 +58,7 @@ class Python : public lagrangian::Field {
   py::object parent_;
 };
 
-void init_field(pybind11::module& m) {
+void init_field(pybind11::module &m) {
   py::enum_<lagrangian::Field::UnitType>(m, "UnitType", "Unit field")
       .value("METRIC", lagrangian::Field::kMetric,
              "The field velocity is expressed in the metric system (eg. m/s)")
@@ -101,8 +101,8 @@ Returns:
 )__doc__")
       .def(
           "fetch",
-          [](lagrangian::Field& self, const lagrangian::DateTime& t0,
-             const lagrangian::DateTime& t1) -> void {
+          [](lagrangian::Field &self, const lagrangian::DateTime &t0,
+             const lagrangian::DateTime &t1) -> void {
             self.Fetch(t0.ToUnixTime(), t1.ToUnixTime());
           },
           py::arg("first"), py::arg("last"), R"__doc__(
@@ -115,9 +115,9 @@ Args:
 )__doc__")
       .def(
           "compute",
-          [](const lagrangian::Field& self, const lagrangian::DateTime& t,
+          [](const lagrangian::Field &self, const lagrangian::DateTime &t,
              const double x, const double y,
-             lagrangian::CellProperties& cell) -> py::object {
+             lagrangian::CellProperties &cell) -> py::object {
             double u;
             double v;
             if (self.Compute(t.ToUnixTime(), x, y, u, v, cell)) {

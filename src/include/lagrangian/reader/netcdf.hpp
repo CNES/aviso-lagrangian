@@ -69,14 +69,14 @@ class NetCDF : public Reader {
    *
    * @param rhs right value
    */
-  NetCDF(NetCDF&& rhs) = default;
+  NetCDF(NetCDF &&rhs) = default;
 
   /**
    * Move assignment operator
    *
    * @param rhs right value
    */
-  auto operator=(NetCDF&& rhs) -> NetCDF& = default;
+  auto operator=(NetCDF &&rhs) -> NetCDF & = default;
 
   /**
    * @brief Opens a NetCDF grid in read-only.
@@ -86,7 +86,7 @@ class NetCDF : public Reader {
    * @throw std::logic_error If the function can not find the definition of
    * longitudes or latitudes in the file.
    */
-  void Open(const std::string& filename) override;
+  void Open(const std::string &filename) override;
 
   /**
    * @brief Load into memory grid data
@@ -97,7 +97,7 @@ class NetCDF : public Reader {
    * conversion(i.e. the unit of the data loaded into memory is the unit
    * defined in the NetCDF file)
    */
-  void Load(const std::string& varname, const std::string& unit = "") override;
+  void Load(const std::string &varname, const std::string &unit = "") override;
 
   /**
    * @brief Computes the value of the grid point requested by bilinear
@@ -112,7 +112,7 @@ class NetCDF : public Reader {
    * point is outside the grid.
    */
   auto Interpolate(double longitude, double latitude, double fill_value = 0,
-                   CellProperties& cell = CellProperties::NONE()) const
+                   CellProperties &cell = CellProperties::NONE()) const
       -> double override;
 
   /**
@@ -122,7 +122,7 @@ class NetCDF : public Reader {
    *
    * @return the date
    */
-  [[nodiscard]] auto GetDateTime(const std::string& name) const
+  [[nodiscard]] auto GetDateTime(const std::string &name) const
       -> DateTime override;
 
  private:
@@ -138,7 +138,7 @@ class NetCDF : public Reader {
   GetIndex pGetIndex_{nullptr};
 
   // Search for a variable in the NetCDF file
-  [[nodiscard]] auto FindVariable(const std::string& name) const
+  [[nodiscard]] auto FindVariable(const std::string &name) const
       -> netcdf::Variable {
     netcdf::Variable variable = netcdf_.FindVariable(name);
 

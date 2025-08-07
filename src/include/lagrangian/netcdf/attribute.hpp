@@ -38,7 +38,7 @@ class Attribute {
    *
    * @param ncatt An instance of NcAtt
    */
-  explicit Attribute(const netCDF::NcAtt& ncatt) : name_(ncatt.getName()) {
+  explicit Attribute(const netCDF::NcAtt &ncatt) : name_(ncatt.getName()) {
     // Attribute is a string ?
     if (ncatt.getType() == netCDF::ncChar ||
         ncatt.getType() == netCDF::ncString) {
@@ -55,7 +55,7 @@ class Attribute {
    *
    * @return name
    */
-  [[nodiscard]] inline auto get_name() const -> std::string const& {
+  [[nodiscard]] inline auto get_name() const -> std::string const & {
     return name_;
   }
 
@@ -75,7 +75,7 @@ class Attribute {
    *
    * @see Attribute#IsString
    */
-  [[nodiscard]] inline auto get_string() const -> std::string const& {
+  [[nodiscard]] inline auto get_string() const -> std::string const & {
     if (!IsString()) {
       throw std::logic_error("Attribute is numeric");
     }
@@ -115,7 +115,7 @@ class Attribute {
    *
    * @return if attributes are equals
    */
-  inline friend auto operator==(Attribute const& a, Attribute const& b)
+  inline friend auto operator==(Attribute const &a, Attribute const &b)
       -> bool {
     return a.name_ == b.name_ && a.svalue_ == b.svalue_ && a.value_ == b.value_;
   }
@@ -128,7 +128,7 @@ class Attribute {
    *
    * @return if attributes are different
    */
-  inline friend auto operator!=(Attribute const& a, Attribute const& b)
+  inline friend auto operator!=(Attribute const &a, Attribute const &b)
       -> bool {
     return a.name_ != b.name_ || a.svalue_ != b.svalue_ || a.value_ != b.value_;
   }

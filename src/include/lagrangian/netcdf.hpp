@@ -48,14 +48,14 @@ class NetCDF : public netcdf::Group {
    * @brief Creates a new instance and opens an existing NetCDF file (read-
    * only)
    */
-  explicit NetCDF(const std::string& filename) { Open(filename); }
+  explicit NetCDF(const std::string &filename) { Open(filename); }
 
   /**
    * @brief Open an existing NetCDF file (read-only)
    *
    * @throw std::runtime_error if filename is not a valid NetCDF file
    */
-  void Open(const std::string& filename);
+  void Open(const std::string &filename);
 
   /**
    * @brief Get all of the variables in the files.
@@ -73,9 +73,9 @@ class NetCDF : public netcdf::Group {
    *
    * @return the Variable, or Variable::MISSING if not found
    */
-  [[nodiscard]] auto FindVariable(const std::string& name) const
-      -> netcdf::Variable const& {
-    for (auto& item : variables_) {
+  [[nodiscard]] auto FindVariable(const std::string &name) const
+      -> netcdf::Variable const & {
+    for (auto &item : variables_) {
       if (item.get_name() == name) {
         return item;
       }

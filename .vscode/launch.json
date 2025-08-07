@@ -9,7 +9,9 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/work/ALT/odatis/briolf/anaconda3/bin/python",
-            "args": ["/home/fbriol/Documents/workspace/lagrangian/tests/test_integration.py"],
+            "args": [
+                "/home/fbriol/Documents/workspace/lagrangian/tests/test_integration.py"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [
@@ -33,7 +35,9 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "env": {"PYTHONPATH": "/home/fbriol/Documents/workspace/lagrangian/build/lib.linux-x86_64-3.7"},
+            "env": {
+                "PYTHONPATH": "/home/fbriol/Documents/workspace/lagrangian/build/lib.linux-x86_64-3.7"
+            },
             "console": "integratedTerminal"
         }
     ]

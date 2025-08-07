@@ -51,7 +51,7 @@ class ScaleMissing {
    *
    * @param group an existing Group
    */
-  explicit ScaleMissing(const Group& group);
+  explicit ScaleMissing(const Group &group);
 
   /**
    * @brief The variable defined a valid data range
@@ -163,12 +163,12 @@ class ScaleMissing {
    *
    * @param array data to convert
    */
-  void ConvertScaleOffset(std::vector<double>& array) const {
+  void ConvertScaleOffset(std::vector<double> &array) const {
     if (!has_scale_offset_) {
       return;
     }
 
-    for (auto& item : array) {
+    for (auto &item : array) {
       item = !IsMissing(item) ? item * scale_ + offset_
                               : std::numeric_limits<double>::quiet_NaN();
     }
@@ -181,12 +181,12 @@ class ScaleMissing {
    * @param array data to convert
    *
    */
-  void SetMissingToNan(std::vector<double>& array) const {
+  void SetMissingToNan(std::vector<double> &array) const {
     if (!HasMissing()) {
       return;
     }
 
-    for (auto& item : array) {
+    for (auto &item : array) {
       if (IsMissing(item)) {
         item = std::numeric_limits<double>::quiet_NaN();
       }
