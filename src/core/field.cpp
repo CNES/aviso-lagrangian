@@ -134,7 +134,7 @@ Args:
     x (float): Longitude Longitude expressed as degree
     y (float): Latitude expressed as degree
     cell (lagrangian.CellProperties): Cell properties of the grid used for the
-        interpolation
+        interpolation. Default is :py:meth:`lagrangian.CellProperties.none`
 
 Returns:
     tuple, optional: U and V components of the velocities evaluated or None if
@@ -178,5 +178,13 @@ Returns:
       .def(py::init<py::object, lagrangian::Field::UnitType,
                     lagrangian::Field::CoordinatesType>(),
            py::arg("self"), py::arg("unit_type") = lagrangian::Field::kMetric,
-           py::arg("coordinates_type") = lagrangian::Field::kCartesian);
+           py::arg("coordinates_type") = lagrangian::Field::kCartesian,
+           R"__doc__(
+Constructor
+
+Args:
+    unit_type (lagrangian.UnitType): Unit type used by this field
+    coordinates_type (lagrangian.CoordinatesType): Coordinate type used
+        by this field
+)__doc__");
 }

@@ -92,13 +92,12 @@ void init_reader(pybind11::module &m) {
       .def(py::init<>());
 
   py::class_<lagrangian::reader::NetCDF, lagrangian::Reader, NetCDF>(
-      reader, "NetCDF", R"__doc__(
- Grid NetCDF CF reader.
+      reader, "NetCDF", R"__doc__(Grid NetCDF CF reader.
 
- The grid must contain at least one variable and two vectors defining the
- axes of the longitudes and latitudes of the variable. For example :
+The grid must contain at least one variable and two vectors defining the
+axes of the longitudes and latitudes of the variable. For example :
 
- .. code::
+.. code::
 
     dimensions:
       y = 915 ;
@@ -126,10 +125,9 @@ void init_reader(pybind11::module &m) {
   The variable to be read must set an attribute named "date" that
   define the date of data contained in the variable.
 )__doc__")
-      .def(py::init<>())
+      .def(py::init<>(), "Default constructor")
       .def("open", &lagrangian::reader::NetCDF::Open, py::arg("path"),
-           R"__doc__(
-Opens a NetCDF grid in read-only.
+           R"__doc__(Opens a NetCDF grid in read-only.
 
 Args:
   path (str): Path to the NetCDF grid
@@ -167,7 +165,7 @@ Returns:
 )__doc__")
       .def("date", &lagrangian::reader::NetCDF::GetDateTime, py::arg("name"),
            R"__doc__(
- Returns the date of the grid
+Returns the date of the grid
 
 Args:
   name (str): The variable name containing the date
