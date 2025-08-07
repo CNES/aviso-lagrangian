@@ -22,12 +22,13 @@
             item not in attributes and
             item not in meth and
             item not in ['__dict__',
-                         '__entries',
                          '__doc__',
+                         '__entries',
                          '__init__',
                          '__members__',
                          '__module__',
-                         '__weakref__'] -%}
+                         '__weakref__',
+                         '._pybind11_conduit_v1_'] -%}
         {{ meth.append(item) or "" }}
       {%- endif -%}
    {%- endfor -%}

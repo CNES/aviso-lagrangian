@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: "*"
+  pull_request:
+    branches: main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  linux:
+    name: ${{ matrix.python-version }}-posix
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ['3.12']
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        lfs: true
+        fetch-depth: 0
+        fetch-tags: true
+
+    - name: Setup Miniconda
+      uses: mamba-org/setup-micromamba@v1
+      with:
+        cache-downloads: true
+        condarc: |
+          channels:
+            - conda-forge
+        create-args: |
+          python=${{ matrix.python-version }}
+        environment-name: Lagrangian
+        environment-file: conda/environment.yml
+
+    - name: Compile and Testing Python Package
+      shell: bash -l {0}
+      run: |
+        python setup.py build
+        pytest -v -ra
+
+    - name: Generate Documentation
+      shell: bash -l {0}
+      run: |
+        sphinx-build -b html docs/source docs/build
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: docs/build
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+  # win:
+  #   name: win
+  #   runs-on: windows-2022
+
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
+  #     with:
+  #       submodules: recursive
+  #       lfs: true
+
+  #   - name: Setup Miniconda
+  #     uses: mamba-org/setup-micromamba@v1
+  #     with:
+  #       cache-downloads: true
+  #       condarc: |
+  #         channels:
+  #           - conda-forge
+  #       create-args: |
+  #         python=3.12
+  #       environment-name: Lagrangian
+  #       environment-file: conda/environment.yml
+
+  #   - name: Building Testing Python Package
+  #     shell: bash -l {0}
+  #     run: |
+  #       python setup.py build_ext --generator="Visual Studio 17 2022"
+  #       python setup.py build
+  #       pytest -v -ra
