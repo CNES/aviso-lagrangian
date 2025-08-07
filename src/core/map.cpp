@@ -201,8 +201,8 @@ Args:
 Initializing the grid cells.
 
 Args:
-     integration (lagrangian.Integration): Integration peoprties
-     reader (lagragian.Reader.NetCDF): NetCDF reader allow to access of the
+     integration (lagrangian.core.Integration): Integration peoprties
+     reader (lagragian.core.Reader.NetCDF): NetCDF reader allow to access of the
           mask's value. If no reader is defined, all gris points are used
           during the calculation
 )__doc__")
@@ -211,7 +211,7 @@ Args:
 Compute the map
 
 Args:
-     integration (lagrangian.Integration): Integration peoprties
+     integration (lagrangian.core.Integration): Integration properties
      num_threads (int, optional): The number of threads to use for the
           computation. If 0 all CPUs are used. If 1 is given, no parallel
           computing code is used at all, which is useful for debugging.
@@ -254,12 +254,12 @@ Returns:
 Default constructor
 
 Args:
-     map_properties (lagrangian.MapProperties): Properties of the regular
+     map_properties (lagrangian.core.MapProperties): Properties of the regular
           grid to create
-     fle (lagrangian.FiniteLyapunovExponents): FLE handler
-     stencil (lagrangian.Stencil): Type of stencil used for the calculation of
-          finite difference.
-     reader (lagrangian.reader.NetCDF):  NetCDF used to locate the hidden
+     fle (lagrangian.core.FiniteLyapunovExponents): FLE handler
+     stencil (lagrangian.core.Stencil): Type of stencil used for the calculation
+          of finite difference.
+     reader (lagrangian.core.reader.NetCDF):  NetCDF used to locate the hidden
           values​​ (eg continents). These cells identified will not be taken
           into account during the calculation process, in order to accelerate
           it. If this parameter is not defined, all cells will be processed in

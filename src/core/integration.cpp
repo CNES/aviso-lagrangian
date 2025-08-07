@@ -94,8 +94,7 @@ Default constructor
 
     This constructor may lead to an error in diagnostic because start time is
     set to zero: if stencil has not been advected then delta_t is equal to
-    minus advection starting time (- start_time_) which is not correct. (see
-    FiniteLyapunovExponentsIntegration::ComputeExponents in integration.cpp)
+    minus advection starting time (- ``start_time``) which is not correct.
 )__doc__")
       .def(py::init([](const lagrangian::DateTime &date,
                        const bool spherical_equatorial) {
@@ -354,40 +353,42 @@ Handles the computation of Lyapunov Exponent
 
 Finite Size Lyapunov Exponent (FSLE) is a scalar local notion that
 represents the rate of separation of initially neighbouring particles
-over a finite-time window [t₀, t₀ + T], where T is the time two
-particules need to be advected in order to be separated from a given
-distance d.
+over a finite-time window :math:`[t_0, t_0 + T]`, where :math:`T` is the time
+two particles need to be advected in order to be separated from a given
+distance :math:`d`.
 
-Let x(t) = x(t; x₀, t₀) be the position of a lagrangian particle
-at time t, started at x₀ at t=t₀ and advected by the time-dependent
-fluid flow u(x, t).
+Let :math:`x(t) = x(t; x_0, t_0)` be the position of a lagrangian particle
+at time :math:`t`, started at :math:`x_0` at :math:`t = t_0` and advected by
+the time-dependent fluid flow :math:`u(x, t)`.
 
-The Forward Finite-Time Lyapunov Exponent at a point x₀
-and for the advection time T is defined as the growth factor of
-the norm of the perturbation dx0 started around x₀ and advected
-by the flow after the finite advection time T.
+The Forward Finite-Time Lyapunov Exponent at a point :math:`x_0`
+and for the advection time :math:`T` is defined as the growth factor of the
+norm of the perturbation :math:`dx_0` started around :math:`x_0` and advected
+by the flow after the finite advection time :math:`T`.
 
-Maximal stretching occurs when dx0 is aligned with the eigenvector
-associated with the maximum eigenvalue δmax of the Cauchy-Green strain
-tensor Δ:
+Maximal stretching occurs when :math:`dx_0` is aligned with the eigenvector
+associated with the maximum eigenvalue :math:`\delta_{\text{max}}` of the
+Cauchy-Green strain tensor :math:`\Delta`:
 
-Δ = [ ∇Φ₀ᵀ (x₀) ]^* [ ∇Φ₀ᵀ (x₀) ]
+.. math::
+    \Delta = \left[ \nabla \Phi_0^T (x_0) \right]^* 
+        \left[ \nabla \Phi_0^T (x_0) \right]
 
-where Φ₀ᵀ : x₀ ➜ x(t, x₀, t₀) is the flow map of the advection equation:
-it links the location x₀ of a lagragian particule at t=t₀ to its position
-x(t,x₀,t₀) at time t. (* denotes the transposition operator).
+where :math:`\Phi_0^T : x_0 \rightarrow x(t, x_0, t_0)` is the flow map of the
+advection equation: it links the location :math:`x_0` of a lagrangian particle
+at :math:`t = t_0` to its position :math:`x(t, x_0, t_0)` at time :math:`t`. 
+(* denotes the transposition operator).
 
 FTLE is defined as
 
-σ = ( 1 / (2*T) ) * log( λmax( Δ ) )
+:math:`\sigma = \frac{1}{2T} \log \left( \lambda_{\text{max}}(\Delta) \right)`
 
-Finite-Size Lyapunov Exponent is similarly defined: T is chosen so that
-neighbouring particules separate from a given distance d.
+Finite-Size Lyapunov Exponent is similarly defined: :math:`T` is chosen so that
+neighbouring particles separate from a given distance :math:`d`.
 
-ComputeExponents(const Position& position) function implements the
-computation of the Lyapunov exponents based on maximal and minimal
-eigenvalues and orientation of eigenvectors of Δ given the elements of
-∇Φ₀ᵀ matrix.
+ComputeExponents function implements the computation of the Lyapunov exponents
+based on maximal and minimal eigenvalues and orientation of eigenvectors of
+:math:`\Delta` given the elements of :math:`\nabla \Phi_0^T` matrix.
 
 For more details see:
 
@@ -397,7 +398,7 @@ For more details see:
    Remark: In this paper, FTLE is referred to as the Direct Lyapunov
    Exponent (DLE)
 
- 2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
+2. http://mmae.iit.edu/shadden/LCS-tutorial/FTLE-derivation.html
 )__doc__")
       .def(py::init<lagrangian::DateTime, lagrangian::DateTime,
                     boost::posix_time::time_duration,
