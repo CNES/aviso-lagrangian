@@ -11,10 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import importlib.metadata
-import os
 import pathlib
-import sysconfig
 import sys
+import sysconfig
 
 #: The directory containing this file.
 HERE = pathlib.Path(__file__).absolute().parent
@@ -47,7 +46,6 @@ except importlib.metadata.PackageNotFoundError:
     except ImportError:
         release = '0.0.0'
 version = '.'.join(release.split('.')[:2])
-
 
 # -- Project information -----------------------------------------------------
 
