@@ -22,7 +22,37 @@ except ImportError:
         from setuptools_scm import get_version
         __version__ = get_version(root='..', relative_to=__file__)
     except ImportError:
-        __version__ = "unknown"
+        __version__ = 'unknown'
+
+__all__ = [
+    'CellProperties',
+    'CoordinatesType',
+    'DateTime',
+    'Field',
+    'FiniteLyapunovExponents',
+    'FiniteLyapunovExponentsIntegration',
+    'Integration',
+    'IntegrationMode',
+    'Iterator',
+    'MapOfFiniteLyapunovExponents',
+    'MapProperties',
+    'Path',
+    'Position',
+    'Quintuplet',
+    'Reader',
+    'RungeKutta',
+    'Stencil',
+    'TimeDuration',
+    'Triplet',
+    'UnitType',
+    'axis',
+    'debug',
+    'field',
+    'reader',
+    'set_verbose',
+    'units',
+    'version',
+]
 
 from .core import (
     CellProperties,
@@ -49,7 +79,7 @@ from .core import (
     debug,
     field,
     reader,
-    units,
     set_verbose,
+    units,
     version,
 )

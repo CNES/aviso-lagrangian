@@ -17,8 +17,10 @@
 import argparse
 import fnmatch
 import os
+
 import netCDF4
 import numpy
+
 import lagrangian
 
 
@@ -47,7 +49,7 @@ def usage():
     parser.add_argument('v', help='NetCDF variable containing the V component')
     parser.add_argument('--mask',
                         help='Select only the files matching the mask',
-                        default="*.nc")
+                        default='*.nc')
     return parser.parse_args()
 
 
@@ -76,9 +78,9 @@ def get_axis(variables):
                     variable.units.encode('ASCII')):
                 y = name
     if x is None:
-        raise RuntimeError("Could not find the X-axis")
+        raise RuntimeError('Could not find the X-axis')
     if y is None:
-        raise RuntimeError("Could not find the Y-axis")
+        raise RuntimeError('Could not find the Y-axis')
     return x, y
 
 
@@ -121,7 +123,7 @@ def read_var(variable):
     Read velocity component and convert it in m/s if needed
     """
     offset, scale = lagrangian.units.Units.get_converter(
-        variable.units.encode('ASCII'), "m/s")
+        variable.units.encode('ASCII'), 'm/s')
     return variable[:] * scale + offset
 
 
@@ -212,16 +214,15 @@ def main():
             u, v = convert(x, y, u[0, :], v[0, :])
 
             dst.variables[args.u][0, :] = u * 1e6
-            dst.variables[args.u].units = "microdegrees/s"
+            dst.variables[args.u].units = 'microdegrees/s'
             dst.variables[args.v][0, :] = v * 1e6
-            dst.variables[args.v].units = "microdegrees/s"
+            dst.variables[args.v].units = 'microdegrees/s'
 
             src.close()
             dst.close()
-        except:
+        finally:
             if os.path.exists(path):
                 os.unlink(path)
-            raise
 
 
 if __name__ == '__main__':

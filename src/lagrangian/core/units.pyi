@@ -1,7 +1,4 @@
-from typing import Tuple
-
-
 class Units:
+    def __init__(self, *args, **kwargs) -> None: ...
     @staticmethod
-    def get_converter(from_: str, to: str) -> Tuple[float, float]:
-        ...
+    def get_converter(_from: str, to: str) -> tuple: ...

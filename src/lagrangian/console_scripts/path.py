@@ -14,27 +14,31 @@
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with core.  If not, see <http://www.gnu.org/licenses/>.import lagrangian
-import datetime
 import argparse
+import datetime
 import os
 import re
 import sys
+
 import dateutil.parser
+
 import lagrangian
 
 
-class FileType(object):
+class FileType:
     """
     FileType factory
     """
+
     def __init__(self, mode='r'):
         self.__mode = mode
 
     def __call__(self, path):
         try:
             return open(path, self.__mode)
-        except (OSError, IOError) as e:
-            raise argparse.ArgumentTypeError("can't open '%s': %s" % (path, e))
+        except OSError as e:
+            raise argparse.ArgumentTypeError("can't open '{}': {}".format(
+                path, e))
 
 
 def path_type(value):
@@ -54,7 +58,7 @@ def date_type(value):
     try:
         value = dateutil.parser.parse(value)
     except ValueError as error:
-        raise argparse.ArgumentTypeError("invalid date time %r: %s" %
+        raise argparse.ArgumentTypeError('invalid date time %r: %s' %
                                          (value, error))
     return value
 
@@ -132,7 +136,7 @@ class Position:
         return self.__process
 
     def __str__(self):
-        return "%d\t%f\t%f" % (self.__ident, self.__x, self.__y)
+        return '%d\t%f\t%f' % (self.__ident, self.__x, self.__y)
 
 
 def decode_x(value):
@@ -142,11 +146,11 @@ def decode_x(value):
     try:
         value = float(value)
     except ValueError:
-        raise RuntimeError("%r could not be interpreted as a float" % value)
+        raise RuntimeError('%r could not be interpreted as a float' % value)
     while value > 180:
         value -= 180
     if value < -180 or value > 180:
-        raise RuntimeError("%f does not represent a correct longitude" % value)
+        raise RuntimeError('%f does not represent a correct longitude' % value)
     return value
 
 
@@ -157,9 +161,9 @@ def decode_y(value):
     try:
         value = float(value)
     except ValueError:
-        raise RuntimeError("%r could not be interpreted as a float" % value)
+        raise RuntimeError('%r could not be interpreted as a float' % value)
     if value < -90 or value > 90:
-        raise RuntimeError("%f does not represent a correct latitude" % value)
+        raise RuntimeError('%f does not represent a correct latitude' % value)
     return value
 
 
@@ -173,16 +177,16 @@ def main():
     delta = datetime.timedelta(0, 6 * 60 * 60)
 
     if args.start_time < ts.start_time():
-        raise RuntimeError("The start date (%s) is before the beginning "
-                           "of the time series (%s)" %
-                           (args.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                            ts.start_time.strftime("%Y-%m-%dT%H:%M:%S")))
+        raise RuntimeError('The start date (%s) is before the beginning '
+                           'of the time series (%s)' %
+                           (args.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                            ts.start_time.strftime('%Y-%m-%dT%H:%M:%S')))
 
     if args.end_time > ts.end_time():
-        raise RuntimeError("The end date (%s) is after the ending "
-                           "of the time series (%s)" %
-                           (args.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                            ts.end_time.strftime("%Y-%m-%dT%H:%M:%S")))
+        raise RuntimeError('The end date (%s) is after the ending '
+                           'of the time series (%s)' %
+                           (args.end_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                            ts.end_time.strftime('%Y-%m-%dT%H:%M:%S')))
 
     path = lagrangian.Path(args.start_time, args.end_time, delta, ts)
     positions = []
@@ -195,12 +199,12 @@ def main():
             if line:
                 columns = re.split(r'\s+', line)
                 if len(columns) < 2:
-                    raise RuntimeError("missing position")
+                    raise RuntimeError('missing position')
                 positions.append(
                     Position(decode_x(columns[0]), decode_y(columns[1])))
         except Exception as err:
-            raise RuntimeError("Parse error in input file at "
-                               "line %d: %s" % (ix, ''.join(err.args)))
+            raise RuntimeError('Parse error in input file at '
+                               'line %d: %s' % (ix, ''.join(err.args)))
         ix += 1
 
     it = path.iterator()
@@ -211,7 +215,7 @@ def main():
             if item.process:
                 result = path.compute(it, item.x, item.y)
                 if result is not None:
-                    args.output.write("%s\t%s\n" %
+                    args.output.write('%s\t%s\n' %
                                       (item, time_step.isoformat()))
                     item.update(True, result[0], result[1])
                 else:

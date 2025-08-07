@@ -12,15 +12,17 @@
 #
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-from typing import Any, Dict
-import datetime
 import argparse
+import datetime
 import pickle
 import sys
 import time
+from typing import Any
+
 import dateutil.parser
 import netCDF4
 import numpy
+
 import lagrangian
 
 try:
@@ -46,7 +48,7 @@ def timedelta_type(value: str) -> datetime.timedelta:
     try:
         days = float(value)
     except ValueError:
-        raise argparse.ArgumentTypeError("invalid float value: %r" % value)
+        raise argparse.ArgumentTypeError('invalid float value: %r' % value)
     return datetime.timedelta(days=days)
 
 
@@ -56,12 +58,12 @@ def datetime_type(value: str) -> datetime.datetime:
     try:
         date = dateutil.parser.parse(value)
     except ValueError as error:
-        raise argparse.ArgumentTypeError("invalid date time %r: %s" %
+        raise argparse.ArgumentTypeError('invalid date time %r: %s' %
                                          (value, error))
     return date
 
 
-class TimeDirection(object):
+class TimeDirection:
     """Define the time integration direction
     """
     BACKWARD = 0
@@ -71,10 +73,10 @@ class TimeDirection(object):
     def default() -> str:
         """Return the default time integration direction
         """
-        return "backward"
+        return 'backward'
 
     @classmethod
-    def choices(cls) -> Dict[str, int]:
+    def choices(cls) -> dict[str, int]:
         """Return a hash that represents the possible choices for the
         integration time.
         """
@@ -87,10 +89,10 @@ def positive_value(value: str) -> float:
     try:
         real = float(value)
     except ValueError:
-        msg = "invalid float value: %r" % value
+        msg = 'invalid float value: %r' % value
         raise argparse.ArgumentTypeError(msg)
     if real < 0:
-        msg = "value must be positive: %f" % value
+        msg = 'value must be positive: %s' % value
         raise argparse.ArgumentTypeError(msg)
     return real
 
@@ -128,12 +130,12 @@ def usage():
     integration = parser.add_argument_group('integration arguments',
                                             'Define integration')
     integration.add_argument('--mode',
-                             help="define the integration mode: "
-                             "fsle to compute Finite Size "
-                             "Lyapunov Exponent, ftle to compute "
-                             "Finite Time Lyapunov Exponent.",
+                             help='define the integration mode: '
+                             'fsle to compute Finite Size '
+                             'Lyapunov Exponent, ftle to compute '
+                             'Finite Time Lyapunov Exponent.',
                              choices=MODE.keys(),
-                             default="fsle")
+                             default='fsle')
     integration.add_argument('--time_direction',
                              help='time integration direction',
                              choices=TimeDirection.choices().keys(),
@@ -142,7 +144,7 @@ def usage():
                              help='type of stencil used to compute the finite '
                              'difference.',
                              choices=STENCIL.keys(),
-                             default="triplet")
+                             default='triplet')
     integration.add_argument('--initial_separation',
                              help='initial separation in degrees of '
                              'neighbouring particules',
@@ -188,21 +190,21 @@ def usage():
             'Runs the calculation on a cluster (divides the calculation by '
             'geographical area).')
         group = cluster.add_mutually_exclusive_group()
-        group.add_argument("--scheduler_file",
-                           help="Path to a file with DASK scheduler "
-                           "information",
+        group.add_argument('--scheduler_file',
+                           help='Path to a file with DASK scheduler '
+                           'information',
                            metavar='PATH',
                            default=None)
-        group.add_argument("--local-cluster",
-                           help="Use a dask local cluster for testing purpose",
-                           action="store_true")
+        group.add_argument('--local-cluster',
+                           help='Use a dask local cluster for testing purpose',
+                           action='store_true')
 
     data = parser.add_argument_group('reader arguments',
                                      'Set options of the NetCDF reader.')
     data.add_argument('--unit',
                       help='system of units for velocity',
                       choices=SYSTEM_UNITS.keys(),
-                      default="metric")
+                      default='metric')
     data.add_argument('--mask',
                       help='netCDF grid for fixing undefined cells',
                       nargs=2,
@@ -232,10 +234,11 @@ def usage():
     args = parser.parse_args()
     if MODE[args.mode] == lagrangian.IntegrationMode.FTLE and \
             args.final_separation != -1:
-        parser.error('argument --final_separation not allowed in FTLE ' 'mode')
+        parser.error('argument --final_separation not allowed in FTLE '
+                     'mode')
     if not HAVE_DASK:
-        args.__dict__["local_cluster"] = None
-        args.__dict__["scheduler_file"] = None
+        args.__dict__['local_cluster'] = None
+        args.__dict__['scheduler_file'] = None
     return args
 
 
@@ -322,16 +325,16 @@ def check_period(ts: TimeSerie, start_time: datetime.datetime,
         start_time, end_time = end_time, start_time
 
     if start_time < ts.start_time():
-        raise RuntimeError("The start date (%s) is before the beginning "
-                           "of the time series (%s)" %
-                           (start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                            ts.start_time().strftime("%Y-%m-%dT%H:%M:%S")))
+        raise RuntimeError('The start date (%s) is before the beginning '
+                           'of the time series (%s)' %
+                           (start_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                            ts.start_time().strftime('%Y-%m-%dT%H:%M:%S')))
 
     if end_time > ts.end_time():
-        raise RuntimeError("The end date (%s) is after the ending "
-                           "of the time series (%s)" %
-                           (end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                            ts.end_time().strftime("%Y-%m-%dT%H:%M:%S")))
+        raise RuntimeError('The end date (%s) is after the ending '
+                           'of the time series (%s)' %
+                           (end_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                            ts.end_time().strftime('%Y-%m-%dT%H:%M:%S')))
 
 
 def worker_task(args: argparse.Namespace,
@@ -369,25 +372,24 @@ def worker_task(args: argparse.Namespace,
     return numpy.stack(result)
 
 
-def build_dask_array(args: argparse.Namespace,
-                     fsle: FiniteLyapunovExponentsIntegration,
-                     map_properties: MapProperties, workers: int,
-                     threads_per_worker: int
-                     ) -> "dask.array.Array":  # type: ignore
+def build_dask_array(
+        args: argparse.Namespace, fsle: FiniteLyapunovExponentsIntegration,
+        map_properties: MapProperties, workers: int,
+        threads_per_worker: int) -> 'dask.array.Array':  # type: ignore
     x_axis = map_properties.x_axis()
     y_axis = map_properties.y_axis()
     y_chunks = numpy.array_split(y_axis, workers)
     chunks = ((6 if args.diagnostic else 4, ), (x_axis.size, ),
               tuple(item.size for item in y_chunks))
     dsk = dict()
-    name = "lagrangian"
+    name = 'lagrangian'
     for (i, y_chunk) in enumerate(y_chunks):
         map_properties_ = MapProperties(x_axis.size, len(y_chunk), x_axis[0],
                                         y_chunk[0], map_properties.step)
         dsk[(name, 0, 0, i)] = (worker_task, args, fsle, map_properties_,
                                 threads_per_worker)
 
-    return dask.array.Array(dsk, name, chunks, "float64")  # type: ignore
+    return dask.array.Array(dsk, name, chunks, 'float64')  # type: ignore
 
 
 def write_netcdf(args: argparse.Namespace, exponents: numpy.ndarray,
@@ -409,15 +411,15 @@ def write_netcdf(args: argparse.Namespace, exponents: numpy.ndarray,
         setattr(rootgrp, name, str(value))
 
     x_axis = rootgrp.createVariable('lon', 'f8', ('lon', ))
-    x_axis.standard_name = "longitude"
+    x_axis.standard_name = 'longitude'
     x_axis.units = 'degrees_east'
-    x_axis.axis = "X"
+    x_axis.axis = 'X'
     x_axis[:] = map_properties.x_axis()
 
     y_axis = rootgrp.createVariable('lat', 'f8', ('lat', ))
-    y_axis.standard_name = "latitude"
+    y_axis.standard_name = 'latitude'
     y_axis.units = 'degrees_north'
-    y_axis.axis = "Y"
+    y_axis.axis = 'Y'
     y_axis[:] = map_properties.y_axis()
 
     theta1 = rootgrp.createVariable('theta1',
@@ -504,13 +506,13 @@ def main():
     # Display set parameter values for the integration
     for item in args._get_kwargs():
         option, value = item
-        lagrangian.debug("%s: %s" % (option, value))
+        lagrangian.debug(f'{option}: {value}')
 
     # Check X & Y range
     if not args.x_min < args.x_max:
-        raise RuntimeError("Invalid definition of x range.")
+        raise RuntimeError('Invalid definition of x range.')
     if not args.y_min < args.y_max:
-        raise RuntimeError("Invalid definition of y range.")
+        raise RuntimeError('Invalid definition of y range.')
 
     # Initializes the time series to process
     ts = TimeSerie(args.configuration, SYSTEM_UNITS[args.unit])
@@ -555,7 +557,7 @@ def main():
         while True:
             workers = len(client.scheduler_info()['workers'])
             threads_per_worker = min(
-                item["nthreads"]
+                item['nthreads']
                 for item in client.scheduler_info()['workers'].values())
             if workers == 0:
                 time.sleep(5)
@@ -571,5 +573,5 @@ def main():
     write_netcdf(args, exponents, map_properties, nx, ny, start_time)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
