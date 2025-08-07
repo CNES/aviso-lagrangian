@@ -33,13 +33,23 @@ MINOR = sys.version_info[1]
 WORKING_DIRECTORY = pathlib.Path(__file__).parent.absolute()
 
 
+def compare_setuptools_version(required) -> bool:
+    """Compare the version of setuptools with the required version."""
+    current = tuple(map(int, setuptools.__version__.split('.')[:2]))
+    return current >= required
+
+
 def build_dirname(extname=None):
-    """Returns the name of the build directory"""
-    extname = '' if extname is None else os.sep.join(extname.split(".")[:-1])
-    return str(
-        pathlib.Path(WORKING_DIRECTORY, "build",
-                     "lib.%s-%d.%d" % (sysconfig.get_platform(), MAJOR, MINOR),
-                     extname))
+    """Returns the name of the build directory."""
+    extname = '' if extname is None else os.sep.join(extname.split('.')[:-1])
+    if compare_setuptools_version((62, 1)):  # type: ignore
+        return pathlib.Path(
+            WORKING_DIRECTORY, 'build', f'lib.{sysconfig.get_platform()}-'
+            f'{sys.implementation.cache_tag}', extname)
+    return pathlib.Path(WORKING_DIRECTORY, 'build',
+                        f'lib.{sysconfig.get_platform()}-{MAJOR}.{MINOR}',
+                        extname)
+
 
 
 class CMakeExtension(setuptools.Extension):
@@ -111,7 +121,7 @@ class BuildExt(setuptools.command.build_ext.build_ext):
             "-DBoost_NO_BOOST_CMAKE=TRUE"
         boost_root = sys.prefix
         if os.path.exists(os.path.join(boost_root, "include", "boost")):
-            return "{boost_option} -DBOOST_ROOT={boost_root}".format(
+            return "{boost_option} -DDBOOSTROOT={boost_root}".format(
                 boost_root=boost_root, boost_option=boost_option).split()
         boost_root = os.path.join(sys.prefix, "Library", "include")
         if not os.path.exists(boost_root):
@@ -202,7 +212,7 @@ class BuildExt(setuptools.command.build_ext.build_ext):
 
         cmake_args = [
             "-DCMAKE_BUILD_TYPE=" + cfg, "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" +
-            str(extdir), "-DPYTHON_EXECUTABLE=" + sys.executable
+            str(extdir), "-DPython3_EXECUTABLE=" + sys.executable
         ] + self.set_cmake_user_options()
 
         build_args = ['--config', cfg]

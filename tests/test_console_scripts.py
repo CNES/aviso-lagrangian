@@ -21,10 +21,17 @@ import sys
 import netCDF4
 import numpy
 
+import lagrangian
 
 class TestConsoleScripts(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        lagrangian_dir = os.path.dirname(lagrangian.__file__)
+        paths = list(sys.path)
+        paths.insert(0, lagrangian_dir)
+        sep = ";" if platform.system() == "Windows" else ":"
+        os.environ['PYTHONPATH'] = sep.join(paths)
+
         os.environ['ROOT'] = os.path.dirname(__file__)
         cls.pos = os.path.join(os.environ['ROOT'], 'buoys.txt')
         cls.ini = os.path.join(os.environ['ROOT'], 'map.ini')

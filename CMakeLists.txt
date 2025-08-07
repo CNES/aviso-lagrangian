@@ -14,6 +14,10 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 cmake_minimum_required(VERSION 3.12)
 
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
+
 include(CheckFunctionExists)
 include(CheckCXXSourceRuns)
 
@@ -128,15 +132,17 @@ if(NOT POW_FUNCTION_EXISTS)
 endif()
 
 # Python
-find_package(PythonInterp REQUIRED)
+  find_package(
+    Python3 3.7
+    COMPONENTS Interpreter Development
+    REQUIRED)
 execute_process(
     COMMAND
-    ${PYTHON_EXECUTABLE} -c [=[import os
+    ${Python3_EXECUTABLE} -c [=[import os
 import sysconfig
 import sys
 sys.stdout.write(os.path.dirname(sysconfig.get_config_h_filename()))
 ]=] OUTPUT_VARIABLE PYTHON_INCLUDE_DIR)
-find_package(PythonLibs REQUIRED)
 
 # Boost
 find_package(Boost 1.63 REQUIRED COMPONENTS date_time)
