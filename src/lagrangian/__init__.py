@@ -12,6 +12,18 @@
 #
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
+
+# Import version using setuptools_scm
+try:
+    from ._version import version as __version__
+except ImportError:
+    # Fallback for development installs
+    try:
+        from setuptools_scm import get_version
+        __version__ = get_version(root='..', relative_to=__file__)
+    except ImportError:
+        __version__ = "unknown"
+
 from .core import (
     CellProperties,
     CoordinatesType,

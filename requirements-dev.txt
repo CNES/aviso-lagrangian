@@ -1,0 +1,18 @@
+# Development dependencies for aviso-lagrangian
+
+# Testing
+pytest>=6.0
+pytest-cov
+
+# Code quality
+black
+isort
+flake8
+
+# Build tools
+build
+setuptools_scm[toml]
+
+# Documentation (optional)
+sphinx
+sphinx-rtd-theme

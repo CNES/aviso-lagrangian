@@ -22,5 +22,7 @@ MANIFEST
 __pycache__/
 *.py[cod]
 *$py.class
+src/lagrangian/_version.py
+src/lib/trace.cpp
 docs/build/
 docs/source/generated

@@ -12,7 +12,7 @@
 #
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.12)
 
 include(CheckFunctionExists)
 include(CheckCXXSourceRuns)

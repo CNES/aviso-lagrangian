@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=64", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lagrangian"
+description = "Lagrangian Coherent Structures and Finite-Time Lyapunov Exponents"
+readme = "README.md"
+license = "LGPL-3.0-or-later"
+authors = [
+    {name = "CLS/LOCEAN", email = "fbriol@cls.fr"}
+]
+keywords = ["oceanography", "lagrangian", "analysis", "fsle", "ftle"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: C++",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+requires-python = ">=3.8"
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/CNES/aviso-lagrangian"
+Documentation = "http://lagrangian.readthedocs.io/en/latest/index.html"
+Repository = "https://github.com/CNES/aviso-lagrangian"
+"Bug Tracker" = "https://github.com/CNES/aviso-lagrangian/issues"
+
+[project.scripts]
+map_of_fle = "lagrangian.console_scripts.map_of_fle:main"
+metric_to_angular = "lagrangian.console_scripts.metric_to_angular:main"
+path = "lagrangian.console_scripts.path:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["lib*", "core*", "include*"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools_scm]
+write_to = "src/lagrangian/_version.py"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3

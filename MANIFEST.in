@@ -1,0 +1,22 @@
+include README.md
+include COPYING
+include pyproject.toml
+include CMakeLists.txt
+recursive-include src *.py *.pyi
+recursive-include src/include *.hpp
+recursive-include src/core *.cpp *.hpp
+recursive-include src/lib *.cpp
+recursive-include cmake *.cmake
+recursive-include conda *.yaml *.yml
+recursive-include tests *.py *.txt *.ini
+recursive-include docs *.rst *.py *.png *.bat
+recursive-include docs/source *.rst *.py
+recursive-include docs/source/_templates *
+recursive-include docs/source/images *.png
+recursive-include docs/source/scripts *.rst
+prune build
+prune dist
+prune *.egg-info
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .git*

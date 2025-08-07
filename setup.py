@@ -14,19 +14,16 @@
 #
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-import distutils.command.build
 import os
 import pathlib
 import platform
 import re
-import setuptools
-import setuptools.command.build_ext
-import setuptools.command.install
-import setuptools.command.test
-import shlex
 import subprocess
 import sys
 import sysconfig
+
+import setuptools
+import setuptools.command.build_ext
 
 # Python version
 MAJOR = sys.version_info[0]
@@ -69,8 +66,39 @@ class BuildExt(setuptools.command.build_ext.build_ext):
     #: Preferred NetCDF prefix
     NETCDF_DIR = None
 
+    user_options = setuptools.command.build_ext.build_ext.user_options + [
+        ('boost-root=', None, 'Preferred Boost installation prefix'),
+        ('cxx-compiler=', None, 'Preferred C++ compiler'),
+        ('netcdf-dir=', None, 'Preferred NETCDF installation prefix'),
+        ('reconfigure', None, 'Forces CMake to reconfigure this project'),
+        ('udunits2-root=', None, 'Preferred UDUNITS-2 installation prefix'),
+    ]
+
+    def initialize_options(self):
+        """Set default values for all the options that this command supports"""
+        super().initialize_options()
+        self.boost_root = None
+        self.cxx_compiler = None
+        self.netcdf_dir = None
+        self.reconfigure = None
+        self.udunits2_root = None
+
+    def finalize_options(self):
+        """Set final values for all the options that this command supports"""
+        super().finalize_options()
+        if self.boost_root is not None:
+            BuildExt.BOOST_ROOT = self.boost_root
+        if self.cxx_compiler is not None:
+            BuildExt.CXX_COMPILER = self.cxx_compiler
+        if self.netcdf_dir is not None:
+            BuildExt.NETCDF_DIR = self.netcdf_dir
+        if self.reconfigure is not None:
+            BuildExt.RECONFIGURE = True
+        if self.udunits2_root is not None:
+            BuildExt.UDUNITS2_ROOT = self.udunits2_root
+
     def run(self):
-        """A command’s raison d’etre: carry out the action"""
+        """A command's raison d'etre: carry out the action"""
         for ext in self.extensions:
             self.build_cmake(ext)
         super().run()
@@ -128,7 +156,7 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         if not result:
             try:
                 import conda
-            except:
+            except ImportError:
                 result = False
             else:
                 result = True
@@ -179,7 +207,9 @@ class BuildExt(setuptools.command.build_ext.build_ext):
 
         build_args = ['--config', cfg]
 
-        if self.verbose:
+        # Check if verbose flag is set in build_ext
+        verbose = getattr(self, 'verbose', False)
+        if verbose:
             os.environ["VERBOSE"] = "1"
 
         if platform.system() != 'Windows':
@@ -215,41 +245,6 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         os.chdir(str(WORKING_DIRECTORY))
 
 
-class Build(distutils.command.build.build):
-    """Build everything needed to install"""
-    user_options = distutils.command.build.build.user_options
-    user_options += [
-        ('boost-root=', None, 'Preferred Boost installation prefix'),
-        ('cxx-compiler=', None, 'Preferred C++ compiler'),
-        ('netcdf-dir=', None, 'Preferred NETCDF installation prefix'),
-        ('reconfigure', None, 'Forces CMake to reconfigure this project'),
-        ('udunits2-root=', None, 'Preferred UDUNITS-2 installation prefix'),
-    ]
-
-    def initialize_options(self):
-        """Set default values for all the options that this command supports"""
-        super().initialize_options()
-        self.boost_root = None
-        self.cxx_compiler = None
-        self.netcdf_dir = None
-        self.reconfigure = None
-        self.udunits2_root = None
-
-    def run(self):
-        """A command’s raison d’etre: carry out the action"""
-        if self.boost_root is not None:
-            BuildExt.BOOST_ROOT = self.boost_root
-        if self.cxx_compiler is not None:
-            BuildExt.CXX_COMPILER = self.cxx_compiler
-        if self.netcdf_dir is not None:
-            BuildExt.NETCDF_DIR = self.netcdf_dir
-        if self.reconfigure is not None:
-            BuildExt.RECONFIGURE = True
-        if self.udunits2_root is not None:
-            BuildExt.UDUNITS2_ROOT = self.udunits2_root
-        super().run()
-
-
 def execute(cmd):
     """Executes a command and returns the lines displayed on the standard
     output"""
@@ -257,29 +252,10 @@ def execute(cmd):
                                shell=True,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
-    return process.stdout.read().decode()
-
-
-# def update_sphinx(date, version):
-#     # Updating the version number description for sphinx
-#     conf = pathlib.Path(WORKING_DIRECTORY, 'doc', 'source', 'conf.py')
-#     with open(conf, "r") as stream:
-#         lines = stream.readlines()
-#     pattern = re.compile(r'(\w+)\s+=\s+(.*)')
-
-#     for idx, line in enumerate(lines):
-#         match = pattern.search(line)
-#         if match is not None:
-#             if match.group(1) == 'version':
-#                 lines[idx] = "version = %r\n" % ".".join(
-#                     version.split(".")[:-1])
-#             elif match.group(1) == 'release':
-#                 lines[idx] = "release = %r\n" % version
-#             elif match.group(1) == 'copyright':
-#                 lines[idx] = "copyright = '(%s, CLS)'\n" % date.year
-
-#     with open(conf, "w") as stream:
-#         stream.write("".join(lines))
+    stdout = process.stdout
+    if stdout is not None:
+        return stdout.read().decode()
+    return ""
 
 
 def update_meta(version):
@@ -299,7 +275,7 @@ def update_meta(version):
         stream.write("".join(lines))
 
 
-def release():
+def generate_version_info():
     """Returns the software version"""
     trace_cpp = pathlib.Path(WORKING_DIRECTORY, 'src', 'lib', 'trace.cpp')
     stdout = execute("git describe --tags --dirty --long --always").strip()
@@ -320,12 +296,7 @@ def release():
     assert match is not None, "No tags have been recorded."
     version = match.group(1)
 
-    # stdout = execute("git log  %s -1 --format=\"%%H %%at\"" % sha1)
-    # stdout = stdout.strip().split()
-    # date = datetime.datetime.utcfromtimestamp(int(stdout[1]))
-
     update_meta(version)
-    # update_sphinx(date, version)
 
     # Finally, write the file containing the version number.
     pattern = re.compile(r'.*Version.*\{\s+return\s+"(.*)";\s+\}')
@@ -348,93 +319,11 @@ def release():
     return version
 
 
-class Test(setuptools.command.test.test):
-    """Test runner"""
-    user_options = [("pytest-args=", None, "Arguments to pass to pytest")]
-
-    def initialize_options(self):
-        """Set default values for all the options that this command
-        supports"""
-        super().initialize_options()
-        self.pytest_args = None
-
-    def finalize_options(self):
-        """Set final values for all the options that this command supports"""
-        dirname = pathlib.Path(pathlib.Path(__file__).absolute().parent)
-        rootdir = "--rootdir=" + str(dirname)
-        if self.pytest_args is None:
-            self.pytest_args = ''
-        self.pytest_args = rootdir + " tests " + self.pytest_args
-
-    def run_tests(self):
-        """Run tests"""
-        import pytest
-        sys.path.insert(0, build_dirname())
-
-        errno = pytest.main(
-            shlex.split(self.pytest_args,
-                        posix=platform.system() != 'Windows'))
-        if errno:
-            sys.exit(errno)
-
-
-CLASSIFIERS = [
-    'Description-Content-Type: text/markdown',
-    'Development Status :: 5 - Production/Stable',
-    'Intended Audience :: Science/Research',
-    'OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
-    'Platform: Linux',
-    'Platform: Mac OS X',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 3',
-    'Topic :: Scientific/Engineering :: Physics',
-]
-
-
-def long_description():
-    """Reads the README file"""
-    with open(pathlib.Path(WORKING_DIRECTORY, "README.md")) as stream:
-        return stream.read()
-
-
 def main():
+    generate_version_info()
     setuptools.setup(
-        name='lagrangian',
-        version=release(),
-        description=("Lagrangian Coherent Structures and Finite-Time "
-                     "Lyapunov Exponents"),
-        url='https://github.com/CNES/aviso-lagrangian',
-        author='CLS/LOCEAN',
-        author_email="fbriol@cls.fr",
-        classifiers=CLASSIFIERS,
-        license="License :: OSI Approved :: "
-        "GNU Library or Lesser General Public License (LGPL)",
         ext_modules=[CMakeExtension(name="lagrangian.core")],
-        keywords="oceanography lagrangian analysis fsle ftle",
-        long_description=long_description(),
-        long_description_content_type='text/markdown',
-        packages=setuptools.find_namespace_packages(
-            where=str(pathlib.Path("src").absolute()),
-            exclude=(
-                "lib*",
-                "core*",
-                "include*",
-            )),
-        package_dir={"": "src"},
-        entry_points={
-            "console_scripts": [
-                "map_of_fle=lagrangian.console_scripts.map_of_fle:main",
-                "metric_to_angular=lagrangian.console_scripts."
-                "metric_to_angular:main",
-                "path=lagrangian.console_scripts.path:main"
-            ]
-        },
-        cmdclass={
-            'build': Build,
-            'build_ext': BuildExt,
-            'test': Test
-        },
+        cmdclass={'build_ext': BuildExt},
         zip_safe=False)
 
 
