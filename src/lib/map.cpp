@@ -104,12 +104,11 @@ void FiniteLyapunovExponents::ComputeHt(
 // ___________________________________________________________________________//
 
 void FiniteLyapunovExponents::Compute(
-    lagrangian::FiniteLyapunovExponentsIntegration& fle,
-    int num_threads) {
+    lagrangian::FiniteLyapunovExponentsIntegration& fle, int num_threads) {
   auto it = fle.GetIterator();
   std::list<std::thread> threads;
 
-  if(num_threads == 0) {
+  if (num_threads == 0) {
     num_threads = std::thread::hardware_concurrency();
   }
 

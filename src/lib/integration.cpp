@@ -124,7 +124,7 @@ auto FiniteLyapunovExponentsIntegration::ComputeExponents(
 // (1/δ₀) * A where
 // A = [ a b ]
 //     [ b d ]
-// whith
+// with
 // a = a₀₀² + a₀₁²
 // b = a₀₀*a₁₀ + a₀₁*a₁₁
 // d = a₁₁² + a₁₀²
