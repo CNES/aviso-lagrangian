@@ -371,12 +371,12 @@ associated with the maximum eigenvalue :math:`\delta_{\text{max}}` of the
 Cauchy-Green strain tensor :math:`\Delta`:
 
 .. math::
-    \Delta = \left[ \nabla \Phi_0^T (x_0) \right]^* 
+    \Delta = \left[ \nabla \Phi_0^T (x_0) \right]^*
         \left[ \nabla \Phi_0^T (x_0) \right]
 
 where :math:`\Phi_0^T : x_0 \rightarrow x(t, x_0, t_0)` is the flow map of the
 advection equation: it links the location :math:`x_0` of a lagrangian particle
-at :math:`t = t_0` to its position :math:`x(t, x_0, t_0)` at time :math:`t`. 
+at :math:`t = t_0` to its position :math:`x(t, x_0, t_0)` at time :math:`t`.
 (* denotes the transposition operator).
 
 FTLE is defined as

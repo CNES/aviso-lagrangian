@@ -54,13 +54,13 @@ provides detailed documentation for all public classes and functions.
     and output interpretation.
 
     .. autoattribute:: IntegrationMode.FSLE
-        
+
         Finite-Size Lyapunov Exponent mode. Integration continues until
         particles reach a specified separation distance. The result is
         the time taken to reach this separation.
 
     .. autoattribute:: IntegrationMode.FTLE
-        
+
         Finite-Time Lyapunov Exponent mode. Integration runs for a fixed
         time period. The result is the separation achieved at the end
         of this period.
@@ -76,13 +76,13 @@ provides detailed documentation for all public classes and functions.
    different trade-offs between accuracy and computational cost.
 
    .. autoattribute:: Stencil.TRIPLET
-      
+
       3-particle stencil configuration. Uses one central particle and two
       additional particles to form a triangle. More efficient but less
       accurate than quintuplet.
 
    .. autoattribute:: Stencil.QUINTUPLET
-      
+
       5-particle stencil configuration. Uses one central particle and four
       additional particles arranged in a cross pattern. More accurate but
       computationally more expensive than triplet.
@@ -98,13 +98,13 @@ provides detailed documentation for all public classes and functions.
    **Available Types:**
 
    .. autoattribute:: UnitType.METRIC
-      
+
       Metric units (meters, m/s). Used for Cartesian coordinate systems
       where distances are measured in meters and velocities in meters per
       second.
 
    .. autoattribute:: UnitType.ANGULAR
-      
+
       Angular units (degrees, degrees/day). Used for spherical coordinate
       systems where distances are measured in degrees and velocities in degrees
       per day.
