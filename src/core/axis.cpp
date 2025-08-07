@@ -13,6 +13,7 @@
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include "lagrangian/axis.hpp"
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -23,16 +24,18 @@ void init_axis(pybind11::module& m) {
   py::class_<lagrangian::axis::LatitudeUnit>(axis, "LatitudeUnit",
                                              "Units setting out latitudes")
       .def(py::init<>(), "Default constructor")
-      .def("__call__",
-           [](const lagrangian::axis::LatitudeUnit& self,
-              const std::string& unit) -> bool { return self(unit); },
-           py::arg("unit"), "Checks if the unit can define a latitude axis");
+      .def(
+          "__call__",
+          [](const lagrangian::axis::LatitudeUnit& self,
+             const std::string& unit) -> bool { return self(unit); },
+          py::arg("unit"), "Checks if the unit can define a latitude axis");
 
   py::class_<lagrangian::axis::LongitudeUnit>(axis, "LongitudeUnit",
                                               "Units setting out longitudes")
       .def(py::init<>(), "Default constructor")
-      .def("__call__",
-           [](const lagrangian::axis::LongitudeUnit& self,
-              const std::string& unit) -> bool { return self(unit); },
-           py::arg("unit"), "Checks if the unit can define a longitude axis");
+      .def(
+          "__call__",
+          [](const lagrangian::axis::LongitudeUnit& self,
+             const std::string& unit) -> bool { return self(unit); },
+          py::arg("unit"), "Checks if the unit can define a longitude axis");
 }

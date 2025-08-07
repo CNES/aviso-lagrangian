@@ -12,10 +12,11 @@
 //
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-#include "datetime.hpp"
-#include "lagrangian/reader/factory.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include "datetime.hpp"
+#include "lagrangian/reader/factory.hpp"
 
 namespace py = pybind11;
 

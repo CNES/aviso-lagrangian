@@ -13,6 +13,7 @@
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #include "lagrangian/map.hpp"
+
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -92,43 +93,43 @@ class MapOfFiniteLyapunovExponents {
   }
 };
 
-class Advect: public lagrangian::map::Advect {
-public:
-     using lagrangian::map::Advect::Advect;
+class Advect : public lagrangian::map::Advect {
+ public:
+  using lagrangian::map::Advect::Advect;
 
-     auto get_map_of_x(const double fill_value) -> py::array_t<double> {
-       return get_map(fill_value, &lagrangian::Position::get_xi);
-     }
+  auto get_map_of_x(const double fill_value) -> py::array_t<double> {
+    return get_map(fill_value, &lagrangian::Position::get_xi);
+  }
 
-     auto get_map_of_y(const double fill_value) -> py::array_t<double> {
-       return get_map(fill_value, &lagrangian::Position::get_yi);
-     }
+  auto get_map_of_y(const double fill_value) -> py::array_t<double> {
+    return get_map(fill_value, &lagrangian::Position::get_yi);
+  }
 
-private:
- auto get_map(const double fill_value,
-              const std::function<double(const lagrangian::Position&,
-                                         size_t idx)>& getter)
-     -> py::array_t<double> {
-   auto result = py::array_t<double>(
-       py::array::ShapeContainer({map_.get_nx(), map_.get_ny()}));
-   auto result_ = result.mutable_unchecked<2>();
+ private:
+  auto get_map(const double fill_value,
+               const std::function<double(const lagrangian::Position&,
+                                          size_t idx)>& getter)
+      -> py::array_t<double> {
+    auto result = py::array_t<double>(
+        py::array::ShapeContainer({map_.get_nx(), map_.get_ny()}));
+    auto result_ = result.mutable_unchecked<2>();
 
-   {
-     auto gil = py::gil_scoped_release();
+    {
+      auto gil = py::gil_scoped_release();
 
-     for (auto ix = 0; ix < map_.get_nx(); ++ix) {
-       for (auto iy = 0; iy < map_.get_ny(); ++iy) {
-         auto position = map_.GetItem(ix, iy);
-         if (position->IsMissing()) {
-           result_(ix, iy) = fill_value;
-         } else {
-           result_(ix, iy) = getter(*position, 0);
-         }
-       }
-     }
-   }
-   return result;
- }
+      for (auto ix = 0; ix < map_.get_nx(); ++ix) {
+        for (auto iy = 0; iy < map_.get_ny(); ++iy) {
+          auto position = map_.GetItem(ix, iy);
+          if (position->IsMissing()) {
+            result_(ix, iy) = fill_value;
+          } else {
+            result_(ix, iy) = getter(*position, 0);
+          }
+        }
+      }
+    }
+    return result;
+  }
 };
 
 void init_map(pybind11::module& m) {

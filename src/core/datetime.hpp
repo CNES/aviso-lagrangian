@@ -14,18 +14,23 @@
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 #include <pybind11/pybind11.h>
+// clang-format off
+// This Python header must be included after pybind11/pybind11.h
 #include <datetime.h>
+// clang-format on
+
 #include "lagrangian/datetime.hpp"
 
 namespace pybind11::detail {
 
-auto inline microseconds = [](const boost::posix_time::time_duration& time_duration) {
-  static int ticks = boost::posix_time::time_duration::ticks_per_second();
-  int fractional = time_duration.fractional_seconds();
+auto inline microseconds =
+    [](const boost::posix_time::time_duration& time_duration) {
+      static int ticks = boost::posix_time::time_duration::ticks_per_second();
+      int fractional = time_duration.fractional_seconds();
 
-  return ticks > 1000000 ? fractional / (ticks * 1e-6)
-                         : fractional * (1000000 / ticks);
-};
+      return ticks > 1000000 ? fractional / (ticks * 1e-6)
+                             : fractional * (1000000 / ticks);
+    };
 
 /// type_caster for boost::posix_time::time_duration
 template <>

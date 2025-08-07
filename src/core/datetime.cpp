@@ -12,8 +12,9 @@
 //
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-#include <pybind11/pybind11.h>
 #include "datetime.hpp"
+
+#include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 

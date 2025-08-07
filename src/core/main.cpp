@@ -12,9 +12,10 @@
 //
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-#include "lagrangian/trace.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include "lagrangian/trace.hpp"
 
 namespace py = pybind11;
 

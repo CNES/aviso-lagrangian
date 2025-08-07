@@ -12,12 +12,15 @@
 //
 // You should have received a copy of GNU Lesser General Public License
 // along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-#include "datetime.hpp"
 #include "lagrangian/integration.hpp"
-#include <memory>
+
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <memory>
+
+#include "datetime.hpp"
 
 namespace py = pybind11;
 
@@ -337,7 +340,7 @@ Args:
                     "Cauchy-Green strain tensor")
       .def_property("theta2", &lagrangian::FiniteLyapunovExponents::get_theta2,
                     &lagrangian::FiniteLyapunovExponents::set_theta2,
-                    "FLE associated to the maxmimum eigenvalue of the "
+                    "FLE associated to the maximum eigenvalue of the "
                     "Cauchy-Green strain tensor")
       .def_property("final_separation",
                     &lagrangian::FiniteLyapunovExponents::get_final_separation,
@@ -378,7 +381,7 @@ FTLE is defined as
 
 σ = ( 1 / (2*T) ) * log( λmax( Δ ) )
 
-Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
+Finite-Size Lyapunov Exponent is similarly defined: T is chosen so that
 neighbouring particules separate from a given distance d.
 
 ComputeExponents(const Position& position) function implements the
