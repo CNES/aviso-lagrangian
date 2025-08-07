@@ -51,11 +51,11 @@ def build_dirname(extname=None):
                         extname)
 
 
-
 class CMakeExtension(setuptools.Extension):
     """Python extension to build"""
+
     def __init__(self, name):
-        super(CMakeExtension, self).__init__(name, sources=[])
+        super().__init__(name, sources=[])
 
 
 class BuildExt(setuptools.command.build_ext.build_ext):
@@ -108,56 +108,56 @@ class BuildExt(setuptools.command.build_ext.build_ext):
             BuildExt.UDUNITS2_ROOT = self.udunits2_root
 
     def run(self):
-        """A command's raison d'etre: carry out the action"""
+        """Executes the main build action for this command."""
         for ext in self.extensions:
             self.build_cmake(ext)
         super().run()
 
     @staticmethod
     def boost():
-        """Get the default boost path in Anaconda's environnement."""
+        """Get the default boost path in Anaconda's environment."""
         # Do not search system for Boost & disable the search for boost-cmake
-        boost_option = "-DBoost_NO_SYSTEM_PATHS=TRUE " \
-            "-DBoost_NO_BOOST_CMAKE=TRUE"
+        boost_option = '-DBoost_NO_SYSTEM_PATHS=TRUE ' \
+            '-DBoost_NO_BOOST_CMAKE=TRUE'
         boost_root = sys.prefix
-        if os.path.exists(os.path.join(boost_root, "include", "boost")):
-            return "{boost_option} -DDBOOSTROOT={boost_root}".format(
+        if os.path.exists(os.path.join(boost_root, 'include', 'boost')):
+            return '{boost_option} -DDBOOSTROOT={boost_root}'.format(
                 boost_root=boost_root, boost_option=boost_option).split()
-        boost_root = os.path.join(sys.prefix, "Library", "include")
+        boost_root = os.path.join(sys.prefix, 'Library', 'include')
         if not os.path.exists(boost_root):
             raise RuntimeError(
-                "Unable to find the Boost library in the conda distribution "
-                "used.")
-        return "{boost_option} -DBoost_INCLUDE_DIR={boost_root}".format(
+                'Unable to find the Boost library in the conda distribution '
+                'used.')
+        return '{boost_option} -DBoost_INCLUDE_DIR={boost_root}'.format(
             boost_root=boost_root, boost_option=boost_option).split()
 
     @staticmethod
     def udunits2():
-        """Get the default UDUNITS2 path in Anaconda's environnement."""
+        """Get the default UDUNITS2 path in Anaconda's environment."""
         root = sys.prefix
-        if os.path.exists(os.path.join(root, "include", "udunits2.h")):
-            return "-DUDUNITS2_ROOT=" + root
-        root = os.path.join(sys.prefix, "Library", "include")
+        if os.path.exists(os.path.join(root, 'include', 'udunits2.h')):
+            return '-DUDUNITS2_ROOT=' + root
+        root = os.path.join(sys.prefix, 'Library', 'include')
         if not os.path.exists(root):
             raise RuntimeError(
-                "Unable to find the UDUNITS2 library in the conda "
-                "distribution used.")
-        return "-DUDUNITS2_ROOT=" + root
+                'Unable to find the UDUNITS2 library in the conda '
+                'distribution used.')
+        return '-DUDUNITS2_ROOT=' + root
 
     @staticmethod
     def netcdf():
-        """Get the default NETCDF path in Anaconda's environnement."""
+        """Get the default NETCDF path in Anaconda's environment."""
         root = sys.prefix
-        include_dir = os.path.join(root, "include", "netcdf.h")
+        include_dir = os.path.join(root, 'include', 'netcdf.h')
         if os.path.exists(include_dir):
-            return "-DNETCDF_DIR=" + root
-        include_dir = os.path.join(sys.prefix, "Library", "include",
-                                   "netcdf.h")
+            return '-DNETCDF_DIR=' + root
+        include_dir = os.path.join(sys.prefix, 'Library', 'include',
+                                   'netcdf.h')
         if not os.path.exists(include_dir):
             raise RuntimeError(
-                "Unable to find the NETCDF library in the conda distribution "
-                "used.")
-        return "-DNETCDF_DIR=" + os.path.join(sys.prefix, "Library")
+                'Unable to find the NETCDF library in the conda distribution '
+                'used.')
+        return '-DNETCDF_DIR=' + os.path.join(sys.prefix, 'Library')
 
     @staticmethod
     def is_conda():
@@ -165,7 +165,7 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         result = os.path.exists(os.path.join(sys.prefix, 'conda-meta'))
         if not result:
             try:
-                import conda
+                import conda  # noqa: F401
             except ImportError:
                 result = False
             else:
@@ -178,25 +178,25 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         result = []
 
         if self.CXX_COMPILER is not None:
-            result.append("-DCMAKE_CXX_COMPILER=" + self.CXX_COMPILER)
+            result.append('-DCMAKE_CXX_COMPILER=' + self.CXX_COMPILER)
 
         if self.BOOST_ROOT is not None:
-            result.append("-DBOOST_ROOT=" + self.BOOST_ROOT)
+            result.append('-DBOOST_ROOT=' + self.BOOST_ROOT)
         elif is_conda:
             result += self.boost()
 
         if self.UDUNITS2_ROOT is not None:
-            result.append("-DUDUNITS2_ROOT=" + self.UDUNITS2_ROOT)
+            result.append('-DUDUNITS2_ROOT=' + self.UDUNITS2_ROOT)
         elif is_conda:
             result.append(self.udunits2())
 
         if self.NETCDF_DIR is not None:
-            result.append("-DNETCDF_DIR=" + self.NETCDF_DIR)
+            result.append('-DNETCDF_DIR=' + self.NETCDF_DIR)
         elif is_conda:
             result.append(self.netcdf())
 
         if is_conda:
-            result.append("-DCMAKE_PREFIX_PATH=" + sys.prefix)
+            result.append('-DCMAKE_PREFIX_PATH=' + sys.prefix)
 
         return result
 
@@ -211,8 +211,8 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         cfg = 'Debug' if self.debug else 'Release'
 
         cmake_args = [
-            "-DCMAKE_BUILD_TYPE=" + cfg, "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" +
-            str(extdir), "-DPython3_EXECUTABLE=" + sys.executable
+            '-DCMAKE_BUILD_TYPE=' + cfg, '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' +
+            str(extdir), '-DPython3_EXECUTABLE=' + sys.executable
         ] + self.set_cmake_user_options()
 
         build_args = ['--config', cfg]
@@ -220,7 +220,7 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         # Check if verbose flag is set in build_ext
         verbose = getattr(self, 'verbose', False)
         if verbose:
-            os.environ["VERBOSE"] = "1"
+            os.environ['VERBOSE'] = '1'
 
         if platform.system() != 'Windows':
             build_args += ['--', '-j%d' % os.cpu_count()]
@@ -239,8 +239,8 @@ class BuildExt(setuptools.command.build_ext.build_ext):
         os.chdir(str(build_temp))
 
         # Has CMake ever been executed?
-        if pathlib.Path(build_temp, "CMakeFiles",
-                        "TargetDirectories.txt").exists():
+        if pathlib.Path(build_temp, 'CMakeFiles',
+                        'TargetDirectories.txt').exists():
             # The user must force the reconfiguration
             configure = self.RECONFIGURE is not None
         else:
@@ -265,14 +265,14 @@ def execute(cmd):
     stdout = process.stdout
     if stdout is not None:
         return stdout.read().decode()
-    return ""
+    return ''
 
 
 def update_meta(version):
     """Updating the version number description in conda/meta.yaml."""
     path = pathlib.Path(WORKING_DIRECTORY, 'conda', 'meta.yaml')
 
-    with open(path, "r") as stream:
+    with open(path) as stream:
         lines = stream.readlines()
     pattern = re.compile(r'{% set version = ".*" %}')
 
@@ -281,14 +281,14 @@ def update_meta(version):
         if match is not None:
             lines[idx] = '{%% set version = "%s" %%}\n' % version
 
-    with open(path, "w") as stream:
-        stream.write("".join(lines))
+    with open(path, 'w') as stream:
+        stream.write(''.join(lines))
 
 
 def generate_version_info():
     """Returns the software version"""
     trace_cpp = pathlib.Path(WORKING_DIRECTORY, 'src', 'lib', 'trace.cpp')
-    stdout = execute("git describe --tags --dirty --long --always").strip()
+    stdout = execute('git describe --tags --dirty --long --always').strip()
     pattern = re.compile(r'([\w\d\.]+)-(\d+)-g([\w\d]+)(?:-(dirty))?')
     match = pattern.search(stdout)
 
@@ -296,14 +296,14 @@ def generate_version_info():
     # development environment), file creation is not possible
     if not stdout:
         pattern = re.compile(r'\{\s*return\s+\"(.*)\"\s*;\s*\}')
-        with open(trace_cpp, "r") as stream:
+        with open(trace_cpp) as stream:
             for line in stream:
                 match = pattern.search(line)
                 if match:
                     return match.group(1)
-        raise AssertionError("Unable to decode version in %r" % trace_cpp)
+        raise AssertionError('Unable to decode version in %r' % trace_cpp)
 
-    assert match is not None, "No tags have been recorded."
+    assert match is not None, 'No tags have been recorded.'
     version = match.group(1)
 
     update_meta(version)
@@ -313,7 +313,7 @@ def generate_version_info():
     lines = []
     write = False
 
-    with open(trace_cpp, 'r') as stream:
+    with open(trace_cpp) as stream:
         for line in stream:
             match = pattern.search(line)
             if match:
@@ -324,18 +324,17 @@ def generate_version_info():
                 continue
             lines.append(line)
     if write:
-        with open(trace_cpp, "w") as stream:
+        with open(trace_cpp, 'w') as stream:
             stream.writelines(lines)
     return version
 
 
 def main():
     generate_version_info()
-    setuptools.setup(
-        ext_modules=[CMakeExtension(name="lagrangian.core")],
-        cmdclass={'build_ext': BuildExt},
-        zip_safe=False)
+    setuptools.setup(ext_modules=[CMakeExtension(name='lagrangian.core')],
+                     cmdclass={'build_ext': BuildExt},
+                     zip_safe=False)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
