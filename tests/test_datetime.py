@@ -14,10 +14,12 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import unittest
+
 import lagrangian
 
 
 class TestDateTime(unittest.TestCase):
+
     def test_init(self):
         date = datetime.datetime.now()
         self.assertEqual(date, lagrangian.DateTime(date).to_datetime())
@@ -26,5 +28,5 @@ class TestDateTime(unittest.TestCase):
         self.assertEqual(td, lagrangian.TimeDuration(td).to_timedelta())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

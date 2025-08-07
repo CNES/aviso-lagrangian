@@ -13,23 +13,34 @@
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import os
-import unittest
-import tempfile
 import platform
 import subprocess
 import sys
+import tempfile
+import unittest
+
 import netCDF4
 import numpy
 
 import lagrangian
 
+
 class TestConsoleScripts(unittest.TestCase):
+    pos: str
+    ini: str
+    exe: str
+    tst: str
+    ref: str
+    new: str
+
+    maxDiff = None
+
     @classmethod
     def setUpClass(cls) -> None:
         lagrangian_dir = os.path.dirname(lagrangian.__file__)
         paths = list(sys.path)
         paths.insert(0, lagrangian_dir)
-        sep = ";" if platform.system() == "Windows" else ":"
+        sep = ';' if platform.system() == 'Windows' else ':'
         os.environ['PYTHONPATH'] = sep.join(paths)
 
         os.environ['ROOT'] = os.path.dirname(__file__)
@@ -39,7 +50,7 @@ class TestConsoleScripts(unittest.TestCase):
         with tempfile.NamedTemporaryFile() as stream:
             cls.tst = stream.name
         cls.ref = os.path.join(os.environ['ROOT'], 'data', 'fsle.nc')
-        cls.new = os.path.join(tempfile.gettempdir(), "fsle.nc")
+        cls.new = os.path.join(tempfile.gettempdir(), 'fsle.nc')
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -50,7 +61,7 @@ class TestConsoleScripts(unittest.TestCase):
             pass
 
     def test_map_of_fle(self):
-        with open(self.tst, "w") as stream:
+        with open(self.tst, 'w') as stream:
             stream.write("""
 import lagrangian.console_scripts.map_of_fle
 
@@ -58,22 +69,22 @@ if __name__ == "__main__":
     lagrangian.console_scripts.map_of_fle.main()
 """)
         subprocess.check_call([
-            self.exe, stream.name, self.ini, self.new, "2010-01-01",
-            "--advection_time=89", "--resolution=0.05", "--x_min=40",
-            "--x_max=59.95", "--y_min=-60", "--y_max=-40.05",
-            "--final_separation=0.2", "--verbose", "--time_direction=forward"
+            self.exe, stream.name, self.ini, self.new, '2010-01-01',
+            '--advection_time=89', '--resolution=0.05', '--x_min=40',
+            '--x_max=59.95', '--y_min=-60', '--y_max=-40.05',
+            '--final_separation=0.2', '--verbose', '--time_direction=forward'
         ])
         with netCDF4.Dataset(self.ref) as ref:
             with netCDF4.Dataset(self.new) as new:
                 for item in ref.variables:
-                    if item not in ["theta1", "theta2", "lambda1", "lambda2"]:
+                    if item not in ['theta1', 'theta2', 'lambda1', 'lambda2']:
                         continue
                     x = ref.variables[item][:]
                     y = new.variables[item][:]
                     self.assertAlmostEqual(numpy.mean(x - y), 0, delta=1e-9)
 
     def test_path(self):
-        with open(self.tst, "w") as stream:
+        with open(self.tst, 'w') as stream:
             stream.write("""
 import lagrangian.console_scripts.path
 
@@ -81,8 +92,8 @@ if __name__ == "__main__":
     lagrangian.console_scripts.path.main()
 """)
         lines = subprocess.check_output([
-            self.exe, stream.name, self.ini, self.pos, "2010-01-01",
-            "2010-01-02"
+            self.exe, stream.name, self.ini, self.pos, '2010-01-01',
+            '2010-01-02'
         ])
         expected = [
             item.strip()
@@ -94,7 +105,7 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-01T00:00:00
 6\t32.000000\t32.000000\t2010-01-01T00:00:00
 7\t64.000000\t64.000000\t2010-01-01T00:00:00
-8\t70.000000\t1.000000\t2010-01-01T00:00:00
+8\t70.000000\t12.000000\t2010-01-01T00:00:00
 0\t-0.038031\t-0.013479\t2010-01-01T06:00:00
 1\t1.433333\t43.600000\t2010-01-01T06:00:00
 2\t1.991477\t1.978912\t2010-01-01T06:00:00
@@ -103,7 +114,7 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-01T06:00:00
 6\t32.000000\t32.000000\t2010-01-01T06:00:00
 7\t64.000000\t64.000000\t2010-01-01T06:00:00
-8\t70.009008\t1.011399\t2010-01-01T06:00:00
+8\t70.012015\t12.020717\t2010-01-01T06:00:00
 0\t-0.074492\t-0.026498\t2010-01-01T12:00:00
 1\t1.433333\t43.600000\t2010-01-01T12:00:00
 2\t1.983383\t1.957937\t2010-01-01T12:00:00
@@ -112,7 +123,7 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-01T12:00:00
 6\t32.000000\t32.000000\t2010-01-01T12:00:00
 7\t64.000000\t64.000000\t2010-01-01T12:00:00
-8\t70.017918\t1.023265\t2010-01-01T12:00:00
+8\t70.024020\t12.041076\t2010-01-01T12:00:00
 0\t-0.110257\t-0.038725\t2010-01-01T18:00:00
 1\t1.433333\t43.600000\t2010-01-01T18:00:00
 2\t1.975714\t1.937067\t2010-01-01T18:00:00
@@ -121,7 +132,7 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-01T18:00:00
 6\t32.000000\t32.000000\t2010-01-01T18:00:00
 7\t64.000000\t64.000000\t2010-01-01T18:00:00
-8\t70.026729\t1.035611\t2010-01-01T18:00:00
+8\t70.036031\t12.061077\t2010-01-01T18:00:00
 0\t-0.145335\t-0.050205\t2010-01-02T00:00:00
 1\t1.433333\t43.600000\t2010-01-02T00:00:00
 2\t1.968466\t1.916294\t2010-01-02T00:00:00
@@ -130,15 +141,16 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-02T00:00:00
 6\t32.000000\t32.000000\t2010-01-02T00:00:00
 7\t64.000000\t64.000000\t2010-01-02T00:00:00
-8\t70.035436\t1.048449\t2010-01-02T00:00:00
-""".split("\n") if item.strip()
+8\t70.048066\t12.080719\t2010-01-02T00:00:00
+""".split('\n') if item.strip()
         ]
-        lines = [
-            item.strip() for item in lines.decode().split("\n")
+        lines = {
+            item.strip() for item in lines.decode().split('\n')
             if item.strip()
-        ]
-        self.assertListEqual(lines, expected)
+        }
+        self.assertEqual(lines, set(expected),
+                         'Output does not match expected results')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

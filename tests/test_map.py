@@ -15,10 +15,12 @@
 import datetime
 import os
 import unittest
+
 import lagrangian
 
 
 class TestMapProperties(unittest.TestCase):
+
     def test(self):
         map_properties = lagrangian.MapProperties(360, 180, -180, -90, 1)
         self.assertEqual(map_properties.nx, 360)
@@ -37,6 +39,7 @@ class TestMapProperties(unittest.TestCase):
 
 
 class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
+
     def setUp(self):
         os.environ['ROOT'] = os.path.dirname(__file__)
         self.ini = os.path.join(os.environ['ROOT'], 'map.ini')
@@ -54,10 +57,9 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
             lagrangian.IntegrationMode.FSLE, 0.1, 0.05, ts)
         reader = lagrangian.reader.NetCDF()
         reader.open(self.path)
-        reader.load("Grid_0001")
+        reader.load('Grid_0001')
         map_of_fsle = lagrangian.MapOfFiniteLyapunovExponents(
-            map_properties, integration, lagrangian.Stencil.TRIPLET,
-            reader)
+            map_properties, integration, lagrangian.Stencil.TRIPLET, reader)
         # lagrangian.set_verbose(True)
         map_of_fsle.compute()
         lambda1 = map_of_fsle.map_of_lambda1(0)
@@ -68,5 +70,5 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         effective_separation = map_of_fsle.map_of_final_separation(0)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

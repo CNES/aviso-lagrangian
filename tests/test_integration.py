@@ -14,10 +14,12 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import unittest
+
 import lagrangian
 
 
 class Field(lagrangian.field.Python):
+
     def __init__(self):
         super().__init__(self)
 
@@ -26,6 +28,7 @@ class Field(lagrangian.field.Python):
 
 
 class TestIntegration(unittest.TestCase):
+
     def setUp(self):
         pass
 
@@ -113,5 +116,5 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(integration.exponents(position, fle))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

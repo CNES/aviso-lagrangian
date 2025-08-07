@@ -13,12 +13,14 @@
 # You should have received a copy of GNU Lesser General Public License
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
-import unittest
 import os
+import unittest
+
 import lagrangian
 
 
 class TestTimeSerie(unittest.TestCase):
+
     def setUp(self):
         os.environ['ROOT'] = os.path.dirname(__file__)
         self.ini = os.path.join(os.environ['ROOT'], 'map.ini')
@@ -31,7 +33,7 @@ class TestTimeSerie(unittest.TestCase):
         self.assertEqual(ts.unit_type, lagrangian.UnitType.METRIC)
         self.assertEqual(ts.coordinate_type,
                          lagrangian.CoordinatesType.SPHERICAL_EQUATORIAL)
-        self.assertEqual(ts.unit(), "m/s")
+        self.assertEqual(ts.unit(), 'm/s')
         self.assertEqual(ts.start_time(), datetime.datetime(2009, 12, 30))
         self.assertEqual(ts.end_time(), datetime.datetime(2010, 4, 7))
         start = datetime.datetime(2010, 1, 1)
@@ -47,5 +49,5 @@ class TestTimeSerie(unittest.TestCase):
             u, v = ts.compute(start, 0, 0)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
