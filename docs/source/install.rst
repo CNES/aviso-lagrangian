@@ -32,9 +32,9 @@ have Python and a C++ compiler installed on your system to use these programs.
 
 The compiling C++ requires the following development libraries:
 
-    * `boost_date_time <http://www.boost.org>`_
-    * `NetCDF <http://www.unidata.ucar.edu/software/netcdf>`_
-    * `UDUNITS-2 <http://www.unidata.ucar.edu/software/udunits>`_
+* `boost_date_time <http://www.boost.org>`_
+* `NetCDF <http://www.unidata.ucar.edu/software/netcdf>`_
+* `UDUNITS-2 <http://www.unidata.ucar.edu/software/udunits>`_
 
 You can install these packages on ubuntu by typing the following command:
 
@@ -52,11 +52,11 @@ type the command ``python3 setup.py build`` at the root of the project.
 
 You can specify, among other things, the following options:
 
-    * ``--boost-root``  to specify the preferred Boost installation prefix
-    * ``--cxx-compiler``  to specify the preferred C++ compiler
-    * ``--netcdf-dir``  to specify the preferred NETCDF installation prefix
-    * ``--reconfigure``  to force CMake to reconfigure this project
-    * ``--udunits2-root``  to specify the preferred UDUNITS-2 installation prefix
+* ``--boost-root``  to specify the preferred Boost installation prefix
+* ``--cxx-compiler``  to specify the preferred C++ compiler
+* ``--netcdf-dir``  to specify the preferred NETCDF installation prefix
+* ``--reconfigure``  to force CMake to reconfigure this project
+* ``--udunits2-root``  to specify the preferred UDUNITS-2 installation prefix
 
 Run the ``python setup.py build --help`` command to view all the options
 available for building the library.
@@ -69,9 +69,9 @@ Requirements
 
 Running tests require the following Python libraries:
 
-    * `pytest <https://docs.pytest.org/en/latest/>`_
-    * `numpy <https://www.numpy.org/>`_
-    * `netCDF4 <https://unidata.github.io/netcdf4-python/>`_
+* `pytest <https://docs.pytest.org/en/latest/>`_
+* `numpy <https://www.numpy.org/>`_
+* `netCDF4 <https://unidata.github.io/netcdf4-python/>`_
 
 Running tests
 -------------
