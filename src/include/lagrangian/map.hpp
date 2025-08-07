@@ -17,8 +17,8 @@
 // ___________________________________________________________________________//
 
 #include <cstdlib>
-#include <thread>
 #include <optional>
+#include <thread>
 
 // ___________________________________________________________________________//
 
@@ -290,7 +290,6 @@ class FiniteLyapunovExponents {
   /// List of cells of the matrix to be solved
   SplitList<Index> indexes_;
 };
-
 
 /**
  * @brief Advection of grid points

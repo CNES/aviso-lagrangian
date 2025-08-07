@@ -34,7 +34,9 @@ class Dimension {
    *
    * @return name of dimension
    */
-  [[nodiscard]] inline auto get_name() const -> std::string const& { return name_; }
+  [[nodiscard]] inline auto get_name() const -> std::string const& {
+    return name_;
+  }
 
   /**
    * @brief Get the length of the dimension.

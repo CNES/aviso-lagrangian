@@ -16,12 +16,13 @@
 
 // ___________________________________________________________________________//
 
+#include <udunits2.h>
+
 #include <cstring>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <udunits2.h>
 #include <vector>
 
 namespace lagrangian {
@@ -123,15 +124,14 @@ class UnitConverter {
    * @param scale the numeric scale factor
    */
   explicit UnitConverter(const double offset = 0, const double scale = 1)
-      : offset_(offset),
-        scale_(scale){}
+      : offset_(offset), scale_(scale) {}
 
-            /**
-             * Tests if the converter is null
-             *
-             * @return true if the converter is null otherwise false
-             */
-            [[nodiscard]] inline auto IsNull() const -> bool {
+  /**
+   * Tests if the converter is null
+   *
+   * @return true if the converter is null otherwise false
+   */
+  [[nodiscard]] inline auto IsNull() const -> bool {
     return offset_ == 0 && scale_ == 1;
   }
 

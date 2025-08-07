@@ -125,7 +125,7 @@ class SplitList : public std::list<T> {
    * @param value Value to test
    * @return false
    */
-  static inline auto predicate(const T & /*value*/) -> bool { return false; }
+  static inline auto predicate(const T& /*value*/) -> bool { return false; }
 };
 
 template <class T>

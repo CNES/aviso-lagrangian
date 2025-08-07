@@ -150,14 +150,16 @@ class NetCDF : public Reader {
   }
 
   // Get the index of the cell of a grid [Y, X]
-  [[nodiscard]] inline auto GetIndexXY(const double ix, const double iy) const
-      noexcept -> size_t {
+  [[nodiscard]] inline auto GetIndexXY(const double ix,
+                                       const double iy) const noexcept
+      -> size_t {
     return ix * axis_y_.GetNumElements() + iy;
   }
 
   // Get the index of the cell of a grid [X, Y]
-  [[nodiscard]] inline auto GetIndexYX(const double ix, const double iy) const
-      noexcept -> size_t {
+  [[nodiscard]] inline auto GetIndexYX(const double ix,
+                                       const double iy) const noexcept
+      -> size_t {
     return iy * axis_x_.GetNumElements() + ix;
   }
 

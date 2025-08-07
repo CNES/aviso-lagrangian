@@ -320,7 +320,7 @@ class FiniteLyapunovExponents {
   [[nodiscard]] inline auto get_theta2() const -> double { return theta2_; }
 
   /**
-   * @brief Get the missing value of the orientation ot the eigenvectors of the
+   * @brief Get the missing value of the orientation of the eigenvectors of the
    * Cauchy-Green strain tensor in case of undefined FLE
    * @details FSLE and FTLE are undefined when stencil has not been advected
    * FSLE is also undefined when stencil has not been separated
@@ -415,7 +415,7 @@ class FiniteLyapunovExponents {
  *
  * σ = ( 1 / (2*T) ) * log( λmax( Δ ) )
  *
- * Finite-Size Lyapunov Exponent is similary defined: T is choosen so that
+ * Finite-Size Lyapunov Exponent is similarly defined: T is chosen so that
  * neighbouring particules separate from a given distance d.
  *
  * ComputeExponents(const Position& position) function implements the

@@ -91,7 +91,7 @@ class RungeKutta {
           // RK step 4
           if (field_->Compute(t + h_, xn, yn, u4, v4, cell)) {
             (this->pMove_)(h_6_, x, y, u1 + 2 * (u2 + u3) + u4,
-                            v1 + 2 * (v2 + v3) + v4, xi, yi);
+                           v1 + 2 * (v2 + v3) + v4, xi, yi);
             return true;
           }
         }
