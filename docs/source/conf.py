@@ -10,19 +10,53 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import importlib.metadata
 import os
+import pathlib
+import sysconfig
+import sys
 
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+#: The directory containing this file.
+HERE = pathlib.Path(__file__).absolute().parent
+
+
+def build_dirname(extname=None):
+    """Returns the name of the build directory."""
+    return pathlib.Path(
+        HERE.parent.parent, 'build',
+        f'lib.{sysconfig.get_platform()}-{sys.implementation.cache_tag}')
+
+
+def push_front_syspath():
+    """Add the build directory to the front of sys.path."""
+    if HERE.parent.parent.joinpath('setup.py').exists():
+        # We are in the root directory of the development tree
+        sys.path.insert(0, str(build_dirname().resolve()))
+
+
+# Insert the project root dir as the first element in the PYTHONPATH.
+push_front_syspath()
+
+try:
+    release = importlib.metadata.version('lagrangian')
+except importlib.metadata.PackageNotFoundError:
+    try:
+        import lagrangian
+        release = lagrangian.__version__
+        release = '.'.join(release.split('.')[:3])
+    except ImportError:
+        release = '0.0.0'
+version = '.'.join(release.split('.')[:2])
+
 
 # -- Project information -----------------------------------------------------
 
 project = 'lagrangian'
-copyright = '2020, CLS/LOCEAN'
+copyright = '2025, CLS/LOCEAN'
 author = 'CLS/LOCEAN'
 
 # The full version, including alpha/beta/rc tags
-release = '3.0.0'
+release = version
 
 # -- General configuration ---------------------------------------------------
 
@@ -37,6 +71,18 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
 ]
+
+# Autodoc configuration for better handling of pybind11 modules
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
+
+# Mock imports for submodules that Sphinx has trouble with
+autodoc_mock_imports = []
 
 autosummary_generate = True
 numpydoc_class_members_toctree = True

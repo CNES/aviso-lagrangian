@@ -1,19 +1,22 @@
-.. currentmodule:: lagrangian
-
 API Documentation
 #################
 
 Axis
 ----
 
+.. currentmodule:: lagrangian.core
+
 .. autosummary::
     :toctree: generated/
+
 
     axis.LatitudeUnit
     axis.LongitudeUnit
 
 Integration
 -----------
+
+.. currentmodule:: lagrangian
 
 .. autosummary::
     :toctree: generated/
@@ -49,6 +52,8 @@ Misc
 
 Units
 -----
+
+.. currentmodule:: lagrangian.core
 
 .. autosummary::
     :toctree: generated/
