@@ -1,15 +1,37 @@
 Building and installing
 =======================
 
-Pre-built binaries
-------------------
+This module provides functionality for building, testing, and generating documentation for the project.
 
-The easiest route to installing Lagrangion is through conda. For all platforms
-installing this package can be done with:
+Building with Miniforge3
+------------------------
 
-.. code-block:: bash
+To install the prerequisites and set up the build environment using conda,
+follow these steps:
 
-    conda install -c conda-forge lagrangian
+#. Install Miniforge3 from the official source: https://github.com/conda-forge/miniforge
+#. Clone the repository:
+    .. code-block:: bash
+
+        git clone https://github.com/CNES/aviso-lagrangian.git
+
+#. Navigate to the project directory:
+    .. code-block:: bash
+
+        cd aviso-lagrangian
+
+#. Create the build environment using the provided environment file:
+    .. code-block:: bash
+
+        mamba create -f conda/environment.yml
+
+    This will install all necessary dependencies for building, testing, and
+    generating documentation.
+
+#. To install this software in the created environment, run:
+    .. code-block:: bash
+
+        pip install .
 
 Building from source
 --------------------
@@ -82,14 +104,20 @@ use the following at the root of the project:
 
 .. code-block:: bash
 
-    python setup.py test
+    pytest
 
 Install
 #######
 
-To install just type the command ``python setup.py``. You can specify an
-alternate installation path, with:
+To install the package, use ``pip`` . Run the following command at the root of
+the project:
 
 .. code-block:: bash
 
-    python setup.py install --prefix=/usr/local
+    pip install .
+
+You can specify an alternate installation path with the ``--prefix`` option:
+
+.. code-block:: bash
+
+    pip install . --prefix=/usr/local
