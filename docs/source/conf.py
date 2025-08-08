@@ -62,6 +62,7 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx_gallery.gen_gallery',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
@@ -78,6 +79,23 @@ autodoc_default_options = {
     'undoc-members': True,
     'exclude-members': '__weakref__'
 }
+
+# dependencies = HERE.joinpath(
+#     '..', '..', 'binder', 'environment.yml').resolve()
+sphinx_gallery_conf = {
+    'examples_dirs': [HERE.parent.parent.joinpath('examples')],
+    'filename_pattern': r'[\\\/]ex_',
+    'pypandoc': False,
+    # 'binder': {
+    #     'org': 'CNES',
+    #     'repo': 'aviso-lagrangian',
+    #     'branch': 'main',
+    #     'binderhub_url': 'https://mybinder.org',
+    #     'dependencies': [dependencies],
+    #     'use_jupyter_lab': True,
+    # }
+}
+exclude_patterns = []
 
 # Mock imports for submodules that Sphinx has trouble with
 autodoc_mock_imports = []

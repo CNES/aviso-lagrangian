@@ -12,16 +12,14 @@
 #
 # You should have received a copy of GNU Lesser General Public License along
 # with lagrangian. If not, see <http://www.gnu.org/licenses/>.
-import unittest
+import pathlib
 
 import lagrangian
 
 
-class BaseLagrangianTest(unittest.TestCase):
-    """Test setup of the lagrangian library."""
+class SampleDataHandler(lagrangian.SampleDataHandler):
+    #: Set the data folder to the directory where this module is located
+    ROOT = pathlib.Path(__file__).absolute().parent
 
-    def __init__(self, *args, **kwargs):
-        """Setup the test data folder."""
-        super().__init__(*args, **kwargs)
-        test_data = lagrangian.TestData()
-        self.folder = test_data.folder()
+
+SampleDataHandler()  # Ensure the test data is downloaded at module import

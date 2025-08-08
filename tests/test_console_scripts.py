@@ -23,6 +23,8 @@ import numpy
 
 import lagrangian
 
+from . import SampleDataHandler
+
 
 class TestConsoleScripts(unittest.TestCase):
     pos: str
@@ -42,7 +44,7 @@ class TestConsoleScripts(unittest.TestCase):
         sep = ';' if platform.system() == 'Windows' else ':'
         os.environ['PYTHONPATH'] = sep.join(paths)
 
-        folder = lagrangian.TestData().folder()
+        folder = SampleDataHandler.folder()
         os.environ['ROOT'] = str(folder)
         here = os.path.dirname(__file__)
         cls.pos = os.path.join(here, 'buoys.txt')

@@ -11,7 +11,7 @@ import zipfile
 DOWNLOAD_LOCK = threading.RLock()
 
 
-class TestData:
+class SampleDataHandler:
     """
     Utility class for managing test data downloads.
     """
@@ -101,7 +101,7 @@ class TestData:
             archive: The path where the downloaded zip file will be saved.
         """
         # Only show progress if running interactively (not in CI)
-        hook = (TestData.progress_hook
+        hook = (SampleDataHandler.progress_hook
                 if sys.stderr.isatty() and not os.getenv('CI') else None)
         urllib.request.urlretrieve(cls.URL, archive, reporthook=hook)
         sys.stderr.write('\n')  # Add newline after progress bar

@@ -19,14 +19,14 @@ import unittest
 
 import lagrangian
 
-from . import BaseLagrangianTest
+from . import SampleDataHandler
 
 
-class TestReader(BaseLagrangianTest):
+class TestReader(unittest.TestCase):
 
     def setUp(self):
         self.path = str(
-            self.folder /
+            SampleDataHandler.folder() /
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):

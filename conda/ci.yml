@@ -2,15 +2,17 @@ name: lagrangian
 channels:
   - conda-forge
 dependencies:
+  - binutils # [not win]
+  - boost-cpp
   - cmake
-  - setuptools_scm
+  - cxx-compiler
+  - dateutils
+  - make # [not win]
+  - matplotlib
   - netcdf4
   - pytest
-  - boost-cpp
-  - cxx-compiler
-  - make # [not win]
-  - binutils # [not win]
+  - setuptools_scm
   - sphinx
   - sphinx-book-theme
+  - sphinx-gallery
   - udunits2
-  - dateutils

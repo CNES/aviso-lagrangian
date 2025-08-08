@@ -44,7 +44,7 @@ follow these steps:
 #. Activate the environment:
     .. code-block:: bash
 
-        mamba activate Lagrangian
+        mamba activate lagrangian
 
 #. To install this software in the created environment, run:
     .. code-block:: bash

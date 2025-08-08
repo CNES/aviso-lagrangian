@@ -19,13 +19,13 @@ import unittest
 
 import lagrangian
 
-from . import BaseLagrangianTest
+from . import SampleDataHandler
 
 
-class TestTimeSerie(BaseLagrangianTest):
+class TestTimeSerie(unittest.TestCase):
 
     def setUp(self):
-        os.environ['ROOT'] = str(self.folder)
+        os.environ['ROOT'] = str(SampleDataHandler.folder())
         self.ini = str(pathlib.Path(__file__).parent / 'map.ini')
 
     def test(self):
@@ -42,14 +42,15 @@ class TestTimeSerie(BaseLagrangianTest):
         start = datetime.datetime(2010, 1, 1)
         end = datetime.datetime(2010, 2, 1)
         with self.assertRaises(RuntimeError):
-            u, v = ts.compute(start, 0.0, 0.0)
+            ts.compute(start, 0.0, 0.0)
         ts.fetch(start, end)
-        u, v = ts.compute(start, 0, 0)
-        self.assertAlmostEqual(u, -0.22053186488468596, delta=1e-3)
-        self.assertAlmostEqual(v, -0.06173804191683556, delta=1e-3)
+        uv = ts.compute(start, 0, 0)
+        assert uv is not None, 'Expected a valid result from compute'
+        self.assertAlmostEqual(uv[0], -0.22053186488468596, delta=1e-3)
+        self.assertAlmostEqual(uv[1], -0.06173804191683556, delta=1e-3)
         with self.assertRaises(IndexError):
             start = datetime.datetime(2015, 1, 1)
-            u, v = ts.compute(start, 0, 0)
+            ts.compute(start, 0, 0)
 
 
 if __name__ == '__main__':

@@ -43,8 +43,8 @@ jobs:
             - conda-forge
         create-args: |
           python=${{ matrix.python-version }}
-        environment-name: Lagrangian
-        environment-file: conda/environment.yml
+        environment-name: lagrangian
+        environment-file: conda/ci.yml
 
     - name: Compile and Testing Python Package
       shell: bash -l {0}
@@ -89,8 +89,8 @@ jobs:
   #           - conda-forge
   #       create-args: |
   #         python=3.12
-  #       environment-name: Lagrangian
-  #       environment-file: conda/environment.yml
+  #       environment-name: lagrangian
+  #       environment-file: conda/ci.yml
 
   #   - name: Building Testing Python Package
   #     shell: bash -l {0}

@@ -41,8 +41,8 @@ __all__ = [
     'Quintuplet',
     'Reader',
     'RungeKutta',
+    'SampleDataHandler',
     'Stencil',
-    'TestData',
     'TimeDuration',
     'Triplet',
     'UnitType',
@@ -83,4 +83,4 @@ from .core import (
     units,
     version,
 )
-from .test_data import TestData
+from .sample_data_handler import SampleDataHandler

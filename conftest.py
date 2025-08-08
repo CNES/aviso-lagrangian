@@ -41,4 +41,12 @@ def push_front_syspath():
         sys.path.insert(0, str(build_dirname().resolve()))
 
 
+def pytest_sessionstart(session):
+    """Hook to run before any tests are collected."""
+    tests_folder = str(WORKING_DIRECTORY)
+    sys.path.insert(0, tests_folder)
+    from tests import SampleDataHandler
+    SampleDataHandler()
+
+
 push_front_syspath()

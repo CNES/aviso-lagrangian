@@ -19,7 +19,7 @@ import unittest
 
 import lagrangian
 
-from . import BaseLagrangianTest
+from . import SampleDataHandler
 
 
 class TestMapProperties(unittest.TestCase):
@@ -41,13 +41,14 @@ class TestMapProperties(unittest.TestCase):
         self.assertEqual(len(y), 180)
 
 
-class TestMapOfFiniteLyapunovExponents(BaseLagrangianTest):
+class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
 
     def setUp(self):
-        os.environ['ROOT'] = str(self.folder)
+        folder = SampleDataHandler.folder()
+        os.environ['ROOT'] = str(folder)
         self.ini = str(pathlib.Path(__file__).parent / 'map.ini')
         self.path = str(
-            self.folder /
+            folder /
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):
