@@ -160,3 +160,13 @@ class TestData:
     def folder(cls) -> pathlib.Path:
         """Returns the folder where the data is stored."""
         return cls.ROOT / 'data'
+
+    @classmethod
+    def cleanup(cls) -> None:
+        """Cleans up the downloaded data."""
+        with DOWNLOAD_LOCK:
+            for item in cls.FILES:
+                path = cls.folder() / item
+                if path.exists():
+                    path.unlink()
+            cls.folder().rmdir()
