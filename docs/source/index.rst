@@ -5,7 +5,7 @@ The **Finite Size Lyapunov Exponent (FSLE)** is a local Lagrangian diagnostic
 widely used to study the transport and mixing of oceanographic tracers such as
 sea surface temperature and ocean color. It is derived from the **Finite-Time
 Lyapunov Exponent (FTLE)**, which helps identify *Lagrangian Coherent
-Structures*.  
+Structures*.
 
 This code, developed in collaboration between LOCEAN (F. d'Ovidio) and CLS, is
 released under the GNU General Public License. Given a time series of mesoscale
@@ -17,7 +17,7 @@ Lyapunov Vectors.
    :hidden:
    :maxdepth: 1
    :caption: Contents:
-   
+
    contents
    install
    auto_examples/index.rst
