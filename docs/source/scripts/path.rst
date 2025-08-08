@@ -1,78 +1,167 @@
 path
 ====
 
-This program is used to calculate the drift of a set of points using
-geostrophic velocity fields.
+Usage
+-----
 
-This program uses a configuration file similar to the configuration file used
-by the program :doc:`map_of_fle.py <map_of_fle>` and tabular ASCII file that
-contains:
+.. help_directive:: lagrangian.console_scripts.path
+    :program_name: path
 
-* on the first column the longitude of the point in degrees and
-* on the second column the latitude of the point in degrees.
+Overview
+--------
 
-To launch the propagation of points over the velocity fields, execute the
-following command:
+The ``path`` program computes the drift (trajectory) of a set of points over a
+geostrophic velocity field time series. It reads an input table of positions
+(longitude, latitude) and advects them from a start time to an end time.
+
+Quick start
+-----------
+
+.. code-block:: bash
+
+    path list.ini buoys.txt "2010-01-01" "2010-01-02" --output tracks.tsv
+
+- ``list.ini``: configuration of the velocity time series
+- ``buoys.txt``: initial positions
+- Start and end times in any ISO-like format (parsed with ``dateutil``)
+- Output is written to ``tracks.tsv`` (tab-separated). Without ``--output``,
+  results are printed to stdout.
+
+Inputs
+------
+
+Configuration file
+^^^^^^^^^^^^^^^^^^
+
+Use a simple configuration file (one item per line) to describe the U/V time
+series, similar to the one used by ``map_of_fle``:
+
+.. code-block:: cfg
+
+    U = /path/to/dt_upd_global_merged_madt_uv_20091230_20091230_20110329.nc
+    U = /path/to/dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc
+    ... (one line per time slice)
+    V = /path/to/dt_upd_global_merged_madt_uv_20091230_20091230_20110329.nc
+    V = /path/to/dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc
+    ... (one line per time slice)
+    U_NAME = Grid_0001
+    V_NAME = Grid_0002
+    FILL_VALUE = 0
+
+- ``U``/``V``: paths to NetCDF files containing eastward/northward velocities
+  for each time step (accepts absolute paths or ``${ENV}`` variables).
+- ``U_NAME``/``V_NAME``: variable names inside the NetCDF files.
+- ``FILL_VALUE``: value used for missing data (``0`` to avoid propagating
+  missing values, or ``nan`` to propagate them).
+
+If you need sample data, see
+`data.zip <https://github.com/CNES/aviso-lagrangian/wiki/data.zip>`_ and the
+`AVISO product page <https://www.aviso.altimetry.fr/en/data/products/auxiliary-products/merged-madt.html>`_.
+
+Buoys file format
+^^^^^^^^^^^^^^^^^
+
+A plain text file with one point per line:
+
+- First column: longitude in degrees (range -180..180)
+- Second column: latitude in degrees (range -90..90)
+- Lines may contain comments starting with ``#``
+- Columns separated by whitespace (spaces or tabs)
+
+Example:
 
 .. code-block:: text
 
-    path.py list.ini buoys.txt "2010-01-01" "2010-01-02"
+    # lon   lat
+    0       0
+    1.433333 43.6
+    70      1
 
-The program run shows the following lines:
+Command examples
+----------------
+
+.. code-block:: bash
+
+    # Drift for 1 day, default 6 h time step
+    path list.ini buoys.txt "2010-01-01" "2010-01-02"
+
+    # Write output to a file
+    path list.ini buoys.txt "2010-01-01" "2010-01-02" --output tracks.tsv
+
+Options
+-------
+
+- ``--output FILE``: write results to a file (tab-separated). Defaults to
+  stdout if omitted.
+- ``--version``: print version and exit.
+
+Positional arguments:
+
+- ``configuration``: path to the configuration file.
+- ``input``: path to the buoys file.
+- ``start_time``: start time of the drift.
+- ``end_time``: end time of the drift.
+
+Notes
+-----
+
+- The internal integration time step is fixed to 6 hours.
+- The start/end times must lie within the velocity time series; otherwise a
+  runtime error is raised.
+- Longitudes must be in [-180, 180] and latitudes in [-90, 90].
+
+Output
+------
+
+Tab-separated values with the following columns on each printed time step:
+
+- Index of the buoy (0-based)
+- Longitude [degree]
+- Latitude [degree]
+- Timestamp in ISO format
+
+Example output snippet:
 
 .. code-block:: text
 
     0	0.000000	0.000000	2010-01-01T01:00:00
     1	1.433333	43.600000	2010-01-01T01:00:00
-    2	2.000000	2.000000	2010-01-01T01:00:00
-    3	4.000000	4.000000	2010-01-01T01:00:00
-    4	8.000000	8.000000	2010-01-01T01:00:00
-    5	16.000000	16.000000	2010-01-01T01:00:00
-    6	32.000000	32.000000	2010-01-01T01:00:00
-    7	64.000000	64.000000	2010-01-01T01:00:00
-    8	70.000000	1.000000	2010-01-01T01:00:00
     0	-0.038031	-0.013479	2010-01-01T07:00:00
-    1	1.433333	43.600000	2010-01-01T07:00:00
-    2	1.991477	1.978912	2010-01-01T07:00:00
-    3	4.022234	3.996796	2010-01-01T07:00:00
-    4	8.000000	8.000000	2010-01-01T07:00:00
-    5	16.000000	16.000000	2010-01-01T07:00:00
-    6	32.000000	32.000000	2010-01-01T07:00:00
-    7	64.000000	64.000000	2010-01-01T07:00:00
-    8	70.009008	1.011399	2010-01-01T07:00:00
-    0	-0.074492	-0.026498	2010-01-01T13:00:00
-    1	1.433333	43.600000	2010-01-01T13:00:00
-    2	1.983383	1.957937	2010-01-01T13:00:00
-    3	4.044936	3.993897	2010-01-01T13:00:00
-    4	8.000000	8.000000	2010-01-01T13:00:00
-    5	16.000000	16.000000	2010-01-01T13:00:00
-    6	32.000000	32.000000	2010-01-01T13:00:00
-    7	64.000000	64.000000	2010-01-01T13:00:00
-    8	70.017918	1.023265	2010-01-01T13:00:00
-    0	-0.110257	-0.038725	2010-01-01T19:00:00
-    1	1.433333	43.600000	2010-01-01T19:00:00
-    2	1.975714	1.937067	2010-01-01T19:00:00
-    3	4.068077	3.991302	2010-01-01T19:00:00
-    4	8.000000	8.000000	2010-01-01T19:00:00
-    5	16.000000	16.000000	2010-01-01T19:00:00
-    6	32.000000	32.000000	2010-01-01T19:00:00
-    7	64.000000	64.000000	2010-01-01T19:00:00
-    8	70.026729	1.035611	2010-01-01T19:00:00
-    0	-0.145335	-0.050205	2010-01-02T01:00:00
-    1	1.433333	43.600000	2010-01-02T01:00:00
-    2	1.968466	1.916294	2010-01-02T01:00:00
-    3	4.091630	3.989012	2010-01-02T01:00:00
-    4	8.000000	8.000000	2010-01-02T01:00:00
-    5	16.000000	16.000000	2010-01-02T01:00:00
-    6	32.000000	32.000000	2010-01-02T01:00:00
-    7	64.000000	64.000000	2010-01-02T01:00:00
-    8	70.035436	1.048449	2010-01-02T01:00:00
 
-The displayed columns contain the following information:
+Help
+----
 
-* the index of the location that has been moved,
-* the longitude,
-* the latitude and
-* the date on which the point is located there.
+Type ``path --help`` or ``path.py --help`` to see all options.
 
-Type ``path.py --help`` to see the available options.
+Troubleshooting
+---------------
+
+PYTHONPATH
+^^^^^^^^^^
+
+If you see this error message:
+
+.. code-block:: text
+
+    ImportError: No module named lagrangian
+
+Set the ``PYTHONPATH`` environment variable to include the directory that
+contains the compiled ``lagrangian`` module (``lagrangian.so``).
+
+UDUNITS2_XML_PATH
+^^^^^^^^^^^^^^^^^
+
+If you see this error message:
+
+.. code-block:: text
+
+    RuntimeError: The variable UDUNITS2_XML_PATH is unset, and the installed, default unit, database couldn't be opened: No such file or directory
+
+Set the UDUNITS2 database path, for example: ::
+
+    export UDUNITS2_XML_PATH=/path/to/share/udunits/udunits2.xml
+
+See also
+--------
+
+- :doc:`map_of_fle`: compute FSLE/FTLE maps from the same velocity time series.

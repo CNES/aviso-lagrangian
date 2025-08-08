@@ -31,6 +31,7 @@ def push_front_syspath():
     if HERE.parent.parent.joinpath('setup.py').exists():
         # We are in the root directory of the development tree
         sys.path.insert(0, str(build_dirname().resolve()))
+        sys.path.insert(0, str(HERE.resolve()))
 
 
 # Insert the project root dir as the first element in the PYTHONPATH.
@@ -62,10 +63,11 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'help_directive',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',

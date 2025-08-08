@@ -8,7 +8,9 @@ units, and simulating particle drift. Each script is documented in detail to
 guide users through its usage and configuration.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Contents
+   :hidden:
 
    scripts/map_of_fle
    scripts/metric_to_angular
