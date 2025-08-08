@@ -14,7 +14,6 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import os
 import platform
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -37,19 +36,21 @@ class TestConsoleScripts(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        lagrangian_dir = os.path.dirname(lagrangian.__file__)
+        lagrangian_module_dir = os.path.dirname(lagrangian.__file__)
         paths = list(sys.path)
-        paths.insert(0, lagrangian_dir)
+        paths.insert(0, lagrangian_module_dir)
         sep = ';' if platform.system() == 'Windows' else ':'
         os.environ['PYTHONPATH'] = sep.join(paths)
 
-        os.environ['ROOT'] = os.path.dirname(__file__)
-        cls.pos = os.path.join(os.environ['ROOT'], 'buoys.txt')
-        cls.ini = os.path.join(os.environ['ROOT'], 'map.ini')
+        folder = lagrangian.TestData().folder()
+        os.environ['ROOT'] = str(folder)
+        here = os.path.dirname(__file__)
+        cls.pos = os.path.join(here, 'buoys.txt')
+        cls.ini = os.path.join(here, 'map.ini')
         cls.exe = sys.executable
         with tempfile.NamedTemporaryFile() as stream:
             cls.tst = stream.name
-        cls.ref = os.path.join(os.environ['ROOT'], 'data', 'fsle.nc')
+        cls.ref = str(folder / 'fsle.nc')
         cls.new = os.path.join(tempfile.gettempdir(), 'fsle.nc')
 
     @classmethod
@@ -61,19 +62,16 @@ class TestConsoleScripts(unittest.TestCase):
             pass
 
     def test_map_of_fle(self):
-        with open(self.tst, 'w') as stream:
-            stream.write("""
-import lagrangian.console_scripts.map_of_fle
+        from lagrangian.console_scripts.map_of_fle import main
 
-if __name__ == "__main__":
-    lagrangian.console_scripts.map_of_fle.main()
-""")
-        subprocess.check_call([
-            self.exe, stream.name, self.ini, self.new, '2010-01-01',
+        sys.argv = [
+            'map_of_fle', self.ini, self.new, '2010-01-01',
             '--advection_time=89', '--resolution=0.05', '--x_min=40',
             '--x_max=59.95', '--y_min=-60', '--y_max=-40.05',
             '--final_separation=0.2', '--verbose', '--time_direction=forward'
-        ])
+        ]
+        main()
+
         with netCDF4.Dataset(self.ref) as ref:
             with netCDF4.Dataset(self.new) as new:
                 for item in ref.variables:
@@ -84,20 +82,25 @@ if __name__ == "__main__":
                     self.assertAlmostEqual(numpy.mean(x - y), 0, delta=1e-9)
 
     def test_path(self):
-        with open(self.tst, 'w') as stream:
-            stream.write("""
-import lagrangian.console_scripts.path
+        from lagrangian.console_scripts.path import main
 
-if __name__ == "__main__":
-    lagrangian.console_scripts.path.main()
-""")
-        lines = subprocess.check_output([
-            self.exe, stream.name, self.ini, self.pos, '2010-01-01',
-            '2010-01-02'
-        ])
-        expected = [
-            item.strip()
-            for item in """0\t0.000000\t0.000000\t2010-01-01T00:00:00
+        with tempfile.NamedTemporaryFile(delete=False) as temp_output:
+            output_file = temp_output.name
+
+        sys.argv = [
+            'path', self.ini, self.pos, '2010-01-01', '2010-01-02', '--output',
+            output_file
+        ]
+
+        try:
+            main()
+
+            with open(output_file) as f:
+                output_lines = [line.strip() for line in f.readlines()]
+
+            expected = [
+                item.strip()
+                for item in """0\t0.000000\t0.000000\t2010-01-01T00:00:00
 1\t1.433333\t43.600000\t2010-01-01T00:00:00
 2\t2.000000\t2.000000\t2010-01-01T00:00:00
 3\t4.000000\t4.000000\t2010-01-01T00:00:00
@@ -141,15 +144,12 @@ if __name__ == "__main__":
 5\t16.000000\t16.000000\t2010-01-02T00:00:00
 6\t32.000000\t32.000000\t2010-01-02T00:00:00
 7\t64.000000\t64.000000\t2010-01-02T00:00:00
-8\t70.048066\t12.080719\t2010-01-02T00:00:00
-""".split('\n') if item.strip()
-        ]
-        lines = {
-            item.strip()
-            for item in lines.decode().split('\n') if item.strip()
-        }
-        self.assertEqual(lines, set(expected),
-                         'Output does not match expected results')
+8\t70.048066\t12.080719\t2010-01-02T00:00:00""".split('\n') if item.strip()
+            ]
+            self.assertEqual(set(output_lines), set(expected),
+                             'Output does not match expected results')
+        finally:
+            os.unlink(output_file)
 
 
 if __name__ == '__main__':

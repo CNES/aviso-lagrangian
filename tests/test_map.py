@@ -14,9 +14,12 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import os
+import pathlib
 import unittest
 
 import lagrangian
+
+from . import BaseLagrangianTest
 
 
 class TestMapProperties(unittest.TestCase):
@@ -38,13 +41,13 @@ class TestMapProperties(unittest.TestCase):
         self.assertEqual(len(y), 180)
 
 
-class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
+class TestMapOfFiniteLyapunovExponents(BaseLagrangianTest):
 
     def setUp(self):
-        os.environ['ROOT'] = os.path.dirname(__file__)
-        self.ini = os.path.join(os.environ['ROOT'], 'map.ini')
-        self.path = os.path.join(
-            os.path.dirname(__file__), 'data',
+        os.environ['ROOT'] = str(self.folder)
+        self.ini = str(pathlib.Path(__file__).parent / 'map.ini')
+        self.path = str(
+            self.folder /
             'dt_upd_global_merged_madt_uv_20100106_20100106_20110329.nc')
 
     def test(self):
@@ -68,6 +71,13 @@ class TestMapOfFiniteLyapunovExponents(unittest.TestCase):
         teta2 = map_of_fsle.map_of_theta2(0)
         delta_t = map_of_fsle.map_of_delta_t(0)
         effective_separation = map_of_fsle.map_of_final_separation(0)
+
+        assert lambda1 is not None
+        assert lambda2 is not None
+        assert teta1 is not None
+        assert teta2 is not None
+        assert delta_t is not None
+        assert effective_separation is not None
 
 
 if __name__ == '__main__':

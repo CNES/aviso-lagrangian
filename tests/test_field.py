@@ -14,16 +14,19 @@
 # along with lagrangian. If not, see <http://www.gnu.org/licenses/>.
 import datetime
 import os
+import pathlib
 import unittest
 
 import lagrangian
 
+from . import BaseLagrangianTest
 
-class TestTimeSerie(unittest.TestCase):
+
+class TestTimeSerie(BaseLagrangianTest):
 
     def setUp(self):
-        os.environ['ROOT'] = os.path.dirname(__file__)
-        self.ini = os.path.join(os.environ['ROOT'], 'map.ini')
+        os.environ['ROOT'] = str(self.folder)
+        self.ini = str(pathlib.Path(__file__).parent / 'map.ini')
 
     def test(self):
         ts = lagrangian.field.TimeSerie(

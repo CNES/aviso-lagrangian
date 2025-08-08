@@ -26,3 +26,5 @@ src/lagrangian/_version.py
 src/lib/trace.cpp
 docs/build/
 docs/source/generated
+docs/source/sg_execution_times.rst
+docs/source/auto_examples
