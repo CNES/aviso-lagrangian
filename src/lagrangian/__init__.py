@@ -42,6 +42,7 @@ __all__ = [
     'Reader',
     'RungeKutta',
     'Stencil',
+    'TestData',
     'TimeDuration',
     'Triplet',
     'UnitType',
@@ -53,7 +54,6 @@ __all__ = [
     'units',
     'version',
 ]
-
 from .core import (
     CellProperties,
     CoordinatesType,
@@ -83,3 +83,4 @@ from .core import (
     units,
     version,
 )
+from .test_data import TestData
