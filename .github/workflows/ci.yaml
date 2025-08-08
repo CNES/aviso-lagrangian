@@ -69,32 +69,32 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
 
-  # win:
-  #   name: win
-  #   runs-on: windows-2022
+  win:
+    name: win
+    runs-on: windows-2022
 
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #     with:
-  #       submodules: recursive
-  #       lfs: true
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        lfs: true
 
-  #   - name: Setup Miniconda
-  #     uses: mamba-org/setup-micromamba@v1
-  #     with:
-  #       cache-downloads: true
-  #       condarc: |
-  #         channels:
-  #           - conda-forge
-  #       create-args: |
-  #         python=3.12
-  #       environment-name: lagrangian
-  #       environment-file: conda/ci.yml
+    - name: Setup Miniconda
+      uses: mamba-org/setup-micromamba@v1
+      with:
+        cache-downloads: true
+        condarc: |
+          channels:
+            - conda-forge
+        create-args: |
+          python=3.12
+        environment-name: lagrangian
+        environment-file: conda/environment.yml
 
-  #   - name: Building Testing Python Package
-  #     shell: bash -l {0}
-  #     run: |
-  #       python setup.py build_ext --generator="Visual Studio 17 2022"
-  #       python setup.py build
-  #       pytest -v -ra
+    - name: Building Testing Python Package
+      shell: bash -l {0}
+      run: |
+        python setup.py build_ext --generator="Visual Studio 17 2022"
+        python setup.py build
+        pytest -v -ra
