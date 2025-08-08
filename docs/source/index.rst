@@ -1,33 +1,25 @@
-.. lagrangian documentation master file, created by
-   sphinx-quickstart on Wed Feb  5 15:43:44 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Lagrangian Documentation
+========================
 
-Welcome to lagrangian's documentation!
-======================================
+The **Finite Size Lyapunov Exponent (FSLE)** is a local Lagrangian diagnostic
+widely used to study the transport and mixing of oceanographic tracers such as
+sea surface temperature and ocean color. It is derived from the **Finite-Time
+Lyapunov Exponent (FTLE)**, which helps identify *Lagrangian Coherent
+Structures*.  
 
-Finite Size Lyapunov Exponent (FSLE) is a local lagrangian diagnostics that is
-widely used for the study of transport and mixing processes of oceanographic
-tracers (Sea surface temperature, Ocean color ...). Its computation is derived
-from the definition of Finite-Time Lyapunov Exponent that allows the
-identification of Lagrangian Coherent Structures. Given a time series of meso-
-scale velocity field, this code computes corresponding sub-mesoscale maps of
-backward FLSE or FTLE. It also compute other diagnostics such as orientation
-of Finite-Time Lyapunov Vectors.
-
-Contents:
+This code, developed in collaboration between LOCEAN (F. d'Ovidio) and CLS, is
+released under the GNU General Public License. Given a time series of mesoscale
+velocity fields, it computes sub-mesoscale maps of backward or forward
+FSLE/FTLE, as well as other diagnostics such as the orientation of Finite-Time
+Lyapunov Vectors.
 
 .. toctree::
-   :maxdepth: 2
-
+   :hidden:
+   :maxdepth: 1
+   :caption: Contents:
+   
    contents
    install
+   auto_examples/index.rst
    api
    scripts
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
